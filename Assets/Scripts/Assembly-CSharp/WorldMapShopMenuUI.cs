@@ -222,6 +222,14 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			m_DiscountPercentageLabel.text = "-" + GetDiscountPercentage() + "%";
 			m_StampCardAmountLabel.text = DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "daily_post_card").ToString();
 			break;
+		case ShopMenuType.Merchant:
+			m_AnvilProp.SetActive(false);
+			m_AlchemyProp.SetActive(false);
+			m_EagleProp.SetActive(false);
+			m_DiscountBubbleProp.SetActive(false);
+			m_SaleBubbleProp.SetActive(false);
+			m_SaleTimerObject.gameObject.SetActive(false);
+			break;
 		}
 		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.EnterLevelDisplay();
 		m_SkipButtonAnimation.gameObject.SetActive(m_MenuType == ShopMenuType.Dojo);

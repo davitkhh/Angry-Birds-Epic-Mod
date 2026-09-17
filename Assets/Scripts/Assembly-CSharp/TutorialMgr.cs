@@ -444,35 +444,35 @@ public class TutorialMgr : MonoBehaviour, ITutorialMgr
 
 	private void Start()
 	{
-		AddIntroBattleTutorial();
-		AddStartFirstBattleTutorial();
-		AddCraftFirstItemTutorial();
-		AddGachaTooltipTutorial();
-		AddCraftHealingPotionTutorial();
-		AddUseConsumableTutorial();
-		AddCraftSecondItemTutorial();
-		AddCraftRerollTutorial();
-		AddDefensiveAbilityTutorial();
-		AddSaveYellowTutorial();
-		AddUseWhiteTutorial();
-		AddUseOffensiveYellowTutorial();
-		AddUseDefensiveYellowTutorial();
-		AddUseGachaTutorial();
-		AddRerollBattleLootTutorial();
-		AddBuyConsumableWorldMapTutorial();
-		AddBuyMainHandEquipmentTutorial();
-		AddBuyMainHandEquipmentTutorial2();
-		AddBattleRuleTooltipTutorial();
-		AddBuyClassTutorial();
-		AddEquipClassTutorial();
-		AddTooltipEnemyTutorial();
-		AddHarvestTutorial();
-		AddExitBuyClassTutorial();
-		AddExitBuyMainHandEquipmentTutorial();
-		AddReadPvPDailyObjectivesTutorial();
-		AddPointOutNextHotspotTutorial();
-		AddEnchantmentTutorial();
-		InitPlayerTutorialTracks();
+		// AddIntroBattleTutorial();
+		// AddStartFirstBattleTutorial();
+		// AddCraftFirstItemTutorial();
+		// AddGachaTooltipTutorial();
+		// AddCraftHealingPotionTutorial();
+		// AddUseConsumableTutorial();
+		// AddCraftSecondItemTutorial();
+		// AddCraftRerollTutorial();
+		// AddDefensiveAbilityTutorial();
+		// AddSaveYellowTutorial();
+		// AddUseWhiteTutorial();
+		// AddUseOffensiveYellowTutorial();
+		// AddUseDefensiveYellowTutorial();
+		// AddUseGachaTutorial();
+		// AddRerollBattleLootTutorial();
+		// AddBuyConsumableWorldMapTutorial();
+		// AddBuyMainHandEquipmentTutorial();
+		// AddBuyMainHandEquipmentTutorial2();
+		// AddBattleRuleTooltipTutorial();
+		// AddBuyClassTutorial();
+		// AddEquipClassTutorial();
+		// AddTooltipEnemyTutorial();
+		// AddHarvestTutorial();
+		// AddExitBuyClassTutorial();
+		// AddExitBuyMainHandEquipmentTutorial();
+		// AddReadPvPDailyObjectivesTutorial();
+		// AddPointOutNextHotspotTutorial();
+		// AddEnchantmentTutorial();
+		// InitPlayerTutorialTracks();
 	}
 
 	public void InitPlayerTutorialTracks()
@@ -1122,7 +1122,7 @@ public class TutorialMgr : MonoBehaviour, ITutorialMgr
 				new TutorialStepTemplate
 				{
 					StepTemplate = TutorialStepType.Harvest,
-					PossibleParameters = new List<string> { "hotspot_011_01_resourcenode" }
+					PossibleParameters = new List<string> { "hotspot_008_01_resourcenode" }
 				}
 			}
 		});

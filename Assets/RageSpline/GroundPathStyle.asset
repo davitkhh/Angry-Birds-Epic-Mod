@@ -44,7 +44,7 @@ MonoBehaviour:
   physics: 0
   createPhysicsInEditor: 0
   physicsMaterial: {fileID: 0}
-  vertexCount: 20
+  vertexCount: 48
   physicsColliderCount: 32
   colliderZDepth: 100
   colliderNormalOffset: 0
