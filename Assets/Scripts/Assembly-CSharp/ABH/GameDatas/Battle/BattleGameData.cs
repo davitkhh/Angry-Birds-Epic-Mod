@@ -93,6 +93,8 @@ namespace ABH.GameDatas.Battle
 
 		public float m_AllPigDamageInCurrentTurn;
 
+		public float m_PigDamageTakenLastTurn;
+
 		public string m_BattleGroundName;
 
 		public VictoryCondition m_CurrentVictoryCondition;

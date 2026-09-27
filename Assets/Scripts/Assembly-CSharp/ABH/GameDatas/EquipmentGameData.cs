@@ -328,6 +328,8 @@ namespace ABH.GameDatas
 				return "PassiveEffect_Dispel";
 			case PerkType.HocusPokus:
 				return "PassiveEffect_HocusPocus";
+			case PerkType.HocusPokusChiliDrain:
+				return "PassiveEffect_HocusPocus";
 			case PerkType.Might:
 				return "PassiveEffect_Might";
 			case PerkType.Vigor:
@@ -476,6 +478,7 @@ namespace ABH.GameDatas
 			var dictionary = new Dictionary<string, string>();
 			dictionary.Add("{value_1}", item.BalancingData.Perk.ProbablityInPercent.ToString("0"));
 			dictionary.Add("{value_2}", item.BalancingData.Perk.PerkValue.ToString("0"));
+			dictionary.Add("{value_3}", item.BalancingData.Perk.PerkValue2.ToString("0"));
 			return DIContainerInfrastructure.GetLocaService().GetPerkDesc(item.BalancingData.Perk.Type, dictionary);
 		}
 

@@ -405,7 +405,7 @@
     "Type": "Node",
     "BattleId": null,
     "HotspotContents": {
-      "workshop_001": 1
+      "workshop_000": 1
     },
     "ZoneLocaIdent": "zone_cobalt_plateaus",
     "ZoneStageIndex": 0,

@@ -31,6 +31,8 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private List<ICombatant> m_possibleAttackingCharacters;
 
+		public bool SkipCastAnimation;
+
 		public override void BoneAnimationUserTrigger(UserTriggerEvent triggerEvent)
 		{
 			if (triggerEvent.tag == "Impact")
@@ -56,8 +58,11 @@ namespace ABH.GameDatas.Battle.Skills
 			m_Source = source;
 			m_possibleAttackingCharacters = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == target.CombatantFaction && !c.IsStunned && c.IsParticipating).ToList();
 			m_possibleAttackingCharacters.Shuffle();
-			SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting);
-			yield return new WaitForSeconds(source.CombatantView.PlayRageSkillAnimation());
+			if (!SkipCastAnimation)
+			{
+				SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting);
+				yield return new WaitForSeconds(source.CombatantView.PlayRageSkillAnimation());
+			}
 			battle.SetRageAvailable(source.CombatantFaction, false);
 			if (source.CombatantFaction == Faction.Pigs)
 			{

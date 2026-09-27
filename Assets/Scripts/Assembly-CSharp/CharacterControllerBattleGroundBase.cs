@@ -571,7 +571,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	private ICombatant GetPerkVisualEffectTarget(PerkType type, ICombatant source, ICombatant target)
 	{
-		if (type == PerkType.HocusPokus)
+		if (type == PerkType.HocusPokus || type == PerkType.HocusPokusChiliDrain)
 		{
 			return source;
 		}
@@ -589,6 +589,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		case PerkType.Dispel:
 			return "Purge";
 		case PerkType.HocusPokus:
+		case PerkType.HocusPokusChiliDrain:
 			return "Heal_Weak";
 		default:
 			return string.Empty;

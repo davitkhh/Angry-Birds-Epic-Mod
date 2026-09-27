@@ -7,7 +7,7 @@ using SmoothMoves;
 
 namespace ABH.GameDatas.Battle.Skills
 {
-	public class IgnoreDamageSpawnCatch : SkillBattleDataBase
+	public class IgnoreDamageSummonCombatant : SkillBattleDataBase
 	{
 		private float m_ModifiedReferencedDamageInPercent;
 
@@ -50,9 +50,6 @@ namespace ABH.GameDatas.Battle.Skills
 			m_Source = source;
 			if (m_LowerOrHigher < 0f)
 			{
-				var list = new List<float>();
-				list.Add(m_ModifiedReferencedDamageInPercent);
-				var values = list;
 				var battleEffectGameData = new BattleEffectGameData(source, target, new List<BattleEffect>
 				{
 					new BattleEffect
@@ -60,23 +57,36 @@ namespace ABH.GameDatas.Battle.Skills
 						EffectTrigger = EffectTriggerType.OnReceiveDamage,
 						EffectType = BattleEffectType.IgnoreDamageIfLower,
 						AfflicionType = base.Model.Balancing.EffectType,
-						Values = values,
+						Values = new List<float> { m_ModifiedReferencedDamageInPercent },
 						Duration = base.Model.Balancing.EffectDuration,
 						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
 						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
 					}
 				}, base.Model.Balancing.EffectDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
 				battleEffectGameData.AddEffect();
-
-
+			}
+			else if (m_LowerOrHigher > 0f)
+			{
+				var battleEffectGameData = new BattleEffectGameData(source, target, new List<BattleEffect>
+				{
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.OnReceiveDamage,
+						EffectType = BattleEffectType.IgnoreDamageIfHigher,
+						AfflicionType = base.Model.Balancing.EffectType,
+						Values = new List<float> { m_ModifiedReferencedDamageInPercent },
+						Duration = base.Model.Balancing.EffectDuration,
+						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
+						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
+					}
+				}, base.Model.Balancing.EffectDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
+				battleEffectGameData.AddEffect();
+			}
 			DebugLog.Log("Trigger environmental skill: " + base.Model.Balancing.NameId + "; Target: " + target.CombatantName);
-			m_Source = source;
-			var list2 = new List<float>();
-			list2.Add(m_Amount);
-			list2.Add(m_Delay);
-			list2.Add(m_Random);
-			list2.Add(m_Index);
-			var values2 = list2;
+			// Distinct effect ident so this doesn't collide with (and overwrite) the ignore-damage
+			// effect above in CurrrentEffects, and so it doesn't inherit the Ironclad visual/animation
+			// via the generic EvaluateEffect() visual-effect lookup - summoning plays no visual of its own.
+			var summonEffectIdent = base.Model.SkillNameId + "_Summon";
 			var battleEffectGameData2 = new BattleEffectGameData(source, target, new List<BattleEffect>
 			{
 				new BattleEffect
@@ -84,34 +94,13 @@ namespace ABH.GameDatas.Battle.Skills
 					EffectTrigger = EffectTriggerType.OnDealDamagePerTurn,
 					EffectType = BattleEffectType.SummonCombatant,
 					AfflicionType = base.Model.Balancing.EffectType,
-					Values = values2,
+					Values = new List<float> { m_Amount, m_Delay, m_Random, m_Index },
 					Duration = base.Model.Balancing.EffectDuration,
 					EffectAssetId = base.Model.Balancing.EffectIconAssetId,
 					EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
 				}
-			}, base.Model.Balancing.EffectDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
+			}, base.Model.Balancing.EffectDuration, battle, summonEffectIdent, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
 			battleEffectGameData2.AddEffect();
-			}
-			else if (m_LowerOrHigher > 0f)
-			{
-				var list = new List<float>();
-				list.Add(m_ModifiedReferencedDamageInPercent);
-				var values2 = list;
-				var battleEffectGameData2 = new BattleEffectGameData(source, target, new List<BattleEffect>
-				{
-					new BattleEffect
-					{
-						EffectTrigger = EffectTriggerType.OnReceiveDamage,
-						EffectType = BattleEffectType.IgnoreDamageIfHigher,
-						AfflicionType = base.Model.Balancing.EffectType,
-						Values = values2,
-						Duration = base.Model.Balancing.EffectDuration,
-						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
-						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
-					}
-				}, base.Model.Balancing.EffectDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
-				battleEffectGameData2.AddEffect();
-			}
 		}
 
 		public float EvaluateIgnoreDamage(ICombatant invoker)
@@ -145,6 +134,8 @@ namespace ABH.GameDatas.Battle.Skills
 			var num = 0;
 			var currentBattleGameData = ClientInfo.CurrentBattleGameData;
 			dictionary.Add("{value_1}", (m_LowerOrHigher < 0f ? currentBattleGameData == null || currentBattleGameData.m_ironCladValue == 0f ? (int)(DIContainerLogic.GetBattleService().GetReferenceDamageIronclad(invoker.CharacterModel.Level, DIContainerInfrastructure.GetCurrentPlayer().Data.Level, gameConstantsBalancingDataProvider.ReferenceAttackValueBase, gameConstantsBalancingDataProvider.ReferenceAttackValuePerLevelInPercent) * m_ModifiedReferencedDamageInPercent / 100f) : (int)(currentBattleGameData.m_ironCladValue * m_ModifiedReferencedDamageInPercent / 100f) : currentBattleGameData == null || currentBattleGameData.m_dodgeValue == 0f ? (int)(DIContainerLogic.GetBattleService().GetReferenceDamageDodge(invoker.CharacterModel.Level, DIContainerInfrastructure.GetCurrentPlayer().Data.Level, gameConstantsBalancingDataProvider.ReferenceAttackValueBase, gameConstantsBalancingDataProvider.ReferenceAttackValuePerLevelInPercent) * m_ModifiedReferencedDamageInPercent / 100f) : (int)(currentBattleGameData.m_dodgeValue * m_ModifiedReferencedDamageInPercent / 100f)).ToString("0"));
+			dictionary.Add("{value_2}", m_Amount.ToString("0"));
+			dictionary.Add("{value_3}", m_Delay.ToString("0"));
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

@@ -84,15 +84,6 @@
         "CurrentPlayerLevelDelta": 0
       },
       {
-        "NameId": "recipe_weapon_red_lance_01",
-        "LevelMinIncl": 0,
-        "LevelMaxExcl": 0,
-        "Probability": 1.0,
-        "BaseValue": 1,
-        "Span": 0,
-        "CurrentPlayerLevelDelta": 1
-      },
-      {
         "NameId": "recipe_potion_healing_00",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
@@ -9012,19 +9003,10 @@
     "NameId": "loot_resourcenode_021_01",
     "LootTableEntries": [
       {
-        "NameId": "resource_cobalt_stone",
-        "LevelMinIncl": 0,
-        "LevelMaxExcl": 0,
-        "Probability": 1.0,
-        "BaseValue": 1,
-        "Span": 0,
-        "CurrentPlayerLevelDelta": 0
-      },
-      {
         "NameId": "resource_stone",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
-        "Probability": 1.0,
+        "Probability": 0.2,
         "BaseValue": 1,
         "Span": 0,
         "CurrentPlayerLevelDelta": 0
@@ -9042,7 +9024,7 @@
         "NameId": "ingredient_seeds",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
-        "Probability": 2.0,
+        "Probability": 0.5,
         "BaseValue": 1,
         "Span": 0,
         "CurrentPlayerLevelDelta": 0
@@ -9051,7 +9033,7 @@
         "NameId": "ingredient_vial",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
-        "Probability": 1.0,
+        "Probability": 0.4,
         "BaseValue": 1,
         "Span": 0,
         "CurrentPlayerLevelDelta": 0

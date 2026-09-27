@@ -561,6 +561,28 @@
     "RecipeCategoryType": "OffHandEquipment"
   },
   {
+    "NameId": "recipe_offhand_yellow_orb_04",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "recipe_offhand_yellow_orb_04",
+    "LocaBaseId": "recipe_offhand_yellow_orb_04",
+    "SortPriority": 18,
+    "ResultLoot": {
+      "bird_offhand_yellow_orb_06": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
+    "NameId": "recipe_offhand_yellow_orb_05",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "recipe_offhand_yellow_orb_05",
+    "LocaBaseId": "recipe_offhand_yellow_orb_05",
+    "SortPriority": 18,
+    "ResultLoot": {
+      "bird_offhand_yellow_orb_07": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
     "NameId": "recipe_weapon_black_punching_glove_01",
     "ItemType": "CraftingRecipes",
     "AssetBaseId": "recipe_weapon_black_punching_glove_01",

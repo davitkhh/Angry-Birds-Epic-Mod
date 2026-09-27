@@ -87,6 +87,12 @@ namespace ABH.Services.Logic
 
 		private Dictionary<PerkType, Func<KeyValuePair<float, float>, ICombatant, ICombatant, BattleGameData, float>> EarlyEquipmentPerksByType = new Dictionary<PerkType, Func<KeyValuePair<float, float>, ICombatant, ICombatant, BattleGameData, float>>();
 
+		// Heal-for-damage-dealt effects (LeechHealth, HealBanner, DoHeal) are detected on the
+		// OnDealDamage trigger, which fires before attacker crits/buffs and target mitigation are
+		// fully resolved. They queue a heal action here instead of applying it immediately, and
+		// ApplyPendingDamageDealtHeals flushes the queue with the real final damage once it is known.
+		private readonly List<Action<float>> m_PendingDamageDealtHeals = new List<Action<float>>();
+
 		public BattleService()
 		{
 			InitializeBattleEffects();
@@ -1630,6 +1636,20 @@ namespace ABH.Services.Logic
 			battle.m_CurrentWaveTurn++;
 		}
 
+		public void ApplyPendingDamageDealtHeals(float finalDamage)
+		{
+			if (m_PendingDamageDealtHeals.Count == 0)
+			{
+				return;
+			}
+			var pending = new List<Action<float>>(m_PendingDamageDealtHeals);
+			m_PendingDamageDealtHeals.Clear();
+			foreach (var healAction in pending)
+			{
+				healAction(finalDamage);
+			}
+		}
+
 		public int DealDamageFromCurrentTurn(ICombatant target, BattleGameData battle, ICombatant source, bool ignoreRage = false, bool ignoreZeroDamage = true, bool ignoreOnDeathEffect = false, bool ignorePerks = false)
 		{
 			if (target.CombatantView == null)
@@ -1641,6 +1661,11 @@ namespace ABH.Services.Logic
 			{
 			}
 			var num = NormalizeDamage(effectedParam);
+			if (source != null)
+			{
+				source.LastDealtDamage = num;
+			}
+			ApplyPendingDamageDealtHeals(num);
 			if (!ignoreRage)
 			{
 				AddRageForReceiveDamage(num, battle, target);
@@ -2712,6 +2737,59 @@ namespace ABH.Services.Logic
 				return param;
 			});
 			
+			// SpreadDamageReceivedDebuff
+			BattleEffectsByTriggerAndByType[EffectTriggerType.AfterAttack].Add(BattleEffectType.SpreadDamageReceivedDebuff, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				var victim = effectGameData.m_Target.AttackTarget;
+				var turnsLeft = effectGameData.GetTurnsLeft();
+				if (victim == null || !victim.IsAlive || turnsLeft <= 0)
+				{
+					return param;
+				}
+				var values = new List<float> { effect.Values[0] };
+				var spreadEffect = new BattleEffectGameData(victim, victim, new List<BattleEffect>
+				{
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.OnReceiveDamage,
+						EffectType = BattleEffectType.IncreaseDamageReceived,
+						AfflicionType = SkillEffectTypes.Curse,
+						Values = values,
+						Duration = turnsLeft,
+						EffectAssetId = effect.EffectAssetId,
+						EffectAtlasId = effect.EffectAtlasId
+					},
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.AfterAttack,
+						EffectType = BattleEffectType.SpreadDamageReceivedDebuff,
+						AfflicionType = SkillEffectTypes.Curse,
+						Values = values,
+						Duration = turnsLeft,
+						EffectAssetId = effect.EffectAssetId,
+						EffectAtlasId = effect.EffectAtlasId
+					}
+				}, turnsLeft, effectGameData.m_Battle, effectGameData.m_EffectIdent, SkillEffectTypes.Curse, effectGameData.m_LocalizedName, effectGameData.m_SkillIdent);
+				spreadEffect.AddEffect();
+				effectGameData.EvaluateEffect();
+				return param;
+			});
+
+			// IncreaseDamageAndHealingOnAttack
+			BattleEffectsByTriggerAndByType[EffectTriggerType.AfterAttack].Add(BattleEffectType.IncreaseDamageAndHealingOnAttack, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				var increment = effect.Values[0];
+				foreach (var boostedEffect in effectGameData.m_Effects)
+				{
+					if (boostedEffect.EffectType == BattleEffectType.IncreaseDamage || boostedEffect.EffectType == BattleEffectType.IncreaseHealingReceived)
+					{
+						boostedEffect.Values[0] += increment;
+					}
+				}
+				effectGameData.EvaluateEffect();
+				return param;
+			});
+
 			// CleanUndead
 			BattleEffectsByTriggerAndByType[EffectTriggerType.AfterAttack].Add(BattleEffectType.CleanUndead, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -3159,7 +3237,51 @@ namespace ABH.Services.Logic
 				effectGameData.EvaluateEffect();
 				return param;
 			});
-			
+
+			// SummonCombatantHealthGated
+			BattleEffectsByTriggerAndByType[EffectTriggerType.OnDealDamagePerTurn].Add(BattleEffectType.SummonCombatantHealthGated, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				if ((effectGameData.m_Battle.m_CurrentWaveTurn + 1) % (int)effect.Values[1] != 0)
+				{
+					effectGameData.m_Battle.m_EnvEffectTriggered = false;
+					return param;
+				}
+				if (effectGameData.m_Battle.m_EnvEffectTriggered)
+				{
+					return param;
+				}
+				var healthPercent = effectGameData.m_Source.CurrentHealth / effectGameData.m_Source.ModifiedHealth * 100f;
+				var amount = effect.Values[0];
+				var tableIndex = effect.Values[3];
+				if (healthPercent < effect.Values[9])
+				{
+					amount = effect.Values[7];
+					tableIndex = effect.Values[6];
+				}
+				else if (healthPercent <= effect.Values[8])
+				{
+					amount = effect.Values[5];
+					tableIndex = effect.Values[4];
+				}
+				var summonValues = new List<float> { amount, effect.Values[1], effect.Values[2], tableIndex };
+				var bossAssetController = effectGameData.m_Source.CombatantView.m_AssetController as BossAssetController;
+				if (bossAssetController != null)
+				{
+					if (effectGameData.m_Source.IsStunned)
+					{
+						return param;
+					}
+					effectGameData.m_Battle.RaiseSummonCombatant(summonValues, effectGameData.m_Source.CombatantFaction, effectGameData.m_Source.CurrentInitiative, bossAssetController);
+				}
+				else
+				{
+					effectGameData.m_Battle.RaiseSummonCombatant(summonValues, effectGameData.m_Source.CombatantFaction, effectGameData.m_Source.CurrentInitiative, null);
+				}
+				effectGameData.m_Battle.m_EnvEffectTriggered = true;
+				effectGameData.EvaluateEffect();
+				return param;
+			});
+
 			// DoFixedHealDelayed
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnDealDamagePerTurn].Add(BattleEffectType.DoFixedHealDelayed, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -3889,11 +4011,12 @@ namespace ABH.Services.Logic
 					BattleEffectType.IncreaseDamageReceived
 				}, EffectTriggerType.OnReceiveDamage, attacker, effectGameData.m_Target);
 				effectGameData.EvaluateEffect();
-				attacker.ReceiveDamage(effectedParam3 * num61, effectGameData.m_Target);
+				var thornDamage = DIContainerLogic.GetBattleService().ApplyIroncladAndDodgeToRetaliationDamage(effectedParam3 * num61, attacker);
+				attacker.ReceiveDamage(thornDamage, effectGameData.m_Target);
 				DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(attacker, effectGameData.m_Battle, effectGameData.m_Source);
 				return param;
 			});
-			
+
 			// DebuffAttacker
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.DebuffAttacker, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -3960,7 +4083,8 @@ namespace ABH.Services.Logic
 				effectGameData.EvaluateEffect();
 				if (!flag2)
 				{
-					attacker.ReceiveDamage(num57 * effectedParam2 * currentSkillAttackValue * effect.Values[0] / 100f, effectGameData.m_Target);
+					var reflectDamage = DIContainerLogic.GetBattleService().ApplyIroncladAndDodgeToRetaliationDamage(num57 * effectedParam2 * currentSkillAttackValue * effect.Values[0] / 100f, attacker);
+					attacker.ReceiveDamage(reflectDamage, effectGameData.m_Target);
 					DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(attacker, effectGameData.m_Battle, effectGameData.m_Source);
 				}
 				else
@@ -3970,14 +4094,15 @@ namespace ABH.Services.Logic
 						var combatant4 = effectGameData.m_Battle.m_CombatantsByInitiative[num58];
 						if (combatant4.CombatantFaction == attacker.CombatantFaction)
 						{
-							combatant4.ReceiveDamage(num57 * effectedParam2 * currentSkillAttackValue * effect.Values[0] / 100f, effectGameData.m_Target);
+							var reflectDamage = DIContainerLogic.GetBattleService().ApplyIroncladAndDodgeToRetaliationDamage(num57 * effectedParam2 * currentSkillAttackValue * effect.Values[0] / 100f, combatant4);
+							combatant4.ReceiveDamage(reflectDamage, effectGameData.m_Target);
 							DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant4, effectGameData.m_Battle, effectGameData.m_Source);
 						}
 					}
 				}
 				return param;
 			});
-			
+
 			// SpreadDamage
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.SpreadDamage, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -4508,31 +4633,55 @@ namespace ABH.Services.Logic
 				effectGameData.EvaluateEffect();
 				return num40;
 			});
-			
+
+			// ReduceDamageDealtAgainstSource
+			BattleEffectsByTriggerAndByType[EffectTriggerType.OnDealDamage].Add(BattleEffectType.ReduceDamageDealtAgainstSource, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant currentAttackTarget)
+			{
+				if (currentAttackTarget != effectGameData.m_Source)
+				{
+					return param;
+				}
+				var num41 = Math.Max(param - effect.Values[0] / 100f, 0f);
+				effectGameData.EvaluateEffect();
+				return num41;
+			});
+
 			// LeechHealth
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnDealDamage].Add(BattleEffectType.LeechHealth, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
-				var heal2 = effectGameData.m_Target.CurrentSkillAttackValue * (effect.Values[0] / 100f);
 				effectGameData.EvaluateEffect();
-				effectGameData.m_Target.HealDamage(heal2, effectGameData.m_Target);
-				DIContainerLogic.GetBattleService().HealCurrentTurn(effectGameData.m_Target, effectGameData.m_Battle);
+				var healTarget = effectGameData.m_Target;
+				var healPercent = effect.Values[0];
+				var battle = effectGameData.m_Battle;
+				m_PendingDamageDealtHeals.Add(delegate(float finalDamage)
+				{
+					var heal2 = finalDamage * (healPercent / 100f);
+					healTarget.HealDamage(heal2, healTarget);
+					DIContainerLogic.GetBattleService().HealCurrentTurn(healTarget, battle);
+				});
 				return param;
 			});
 			
 			// HealBanner
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnDealDamage].Add(BattleEffectType.HealBanner, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
-				var heal = effectGameData.m_Target.CurrentSkillAttackValue * (effect.Values[0] / 100f);
-				foreach (var item17 in effectGameData.m_Battle.m_CombatantsByInitiative)
+				var healSource = effectGameData.m_Target;
+				var healPercent = effect.Values[0];
+				var battle = effectGameData.m_Battle;
+				m_PendingDamageDealtHeals.Add(delegate(float finalDamage)
 				{
-					if (item17.CombatantFaction == effectGameData.m_Target.CombatantFaction && item17.IsBanner)
+					var heal = finalDamage * (healPercent / 100f);
+					foreach (var item17 in battle.m_CombatantsByInitiative)
 					{
-						effectGameData.EvaluateEffect();
-						item17.HealDamage(heal, effectGameData.m_Target);
-						DIContainerLogic.GetBattleService().HealCurrentTurn(item17, effectGameData.m_Battle);
-						break;
+						if (item17.CombatantFaction == healSource.CombatantFaction && item17.IsBanner)
+						{
+							effectGameData.EvaluateEffect();
+							item17.HealDamage(heal, healSource);
+							DIContainerLogic.GetBattleService().HealCurrentTurn(item17, battle);
+							break;
+						}
 					}
-				}
+				});
 				return param;
 			});
 			
@@ -4542,25 +4691,31 @@ namespace ABH.Services.Logic
 				if (UnityEngine.Random.Range(0, 100) > effect.Values[0])
 					return param;
 
-				var healTarget = effectGameData.m_Target;
-
-				var combatants = new List<ICombatant>();
-				var aliveAllies = effectGameData.m_Battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == healTarget.CombatantFaction && c.CurrentHealth > 0f).ToList();
-				var healAmount = (effectGameData.m_Target.CurrentSkillAttackValue * (effect.Values[1] / 100f)) * param;
-				combatants.AddRange(aliveAllies);
-
-				foreach (var combatant in combatants)
+				var healPercent = effect.Values[1];
+				var battle = effectGameData.m_Battle;
+				var effectOwner = effectGameData.m_Target;
+				m_PendingDamageDealtHeals.Add(delegate(float finalDamage)
 				{
-					if ((combatant.CurrentHealth / combatant.ModifiedHealth) < (healTarget.CurrentHealth / healTarget.ModifiedHealth))
-						healTarget = combatant;
-				}
+					var healTarget = effectOwner;
+					var healAmount = finalDamage * (healPercent / 100f);
 
-				if (healTarget.CurrentHealth > 0f)
-				{
-					healTarget.HealDamage(healAmount, effectGameData.m_Target);
-					DIContainerLogic.GetBattleService().HealCurrentTurn(healTarget, effectGameData.m_Battle);
-					effectGameData.EvaluateEffect();
-				}
+					var combatants = new List<ICombatant>();
+					var aliveAllies = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == healTarget.CombatantFaction && c.CurrentHealth > 0f).ToList();
+					combatants.AddRange(aliveAllies);
+
+					foreach (var combatant in combatants)
+					{
+						if ((combatant.CurrentHealth / combatant.ModifiedHealth) < (healTarget.CurrentHealth / healTarget.ModifiedHealth))
+							healTarget = combatant;
+					}
+
+					if (healTarget.CurrentHealth > 0f)
+					{
+						healTarget.HealDamage(healAmount, effectOwner);
+						DIContainerLogic.GetBattleService().HealCurrentTurn(healTarget, battle);
+						effectGameData.EvaluateEffect();
+					}
+				});
 
 				return param;
 			});
@@ -4626,6 +4781,11 @@ namespace ABH.Services.Logic
 						combatant2.ReceiveDamage(num38, target2);
 						DIContainerLogic.GetBattleService().AddRageForAttack(battle, target2, false);
 						DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant2, battle, effectGameData.m_Source);
+						if (target.ChainedTargets == null)
+						{
+							target.ChainedTargets = new List<ICombatant>();
+						}
+						target.ChainedTargets.Add(combatant2);
 					}
 					effectGameData.EvaluateEffect();
 				}
@@ -5055,6 +5215,57 @@ namespace ABH.Services.Logic
 			return num + num * balancing.StatsBoost / 100f;
 		}
 
+		// Retaliation damage (Thorn/Reflect) is dealt directly via ReceiveDamage instead of going through
+		// the normal OnReceiveDamage pipeline, so it only ever honored ReduceDamageReceived/IncreaseDamageReceived
+		// on the retaliation's target. This replicates Dodge (IgnoreDamageIfHigher) and Ironclad (IgnoreDamageIfLower)
+		// against the already-computed retaliation damage so those defenses can't be bypassed by retaliation effects.
+		public float ApplyIroncladAndDodgeToRetaliationDamage(float damage, ICombatant defender)
+		{
+			if (defender.CurrrentEffects == null)
+			{
+				return damage;
+			}
+			var gameConstants = DIContainerBalancing.GameConstantsBalancingDataProvider;
+			var effects = defender.CurrrentEffects.Values.ToList();
+			foreach (var effectGameData in effects)
+			{
+				foreach (var effect in effectGameData.m_Effects)
+				{
+					if (effect.EffectTrigger != EffectTriggerType.OnReceiveDamage)
+					{
+						continue;
+					}
+					if (effect.EffectType == BattleEffectType.IgnoreDamageIfLower)
+					{
+						if (effectGameData.m_Battle.m_ironCladValue == 0f)
+						{
+							effectGameData.m_Battle.m_ironCladValue = GetReferenceDamageIronclad(effectGameData.m_Source.CharacterModel.Level, effectGameData.m_Battle.m_ControllerLevel, gameConstants.ReferenceAttackValueBase, gameConstants.ReferenceAttackValuePerLevelInPercent);
+						}
+						var ironCladValue = effectGameData.m_Battle.m_ironCladValue;
+						if ((double)Mathf.RoundToInt(damage) < Math.Floor(ironCladValue * effect.Values[0] / 100f))
+						{
+							effectGameData.EvaluateEffect();
+							damage *= 0.5f;
+						}
+					}
+					else if (effect.EffectType == BattleEffectType.IgnoreDamageIfHigher)
+					{
+						if (effectGameData.m_Battle.m_dodgeValue == 0f)
+						{
+							effectGameData.m_Battle.m_dodgeValue = GetReferenceDamageDodge(effectGameData.m_Source.CharacterModel.Level, effectGameData.m_Battle.m_ControllerLevel, gameConstants.ReferenceAttackValueBase, gameConstants.ReferenceAttackValuePerLevelInPercent);
+						}
+						var dodgeCap = effectGameData.m_Battle.m_dodgeValue * effect.Values[0] / 100f;
+						if (Mathf.RoundToInt(damage) > dodgeCap)
+						{
+							effectGameData.EvaluateEffect();
+							damage = Mathf.FloorToInt(dodgeCap);
+						}
+					}
+				}
+			}
+			return damage;
+		}
+
 		public float ApplyEffectsOfTypeOnTriggerType(float effectedParam, List<BattleEffectType> effectTypes, EffectTriggerType triggerType, ICombatant effectOwner, ICombatant target)
 		{
 			var num = effectedParam;
@@ -5188,6 +5399,17 @@ namespace ABH.Services.Logic
 				var num8 = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyVigor }, EffectTriggerType.OnApplyPerk, invoker, target);
 				return paramModifierPair.Key * (100f - num8) / 100f;
 			});
+
+			// Guardian
+			EquipmentPerksByType.Add(PerkType.Guardian, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
+			{
+				if (!target.HasUsedGuardianPerk && target.CurrentHealth - paramModifierPair.Key <= 0f)
+				{
+					target.HasUsedGuardianPerk = true;
+					return Mathf.Max(target.CurrentHealth - 1f, 0f);
+				}
+				return paramModifierPair.Key;
+			});
 			
 			//
 			// Early
@@ -5208,7 +5430,7 @@ namespace ABH.Services.Logic
 			DelayedEquipmentPerksByType.Add(PerkType.HocusPokus, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
 			{
 				var num6 = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyHocusPokus }, EffectTriggerType.OnApplyPerk, invoker, target);
-				var heal = invoker.CurrentSkillAttackValue * num6 / 100f;
+				var heal = invoker.LastDealtDamage * num6 / 100f;
 				if (invoker.CurrentHealth > 0f)
 				{
 					invoker.HealDamage(heal, invoker);
@@ -5216,7 +5438,22 @@ namespace ABH.Services.Logic
 				}
 				return paramModifierPair.Key;
 			});
-			
+
+			// HocusPokusChiliDrain
+			DelayedEquipmentPerksByType.Add(PerkType.HocusPokusChiliDrain, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
+			{
+				var healPercent = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyHocusPokus }, EffectTriggerType.OnApplyPerk, invoker, target);
+				var heal2 = invoker.LastDealtDamage * healPercent / 100f;
+				if (invoker.CurrentHealth > 0f)
+				{
+					invoker.HealDamage(heal2, invoker);
+					HealCurrentTurn(invoker, battle);
+				}
+				var chiliDrainPercent = invoker.CombatantMainHandEquipment.BalancingData.Perk.PerkValue2;
+				ReduceRageFromAttack(chiliDrainPercent, battle, invoker);
+				return paramModifierPair.Key;
+			});
+
 			// Bedtime
 			DelayedEquipmentPerksByType.Add(PerkType.Bedtime, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
 			{
@@ -5263,7 +5500,33 @@ namespace ABH.Services.Logic
 					combatant.ReceiveDamage(num4, invoker);
 					DIContainerLogic.GetBattleService().AddRageForAttack(battle, invoker, false);
 					DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, invoker);
+					if (target.ChainedTargets == null)
+					{
+						target.ChainedTargets = new List<ICombatant>();
+					}
+					target.ChainedTargets.Add(combatant);
 				}
+				return paramModifierPair.Key;
+			});
+
+			// Weaken
+			DelayedEquipmentPerksByType.Add(PerkType.Weaken, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
+			{
+				var values = new List<float> { paramModifierPair.Value };
+				var battleEffectGameData = new BattleEffectGameData(invoker, target, new List<BattleEffect>
+				{
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.OnDealDamage,
+						EffectType = BattleEffectType.ReduceDamageDealtAgainstSource,
+						AfflicionType = SkillEffectTypes.Curse,
+						Values = values,
+						Duration = 1,
+						EffectAtlasId = "Skills_Birds_01",
+						EffectAssetId = "Overpower"
+					}
+				}, 1, battle, "Overpower", SkillEffectTypes.Curse, DIContainerInfrastructure.GetLocaService().GetPerkName(PerkType.Weaken), string.Empty);
+				battleEffectGameData.AddEffect();
 				return paramModifierPair.Key;
 			});
 		}
@@ -5410,7 +5673,7 @@ namespace ABH.Services.Logic
 			{
 				return false;
 			}
-			if (perk.Type != PerkType.Vigor)
+			if (perk.Type != PerkType.Vigor && perk.Type != PerkType.Guardian)
 			{
 				return false;
 			}

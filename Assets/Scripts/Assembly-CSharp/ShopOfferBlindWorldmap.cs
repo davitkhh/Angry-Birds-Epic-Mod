@@ -34,6 +34,13 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 
 	private GameObject m_IconInstanciated;
 
+	// Must match the "IconPreview" layer added in ProjectSettings/TagManager.asset.
+	private const int IconPreviewLayer = 25;
+
+	private UITexture m_IconPreviewTexture;
+
+	private EquipmentIconPreviewPool.PreviewStage m_IconPreviewStage;
+
 	[SerializeField]
 	private UILabel m_BlindMainLabel;
 
@@ -624,6 +631,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		if (m_IconInstanciated)
 		{
 		}
+		ReleaseIconPreviewStage();
 		DeRegisterEventHandlers();
 	}
 
@@ -672,6 +680,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		{
 			RemoveAsset(item);
 		}
+		ReleaseIconPreviewStage();
 		if (item == null)
 		{
 			return;
@@ -685,11 +694,15 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false);
 			break;
 		case InventoryItemType.MainHandEquipment:
-			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false);
+			m_IconPreviewStage = EquipmentIconPreviewPool.Instance != null ? EquipmentIconPreviewPool.Instance.AcquireStage() : null;
+			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconPreviewStage != null ? m_IconPreviewStage.StageRoot : m_IconRoot, Vector3.zero, Quaternion.identity, false);
+			ShowIconPreviewTexture(m_IconPreviewStage);
 			StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
 			break;
 		case InventoryItemType.OffHandEquipment:
-			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false);
+			m_IconPreviewStage = EquipmentIconPreviewPool.Instance != null ? EquipmentIconPreviewPool.Instance.AcquireStage() : null;
+			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconPreviewStage != null ? m_IconPreviewStage.StageRoot : m_IconRoot, Vector3.zero, Quaternion.identity, false);
+			ShowIconPreviewTexture(m_IconPreviewStage);
 			StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
 			break;
 		case InventoryItemType.Mastery:
@@ -705,9 +718,42 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		}
 		
 		if (m_IconInstanciated)
+		{
 			m_IconInstanciated.transform.localScale = Vector3.one;
+			if (m_IconPreviewStage != null)
+			{
+				NGUITools.SetLayer(m_IconInstanciated, IconPreviewLayer);
+			}
+		}
 	}
-	
+
+	private void ShowIconPreviewTexture(EquipmentIconPreviewPool.PreviewStage stage)
+	{
+		if (m_IconPreviewTexture == null && m_IconRoot != null)
+		{
+			m_IconPreviewTexture = m_IconRoot.GetComponentInChildren<UITexture>(true);
+		}
+		if (m_IconPreviewTexture == null)
+		{
+			return;
+		}
+		m_IconPreviewTexture.mainTexture = stage != null ? stage.RenderTexture : null;
+		m_IconPreviewTexture.gameObject.SetActive(stage != null);
+	}
+
+	private void ReleaseIconPreviewStage()
+	{
+		if (m_IconPreviewStage != null && EquipmentIconPreviewPool.Instance != null)
+		{
+			EquipmentIconPreviewPool.Instance.ReleaseStage(m_IconPreviewStage);
+		}
+		m_IconPreviewStage = null;
+		if (m_IconPreviewTexture != null)
+		{
+			m_IconPreviewTexture.gameObject.SetActive(false);
+		}
+	}
+
 	private IEnumerator SetRecipeShader(Renderer[] renderers)
 	{
 		yield return new WaitForEndOfFrame();

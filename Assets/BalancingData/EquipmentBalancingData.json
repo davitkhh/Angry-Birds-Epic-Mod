@@ -38,7 +38,7 @@
     "AssetBaseId": "MainHand_Sword_01",
     "LocaBaseId": "bird_weapon_red_sword",
     "SortPriority": 1,
-    "BaseStat": 16,
+    "BaseStat": 17,
     "StatPerLevel": 0,
     "StatPerQuality": 0,
     "StatPerQualityPercent": [
@@ -84,9 +84,9 @@
     "IsRanged": false,
     "ProjectileAssetId": "",
     "Perk": {
-      "Type": "CriticalStrike",
-      "ProbablityInPercent": 15.0,
-      "PerkValue": 50.0
+      "Type": "Weaken",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 30.0
     },
     "RestrictedBirdId": "bird_red",
     "DirectAssetAndLoca": false,
@@ -439,7 +439,7 @@
     "Perk": {
       "Type": "Vigor",
       "ProbablityInPercent": 100.0,
-      "PerkValue": 5.0
+      "PerkValue": 10.0
     },
     "RestrictedBirdId": "bird_red",
     "DirectAssetAndLoca": true,
@@ -509,9 +509,9 @@
     "IsRanged": false,
     "ProjectileAssetId": "",
     "Perk": {
-      "Type": "Vigor",
+      "Type": "Guardian",
       "ProbablityInPercent": 100.0,
-      "PerkValue": 5.0
+      "PerkValue": 0.0
     },
     "RestrictedBirdId": "bird_red",
     "DirectAssetAndLoca": false,
@@ -992,18 +992,16 @@
     "StatPerLevel": 25,
     "StatPerQuality": 0,
     "StatPerQualityPercent": [
-      0,
-      10,
-      20,
-      30
+      0
     ],
     "AnimationIndex": 1,
     "IsRanged": true,
     "ProjectileAssetId": "",
     "Perk": {
-      "Type": "HocusPokus",
-      "ProbablityInPercent": 100.0,
-      "PerkValue": 15.0
+      "Type": "HocusPokusChiliDrain",
+      "ProbablityInPercent": 50.0,
+      "PerkValue": 15.0,
+      "PerkValue2": 20.0
     },
     "RestrictedBirdId": "bird_yellow",
     "DirectAssetAndLoca": false,
@@ -1657,6 +1655,78 @@
   },
   {
     "NameId": "bird_offhand_yellow_orb_02",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_Orb",
+    "LocaBaseId": "bird_offhand_yellow_orb",
+    "SortPriority": 4,
+    "BaseStat": 42,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      10,
+      20,
+      30
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "Vitality",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 15.0
+    },
+    "RestrictedBirdId": "bird_yellow",
+    "DirectAssetAndLoca": false,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": -9,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_offhand_yellow_orb_06",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_Orb",
+    "LocaBaseId": "bird_offhand_yellow_orb",
+    "SortPriority": 4,
+    "BaseStat": 42,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      10,
+      20,
+      30
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "Vitality",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 15.0
+    },
+    "RestrictedBirdId": "bird_yellow",
+    "DirectAssetAndLoca": false,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": -9,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_offhand_yellow_orb_07",
     "ItemType": "OffHandEquipment",
     "AssetBaseId": "OffHand_Orb",
     "LocaBaseId": "bird_offhand_yellow_orb",

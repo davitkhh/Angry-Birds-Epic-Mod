@@ -306,6 +306,8 @@ namespace ABH.GameDatas.Battle
 					{
 						continue;
 					}
+					skillTarget.EffectIdentsBeforeImpact = skillTarget.CurrrentEffects != null ? skillTarget.CurrrentEffects.Keys.ToList() : new List<string>();
+					skillTarget.ChainedTargets = new List<ICombatant>();
 					var modifierInPercent = 100f;
 					if (!base.Model.SkillParameters.TryGetValue("damage_in_percent", out modifierInPercent))
 					{
@@ -462,6 +464,21 @@ namespace ABH.GameDatas.Battle
 				foreach (var action3 in ActionsAfterDamageDealt)
 				{
 					action3(damage, m_Battle, m_Source, skillTarget);
+				}
+				if (skillTarget.ChainedTargets != null && skillTarget.ChainedTargets.Count > 0 && skillTarget.CurrrentEffects != null)
+				{
+					var effectIdentsBeforeImpact = skillTarget.EffectIdentsBeforeImpact ?? new List<string>();
+					foreach (var pair in skillTarget.CurrrentEffects)
+					{
+						if (effectIdentsBeforeImpact.Contains(pair.Key))
+						{
+							continue;
+						}
+						foreach (var chainedTarget in skillTarget.ChainedTargets)
+						{
+							new BattleEffectGameData(pair.Value, null, chainedTarget).AddEffect();
+						}
+					}
 				}
 			}
 			foreach (var action2 in ActionsToDelayEnd)

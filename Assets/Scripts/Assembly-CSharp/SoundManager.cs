@@ -23,6 +23,52 @@ public class SoundManager : MonoBehaviour, ISoundManager
 	[SerializeField]
 	public readonly Dictionary<int, List<string>> m_muteReasonsPerChannel = new Dictionary<int, List<string>>();
 
+	private const float SimultaneousSoundVolumeStart = 0.2f;
+
+	private const float SimultaneousSoundVolumeStep = 0.1f;
+
+	private class PendingSimultaneousPlay
+	{
+		public int Count;
+
+		public AudioSource Source;
+	}
+
+	private readonly Dictionary<string, PendingSimultaneousPlay> m_pendingSimultaneousPlays = new Dictionary<string, PendingSimultaneousPlay>();
+
+	// When the same sound is triggered more than once on the exact same frame (e.g. several pigs
+	// laughing at once), the actual trigger is deferred to the end of the frame so the final
+	// duplicate count is known before anything plays. Only one instance is then started, with its
+	// volume jumps to SimultaneousSoundVolumeStart (120%) as soon as there are 2 simultaneous plays,
+	// then increases linearly by SimultaneousSoundVolumeStep per further duplicate (10% per
+	// duplicate, e.g. 2 simultaneous plays = 120%, 3 = 130%, 4 = 140%...). This bakes the boosted
+	// volume directly into the Start() call instead
+	// of adjusting AudioSource.volume after the fact, which does not reliably affect a sound
+	// already triggered via AudioSource.PlayOneShot.
+	private void PlayWithSimultaneousStacking(Sound sound)
+	{
+		PendingSimultaneousPlay pending;
+		if (m_pendingSimultaneousPlays.TryGetValue(sound.NameId, out pending))
+		{
+			pending.Count++;
+			return;
+		}
+		pending = new PendingSimultaneousPlay { Count = 1, Source = sound.Source };
+		m_pendingSimultaneousPlays[sound.NameId] = pending;
+		StartCoroutine(FlushSimultaneousPlay(sound, pending));
+	}
+
+	private IEnumerator FlushSimultaneousPlay(Sound sound, PendingSimultaneousPlay pending)
+	{
+		yield return new WaitForEndOfFrame();
+		m_pendingSimultaneousPlays.Remove(sound.NameId);
+		sound.Source = pending.Source;
+		var originalVolume = sound.Volume;
+		sound.Volume = originalVolume * ((pending.Count <= 1) ? 1f : (1f + SimultaneousSoundVolumeStart + SimultaneousSoundVolumeStep * (pending.Count - 2)));
+		sound.Start();
+		sound.Volume = originalVolume;
+	}
+
 	public ISoundManager Initialize()
 	{
 		foreach (var sound in Sounds)
@@ -112,7 +158,7 @@ public class SoundManager : MonoBehaviour, ISoundManager
 			{
 				m_SoundLookup[key].Source = m_DefaultSource;
 			}
-			m_SoundLookup[key].Start();
+			PlayWithSimultaneousStacking(m_SoundLookup[key]);
 			return m_SoundLookup[key];
 		}
 		return null;
@@ -127,7 +173,7 @@ public class SoundManager : MonoBehaviour, ISoundManager
 		if (m_SoundLookup.ContainsKey(key))
 		{
 			m_SoundLookup[key].Source = gob.GetComponent<AudioSource>();
-			m_SoundLookup[key].Start();
+			PlayWithSimultaneousStacking(m_SoundLookup[key]);
 			return m_SoundLookup[key];
 		}
 		return null;

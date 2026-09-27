@@ -15,5 +15,8 @@ namespace ABH.Shared.Models.Generic
 
 		[ProtoMember(3)]
 		public float PerkValue { get; set; }
+
+		[ProtoMember(4)]
+		public float PerkValue2 { get; set; }
 	}
 }

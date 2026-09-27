@@ -21,6 +21,9 @@ namespace ABH.Shared.Generic
 		MythicProtection,
 		Finisher,
 		Stronghold,
-		Justice
+		Justice,
+		HocusPokusChiliDrain,
+		Guardian,
+		Weaken
 	}
 }

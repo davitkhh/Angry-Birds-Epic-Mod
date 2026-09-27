@@ -76,6 +76,10 @@ namespace ABH.GameDatas.Interfaces
 
 		string LastAddedEffect { get; set; }
 
+		List<string> EffectIdentsBeforeImpact { get; set; }
+
+		List<ICombatant> ChainedTargets { get; set; }
+
 		Dictionary<string, float> CurrentStatBuffs { get; set; }
 
 		SkillBattleDataBase KnockedOutSkill { get; set; }
@@ -88,6 +92,8 @@ namespace ABH.GameDatas.Interfaces
 
 		bool IsRevivedOnce { get; set; }
 
+		bool HasUsedGuardianPerk { get; set; }
+
 		bool OverrideHitAnimation { get; set; }
 
 		bool UsedConsumable { get; set; }
@@ -99,6 +105,8 @@ namespace ABH.GameDatas.Interfaces
 		int StunTurns { get; set; }
 
 		float CurrentSkillAttackValue { get; set; }
+
+		float LastDealtDamage { get; set; }
 
 		bool IsRageAvailiable { get; }
 

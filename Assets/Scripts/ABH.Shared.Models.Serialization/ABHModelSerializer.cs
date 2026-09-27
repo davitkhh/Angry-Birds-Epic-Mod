@@ -29360,6 +29360,15 @@ public sealed class ABHModelSerializer : TypeModel
         case BattleEffectType.AddBonusTurnPvP:
                 ProtoWriter.WriteInt32(128, _param1);
                 break;
+        case BattleEffectType.SpreadDamageReceivedDebuff:
+                ProtoWriter.WriteInt32(129, _param1);
+                break;
+        case BattleEffectType.IncreaseDamageAndHealingOnAttack:
+                ProtoWriter.WriteInt32(130, _param1);
+                break;
+        case BattleEffectType.ReduceDamageDealtAgainstSource:
+                ProtoWriter.WriteInt32(131, _param1);
+                break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -29976,6 +29985,15 @@ public sealed class ABHModelSerializer : TypeModel
             case 128:
                   battleEffectType = BattleEffectType.AddBonusTurnPvP;
                   break;
+            case 129:
+                  battleEffectType = BattleEffectType.SpreadDamageReceivedDebuff;
+                  break;
+            case 130:
+                  battleEffectType = BattleEffectType.IncreaseDamageAndHealingOnAttack;
+                  break;
+            case 131:
+                  battleEffectType = BattleEffectType.ReduceDamageDealtAgainstSource;
+                  break;
             default:
               _param1.ThrowEnumException(typeof (BattleEffectType), num2);
               break;
@@ -30338,6 +30356,15 @@ public sealed class ABHModelSerializer : TypeModel
         case PerkType.Justice:
           ProtoWriter.WriteInt32(17, _param1);
           break;
+        case PerkType.HocusPokusChiliDrain:
+          ProtoWriter.WriteInt32(18, _param1);
+          break;
+        case PerkType.Guardian:
+          ProtoWriter.WriteInt32(19, _param1);
+          break;
+        case PerkType.Weaken:
+          ProtoWriter.WriteInt32(20, _param1);
+          break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -30350,10 +30377,16 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteSingle((float) probablityInPercent, _param1);
     }
     var perkValue = (double) _param0.PerkValue;
-    if (perkValue == 0.0)
+    if (perkValue != 0.0)
+    {
+      ProtoWriter.WriteFieldHeader(3, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle((float) perkValue, _param1);
+    }
+    var perkValue2 = (double) _param0.PerkValue2;
+    if (perkValue2 == 0.0)
       return;
-    ProtoWriter.WriteFieldHeader(3, WireType.Fixed32, _param1);
-    ProtoWriter.WriteSingle((float) perkValue, _param1);
+    ProtoWriter.WriteFieldHeader(4, WireType.Fixed32, _param1);
+    ProtoWriter.WriteSingle((float) perkValue2, _param1);
   }
 
   private static EquipmentPerk Read(EquipmentPerk _param0, ProtoReader _param1)
@@ -30428,6 +30461,15 @@ public sealed class ABHModelSerializer : TypeModel
             case 17:
               perkType = PerkType.Justice;
               break;
+            case 18:
+              perkType = PerkType.HocusPokusChiliDrain;
+              break;
+            case 19:
+              perkType = PerkType.Guardian;
+              break;
+            case 20:
+              perkType = PerkType.Weaken;
+              break;
             default:
               _param1.ThrowEnumException(typeof (PerkType), num2);
               break;
@@ -30454,6 +30496,16 @@ public sealed class ABHModelSerializer : TypeModel
           }
           var num4 = _param1.ReadSingle();
           _param0.PerkValue = num4;
+          continue;
+        case 4:
+          if (_param0 == null)
+          {
+            var equipmentPerk = new EquipmentPerk();
+            ProtoReader.NoteObject((object) equipmentPerk, _param1);
+            _param0 = equipmentPerk;
+          }
+          var num5 = _param1.ReadSingle();
+          _param0.PerkValue2 = num5;
           continue;
         default:
           if (_param0 == null)
@@ -40452,6 +40504,15 @@ public sealed class ABHModelSerializer : TypeModel
       case BattleEffectType.AddBonusTurnPvP:
         ProtoWriter.WriteInt32(128, _param1);
         break;
+      case BattleEffectType.SpreadDamageReceivedDebuff:
+        ProtoWriter.WriteInt32(129, _param1);
+        break;
+      case BattleEffectType.IncreaseDamageAndHealingOnAttack:
+        ProtoWriter.WriteInt32(130, _param1);
+        break;
+      case BattleEffectType.ReduceDamageDealtAgainstSource:
+        ProtoWriter.WriteInt32(131, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -40851,6 +40912,15 @@ public sealed class ABHModelSerializer : TypeModel
       case 128:
               battleEffectType = BattleEffectType.AddBonusTurnPvP;
               break;
+      case 129:
+              battleEffectType = BattleEffectType.SpreadDamageReceivedDebuff;
+              break;
+      case 130:
+              battleEffectType = BattleEffectType.IncreaseDamageAndHealingOnAttack;
+              break;
+      case 131:
+              battleEffectType = BattleEffectType.ReduceDamageDealtAgainstSource;
+              break;
       default:
         _param1.ThrowEnumException(typeof (BattleEffectType), num);
         break;
@@ -41193,6 +41263,15 @@ public sealed class ABHModelSerializer : TypeModel
       case PerkType.Justice:
         ProtoWriter.WriteInt32(17, _param1);
         break;
+      case PerkType.HocusPokusChiliDrain:
+        ProtoWriter.WriteInt32(18, _param1);
+        break;
+      case PerkType.Guardian:
+        ProtoWriter.WriteInt32(19, _param1);
+        break;
+      case PerkType.Weaken:
+        ProtoWriter.WriteInt32(20, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -41258,6 +41337,15 @@ public sealed class ABHModelSerializer : TypeModel
         break;
       case 17:
         perkType = PerkType.Justice;
+        break;
+      case 18:
+        perkType = PerkType.HocusPokusChiliDrain;
+        break;
+      case 19:
+        perkType = PerkType.Guardian;
+        break;
+      case 20:
+        perkType = PerkType.Weaken;
         break;
       default:
         _param1.ThrowEnumException(typeof (PerkType), num);

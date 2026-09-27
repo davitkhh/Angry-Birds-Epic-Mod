@@ -1224,6 +1224,10 @@ public class BattleMgr : BattleMgrBase
 				var bird = factionMembers[i];
 				DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType((float)bird.CombatantFaction, EffectTriggerType.OnEndOfTurn, bird, bird);
 			}
+			if (combatant.CombatantFaction == Faction.Birds)
+			{
+				base.Model.m_PigDamageTakenLastTurn = base.Model.m_AllBirdDamageInCurrentTurn;
+			}
 			base.Model.m_AllBirdDamageInCurrentTurn = 0f;
 		}
 		combatant.StartedHisTurn = false;

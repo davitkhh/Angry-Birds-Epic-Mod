@@ -21470,6 +21470,168 @@ MonoBehaviour:
       EffectTextIdent: 
       HasText: 0
       DoNotMirror: 0
+  - BalancingId: OverpowerRd
+    VisualEffects:
+    - SpawnTiming: 1
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Generic_BodyAirflow_Strong
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 1
+      DelayInSeconds: 0.1
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 2
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_WeaponEffect_Strike_Medium
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Impact_Top
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: 
+      OnHitEffect: 1
+      OnHitPrefix: SkillFX_Hit_Single
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 5
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: Camera_Shake_Weak
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0.5
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Generic_Aura_Curse
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 3
+      DelayInSeconds: 1
+      Type: 1
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Curse_LowerAttackRd_Weak
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_GroundImpact_SandSwirl_Strong
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
   - BalancingId: OverThere
     VisualEffects:
     - SpawnTiming: 0
@@ -40915,6 +41077,21 @@ MonoBehaviour:
       Value: 0
     AssetPrioritiy: 0
     Source: {fileID: 0}
+  - NameId: Heartache
+    AssetNames:
+    - Heartache
+    ChannelId: 0
+    Muted: 0
+    Volume: 0.98
+    Params:
+    - Type: 0
+      Value: 0
+    - Type: 2
+      Value: 0
+    - Type: 3
+      Value: 1
+    AssetPrioritiy: 0
+    Source: {fileID: 0}
   m_DefaultSource: {fileID: 102}
   m_AudioAssetProviders:
   - Prioritiy: 0
@@ -41516,6 +41693,18 @@ MonoBehaviour:
   - NameId: SkillFX_Curse_LowerAttack_Weak
     AssetLoadingType: 0
     Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_LowerAttack_Weak
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: SkillFX_Curse_LowerAttackRd_Strong
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_LowerAttackRd_Strong
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: SkillFX_Curse_LowerAttackRd_Weak
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_LowerAttackRd_Weak
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
@@ -48017,6 +48206,42 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
+  - NameId: PigBruteMic
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigBruteMic
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: PigCharents
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigCharents
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MinionRogueShield
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueShield
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MinionRogueDynamite
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueDynamite
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: PigKnightYellow
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigKnightYellow
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MinionGuardFork
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionGuardFork
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
   - NameId: Piglette
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/8_Base/Piglette
@@ -50947,6 +51172,12 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: wav
+  - NameId: Heartache
+    AssetLoadingType: 0
+    Path: Sound/Music/Heartache
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: ogg
   - NameId: character_red_attack_03
     AssetLoadingType: 0
     Path: Sound/Characters/Birds/RedBird/character_red_attack_03

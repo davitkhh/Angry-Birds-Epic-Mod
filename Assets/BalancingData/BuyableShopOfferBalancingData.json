@@ -151,6 +151,230 @@
     "DiscountPrice": 0,
     "DisplayAfterPurchase": false,
     "ExclusiveOffer": false,
+    "Level": 5,
+    "OfferContents": {
+      "recipe_offhand_red_shield_01": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 1,
+    "Category": "shop_00_offhand_red",
+    "NameId": "offer_recipe_offhand_red_shield_00",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_red",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItemWithLevel",
+        "NameId": "recipe_offhand_red_shield_01",
+        "Value": 3.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 8.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "recipe_offhand_yellow_orb_04": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 2,
+    "Category": "shop_00_offhand_yellow",
+    "NameId": "offer_recipe_offhand_yellow_orb_00",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_yellow",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItemWithLevel",
+        "NameId": "recipe_offhand_yellow_orb_04",
+        "Value": 3.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 8.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 4,
+    "OfferContents": {
+      "recipe_weapon_red_lance_01": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 3,
+    "Category": "shop_00_lance_red",
+    "NameId": "offer_recipe_weapon_red_lance_00",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_red",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItemWithLevel",
+        "NameId": "recipe_weapon_red_lance_01",
+        "Value": 8.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 12.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 4,
+    "OfferContents": {
+      "recipe_weapon_red_sword_02": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 4,
+    "Category": "shop_00_sword_red",
+    "NameId": "offer_recipe_weapon_red_sword_02",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_red",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItemWithLevel",
+        "NameId": "recipe_weapon_red_sword_02",
+        "Value": 8.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 12.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
     "Level": 6,
     "OfferContents": {
       "recipe_offhand_red_shield_01": 1
@@ -24164,7 +24388,7 @@
     "NameId": "offer_bonuscode_google_play_summer_sale",
     "AssetId": "",
     "LocaId": "",
-    "DiscountValue": 0,
+    "DiscountValue": 0, 
     "DiscountRequirements": null,
     "DiscountStartDate": 0,
     "DiscountEndDate": 0,

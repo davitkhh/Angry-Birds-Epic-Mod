@@ -102,6 +102,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/RateAppController.cs" />
     <Compile Include="Assets/GooglePlayGames/BasicApi/Achievement.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/PlayerStatsObject.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/IncreaseDamageRandomAlly.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/AssetLoadingInfo.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/AttackAndStealCoins.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/ImmunityToTaunt.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/CHMeshSprite.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/UIPlaySound.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ResourceNodeManager.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/SpawnChuckOnDeath.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/VisualEffectsBalancing.cs" />
     <Compile Include="Assets/GooglePlayGames/ISocialPlatform/PlayGamesScore.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/EventManagerGameData.cs" />
@@ -269,6 +271,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/SeasonRewardProgressUi.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/HotSpotWorldMapAssetBattleProxy.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/BattleEffectDataBase.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/EquipmentIconPreviewPool.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/FontInitializer.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Native/PInvoke/IosPlatformConfiguration.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/BubbleSetting.cs" />
@@ -308,7 +311,6 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/PvPSeasonManagerGameData.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/AnimatedColor.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/AnalyticsSystemFlurryiOSImpl.cs" />
-    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/IgnoreDamageAndSpawnCatcher.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/ReflectDelayed.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/EggSurpriseOnDeath.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/PassiveImmuneAfterRevive.cs" />
@@ -607,7 +609,6 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Shared/BalancingData/LootTableBalancingDataProvider.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/TweenAlpha.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ChWebRequestNullImpl.cs" />
-    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/PassiveRageChannelVampiric.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/CHMotionFadeAndTween.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/IncreaseDamageDealtAndReceived.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Services/Logic/CraftingService.cs" />
@@ -641,6 +642,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/DragController.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Native/PInvoke/NearbyConnectionsManager.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/AchievementServiceGooglePlayServicesImpl.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/SimpleAttackWithMutualTauntSkill.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/Rcs/SocialServices.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/HotSpotWorldMapAssetBattleFull.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ShopOfferBlindBundleBase.cs" />
@@ -702,8 +704,10 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/CollectionItemSlot.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Android/Developers/JavaObjWrapper.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Tutorial/Steps/HarvestTutorialStep.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/PhasedDamageAndCounterBlessing.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/PopupSpecialOfferStateMgr.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/BundleSaleSetInfo.cs" />
+    <Compile Include="Assets/Scripts/Patch/LocationThemeOverrides.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ProfileMerger.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Android/Gms/Common/Api/ResultCallback.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/EventDetailUI.cs" />
@@ -805,6 +809,7 @@
     <Compile Include="Assets/GooglePlayGames/Platforms/Native/Cwrapper/IosPlatformConfiguration.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/CraftingResultUI.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Native/PInvoke/NativeEndpointDetails.cs" />
+    <Compile Include="Assets/Scripts/Patch/MusicLoopPointOverrides.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/NetworkStatusServiceSimple.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/BuildParameter.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/UIEventTrigger.cs" />
@@ -947,6 +952,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/PanelClippingLayoutControl.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/CreditsManager.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/MissingArenaEnergyOverlay.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/IgnoreDamageAndSummonCombatant.cs" />
     <Compile Include="Assets/GooglePlayGames/Platforms/Native/Cwrapper/Types.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/Rcs/OnlineMatchmaker.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/UISpriteAnimation.cs" />
@@ -1200,9 +1206,10 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/MailboxMessages/ResponseBirdBorrowMessage.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/HeaderBanner.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/DailyLoginUI.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/PassiveVampiricChannelRage.cs" />
     <Compile Include="Assets/GooglePlayGames/BasicApi/Nearby/INearbyConnectionClient.cs" />
-    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Services/Logic/BattleService.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/CharacterControllerBattleGround.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Services/Logic/BattleService.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ObjectiveOverlay.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/Utils.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/PopupRootUI.cs" />
@@ -1373,6 +1380,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/MailboxMessages/ResponseFriendshipEssenceMessage.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/ReduceDamageReceivedDelayed.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/ChronicleCaveGameData.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/AttackWithBonusDamageFromPigDamageTaken.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/TweenVolume.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/Rcs/Application.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ChainChestRewardUI.cs" />
@@ -1449,6 +1457,7 @@
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Tutorial/Steps/ExitBirdmanagerTutorialStep.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/SplashScreenStateMgr.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/DebugCampUI.cs" />
+    <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/SummonCombatantHealthGated.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/ABH/Services/Logic/Interfaces/IScoringService.cs" />
     <Compile Include="Assets/GooglePlayGames/BasicApi/Multiplayer/Participant.cs" />
     <Compile Include="Assets/Scripts/Assembly-CSharp/EventSystemStateMgr.cs" />

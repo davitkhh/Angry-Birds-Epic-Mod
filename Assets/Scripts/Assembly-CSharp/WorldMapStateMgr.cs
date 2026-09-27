@@ -48,7 +48,7 @@ public class WorldMapStateMgr : BaseLocationStateManager
 
 	public float[] m_movementStartDelay;
 
-	public float m_BirdSpeed = 100f;
+	public float m_BirdSpeed = 110f;
 
 	public Vector3[] m_HotSpotPositions;
 

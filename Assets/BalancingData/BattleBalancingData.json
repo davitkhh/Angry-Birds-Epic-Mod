@@ -2385,7 +2385,7 @@
       "gold": 2
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_03_MagicCauldron",
-    "UsableFriendBirdsCount": 0,
+    "UsableFriendBirdsCount": 1,
     "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
@@ -2410,7 +2410,7 @@
     "NameId": "battle_012_bird2_resolved",
     "BaseLevel": 2,
     "BattleParticipantsIds": [
-      "bpart_014_1"
+      "bpart_014"
     ],
     "LootTableWheel": {
       "battle_wood": 1
@@ -2433,7 +2433,7 @@
       "gold": 2
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_03",
-    "UsableFriendBirdsCount": 0,
+    "UsableFriendBirdsCount": 1,
     "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "FixedMaximum",
     "BonusPoints": 0,
@@ -2532,11 +2532,11 @@
     },
     "BackgroundAssetId": "Battleground_Castle_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Heartache",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {
-      "Pigs": "summon_bomb_royal_01"
+      "Pigs": "summon_bomb_porky_castle1"
     },
     "EnvironmentalStartWave": 5,
     "MaxBirdsInBattle": 3,
@@ -2558,11 +2558,11 @@
     "NameId": "battle_013_bird2_resolved",
     "BaseLevel": 2,
     "BattleParticipantsIds": [
-      "bpart_015_1",
-      "bpart_016_1",
-      "bpart_017_1",
-      "bpart_018_1",
-      "bpart_019_1"
+      "bpart_015",
+      "bpart_016",
+      "bpart_017",
+      "bpart_018",
+      "bpart_019"
     ],
     "LootTableWheel": {
       "battle_pig_castle_01": 1
@@ -2591,11 +2591,11 @@
     },
     "BackgroundAssetId": "Battleground_Castle_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Heartache",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {
-      "Pigs": "summon_bomb_royal_01"
+      "Pigs": "summon_bomb_porky_castle1"
     },
     "EnvironmentalStartWave": 5,
     "MaxBirdsInBattle": 3,
@@ -2647,7 +2647,7 @@
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {
-      "Pigs": "summon_bomb_royal_01"
+      "Pigs": "summon_bomb_porky_castle1"
     },
     "EnvironmentalStartWave": 5,
     "MaxBirdsInBattle": 3,
@@ -2699,7 +2699,7 @@
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {
-      "Pigs": "summon_bomb_royal_01"
+      "Pigs": "summon_bomb_porky_castle1"
     },
     "EnvironmentalStartWave": 5,
     "MaxBirdsInBattle": 3,
@@ -2746,7 +2746,7 @@
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {
-      "Pigs": "summon_bomb_royal_01"
+      "Pigs": "summon_bomb_porky_castle1"
     },
     "EnvironmentalStartWave": 5,
     "MaxBirdsInBattle": 3,

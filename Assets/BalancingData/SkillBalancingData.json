@@ -5,7 +5,7 @@
     "LocaId": "bird_attack_red_knight",
     "SkillParameters": {
       "damage_in_percent": 115.0,
-      "increase_in_percent": 15.0,
+      "increase_in_percent": 20.0,
       "chance": 100.0,
       "effect_only_target": 1.0
     },
@@ -2445,7 +2445,9 @@
     "AssetId": "Restock",
     "LocaId": "bird_support_minion_merchant",
     "SkillParameters": {
-      "chance": 65.0
+      "chance": 65.0,
+      "damage_and_healing_boost": 10.0,
+      "damage_and_healing_boost_per_attack": 10.0
     },
     "SkillTemplateType": "RestockSkill",
     "EffectDuration": 3,
@@ -2879,6 +2881,28 @@
     "TargetCulling": null
   },
   {
+    "NameId": "pig_attack_minion_rogue_dynamite",
+    "AssetId": "BombExplosion",
+    "LocaId": "pig_attack_minion_rogue_dynamite",
+    "SkillParameters": {
+      "damage_in_percent": 90.0,
+      "all": 1.0,
+      "charge": 2.0
+    },
+    "SkillTemplateType": "SimpleAttackSkill",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
     "NameId": "pig_support_rogue_miniboss_02",
     "AssetId": "CallAid",
     "LocaId": "pig_support_rogue_miniboss_02",
@@ -3007,15 +3031,13 @@
     "AssetId": "Lick",
     "LocaId": "pig_support_minion_corporal",
     "SkillParameters": {
-      "health_in_percent": 60.0,
-      "charge": 2.0,
-      "self": 1.0
+      "health_in_percent": 20.0
     },
     "SkillTemplateType": "HealChargeSkill",
     "EffectDuration": 0,
     "TargetType": "Support",
     "EffectType": "Blessing",
-    "TargetingBehavior": "None",
+    "TargetingBehavior": "Weakest",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": true,
     "IconAssetId": "Heal",
@@ -3030,7 +3052,7 @@
     "LocaId": "pig_attack_minion_bird_catcher",
     "SkillParameters": {
       "damage_in_percent": 100.0,
-      "chance": 5.0,
+      "chance": 15.0,
       "duration": 1.0,
       "use_skill_asset": 1.0
     },
@@ -3232,6 +3254,29 @@
       "falloff": 1.0
     },
     "SkillTemplateType": "ReduceRageAttackSkill",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "Strongest",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "AttackCurse",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_minion_guard_fork_castle",
+    "AssetId": "Tickle",
+    "LocaId": "pig_attack_minion_guard_fork_castle",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "chain": 1.0,
+      "chain_reduction": 50.0,
+      "chain_chance": 100.0
+    },
+    "SkillTemplateType": "AttackWithChainSkill",
     "EffectDuration": 0,
     "TargetType": "Attack",
     "EffectType": "Curse",
@@ -3974,8 +4019,8 @@
     "SkillParameters": {
       "damage_in_percent": 125.0
     },
-    "SkillTemplateType": "SimpleAttackWithTauntSkill",
-    "EffectDuration": 0,
+    "SkillTemplateType": "SimpleAttackWithMutualTauntSkill",
+    "EffectDuration": 2,
     "TargetType": "Attack",
     "EffectType": "Curse",
     "TargetingBehavior": "None",
@@ -3993,9 +4038,11 @@
     "LocaId": "pig_support_pirate_charents",
     "SkillParameters": {
       "counter": 100.0,
-      "damage_in_percent": 200.0
+      "damage_in_percent": 80.0,
+      "reduction_in_percent": 50.0,
+      "increase_in_percent": 50.0
     },
-    "SkillTemplateType": "CounterEnemiesBlessing",
+    "SkillTemplateType": "PhasedDamageAndCounterBlessing",
     "EffectDuration": 3,
     "TargetType": "Support",
     "EffectType": "Blessing",
@@ -4573,6 +4620,48 @@
     "IconAtlasId": "Skills_Pigs_01",
     "EffectIconAtlasId": "Skills_Pigs_01",
     "EffectIconAssetId": "Attack",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_brute_mic",
+    "AssetId": "Smash",
+    "LocaId": "pig_attack_brute_mic",
+    "SkillParameters": {
+      "damage_in_percent": 120.0,
+      "charge": 2.0,
+      "bonus_from_pig_damage_taken_in_percent": 50.0
+    },
+    "SkillTemplateType": "AttackWithBonusDamageFromPigDamageTaken",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Attack",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_support_brute_mic",
+    "AssetId": "TitForTat",
+    "LocaId": "pig_support_brute_mic",
+    "SkillParameters": {
+      "damage_taken_increase": 20.0
+    },
+    "SkillTemplateType": "IncreaseDamageRandomAlly",
+    "EffectDuration": 3,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Blessing",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Blessing",
     "TargetCulling": null
   },
   {
@@ -6787,7 +6876,7 @@
     "SkillParameters": {
       "damage_in_percent": 100.0,
       "all": 1.0,
-      "charge": 2.0
+      "charge": 3.0
     },
     "SkillTemplateType": "AttackAndSelfDestruct",
     "EffectDuration": 0,
@@ -6976,6 +7065,28 @@
     "TargetCulling": null
   },
   {
+    "NameId": "pig_attack_prince_porky_big",
+    "AssetId": "QuickStitch",
+    "LocaId": "pig_attack_prince_porky_big",
+    "SkillParameters": {
+      "damage_in_percent": 140.0,
+      "attack_count": 3.0,
+      "charge": 2.0
+    },
+    "SkillTemplateType": "SimpleAttackSkill",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
     "NameId": "pig_support_prince_porky",
     "AssetId": "TitForTat",
     "LocaId": "pig_support_prince_porky",
@@ -6985,7 +7096,7 @@
       "all": 1.0
     },
     "SkillTemplateType": "IncreaseDamageDealtAndReceived",
-    "EffectDuration": 3,
+    "EffectDuration": 2,
     "TargetType": "Support",
     "EffectType": "Blessing",
     "TargetingBehavior": "None",
@@ -7447,14 +7558,15 @@
   {
     "NameId": "pig_passive_ironclad_catcher",
     "AssetId": "Ironclad",
-    "LocaId": "pig_passive_ironclad",
+    "LocaId": "pig_passive_ironclad_catcher",
     "SkillParameters": {
       "refdamage_percent": 22.0,
       "lower_or_higher": -1.0,
-      "spawn_period": 3,
-      "amount": 1
+      "table_index": 27.0,
+      "delay_in_turns": 3.0,
+      "amount": 1.0
     },
-    "SkillTemplateType": "IgnoreDamageAndSpawnCatcher",
+    "SkillTemplateType": "IgnoreDamageSummonCombatant",
     "EffectDuration": -1,
     "TargetType": "Passive",
     "EffectType": "Passive",
@@ -7650,6 +7762,24 @@
     "EffectType": "Passive",
     "TargetingBehavior": "None",
     "TargetAlreadyAffectedTargets": false,
+    "TargetSelfPossible": true,
+    "IconAssetId": "PassiveEffect",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_passive_spawn_chuck",
+    "AssetId": "SpawnChuckOnDeath",
+    "LocaId": "bird_cutscene_help",
+    "SkillParameters": null,
+    "SkillTemplateType": "SpawnChuckOnDeath",
+    "EffectDuration": -1,
+    "TargetType": "Passive",
+    "EffectType": "Passive",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": true,
     "IconAssetId": "PassiveEffect",
     "IconAtlasId": "Skills_Pigs_01",
@@ -8761,6 +8891,34 @@
       "amount": 1.0
     },
     "SkillTemplateType": "SummonCombatantDelayed",
+    "EffectDuration": -1,
+    "TargetType": "Environmental",
+    "EffectType": "Environmental",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "PassiveEffect",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "summon_bomb_porky_castle1",
+    "AssetId": "SummonBomb",
+    "LocaId": "env_summon_bomb",
+    "SkillParameters": {
+      "table_index": 12.0,
+      "delay_in_turns": 2.0,
+      "amount": 2.0,
+      "royal_table_index": 2.0,
+      "royal_amount": 1.0,
+      "mixed_table_index": 13.0,
+      "mixed_amount": 3.0,
+      "royal_health_threshold": 60.0,
+      "desperate_health_threshold": 30.0
+    },
+    "SkillTemplateType": "SummonCombatantHealthGated",
     "EffectDuration": -1,
     "TargetType": "Environmental",
     "EffectType": "Environmental",

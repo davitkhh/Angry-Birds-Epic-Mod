@@ -19,6 +19,8 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private float m_ReductionPerChain;
 
+		private float m_ChainChance = 100f;
+
 		private string m_AddtionalEffectInfo = string.Empty;
 
 		public override void Init(SkillGameData model)
@@ -31,6 +33,10 @@ namespace ABH.GameDatas.Battle.Skills
 			base.Model.SkillParameters.TryGetValue("attack_count", out m_AttackCount);
 			base.Model.SkillParameters.TryGetValue("chain", out m_ChainCount);
 			base.Model.SkillParameters.TryGetValue("chain_reduction", out m_ReductionPerChain);
+			if (base.Model.SkillParameters.ContainsKey("chain_chance"))
+			{
+				base.Model.SkillParameters.TryGetValue("chain_chance", out m_ChainChance);
+			}
 			foreach (var key in base.Model.SkillParameters.Keys)
 			{
 				if (base.Model.SkillParameters[key] == -1f)
@@ -45,6 +51,10 @@ namespace ABH.GameDatas.Battle.Skills
 				for (var i = 0; (float)i < m_ChainCount; i++)
 				{
 					if (list.Count <= 0)
+					{
+						break;
+					}
+					if (UnityEngine.Random.value > m_ChainChance / 100f)
 					{
 						break;
 					}
@@ -69,6 +79,11 @@ namespace ABH.GameDatas.Battle.Skills
 					}
 					combatant.ReceiveDamage(num2, source);
 					battle.m_DamageLastTurn += DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);
+					if (target.ChainedTargets == null)
+					{
+						target.ChainedTargets = new List<ICombatant>();
+					}
+					target.ChainedTargets.Add(combatant);
 					m_Source.CurrentSkillAttackValue = currentSkillAttackValue;
 				}
 			});
@@ -82,6 +97,7 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_2}", string.Empty + m_ChargeTurns);
 			dictionary.Add("{value_4}", string.Empty + m_AttackCount);
 			dictionary.Add("{value_7}", string.Empty + m_ChainCount);
+			dictionary.Add("{value_8}", string.Empty + m_ChainChance);
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

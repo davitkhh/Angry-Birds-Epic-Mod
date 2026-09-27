@@ -11,6 +11,19 @@
     "AtlasId": ""
   },
   {
+    "NameId": "workshop_000",
+    "Slots": 4,
+    "Categories": [
+      "shop_00_lance_red",
+      "shop_00_sword_red",
+      "shop_00_offhand_red",
+      "shop_00_offhand_yellow"
+    ],
+    "AssetId": "",
+    "LocaId": "",
+    "AtlasId": ""
+  },
+  {
     "NameId": "workshop_001",
     "Slots": 2,
     "Categories": [

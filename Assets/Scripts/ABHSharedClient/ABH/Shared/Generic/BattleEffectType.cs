@@ -130,6 +130,10 @@
 		ModifyMight,
 		ModifyVitality,
 		AddBonusTurn,
-		AddBonusTurnPvP
+		AddBonusTurnPvP,
+		SpreadDamageReceivedDebuff,
+		IncreaseDamageAndHealingOnAttack,
+		ReduceDamageDealtAgainstSource,
+		SummonCombatantHealthGated
 	}
 }

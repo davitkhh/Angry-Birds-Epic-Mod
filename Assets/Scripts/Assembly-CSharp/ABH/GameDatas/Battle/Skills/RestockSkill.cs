@@ -20,6 +20,10 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private bool m_Self;
 
+		private float m_DamageAndHealingBoost;
+
+		private float m_DamageAndHealingBoostPerAttack;
+
 		public override void Init(SkillGameData model)
 		{
 			base.Init(model);
@@ -28,6 +32,8 @@ namespace ABH.GameDatas.Battle.Skills
 			base.Model.SkillParameters.TryGetValue("chance", out value);
 			m_Percent = value;
 			m_Self = base.Model.SkillParameters.ContainsKey("self");
+			base.Model.SkillParameters.TryGetValue("damage_and_healing_boost", out m_DamageAndHealingBoost);
+			base.Model.SkillParameters.TryGetValue("damage_and_healing_boost_per_attack", out m_DamageAndHealingBoostPerAttack);
 		}
 
 		public override void BoneAnimationUserTrigger(UserTriggerEvent triggerEvent)
@@ -80,6 +86,44 @@ namespace ABH.GameDatas.Battle.Skills
 				}, m_BuffDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
 				effect.AddEffect();
 			}
+			var boostedAllies = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == source.CombatantFaction && c != source).ToList();
+			foreach (var ally in boostedAllies)
+			{
+				var boostEffect = new BattleEffectGameData(source, ally, new List<BattleEffect>
+				{
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.OnDealDamage,
+						EffectType = BattleEffectType.IncreaseDamage,
+						AfflicionType = base.Model.Balancing.EffectType,
+						Values = new List<float> { m_DamageAndHealingBoost },
+						Duration = m_BuffDuration,
+						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
+						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
+					},
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.OnReceiveHealingConsumablesAlso,
+						EffectType = BattleEffectType.IncreaseHealingReceived,
+						AfflicionType = base.Model.Balancing.EffectType,
+						Values = new List<float> { m_DamageAndHealingBoost },
+						Duration = m_BuffDuration,
+						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
+						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
+					},
+					new BattleEffect
+					{
+						EffectTrigger = EffectTriggerType.AfterAttack,
+						EffectType = BattleEffectType.IncreaseDamageAndHealingOnAttack,
+						AfflicionType = base.Model.Balancing.EffectType,
+						Values = new List<float> { m_DamageAndHealingBoostPerAttack },
+						Duration = m_BuffDuration,
+						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
+						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
+					}
+				}, m_BuffDuration, battle, base.Model.Balancing.AssetId + "_boost", base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
+				boostEffect.AddEffect();
+			}
 		}
 
 		public override string GetLocalizedDescription(ICombatant invoker)
@@ -89,6 +133,8 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_1}", string.Empty + num);
 			dictionary.Add("{value_2}", string.Empty + m_BuffDuration);
 			dictionary.Add("{value_3}", string.Empty + m_Percent);
+			dictionary.Add("{value_4}", string.Empty + m_DamageAndHealingBoost);
+			dictionary.Add("{value_5}", string.Empty + m_DamageAndHealingBoostPerAttack);
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

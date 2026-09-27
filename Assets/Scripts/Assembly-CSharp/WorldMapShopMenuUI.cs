@@ -344,6 +344,11 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		}
 		yield return new WaitForEndOfFrame();
 		m_OfferListGrid.Reposition();
+		var offerListScrollView = m_OfferListGrid.GetComponent<UIScrollView>();
+		if (offerListScrollView != null)
+		{
+			offerListScrollView.ResetPosition();
+		}
 	}
 
 	private void HandleMasteryOffers(List<BasicShopOfferBalancingData> offers)

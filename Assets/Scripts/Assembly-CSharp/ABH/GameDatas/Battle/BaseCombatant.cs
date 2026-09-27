@@ -52,6 +52,8 @@ namespace ABH.GameDatas.Battle
 
 		protected bool m_IsRevivedOnce;
 
+		protected bool m_HasUsedGuardianPerk;
+
 		protected float m_SummedDamagePerTurn;
 
 		protected float m_SummedHealPerTurn;
@@ -59,6 +61,10 @@ namespace ABH.GameDatas.Battle
 		protected Dictionary<string, BattleEffectGameData> m_CurrentEffects = new Dictionary<string, BattleEffectGameData>();
 
 		protected string m_LastAddedEffect;
+
+		protected List<string> m_EffectIdentsBeforeImpact;
+
+		protected List<ICombatant> m_ChainedTargets;
 
 		protected int m_StunTurns;
 
@@ -347,6 +353,18 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		public bool HasUsedGuardianPerk
+		{
+			get
+			{
+				return m_HasUsedGuardianPerk;
+			}
+			set
+			{
+				m_HasUsedGuardianPerk = value;
+			}
+		}
+
 		public float SummedDamagePerTurn
 		{
 			get
@@ -395,6 +413,30 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		public List<string> EffectIdentsBeforeImpact
+		{
+			get
+			{
+				return m_EffectIdentsBeforeImpact;
+			}
+			set
+			{
+				m_EffectIdentsBeforeImpact = value;
+			}
+		}
+
+		public List<ICombatant> ChainedTargets
+		{
+			get
+			{
+				return m_ChainedTargets;
+			}
+			set
+			{
+				m_ChainedTargets = value;
+			}
+		}
+
 		public bool OverrideHitAnimation { get; set; }
 
 		public abstract string CombatantNameId { get; }
@@ -416,6 +458,8 @@ namespace ABH.GameDatas.Battle
 		}
 
 		public float CurrentSkillAttackValue { get; set; }
+
+		public float LastDealtDamage { get; set; }
 
 		public abstract bool UsedConsumable { get; set; }
 

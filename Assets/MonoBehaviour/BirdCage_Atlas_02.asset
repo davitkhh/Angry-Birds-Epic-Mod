@@ -3,14 +3,15 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
   m_Name: BirdCage_Atlas_02
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 62114930ce6a15c41aaed2f630b75099, type: 2}
   uvs:
   - serializedVersion: 2
