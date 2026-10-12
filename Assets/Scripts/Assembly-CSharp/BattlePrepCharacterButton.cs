@@ -30,8 +30,38 @@ public class BattlePrepCharacterButton : MonoBehaviour
 
 	private bool m_PlayAnimationOnNextSelect;
 
+	// Set by InitExternal: taps are reported through Tapped and the owner decides what selection means.
+	private bool m_ExternalControl;
+
 	[method: MethodImpl(32)]
 	public event Action Selected;
+
+	public event Action<BattlePrepCharacterButton> Tapped;
+
+	public CharacterControllerCamp Controller
+	{
+		get
+		{
+			return m_Controller;
+		}
+	}
+
+	public void InitExternal(BirdGameData bird)
+	{
+		m_ExternalControl = true;
+		m_bird = bird;
+		CreateBird();
+		RemoveScaleControllerComponent();
+		m_selected = false;
+		m_PlayAnimationOnNextSelect = true;
+		m_IsSelectable = true;
+		RegisterEventHandler();
+	}
+
+	public void PlaySelectionReaction(bool selected)
+	{
+		StartCoroutine(selected ? ToggleCheerAnim() : ToggleMourneAnimation());
+	}
 
 	public void Init(BirdGameData bird, BattlePreperationUI preperationUi)
 	{
@@ -122,6 +152,14 @@ public class BattlePrepCharacterButton : MonoBehaviour
 	{
 		if (!m_IsSelectable)
 		{
+			return;
+		}
+		if (m_ExternalControl)
+		{
+			if (this.Tapped != null)
+			{
+				this.Tapped(this);
+			}
 			return;
 		}
 		if (m_PreperationUi != null)

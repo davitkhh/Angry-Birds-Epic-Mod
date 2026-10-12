@@ -184,6 +184,8 @@ namespace ABH.GameDatas
 				{
 					num = (classIndependentAttack + classAttack) * (ClassSkin.BalancingData.BonusDamage / 100f);
 				}
+				// Upgrade blueprints on the class or equipped items add their percent the same way a skin does
+				num += (classIndependentAttack + classAttack) * (UpgradeBlueprints.GetBirdStatPercent(this, true) / 100f);
 				return classIndependentAttack + classAttack + num;
 			}
 		}
@@ -215,6 +217,8 @@ namespace ABH.GameDatas
 				{
 					num = (classIndependentHealth + classHealth) * (ClassSkin.BalancingData.BonusHp / 100f);
 				}
+				// Upgrade blueprints on the class or equipped items add their percent the same way a skin does
+				num += (classIndependentHealth + classHealth) * (UpgradeBlueprints.GetBirdStatPercent(this, false) / 100f);
 				return classIndependentHealth + classHealth + num;
 			}
 		}

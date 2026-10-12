@@ -108,6 +108,16 @@ public class CharacterOverlay : MonoBehaviour
 
 	private Vector3 initialBottomRootPosition;
 
+	private const float NoPassiveSkinOffset = 50f;
+
+	private float skinExtraOffset;
+
+	private const float CompactBlindPadding = 10f;
+
+	private float m_BlindSpacing;
+
+	private float m_FirstBlindY;
+
 	public Transform m_EffectsRoot;
 
 	[SerializeField]
@@ -147,6 +157,11 @@ public class CharacterOverlay : MonoBehaviour
 		#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
 		m_sideBorder += Screen.safeArea.x;
 		#endif
+		if (m_SkillBlinds.Count > 0)
+		{
+			m_FirstBlindY = m_SkillBlinds[0].transform.localPosition.y;
+		}
+		m_BlindSpacing = GetBlindSpacing();
 		initialContainerControlPos = m_ContainerControl.transform.localPosition;
 		initialContainerControlSize = m_ContainerControl.m_Size;
 		initialHeaderPos = m_EffectHeader.localPosition;
@@ -161,6 +176,7 @@ public class CharacterOverlay : MonoBehaviour
 	internal void ShowCharacterOverlay(Transform root, ICombatant combatant, Camera interfaceCamera, bool pvp, SkinItemGameData skin)
 	{
 		var vector = m_InterfaceCamera.ScreenToWorldPoint(interfaceCamera.WorldToScreenPoint(root.position));
+		skinExtraOffset = 0f;
 		if ((combatant is PigCombatant || combatant is BossCombatant) && !pvp)
 		{
 			SetPigOrBossCombatant(combatant);
@@ -200,17 +216,19 @@ public class CharacterOverlay : MonoBehaviour
 			m_MasteryRoot.gameObject.SetActive(false);
 		}
 		var num = SetSkillInfos(combatant);
+		var totalOffset = SkillOverlayOffset(num) + skinExtraOffset;
+		totalOffset += CompactSkillBlinds(num, totalOffset);
 		for (var i = 0; i < m_BackGroundCenterSprites.Count; i++)
 		{
-			m_BackGroundCenterSprites[i].height = (int)(initialBackGroundScales[i] - SkillOverlayOffset(num));
-			m_BackGroundCenterSprites[i].cachedTransform.localPosition = initialBackGroundPositions[i] + new Vector3(0f, SkillOverlayOffset(num) * 0.5f, 0f);
+			m_BackGroundCenterSprites[i].height = (int)(initialBackGroundScales[i] - totalOffset);
+			m_BackGroundCenterSprites[i].cachedTransform.localPosition = initialBackGroundPositions[i] + new Vector3(0f, BackgroundShift(m_BackGroundCenterSprites[i].pivot, totalOffset), 0f);
 		}
 		if (m_BottomRoot)
 		{
-			m_BottomRoot.localPosition = initialBottomRootPosition + new Vector3(0f, SkillOverlayOffset(num), 0f);
+			m_BottomRoot.localPosition = initialBottomRootPosition + new Vector3(0f, totalOffset, 0f);
 		}
-		m_ContainerControl.m_Size = initialContainerControlSize - new Vector3(0f, SkillOverlayOffset(num), 0f);
-		m_ContainerControl.transform.localPosition = PositionRelativeToAnchorPositionFixedOnScreen(vector, m_sideBorder, num);
+		m_ContainerControl.m_Size = initialContainerControlSize - new Vector3(0f, totalOffset, 0f);
+		m_ContainerControl.transform.localPosition = PositionRelativeToAnchorPositionFixedOnScreen(vector, m_sideBorder, totalOffset);
 		if (combatant.CurrrentEffects.Values.Any(e => !string.IsNullOrEmpty(e.m_IconAssetId) && !string.IsNullOrEmpty(e.m_IconAtlasId)))
 		{
 			m_EffectsRoot.gameObject.SetActive(true);
@@ -223,6 +241,23 @@ public class CharacterOverlay : MonoBehaviour
 			m_EffectsRoot.gameObject.SetActive(false);
 		}
 		GetComponent<Animation>().Play("InfoOverlay_Enter");
+	}
+
+	private static float BackgroundShift(UIWidget.Pivot pivot, float offset)
+	{
+		switch (pivot)
+		{
+		case UIWidget.Pivot.TopLeft:
+		case UIWidget.Pivot.Top:
+		case UIWidget.Pivot.TopRight:
+			return 0f;
+		case UIWidget.Pivot.BottomLeft:
+		case UIWidget.Pivot.Bottom:
+		case UIWidget.Pivot.BottomRight:
+			return offset;
+		default:
+			return offset * 0.5f;
+		}
 	}
 
 	private void SetupSkinInfo(SkinItemGameData skin, ICombatant invoker)
@@ -248,6 +283,7 @@ public class CharacterOverlay : MonoBehaviour
 		{
 			m_skinPassiveSkillSprite.gameObject.SetActive(false);
 			m_skinPassiveDesc.gameObject.SetActive(false);
+			skinExtraOffset = NoPassiveSkinOffset;
 		}
 		m_skinAttackBonus.text = "+" + skin.BalancingData.BonusDamage + "%";
 		m_skinHealthBonus.text = "+" + skin.BalancingData.BonusHp + "%";
@@ -375,11 +411,11 @@ public class CharacterOverlay : MonoBehaviour
 		m_EffectGrid.Reposition();
 	}
 
-	private Vector3 PositionRelativeToAnchorPositionFixedOnScreen(Vector3 anchorPosition, float offset, int numOfSkills)
+	private Vector3 PositionRelativeToAnchorPositionFixedOnScreen(Vector3 anchorPosition, float offset, float totalOffset)
 	{
 		return new Vector3(
 			Mathf.Sign(anchorPosition.x) * -1f * (m_AllOverlaysContainerControl.m_Size.x * 0.5f + -1f * (m_ContainerControl.m_Size.x * 0.5f + offset)), 
-			initialContainerControlPos.y - (float)(3 - numOfSkills) * blindSize.y / 2f, 
+			initialContainerControlPos.y - totalOffset / 2f, 
 			initialContainerControlPos.z);
 	}
 
@@ -390,7 +426,85 @@ public class CharacterOverlay : MonoBehaviour
 
 	private float SkillOverlayOffset(int numberOfSkills)
 	{
+		if (numberOfSkills > 3)
+		{
+			return (float)(3 - numberOfSkills) * GetBlindSpacing();
+		}
 		return (float)(3 - numberOfSkills) * blindSize.y;
+	}
+
+	private float GetBlindSpacing()
+	{
+		if (m_BlindSpacing > 0f)
+		{
+			return m_BlindSpacing;
+		}
+		if (m_SkillBlinds.Count < 2)
+		{
+			return blindSize.y;
+		}
+		return m_SkillBlinds[0].transform.localPosition.y - m_SkillBlinds[1].transform.localPosition.y;
+	}
+
+	private void EnsureSkillBlinds(int count)
+	{
+		var spacing = GetBlindSpacing();
+		while (m_SkillBlinds.Count < count)
+		{
+			var last = m_SkillBlinds[m_SkillBlinds.Count - 1];
+			var clone = Object.Instantiate(last.gameObject, last.transform.parent, false);
+			clone.name = "Skill_" + (m_SkillBlinds.Count + 1);
+			clone.transform.localPosition = last.transform.localPosition - new Vector3(0f, spacing, 0f);
+			m_SkillBlinds.Add(clone.GetComponent<SkillBlind>());
+		}
+	}
+
+	// Lays the skill blinds out at their regular spacing. If the paper is then taller than the
+	// screen, removes empty space below the descriptions until it fits; returns the height removed.
+	private float CompactSkillBlinds(int numberOfSkills, float totalOffset)
+	{
+		var spacing = GetBlindSpacing();
+		for (var i = 0; i < m_SkillBlinds.Count; i++)
+		{
+			SetBlindY(i, m_FirstBlindY - i * spacing);
+		}
+		var overflow = initialContainerControlSize.y - totalOffset - (m_AllOverlaysContainerControl.m_Size.y - 2f * m_sideBorder);
+		if (overflow <= 0f)
+		{
+			return 0f;
+		}
+		var count = Mathf.Min(numberOfSkills, m_SkillBlinds.Count);
+		var slacks = new float[count];
+		var totalSlack = 0f;
+		for (var i = 0; i < count; i++)
+		{
+			if (m_SkillBlinds[i].gameObject.activeSelf)
+			{
+				slacks[i] = m_SkillBlinds[i].GetBottomSlack(spacing, CompactBlindPadding);
+				totalSlack += slacks[i];
+			}
+		}
+		if (totalSlack <= 0f)
+		{
+			return 0f;
+		}
+		var ratio = Mathf.Min(1f, overflow / totalSlack);
+		var removed = 0f;
+		for (var i = 0; i < m_SkillBlinds.Count; i++)
+		{
+			SetBlindY(i, m_FirstBlindY - i * spacing + removed);
+			if (i < count)
+			{
+				removed += Mathf.Round(slacks[i] * ratio);
+			}
+		}
+		return removed;
+	}
+
+	private void SetBlindY(int index, float y)
+	{
+		var t = m_SkillBlinds[index].transform;
+		t.localPosition = new Vector3(t.localPosition.x, y, t.localPosition.z);
 	}
 
 	private int SetSkillInfos(ICombatant combatant)
@@ -401,8 +515,11 @@ public class CharacterOverlay : MonoBehaviour
 			for (var i = 0; i < m_SkillBlinds.Count; i++)
 			{
 				var skillBlind = m_SkillBlinds[i];
-				skillBlind.gameObject.SetActive(true);
-				skillBlind.ShowSkillOverlay(combatant.GetSkill(i), combatant, false);
+				skillBlind.gameObject.SetActive(i < 3);
+				if (i < 3)
+				{
+					skillBlind.ShowSkillOverlay(combatant.GetSkill(i), combatant, false);
+				}
 			}
 		}
 		else if (combatant is PigCombatant)
@@ -413,13 +530,14 @@ public class CharacterOverlay : MonoBehaviour
 			{
 				list.Add(skill);
 			}
+			EnsureSkillBlinds(list.Count);
 			for (var j = 0; j < list.Count && j < m_SkillBlinds.Count; j++)
 			{
 				var skillBlind2 = m_SkillBlinds[j];
 				skillBlind2.gameObject.SetActive(true);
 				skillBlind2.ShowSkillOverlay(list[j], combatant, list[j].Model.Balancing.EffectType == SkillEffectTypes.Passive);
 			}
-			result = (combatant.CharacterModel as PigGameData).RageSkill != null ? 3 : list.Count;
+			result = list.Count;
 			for (var k = list.Count; k < m_SkillBlinds.Count; k++)
 			{
 				m_SkillBlinds[k].gameObject.SetActive(false);
@@ -433,6 +551,7 @@ public class CharacterOverlay : MonoBehaviour
 			{
 				list2.Add(skill2);
 			}
+			EnsureSkillBlinds(list2.Count);
 			for (var l = 0; l < list2.Count && l < m_SkillBlinds.Count; l++)
 			{
 				var skillBlind3 = m_SkillBlinds[l];
@@ -452,6 +571,7 @@ public class CharacterOverlay : MonoBehaviour
 			{
 				list3.Add(skill3);
 			}
+			EnsureSkillBlinds(list3.Count);
 			for (var n = 0; n < list3.Count && n < m_SkillBlinds.Count; n++)
 			{
 				var skillBlind4 = m_SkillBlinds[n];

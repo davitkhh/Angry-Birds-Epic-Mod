@@ -47,6 +47,33 @@
     "CountForStars": false,
     "MaxLevel": 0
   },
+  {
+    "NameId": "hotspot_golden_pig_cloud_battleground",
+    "Type": "Battle",
+    "BattleId": [
+      "battle_golden_pig_cloud1"
+    ],
+    "HotspotContents": null,
+    "ZoneLocaIdent": "zone_golden_pig",
+    "ZoneStageIndex": 0,
+    "EnterRequirements": null,
+    "CooldownInSeconds": 0,
+    "VisibleRequirements": [
+      {
+        "RequirementType": "HaveUnlockedHotpsot",
+        "NameId": "hotspot_014_castle",
+        "Value": 1.0
+      }
+    ],
+    "IsSpawnEventPossible": false,
+    "ProgressId": 0,
+    "OrderId": 0,
+    "IsSpawnGoldenPigPossible": false,
+    "UseProgressIndicator": false,
+    "AutoSpawnBirds": true,
+    "CountForStars": false,
+    "MaxLevel": 0
+  },
   
   {
     "NameId": "hotspot_001_camp",
@@ -310,6 +337,48 @@
   },
   {
     "NameId": "hotspot_008_01_resourcenode",
+    "Type": "Resource",
+    "BattleId": null,
+    "HotspotContents": {
+      "loot_resourcenode_011_01": 1
+    },
+    "ZoneLocaIdent": "zone_cobalt_plateaus",
+    "ZoneStageIndex": 0,
+    "EnterRequirements": null,
+    "CooldownInSeconds": 0,
+    "VisibleRequirements": null,
+    "IsSpawnEventPossible": false,
+    "ProgressId": 0,
+    "OrderId": 0,
+    "IsSpawnGoldenPigPossible": false,
+    "UseProgressIndicator": false,
+    "AutoSpawnBirds": true,
+    "CountForStars": false,
+    "MaxLevel": 0
+  },
+  {
+    "NameId": "hotspot_008_03_resourcenode",
+    "Type": "Resource",
+    "BattleId": null,
+    "HotspotContents": {
+      "loot_resourcenode_021_01": 1
+    },
+    "ZoneLocaIdent": "zone_cobalt_plateaus",
+    "ZoneStageIndex": 0,
+    "EnterRequirements": null,
+    "CooldownInSeconds": 0,
+    "VisibleRequirements": null,
+    "IsSpawnEventPossible": false,
+    "ProgressId": 0,
+    "OrderId": 0,
+    "IsSpawnGoldenPigPossible": false,
+    "UseProgressIndicator": false,
+    "AutoSpawnBirds": true,
+    "CountForStars": false,
+    "MaxLevel": 0
+  },
+  {
+    "NameId": "hotspot_014_01_resourcenode",
     "Type": "Resource",
     "BattleId": null,
     "HotspotContents": {

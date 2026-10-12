@@ -100,6 +100,10 @@ public class MenuCrafting : MonoBehaviour
 	[SerializeField]
 	private GameObject m_ListElementConsumablePrefab;
 
+	// Equipment slot used when the player picks which owned copy an upgrade blueprint goes on.
+	[SerializeField]
+	private GameObject m_UpgradeTargetSlotPrefab;
+
 	[SerializeField]
 	private GameObject m_ListRoot;
 
@@ -427,6 +431,11 @@ public class MenuCrafting : MonoBehaviour
 	private void HandleBackButton()
 	{
 		DebugLog.Log("Pressed Back Button: " + GetType());
+		if (m_UpgradeTargetSlots.Count > 0)
+		{
+			CancelUpgradeTargetChoice();
+			return;
+		}
 		DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("back_button_pressed", string.Empty);
 		DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.HideAllTooltips();
 		Leave();
@@ -680,6 +689,12 @@ public class MenuCrafting : MonoBehaviour
 	{
 		var failedItems = new List<IInventoryItemGameData>();
 		var craftingRecipeGameData = (CraftingRecipeGameData)m_currentSelectedRecipe[m_selectedCategory];
+		UpgradeBlueprintBalancingData upgradeBlueprint;
+		if (UpgradeBlueprints.TryGetDefinition(craftingRecipeGameData, out upgradeBlueprint))
+		{
+			CraftUpgrade(craftingRecipeGameData, upgradeBlueprint);
+			return;
+		}
 		craftingRecipeGameData.IncreaseByValue(amount);
 		m_craftable = DIContainerLogic.CraftingService.IsCraftAble(craftingRecipeGameData, DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, amount) && DIContainerLogic.CraftingService.IsCraftingPossible(craftingRecipeGameData, DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, out failedItems, amount);
 		if (!m_craftable)
@@ -727,7 +742,7 @@ public class MenuCrafting : MonoBehaviour
 		StartCoroutine(ShowCraftingPopupAfterAnimations(list[0], LastSelectedSlot, itemsFromLoot, amount, craftingRecipeGameData));
 	}
 
-	private IEnumerator ShowCraftingPopupAfterAnimations(IInventoryItemGameData finalItem, BaseItemSlot lastSelectedSlot, List<IInventoryItemGameData> resourceCost, int amount, CraftingRecipeGameData recipe)
+	private IEnumerator ShowCraftingPopupAfterAnimations(IInventoryItemGameData finalItem, BaseItemSlot lastSelectedSlot, List<IInventoryItemGameData> resourceCost, int amount, CraftingRecipeGameData recipe, Action showResult = null)
 	{
 		DeRegisterEventHandlers();
 		DeRegisterSlotHandlers();
@@ -774,9 +789,190 @@ public class MenuCrafting : MonoBehaviour
 		{
 			UnityEngine.Object.Destroy(explosionFX, explosionFX.GetComponent<Animation>().clip.length);
 		}
-		m_campStateMgr.ShowCraftingResult(finalItem, recipe, amount);
+		if (showResult != null)
+		{
+			showResult();
+		}
+		else
+		{
+			m_campStateMgr.ShowCraftingResult(finalItem, recipe, amount);
+		}
 		yield return new WaitForSeconds(1f);
 		RegisterSlotHandlers();
+	}
+
+	// ----- Upgrade blueprints -----
+
+	private readonly List<InventoryItemSlot> m_UpgradeTargetSlots = new List<InventoryItemSlot>();
+
+	private CraftingRecipeGameData m_UpgradeTargetRecipe;
+
+	private bool m_UpgradeItemWasActive;
+
+	private void CraftUpgrade(CraftingRecipeGameData recipe, UpgradeBlueprintBalancingData upgradeBlueprint)
+	{
+		var inventory = DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
+		var targets = UpgradeBlueprints.GetEligibleOwned(inventory, upgradeBlueprint);
+		if (targets.Count == 0)
+		{
+			DIContainerInfrastructure.GetAsynchStatusService().ShowInfo(DIContainerInfrastructure.GetLocaService().Tr("upgrade_blueprint_no_target", "You don't own an item this upgrade fits."), "upgrade_no_target", DispatchMessage.Status.Error);
+			return;
+		}
+		List<IInventoryItemGameData> missing;
+		if (!UpgradeBlueprints.CanPay(inventory, UpgradeBlueprints.GetNextUseCost(inventory, upgradeBlueprint), out missing))
+		{
+			DIContainerInfrastructure.GetCoreStateMgr().m_MissingResourcesPopup.SetReturnAction(Refresh).ShowMissingResourcesPopup(missing);
+			return;
+		}
+		if (targets.Count == 1)
+		{
+			ApplyUpgrade(recipe, upgradeBlueprint, targets[0]);
+			return;
+		}
+		ShowUpgradeTargetChoice(recipe, targets);
+	}
+
+	private void ApplyUpgrade(CraftingRecipeGameData recipe, UpgradeBlueprintBalancingData upgradeBlueprint, IInventoryItemGameData target)
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		var costs = UpgradeBlueprints.GetNextUseCost(player.InventoryGameData, upgradeBlueprint);
+		var index = UpgradeBlueprints.Apply(player.InventoryGameData, recipe, target);
+		if (index < 0)
+		{
+			return;
+		}
+		player.SavePlayerData();
+		recipe.Data.IsNew = false;
+		var costDictionary = new Dictionary<string, int>();
+		foreach (var cost in costs)
+		{
+			costDictionary[cost.Key] = cost.Value;
+		}
+		var resourceCost = DIContainerLogic.GetLootOperationService().GetItemsFromLoot(DIContainerLogic.GetLootOperationService().GenerateLootPreview(costDictionary, 1));
+		StartCoroutine(ShowCraftingPopupAfterAnimations(target, LastSelectedSlot, resourceCost, 1, recipe, () =>
+		{
+			m_campStateMgr.ShowUpgradeResult(target, recipe, index);
+			if (recipe.ItemValue <= 0)
+			{
+				// The last use was spent and the blueprint left the inventory; otherwise Refresh() on closing the
+				// result updates the uses shown on the slot
+				m_currentSelectedRecipe[m_selectedCategory] = null;
+				LastSelectedSlot = null;
+				RefillRecipies();
+			}
+		}));
+	}
+
+	// Several owned copies fit: the recipe list is swapped for the copies until one is tapped (back cancels).
+	private void ShowUpgradeTargetChoice(CraftingRecipeGameData recipe, List<IInventoryItemGameData> targets)
+	{
+		m_UpgradeTargetRecipe = recipe;
+		foreach (var slot in m_currentItemSlots)
+		{
+			slot.gameObject.SetActive(false);
+		}
+		m_UpgradeItemWasActive = m_UpdgradeItem && m_UpdgradeItem.gameObject.activeSelf;
+		if (m_UpdgradeItem)
+		{
+			m_UpdgradeItem.gameObject.SetActive(false);
+		}
+		m_CraftableRoot.SetActive(false);
+		m_NonCraftableRoot.SetActive(false);
+		m_HeaderText.text = DIContainerInfrastructure.GetLocaService().Tr("upgrade_blueprint_choose", "Choose an item");
+		m_FooterText.text = DIContainerInfrastructure.GetLocaService().Tr("upgrade_blueprint_choose_desc", "You own more than one item this upgrade fits. Tap the one to upgrade.");
+		var prefab = m_UpgradeTargetSlotPrefab != null ? m_UpgradeTargetSlotPrefab : m_ListElementPrefab;
+		for (var i = 0; i < targets.Count; i++)
+		{
+			var go = UnityEngine.Object.Instantiate(prefab);
+			go.SetActive(true);
+			go.transform.parent = m_ListRoot.transform;
+			go.transform.localScale = Vector3.one;
+			go.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, m_ListRoot.transform.position.z);
+			go.name = "000_UpgradeTarget_" + i.ToString("00");
+			var slot = go.GetComponent<InventoryItemSlot>();
+			slot.SetModel(targets[i], false);
+			var parchment = go.GetComponentsInChildren<UISprite>(true).FirstOrDefault(s => s.spriteName == "Recipe");
+			if (parchment != null)
+			{
+				parchment.enabled = false;
+			}
+			slot.OnUsed += OnUpgradeTargetChosen;
+			m_UpgradeTargetSlots.Add(slot);
+		}
+		m_ListRoot.GetComponent<UIGrid>().Reposition();
+		m_ItemsPanel.ResetPosition();
+	}
+
+	private void OnUpgradeTargetChosen(InventoryItemSlot slot)
+	{
+		var target = slot.GetModel();
+		var recipe = m_UpgradeTargetRecipe;
+		CancelUpgradeTargetChoice();
+		UpgradeBlueprintBalancingData upgradeBlueprint;
+		if (target != null && UpgradeBlueprints.TryGetDefinition(recipe, out upgradeBlueprint))
+		{
+			ApplyUpgrade(recipe, upgradeBlueprint, target);
+		}
+	}
+
+	private void CancelUpgradeTargetChoice()
+	{
+		foreach (var slot in m_UpgradeTargetSlots)
+		{
+			slot.OnUsed -= OnUpgradeTargetChosen;
+			UnityEngine.Object.Destroy(slot.gameObject);
+		}
+		m_UpgradeTargetSlots.Clear();
+		m_UpgradeTargetRecipe = null;
+		foreach (var slot in m_currentItemSlots)
+		{
+			slot.gameObject.SetActive(true);
+		}
+		if (m_UpdgradeItem && m_UpgradeItemWasActive)
+		{
+			m_UpdgradeItem.gameObject.SetActive(true);
+		}
+		SetHeader();
+		m_ListRoot.GetComponent<UIGrid>().Reposition();
+		SetCraftButton();
+	}
+
+	private void EnterUpgradeCraftingInfo(CraftingRecipeGameData recipe, UpgradeBlueprintBalancingData upgradeBlueprint)
+	{
+		var inventory = DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
+		var costDictionary = new Dictionary<string, int>();
+		foreach (var cost in UpgradeBlueprints.GetNextUseCost(inventory, upgradeBlueprint))
+		{
+			costDictionary[cost.Key] = cost.Value;
+		}
+		var resourceCost = DIContainerLogic.GetLootOperationService().GetItemsFromLoot(DIContainerLogic.GetLootOperationService().GenerateLootPreview(costDictionary, 1));
+		m_multiCraftingFactor = 1;
+		m_CraftableRoot.SetActive(true);
+		m_MultipleCraftableRoot.SetActive(false);
+		m_NonCraftableRoot.SetActive(false);
+		m_BuyableRoot.SetActive(false);
+		m_UpgradeDetailInfo.gameObject.SetActive(false);
+		m_CraftableEquipmentRoot.gameObject.SetActive(true);
+		m_CraftableConsumableRoot.gameObject.SetActive(false);
+		m_CraftableName.text = GetUpgradeTitle(recipe, upgradeBlueprint);
+		m_NonCraftableName.text = m_CraftableName.text;
+		m_BuyAbleName.text = m_CraftableName.text;
+		m_FooterText.text = DIContainerInfrastructure.GetLocaService().Tr("upgrade_blueprint_footer", "Crafting spends one use on a matching item. Hold the blueprint to see which items it fits.");
+		for (var i = 0; i < Mathf.Min(m_LootDisplays.Count, m_LootCurrentLabel.Count); i++)
+		{
+			var shown = resourceCost.Count > i;
+			m_LootDisplays[i].gameObject.SetActive(shown);
+			m_LootCurrentLabel[i].gameObject.SetActive(shown);
+			if (shown)
+			{
+				m_LootDisplays[i].SetModel(resourceCost[i], new List<IInventoryItemGameData>(), LootDisplayType.None, "_Small", true);
+			}
+		}
+	}
+
+	private static string GetUpgradeTitle(CraftingRecipeGameData recipe, UpgradeBlueprintBalancingData upgradeBlueprint)
+	{
+		return UpgradeBlueprints.GetName(upgradeBlueprint);
 	}
 
 	private void DeRegisterSlotHandlers()
@@ -947,7 +1143,7 @@ public class MenuCrafting : MonoBehaviour
 		LastSelectedSlot.Deselect();
 		slot.Select();
 		var value = new List<IInventoryItemGameData>();
-		foreach (var key in ((CraftingRecipeGameData)slot.GetModel()).GetResultLoot().Keys)
+		foreach (var key in UpgradeBlueprints.GetRecipeListKeys((CraftingRecipeGameData)slot.GetModel()))
 		{
 			m_recipes.TryGetValue(key, out value);
 		}
@@ -981,6 +1177,17 @@ public class MenuCrafting : MonoBehaviour
 		m_FooterText.text = inventoryItemTypeCraftingDesc;
 		footerText.text = inventoryItemTypeCraftingDesc;
 		var craftingRecipeGameData = LastSelectedSlot.GetModel() as CraftingRecipeGameData;
+		UpgradeBlueprintBalancingData upgradeBlueprint;
+		if (UpgradeBlueprints.TryGetDefinition(craftingRecipeGameData, out upgradeBlueprint))
+		{
+			// Not usable yet: no owned item fits it
+			m_NonCraftableRoot.SetActive(true);
+			m_NonCraftableName.text = GetUpgradeTitle(craftingRecipeGameData, upgradeBlueprint);
+			m_CraftableName.text = m_NonCraftableName.text;
+			m_BuyAbleName.text = m_NonCraftableName.text;
+			m_FooterText.text = DIContainerInfrastructure.GetLocaService().Tr("upgrade_blueprint_no_target_footer", "You don't own an item this upgrade fits yet. Hold the blueprint to see which items it fits.");
+			return 0f;
+		}
 		if (craftingRecipeGameData != null)
 		{
 			var inventoryItemGameData = DIContainerLogic.InventoryService.GenerateNewInventoryItemGameData(craftingRecipeGameData.Data.Level, 3, craftingRecipeGameData.GetResultLoot().Keys.FirstOrDefault(), 1);
@@ -1030,6 +1237,12 @@ public class MenuCrafting : MonoBehaviour
 	private float EnterCraftingInfo()
 	{
 		var craftingRecipeGameData = LastSelectedSlot.GetModel() as CraftingRecipeGameData;
+		UpgradeBlueprintBalancingData upgradeBlueprint;
+		if (UpgradeBlueprints.TryGetDefinition(craftingRecipeGameData, out upgradeBlueprint))
+		{
+			EnterUpgradeCraftingInfo(craftingRecipeGameData, upgradeBlueprint);
+			return 0f;
+		}
 		var inventoryItemGameData = DIContainerLogic.InventoryService.GenerateNewInventoryItemGameData(craftingRecipeGameData.Data.Level, 3, craftingRecipeGameData.GetResultLoot().Keys.FirstOrDefault(), 1);
 		var craftingCosts = new List<KeyValuePair<string, int>>();
 		DIContainerLogic.CraftingService.AddCraftingCostsForItem(ref craftingCosts, inventoryItemGameData.ItemBalancing.NameId, craftingRecipeGameData.Data.Level);

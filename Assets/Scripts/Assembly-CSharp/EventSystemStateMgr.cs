@@ -165,6 +165,12 @@ public class EventSystemStateMgr : MonoBehaviourContainerBase
 			return;
 		}
 		var currentPlayer = DIContainerInfrastructure.GetCurrentPlayer();
+		// Before "unlock_events" no event can ever be available, so clearing and re-teasing here would
+		// just repeat (and save the profile) every tick. OnStoryItemAdded restarts the system on unlock.
+		if (DIContainerLogic.InventoryService.GetItemValue(currentPlayer.InventoryGameData, "unlock_events") < 1)
+		{
+			return;
+		}
 		if (!DIContainerLogic.EventSystemService.IsCurrentEventAvailable(currentPlayer))
 		{
 			var dictionary = new Dictionary<string, string>();

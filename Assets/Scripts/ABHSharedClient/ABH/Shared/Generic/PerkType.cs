@@ -24,6 +24,10 @@ namespace ABH.Shared.Generic
 		Justice,
 		HocusPokusChiliDrain,
 		Guardian,
-		Weaken
+		Weaken,
+		PhatLoot,
+		CashStrike,
+		Amplify,
+		Brilliance
 	}
 }

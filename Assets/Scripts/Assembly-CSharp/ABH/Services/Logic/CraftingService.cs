@@ -199,6 +199,11 @@ namespace ABH.Services.Logic
 			{
 				return false;
 			}
+			UpgradeBlueprintBalancingData upgradeBlueprint;
+			if (UpgradeBlueprints.TryGetDefinition(recipe, out upgradeBlueprint))
+			{
+				return recipe.ItemValue > 0 && UpgradeBlueprints.GetEligibleOwned(inventoryGameData, upgradeBlueprint).Count > 0;
+			}
 			var dictionary = m_lootService.GenerateLoot(recipe.GetResultLoot(), recipe.ItemData.Level);
 			var craftingCosts = new List<KeyValuePair<string, int>>();
 			foreach (var item in dictionary)
@@ -221,6 +226,11 @@ namespace ABH.Services.Logic
 				LogError("Not every needed Service is implemented!");
 				failedItems = new List<IInventoryItemGameData>();
 				return false;
+			}
+			UpgradeBlueprintBalancingData upgradeBlueprint;
+			if (UpgradeBlueprints.TryGetDefinition(recipe, out upgradeBlueprint))
+			{
+				return UpgradeBlueprints.CanPay(inventoryGameData, UpgradeBlueprints.GetNextUseCost(inventoryGameData, upgradeBlueprint), out failedItems);
 			}
 			var dictionary = m_lootService.GenerateLoot(recipe.GetResultLoot(), recipe.ItemData.Level);
 			var craftingCosts = new List<KeyValuePair<string, int>>();
@@ -639,6 +649,8 @@ namespace ABH.Services.Logic
 			}
 			List<IInventoryItemGameData> list = null;
 			list = equipment.GetScrapLoot() != null ? m_lootService.RewardLootGetInputCopy(owner, 0, m_lootService.GenerateLoot(equipment.GetScrapLoot(), 0), "scraped_item") : new List<IInventoryItemGameData>();
+			// Applied upgrade blueprints come back with their refund
+			list.AddRange(UpgradeBlueprints.RemoveAll(owner, equipment));
 			m_inventoryService.RemoveItem(owner, equipment, 1, "scraped_item");
 			var dictionary = new Dictionary<string, string>();
 			dictionary.Add("ItemName", equipment.Name);
@@ -646,6 +658,19 @@ namespace ABH.Services.Logic
 			dictionary.Add("ItemQuality", equipment.ItemData.Quality.ToString("0"));
 			ABHAnalyticsHelper.AddPlayerStatusToTracking(dictionary);
 			DIContainerInfrastructure.GetAnalyticsSystem().LogEventWithParameters(ABHAnalyticsEvents.ItemScrapped, dictionary);
+			return list;
+		}
+
+		// Takes only the upgrade blueprints off an item or class, keeping it.
+		public List<IInventoryItemGameData> ScrapUpgrades(InventoryGameData owner, IInventoryItemGameData equipment)
+		{
+			var list = UpgradeBlueprints.RemoveAll(owner, equipment);
+			var dictionary = new Dictionary<string, string>();
+			dictionary.Add("ItemName", equipment.ItemBalancing.NameId);
+			dictionary.Add("ItemType", equipment.ItemBalancing.ItemType.ToString());
+			dictionary.Add("UpgradesReturned", list.Count.ToString());
+			ABHAnalyticsHelper.AddPlayerStatusToTracking(dictionary);
+			DIContainerInfrastructure.GetAnalyticsSystem().LogEventWithParameters("ItemUpgradesScrapped", dictionary);
 			return list;
 		}
 

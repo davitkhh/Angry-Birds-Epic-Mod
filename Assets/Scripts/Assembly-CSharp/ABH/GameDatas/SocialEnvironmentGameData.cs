@@ -271,10 +271,6 @@ namespace ABH.GameDatas
 					0u
 				},
 				{
-					DIContainerLogic.SocialService.GetLowNPCFriend(1).Id,
-					0u
-				},
-				{
 					DIContainerLogic.SocialService.GetHighNPCFriend(1).Id,
 					0u
 				}
@@ -284,7 +280,6 @@ namespace ABH.GameDatas
 			{
 				DIContainerLogic.SocialService.GetPorkyFriend(1).Id,
 				DIContainerLogic.SocialService.GetAdventurerFriend(1).Id,
-				DIContainerLogic.SocialService.GetLowNPCFriend(1).Id,
 				DIContainerLogic.SocialService.GetHighNPCFriend(1).Id
 			};
 			envData.InvitedFriendIds = new List<string>();
@@ -330,10 +325,6 @@ namespace ABH.GameDatas
 					0u
 				},
 				{
-					DIContainerLogic.SocialService.GetLowNPCFriend(1).Id,
-					0u
-				},
-				{
 					DIContainerLogic.SocialService.GetHighNPCFriend(1).Id,
 					0u
 				}
@@ -343,7 +334,6 @@ namespace ABH.GameDatas
 			{
 				DIContainerLogic.SocialService.GetPorkyFriend(1).Id,
 				DIContainerLogic.SocialService.GetAdventurerFriend(1).Id,
-				DIContainerLogic.SocialService.GetLowNPCFriend(1).Id,
 				DIContainerLogic.SocialService.GetHighNPCFriend(1).Id
 			};
 			socialEnvironmentData.InvitedFriendIds = new List<string>();
@@ -365,6 +355,45 @@ namespace ABH.GameDatas
 
 		public FriendGameData AddFriend(FriendGameData friend)
 		{
+			return friend;
+		}
+
+		public bool IsMcCoolFriend
+		{
+			get
+			{
+				return Friends.ContainsKey(DIContainerLogic.SocialService.GetLowNPCFriend(1).Id);
+			}
+		}
+
+		public FriendGameData AddMcCoolFriend()
+		{
+			var mcCool = DIContainerLogic.SocialService.GetLowNPCFriend(1);
+			FriendGameData friend = null;
+			if (Friends.TryGetValue(mcCool.Id, out friend))
+			{
+				return friend;
+			}
+			if (!Data.AcceptedFriendIds.Contains(mcCool.Id))
+			{
+				Data.AcceptedFriendIds.Add(mcCool.Id);
+			}
+			if (!Data.GetBirdCooldowns.ContainsKey(mcCool.Id))
+			{
+				Data.GetBirdCooldowns.Add(mcCool.Id, 0u);
+			}
+			friend = new FriendGameData(mcCool.Id).SetLastBirdRequest(0u);
+			Friends.Add(mcCool.Id, friend);
+			if (!PublicPlayerDatas.ContainsKey(mcCool.Id))
+			{
+				PublicPlayerDatas.Add(mcCool.Id, DIContainerLogic.SocialService.GetNPCPlayer(mcCool));
+			}
+			friend.SetFriendData(mcCool);
+			friend.SetFriendBird(new BirdGameData(DIContainerLogic.SocialService.GetRandomBirdWithLevel(friend.FriendLevel, string.Empty)));
+			if (this.FriendAdded != null)
+			{
+				this.FriendAdded(friend);
+			}
 			return friend;
 		}
 

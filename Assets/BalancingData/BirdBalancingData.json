@@ -462,6 +462,34 @@
     "PvPRageSkillIdent": "bird_rage_minion_merchant"
   },
   {
+    "NameId": "bird_merchant_mcpig",
+    "AssetId": "MerchantPig",
+    "LocaId": "bird_merchant",
+    "DefaultInventoryNameId": "bird_merchant_mcpig",
+    "BaseHealth": 65,
+    "BaseAttack": 14,
+    "PerLevelHealth": 20,
+    "PerLevelAttack": 20,
+    "SizeType": "Medium",
+    "RageSkillIdent": "bird_rage_merchant_mcpig_helmet",
+    "SortPriority": 5,
+    "PvPRageSkillIdent": "bird_rage_minion_merchant"
+  },
+  {
+    "NameId": "bird_merchant_mcpig_castle",
+    "AssetId": "MerchantPig",
+    "LocaId": "bird_merchant",
+    "DefaultInventoryNameId": "bird_merchant",
+    "BaseHealth": 65,
+    "BaseAttack": 14,
+    "PerLevelHealth": 20,
+    "PerLevelAttack": 20,
+    "SizeType": "Medium",
+    "RageSkillIdent": "bird_rage_minion_merchant",
+    "SortPriority": 5,
+    "PvPRageSkillIdent": "bird_rage_minion_merchant"
+  },
+  {
     "NameId": "bird_adventurer",
     "AssetId": "PigPirate",
     "LocaId": "bird_adventurer",

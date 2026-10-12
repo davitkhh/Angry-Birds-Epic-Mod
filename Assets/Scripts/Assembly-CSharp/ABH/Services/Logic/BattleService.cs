@@ -341,7 +341,9 @@ namespace ABH.Services.Logic
 			{
 				GenerateWaveIgnoringStrength(ref combatants, battle.InjectedParticipantTable, 10, battle.m_ControllerLevel, battle);
 			}
-			GenerateWave(ref combatants, balancingData, battle);
+			var firstPigIndex = combatants.Count;
+			GenerateWave(ref combatants, SwapCrystalConfig.WithoutCrystals(balancingData), battle);
+			SwapCrystalConfig.InsertCrystals(combatants, firstPigIndex, balancingData, battle.GetPlayerLevelForHotSpot());
 			return combatants;
 		}
 
@@ -1547,19 +1549,23 @@ namespace ABH.Services.Logic
 		public float ApplyBuffsOnHealth(float baseHealth, ICombatant owner, Dictionary<string, BattleEffectGameData> CurrrentBuffs, float addition)
 		{
 			baseHealth += addition;
-			if (owner.CombatantOffHandEquipment != null)
+			foreach (var perk in UpgradeBlueprints.GetStatPerks(owner))
 			{
-				ApplyPerkOnHealth(owner.CombatantOffHandEquipment.BalancingData.Perk, owner, owner, null, ref baseHealth);
+				ApplyPerkOnHealth(perk, owner, owner, null, ref baseHealth);
 			}
 			return baseHealth;
 		}
 
-		public float ApplyBuffsOnAttack(float baseAttack, ICombatant owner, Dictionary<string, BattleEffectGameData> CurrrentBuffs, float addition)
+		public float ApplyBuffsOnAttack(float baseAttack, ICombatant owner, Dictionary<string, BattleEffectGameData> CurrrentBuffs, float addition, PerkType excludedPerk = PerkType.None)
 		{
 			baseAttack += addition;
-			if (owner.CombatantOffHandEquipment != null)
+			foreach (var perk in UpgradeBlueprints.GetStatPerks(owner))
 			{
-				ApplyPerkOnAttack(owner.CombatantOffHandEquipment.BalancingData.Perk, owner, owner, null, ref baseAttack);
+				if (excludedPerk != PerkType.None && perk.Type == excludedPerk)
+				{
+					continue;
+				}
+				ApplyPerkOnAttack(perk, owner, owner, null, ref baseAttack);
 			}
 			return baseAttack;
 		}
@@ -1657,8 +1663,12 @@ namespace ABH.Services.Logic
 				return 0;
 			}
 			var effectedParam = target.SummedDamagePerTurn;
-			if (!ignorePerks && ApplyPerkOnHit(target.CombatantOffHandEquipment == null ? null : target.CombatantOffHandEquipment.BalancingData.Perk, target, target, battle, ref effectedParam))
+			if (!ignorePerks)
 			{
+				foreach (var perk in UpgradeBlueprints.GetStatPerks(target))
+				{
+					ApplyPerkOnHit(perk, target, target, battle, ref effectedParam);
+				}
 			}
 			var num = NormalizeDamage(effectedParam);
 			if (source != null)
@@ -1714,6 +1724,32 @@ namespace ABH.Services.Logic
 				battle.m_BattleEndData.m_DamageTaken += num;
 			}
 			return num;
+		}
+
+		// Hands snoutlings stolen from victim to the player. A thief wielding a CashStrike main hand spends PerkValue% of them
+		// (rounded up) as damage on the victim: coins * level * PerkValue2. While the victim's hit is still pending the damage
+		// joins that hit, otherwise it is dealt on its own.
+		public void DropStolenGold(BattleGameData battle, ICombatant dropper, ICombatant thief, ICombatant victim, int amount, bool victimHitPending)
+		{
+			var perk = UpgradeBlueprints.FindEquippedPerk(thief, PerkType.CashStrike);
+			if (amount > 0 && perk != null && perk.Type == PerkType.CashStrike && victim != null && victim.CombatantFaction != thief.CombatantFaction && victim.CurrentHealth > 0f)
+			{
+				var converted = Mathf.Min(amount, Mathf.CeilToInt(amount * perk.PerkValue / 100f));
+				if (converted > 0)
+				{
+					amount -= converted;
+					victim.ReceiveDamage(converted * thief.CharacterModel.Level * perk.PerkValue2, thief);
+					if (!victimHitPending)
+					{
+						DealDamageFromCurrentTurn(victim, battle, thief, true);
+					}
+					thief.RaisePerkUsed(PerkType.CashStrike, victim);
+				}
+			}
+			if (amount > 0)
+			{
+				dropper.RaiseDropItems(DIContainerLogic.GetLootOperationService().RewardLootGetInputCopy(battle.m_ControllerInventory, 1, DIContainerLogic.GetLootOperationService().GenerateLoot(new Dictionary<string, int> { { "gold", amount } }, 1), "skill"));
+			}
 		}
 
 		public int HealCurrentTurn(ICombatant target, BattleGameData battle, bool ignoreZero = true, bool ignoreStandardOnHealEffects = false, bool ignoreConsumableOnHealEffects = false, bool ignoreTracking = false, bool isSupportSkill = false, ICombatant source = null)
@@ -2890,7 +2926,7 @@ namespace ABH.Services.Logic
 				var num73 = 0;
 				num73 = !(effect.Values[1] >= effect.Values[2]) ? UnityEngine.Random.Range((int)effect.Values[1], (int)effect.Values[2] + 1) : (int)effect.Values[0];
 				effectGameData.EvaluateEffect();
-				effectGameData.m_Target.RaiseDropItems(DIContainerLogic.GetLootOperationService().RewardLootGetInputCopy(effectGameData.m_Battle.m_ControllerInventory, 1, DIContainerLogic.GetLootOperationService().GenerateLoot(new Dictionary<string, int> { { "gold", num73 } }, 1), "skill"));
+				DropStolenGold(effectGameData.m_Battle, effectGameData.m_Target, effectGameData.m_Target, effectGameData.m_Target.AttackTarget, num73, false);
 				return param;
 			});
 			
@@ -3211,12 +3247,10 @@ namespace ABH.Services.Logic
 			// SummonCombatant
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnDealDamagePerTurn].Add(BattleEffectType.SummonCombatant, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
-				if ((effectGameData.m_Battle.m_CurrentWaveTurn + 1) % (int)effect.Values[1] != 0)
-				{
-					effectGameData.m_Battle.m_EnvEffectTriggered = false;
-					return param;
-				}
-				if (effectGameData.m_Battle.m_EnvEffectTriggered)
+				// Each summoner keeps its own timer (turns since its effect was applied) instead of the
+				// shared wave turn + m_EnvEffectTriggered gate, so several summoners each summon.
+				effectGameData.m_SummonTurnCounter++;
+				if (effectGameData.m_SummonTurnCounter % (int)effect.Values[1] != 0)
 				{
 					return param;
 				}
@@ -3233,7 +3267,6 @@ namespace ABH.Services.Logic
 				{
 					effectGameData.m_Battle.RaiseSummonCombatant(effect.Values, effectGameData.m_Source.CombatantFaction, effectGameData.m_Source.CurrentInitiative, null);
 				}
-				effectGameData.m_Battle.m_EnvEffectTriggered = true;
 				effectGameData.EvaluateEffect();
 				return param;
 			});
@@ -4056,7 +4089,7 @@ namespace ABH.Services.Logic
 				var num59 = 0;
 				num59 = !(effect.Values[0] >= effect.Values[1]) ? UnityEngine.Random.Range((int)effect.Values[0], (int)effect.Values[1] + 1) : (int)effect.Values[0];
 				effectGameData.EvaluateEffect();
-				effectGameData.m_Target.RaiseDropItems(DIContainerLogic.GetLootOperationService().RewardLootGetInputCopy(effectGameData.m_Battle.m_ControllerInventory, 1, DIContainerLogic.GetLootOperationService().GenerateLoot(new Dictionary<string, int> { { "gold", num59 } }, 1), "skill"));
+				DropStolenGold(effectGameData.m_Battle, effectGameData.m_Target, attacker, effectGameData.m_Target, num59, true);
 				return param;
 			});
 			
@@ -5294,12 +5327,29 @@ namespace ABH.Services.Logic
 			return num;
 		}
 
+		// Effects a defender uses to punish whoever hits it (Shock Shield, thorns, stun/debuff the attacker...).
+		// Counter attacks (Counter, CounterWithSource) are deliberately not included: they still happen.
+		private static readonly HashSet<BattleEffectType> RetaliationEffectTypes = new HashSet<BattleEffectType>
+		{
+			BattleEffectType.Reflect,
+			BattleEffectType.Thorn,
+			BattleEffectType.StunAttacker,
+			BattleEffectType.RageblockAttacker,
+			BattleEffectType.DebuffAttacker,
+			BattleEffectType.ReduceRage
+		};
+
+		// Attackers whose current skill can't be retaliated against (e.g. ThrowMainHandAttack). Their targets' retaliation
+		// effects are skipped without being consumed; damage reductions (dodge, ironclad...) still apply.
+		public readonly HashSet<ICombatant> RetaliationImmuneAttackers = new HashSet<ICombatant>();
+
 		public float ApplyEffectsOnTriggerType(float effectedParam, EffectTriggerType triggerType, ICombatant effectOwner, ICombatant target)
 		{
 			if (effectOwner.CurrrentEffects == null)
 			{
 				return effectedParam;
 			}
+			var skipRetaliation = target != null && target != effectOwner && RetaliationImmuneAttackers.Contains(target);
 			var list = effectOwner.CurrrentEffects.Values.OrderBy(e => e.m_Effects[0].EffectType).ToList();
 			for (var i = 0; i < list.Count; i++)
 			{
@@ -5314,6 +5364,10 @@ namespace ABH.Services.Logic
 				{
 					var battleEffect = battleEffectGameData.m_Effects[j];
 					Func<float, BattleEffectGameData, BattleEffect, ICombatant, float> value = null;
+					if (skipRetaliation && RetaliationEffectTypes.Contains(battleEffect.EffectType))
+					{
+						continue;
+					}
 					if (battleEffect.EffectTrigger == triggerType && BattleEffectsByTriggerAndByType.ContainsKey(triggerType) && BattleEffectsByTriggerAndByType[triggerType].TryGetValue(battleEffect.EffectType, out value))
 					{
 						effectedParam = value(effectedParam, battleEffectGameData, battleEffect, target);
@@ -5375,6 +5429,12 @@ namespace ABH.Services.Logic
 			EquipmentPerksByType.Add(PerkType.CriticalStrike, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
 			{
 				var num11 = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyCriticalStrike }, EffectTriggerType.OnApplyPerk, invoker, target);
+				// Brilliance off hands add PerkValue2% on top of the crit's bonus damage
+				var brilliance = UpgradeBlueprints.FindEquippedPerk(invoker, PerkType.Brilliance);
+				if (brilliance != null)
+				{
+					num11 += brilliance.PerkValue2;
+				}
 				var num12 = paramModifierPair.Key + num11 / 100f;
 				return num12;
 			});
@@ -5384,6 +5444,13 @@ namespace ABH.Services.Logic
 			{
 				var num10 = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyMight }, EffectTriggerType.OnApplyPerk, invoker, target);
 				return paramModifierPair.Key * (num10 + 100f) / 100f;
+			});
+			
+			// Brilliance: Might's attack bonus; the crit damage part lives in CriticalStrike above
+			EquipmentPerksByType.Add(PerkType.Brilliance, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
+			{
+				var might = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyMight }, EffectTriggerType.OnApplyPerk, invoker, target);
+				return paramModifierPair.Key * (might + 100f) / 100f;
 			});
 			
 			// Vitality
@@ -5410,7 +5477,22 @@ namespace ABH.Services.Logic
 				}
 				return paramModifierPair.Key;
 			});
-			
+
+			// PhatLoot: the player drops snoutlings whenever the wearer takes damage
+			EquipmentPerksByType.Add(PerkType.PhatLoot, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
+			{
+				if (paramModifierPair.Key <= 0f || target.CombatantFaction != Faction.Birds || battle.m_ControllerInventory == null)
+				{
+					return paramModifierPair.Key;
+				}
+				var lost = Math.Min((int)paramModifierPair.Value, DIContainerLogic.InventoryService.GetItemValue(battle.m_ControllerInventory, "gold"));
+				if (lost > 0)
+				{
+					DIContainerLogic.InventoryService.RemoveItem(battle.m_ControllerInventory, "gold", lost, "phat_loot_hit");
+				}
+				return paramModifierPair.Key;
+			});
+
 			//
 			// Early
 			//
@@ -5449,7 +5531,8 @@ namespace ABH.Services.Logic
 					invoker.HealDamage(heal2, invoker);
 					HealCurrentTurn(invoker, battle);
 				}
-				var chiliDrainPercent = invoker.CombatantMainHandEquipment.BalancingData.Perk.PerkValue2;
+				var chiliDrain = UpgradeBlueprints.FindEquippedPerk(invoker, PerkType.HocusPokusChiliDrain);
+				var chiliDrainPercent = chiliDrain == null ? 0f : chiliDrain.PerkValue2;
 				ReduceRageFromAttack(chiliDrainPercent, battle, invoker);
 				return paramModifierPair.Key;
 			});
@@ -5597,7 +5680,7 @@ namespace ABH.Services.Logic
 			return true;
 		}
 
-		public bool ApplyDelayedPerk(EquipmentPerk perk, ICombatant perkOwner, ICombatant target, BattleGameData battle, ref float effectedParam)
+		public bool ApplyDelayedPerk(EquipmentPerk perk, ICombatant perkOwner, ICombatant target, BattleGameData battle, ref float effectedParam, bool skipRoll = false)
 		{
 			var num = effectedParam;
 			if (perk == null)
@@ -5605,7 +5688,7 @@ namespace ABH.Services.Logic
 				return false;
 			}
 			var num2 = ApplyEffectsOfTypeOnTriggerType(perk.ProbablityInPercent, new List<BattleEffectType> { GetModifyPerkType(perk.Type) }, EffectTriggerType.OnCalculatePerkChance, perkOwner, target);
-			if (num2 / 100f < UnityEngine.Random.value)
+			if (!skipRoll && num2 / 100f < UnityEngine.Random.value)
 			{
 				return false;
 			}
@@ -5673,7 +5756,7 @@ namespace ABH.Services.Logic
 			{
 				return false;
 			}
-			if (perk.Type != PerkType.Vigor && perk.Type != PerkType.Guardian)
+			if (perk.Type != PerkType.Vigor && perk.Type != PerkType.Guardian && perk.Type != PerkType.PhatLoot)
 			{
 				return false;
 			}
@@ -5692,7 +5775,7 @@ namespace ABH.Services.Logic
 			{
 				return false;
 			}
-			if (perk.Type != PerkType.Might)
+			if (perk.Type != PerkType.Might && perk.Type != PerkType.Brilliance)
 			{
 				return false;
 			}
@@ -5843,6 +5926,11 @@ namespace ABH.Services.Logic
 						return InitiateNewCombo(combatant, battle);
 					}
 				}
+				var healthBasedSkill = GetHealthBasedSkill(combatant);
+				if (healthBasedSkill != null)
+				{
+					return healthBasedSkill;
+				}
 			}
 			if (combatant.ComboInfo == null)
 			{
@@ -5854,6 +5942,32 @@ namespace ABH.Services.Logic
 				return InitiateNewCombo(combatant, battle);
 			}
 			return GetCurrentSkillFromComboAndUpdateCombo(combatant, battle);
+		}
+
+		// Pigs whose support skill has "heal_chance_at_no_health" skip combos: each turn they heal with that chance (%)
+		// scaled by missing health (full chance at 0 hp, none at full hp), otherwise they attack. The scaling is
+		// linear unless "heal_chance_at_half_health" bends it (chance = max * missing^k through that point).
+		private SkillBattleDataBase GetHealthBasedSkill(ICombatant combatant)
+		{
+			var support = combatant.GetSkill(1);
+			float chanceAtNoHealth;
+			if (support == null || !support.Model.SkillParameters.TryGetValue("heal_chance_at_no_health", out chanceAtNoHealth))
+			{
+				return null;
+			}
+			combatant.ComboInfo = null;
+			var missingHealth = 1f - Mathf.Clamp01(combatant.CurrentHealth / combatant.ModifiedHealth);
+			var exponent = 1f;
+			float chanceAtHalfHealth;
+			if (support.Model.SkillParameters.TryGetValue("heal_chance_at_half_health", out chanceAtHalfHealth) && chanceAtHalfHealth > 0f && chanceAtHalfHealth < chanceAtNoHealth)
+			{
+				exponent = Mathf.Log(chanceAtHalfHealth / chanceAtNoHealth) / Mathf.Log(0.5f);
+			}
+			if (UnityEngine.Random.value < chanceAtNoHealth / 100f * Mathf.Pow(missingHealth, exponent))
+			{
+				return support;
+			}
+			return combatant.GetSkill(0);
 		}
 
 		private SkillBattleDataBase InitiateNewCombo(ICombatant combatHand, BattleGameData battle)
@@ -6195,6 +6309,14 @@ namespace ABH.Services.Logic
 
 		private ICombatant GetWeakestCharacterForSupportSkillTarget(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction faction)
 		{
+			if (skill.SkillParameters.TryGetValue("prioritize_big_boss_below_percent", out var bossThreshold))
+			{
+				var bigBoss = battle.m_CombatantsByInitiative.FirstOrDefault(c => c.CombatantFaction == faction && c.IsAlive && c.CombatantNameId.Contains("big_boss") && c.CurrentHealth < c.ModifiedHealth * bossThreshold / 100f);
+				if (bigBoss != null)
+				{
+					return bigBoss;
+				}
+			}
 			return GetWeakestCharacterForSkillTarget(battle, combatant, skill, faction).FirstOrDefault();
 		}
 

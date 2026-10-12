@@ -492,6 +492,10 @@ public class BaseLocationStateManager : MonoBehaviour
 	{
 	}
 
+	public virtual void ShowMerchantScreen(string param, HotSpotWorldMapViewBase hotspot)
+	{
+	}
+
 	public virtual void ShowTrainerScreen(string param, HotSpotWorldMapViewBase hotspot)
 	{
 	}

@@ -68,7 +68,7 @@ namespace ABH.GameDatas.Battle.Skills
 			{
 				if (base.Model.SkillParameters.TryGetValue("enemy_damage_retaliated_percent", out effectValue))
 				{
-					var valueList = new List<float> { m_DamageMod * source.ModifiedAttack };
+					var valueList = new List<float> { m_DamageMod * GetShieldAttack(source) };
 					var effect = new BattleEffectGameData(source, m_Targets[i], new List<BattleEffect>
 					{
 						new BattleEffect
@@ -87,10 +87,16 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		// The Magic Book's Brilliance attack bonus is for Chuck's own hits, not the shield's retaliation
+		private static float GetShieldAttack(ICombatant source)
+		{
+			return source == null ? 0f : source.GetModifiedAttackExcludingPerk(PerkType.Brilliance);
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();
-			var num = Convert.ToInt32(m_DamageMod * invoker.ModifiedAttack);
+			var num = Convert.ToInt32(m_DamageMod * GetShieldAttack(invoker));
 			dictionary.Add("{value_1}", string.Empty + num);
 			dictionary.Add("{value_2}", string.Empty + m_BuffDuration);
 			dictionary.Add("{value_3}", string.Empty + m_Percent);

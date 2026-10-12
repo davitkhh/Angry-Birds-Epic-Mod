@@ -1578,7 +1578,7 @@
     "NameId": "battle_007_bird2_resolved",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_008_01"
+      "bpart_008"
     ],
     "LootTableWheel": {
       "battle_wood": 1
@@ -1624,7 +1624,7 @@
     "NameId": "battle_007_bird3_resolved",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_008_2"
+      "bpart_008"
     ],
     "LootTableWheel": {
       "battle_wood": 1
@@ -18601,6 +18601,133 @@
         "RequirementType": "NotHaveItem",
         "NameId": "daily_chain_stamp",
         "Value": 7.0
+      }
+    ],
+    "LootTableLost": {
+      "gold": 5
+    },
+    "BackgroundAssetId": "Battleground_Clouds_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": null,
+    "BattleType": "",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_golden_pig_cloud1",
+    "BaseLevel": 0,
+    "BattleParticipantsIds": [
+      "bpart_golden_cloud_01_01",
+      "bpart_golden_cloud_01_02",
+      "bpart_golden_cloud_01_03"
+    ],
+    "LootTableWheel": {
+      "loot_goldenpig_daily": 1
+    },
+    "LootTableAdditional": {
+      "delayed_lucky_coin": 1
+    },
+    "StrengthPoints": 15,
+    "BattleRequirements": [
+
+    ],
+    "LootTableLost": {
+      "gold": 5
+    },
+    "BackgroundAssetId": "Battleground_EventCampaignDungeon_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "music_secret_dungeon",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": null,
+    "BattleType": "",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_golden_pig_cloud_bird2",
+    "BaseLevel": 0,
+    "BattleParticipantsIds": [
+      "bpart_golden_pig_01_b2"
+    ],
+    "LootTableWheel": {
+      "loot_goldenpig_daily": 1
+    },
+    "LootTableAdditional": {
+      "delayed_lucky_coin": 1
+    },
+    "StrengthPoints": 15,
+    "BattleRequirements": [
+      {
+        "RequirementType": "HaveBirdCount",
+        "NameId": "e",
+        "Value": 2.0
+      }
+    ],
+    "LootTableLost": {
+      "gold": 5
+    },
+    "BackgroundAssetId": "Battleground_Clouds_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 2,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": null,
+    "BattleType": "",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_golden_pig_cloud_bird3",
+    "BaseLevel": 0,
+    "BattleParticipantsIds": [
+      "bpart_golden_pig_01_b3"
+    ],
+    "LootTableWheel": {
+      "loot_goldenpig_daily": 1
+    },
+    "LootTableAdditional": {
+      "delayed_lucky_coin": 1
+    },
+    "StrengthPoints": 15,
+    "BattleRequirements": [
+      {
+        "RequirementType": "HaveBirdCount",
+        "NameId": "l",
+        "Value": 3.0
       }
     ],
     "LootTableLost": {

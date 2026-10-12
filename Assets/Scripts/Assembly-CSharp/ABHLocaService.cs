@@ -337,7 +337,8 @@ public class ABHLocaService
 
 	public string GetShopTypeName(ShopMenuType m_MenuType)
 	{
-		return locaHelper.Tr(m_MenuType.ToString().ToLower() + "_name");
+		// Merchant has no loca key of its own, so fall back to the type name.
+		return locaHelper.Tr(m_MenuType.ToString().ToLower() + "_name", m_MenuType.ToString());
 	}
 
 	public string GetShopTypeContentName(ShopMenuType m_MenuType)

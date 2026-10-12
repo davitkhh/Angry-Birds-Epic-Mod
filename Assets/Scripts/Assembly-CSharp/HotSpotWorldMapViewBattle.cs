@@ -168,6 +168,7 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 		}
 		if (!DIContainerLogic.WorldMapService.IsHotspotVisible(DIContainerInfrastructure.GetCurrentPlayer(), base.Model))
 		{
+			yield return StartCoroutine(ActivateFollowUpsPastThis(parentHotSpot, activateTo, instant));
 			yield break;
 		}
 		var unlockStateAtStart = base.Model.Data.UnlockState;

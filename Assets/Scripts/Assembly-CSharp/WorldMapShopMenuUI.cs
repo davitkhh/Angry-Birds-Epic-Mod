@@ -72,6 +72,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 	[SerializeField]
 	private GameObject m_EagleProp;
 
+	// Piggy McCool peeking over the board; built by McCoolShopPeekBuilder, shown only at the merchant.
+	[SerializeField]
+	private GameObject m_McCoolProp;
+
 	[SerializeField]
 	private GameObject m_DiscountBubbleProp;
 
@@ -109,6 +113,14 @@ public class WorldMapShopMenuUI : MonoBehaviour
 	private HotSpotWorldMapViewBase m_hotspot;
 
 	private bool m_isMasterySale;
+
+	private bool m_IsRefreshing;
+
+	private bool m_RefreshPending;
+
+	private bool m_IsLeaving;
+
+	private readonly List<BasicShopOfferBalancingData> m_PendingBoughtOffers = new List<BasicShopOfferBalancingData>();
 
 	[method: MethodImpl(32)]
 	public event Action BackButtonPressed;
@@ -155,6 +167,7 @@ public class WorldMapShopMenuUI : MonoBehaviour
 
 	private IEnumerator EnterCoroutine()
 	{
+		m_IsLeaving = false;
 		DIContainerInfrastructure.GetCoreStateMgr().m_WindowRoot.Enter(false);
 		DIContainerInfrastructure.BackButtonMgr.RegisterBlockReason("worldmap_shop_animate");
 		if (m_MenuType == ShopMenuType.Dojo && DIContainerLogic.GetTimingService().IsAfter(DIContainerLogic.GetTimingService().GetPresentTime().AddSeconds(DIContainerLogic.GetShopService().GetClassSwitchTimeLeft(DIContainerInfrastructure.GetCurrentPlayer()).TotalSeconds)))
@@ -162,6 +175,13 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			ResetMasteryShopOffers();
 		}
 		m_EmptyLabel.SetActive(false);
+		if (m_MenuType == ShopMenuType.Merchant)
+		{
+			// Opening the shop shows the player any restocked offers, so the hotspot's restock flag is spent.
+			var merchantOffers = DIContainerLogic.GetShopService().GetShopOffers(DIContainerInfrastructure.GetCurrentPlayer(), m_Model.NameId);
+			MerchantStock.Sync(DIContainerInfrastructure.GetCurrentPlayer(), merchantOffers);
+			MerchantStock.ClearRestockNotices(DIContainerInfrastructure.GetCurrentPlayer(), merchantOffers);
+		}
 		yield return StartCoroutine(RefreshBlinds());
 		base.gameObject.GetComponent<UIPanel>().enabled = true;
 		m_BoardAnimation.Play("Board_Enter");
@@ -176,6 +196,11 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		foreach (var go2 in cauldronObjects)
 		{
 			go2.SetActive(false);
+		}
+		if (m_McCoolProp)
+		{
+			// Bobs via its PeekIdleBob (speed is editable on that component).
+			m_McCoolProp.SetActive(m_MenuType == ShopMenuType.Merchant);
 		}
 		switch (m_MenuType)
 		{
@@ -256,26 +281,31 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		yield return new WaitForSeconds(m_BoardAnimation["Board_Enter"].clip.length);
 		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("worldmap_shop_animate");
 		RegisterEventHandlers();
-		DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("entered_workshop", m_Model.NameId);
+		// The merchant is not a workshop; don't trigger the workshop tutorial guides there.
+		if (m_MenuType != ShopMenuType.Merchant)
+		{
+			DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("entered_workshop", m_Model.NameId);
+		}
 	}
 
 	private void HandleAnvil()
 	{
+		// The forge item may not be owned yet; a throw here would abort EnterCoroutine before the handlers register.
 		IInventoryItemGameData anvil;
-		DIContainerLogic.InventoryService.TryGetItemGameData(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "forge_leveled", out anvil);
+		var anvilLevel = DIContainerLogic.InventoryService.TryGetItemGameData(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "forge_leveled", out anvil) && anvil != null ? anvil.ItemData.Level : 0;
 		for (var i = 0; i < 3; i++)
 		{
-			m_AnvilObjects[i].SetActive(i + 1 == anvil.ItemData.Level);
+			m_AnvilObjects[i].SetActive(i + 1 == anvilLevel);
 		}
 	}
 
 	private void HandleCauldron()
 	{
 		IInventoryItemGameData cauldron;
-		DIContainerLogic.InventoryService.TryGetItemGameData(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "cauldron_leveled", out cauldron);
+		var cauldronLevel = DIContainerLogic.InventoryService.TryGetItemGameData(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "cauldron_leveled", out cauldron) && cauldron != null ? cauldron.ItemData.Level : 0;
 		for (var i = 0; i < 3; i++)
 		{
-			m_CauldronObjects[i].SetActive(i + 1 == cauldron.ItemData.Level);
+			m_CauldronObjects[i].SetActive(i + 1 == cauldronLevel);
 		}
 	}
 
@@ -306,9 +336,9 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		return Mathf.Min(num, 30f);
 	}
 
-	private IEnumerator RefreshBlinds()
+	// Only a fresh enter scrolls back to the top; refreshes after a purchase keep the player's scroll position.
+	private IEnumerator RefreshBlinds(bool resetScroll = true)
 	{
-		ClearBlinds();
 		yield return new WaitForEndOfFrame();
 		var offers = new List<BasicShopOfferBalancingData>();
 		offers = m_MenuType != ShopMenuType.Dojo ? DIContainerLogic.GetShopService().GetShopOffers(DIContainerInfrastructure.GetCurrentPlayer(), m_Model.NameId) : DIContainerLogic.GetShopService().GetShopOffers(DIContainerInfrastructure.GetCurrentPlayer(), m_Model.NameId, false);
@@ -347,7 +377,14 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		var offerListScrollView = m_OfferListGrid.GetComponent<UIScrollView>();
 		if (offerListScrollView != null)
 		{
-			offerListScrollView.ResetPosition();
+			if (resetScroll)
+			{
+				offerListScrollView.ResetPosition();
+			}
+			else
+			{
+				offerListScrollView.RestrictWithinBounds(true);
+			}
 		}
 	}
 
@@ -435,6 +472,7 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			activatedShopBlinds++;
 			shopOfferBlindWorldmap.gameObject.SetActive(true);
 			shopOfferBlindWorldmap.SetModel(model, m_StateMgr, applyDojoMasteryBonus);
+			RegisterEventHandlerFromSlot(shopOfferBlindWorldmap);
 			shopOfferBlindWorldmap.Show();
 		}
 		m_EmptyLabel.SetActive(activatedShopBlinds == 0);
@@ -555,17 +593,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			{
 				shopOfferBlindWorldmap.gameObject.SetActive(true);
 				shopOfferBlindWorldmap.SetModel(basicShopOfferBalancingData, m_StateMgr);
+				// A blind is clickable as soon as SetModel runs, so it must report purchases from then on too.
+				RegisterEventHandlerFromSlot(shopOfferBlindWorldmap);
 				shopOfferBlindWorldmap.Show();
 			}
-		}
-	}
-
-	private void ClearBlinds()
-	{
-		for (var num = m_ShopOfferBlinds.Count - 1; num >= 0; num--)
-		{
-			var slot = m_ShopOfferBlinds[num];
-			DeRegisterEventHandlerFromSlot(slot);
 		}
 	}
 
@@ -587,6 +618,7 @@ public class WorldMapShopMenuUI : MonoBehaviour
 
 	private IEnumerator LeaveCoroutine()
 	{
+		m_IsLeaving = true;
 		DIContainerInfrastructure.BackButtonMgr.RegisterBlockReason("worldmap_shop_animate");
 		DeRegisterEventHandlers();
 		m_BoardAnimation.Play("Board_Leave");
@@ -682,41 +714,78 @@ public class WorldMapShopMenuUI : MonoBehaviour
 
 	private void blind_ShopOfferBought(BasicShopOfferBalancingData blind)
 	{
-		StartCoroutine(RefreshAndReEnterCoroutine(blind));
+		QueueRefresh(blind);
 	}
 
 	public void RefreshAndReEnter()
 	{
-		StartCoroutine(RefreshAndReEnterCoroutine(null));
+		QueueRefresh(null);
 	}
 
-	private IEnumerator RefreshAndReEnterCoroutine(BasicShopOfferBalancingData blind)
+	// Purchases made while a refresh is running are queued for it instead of being dropped, and the
+	// back button stays live throughout (the old version unregistered every handler until it finished).
+	private void QueueRefresh(BasicShopOfferBalancingData boughtOffer)
 	{
-		if (m_MenuType != ShopMenuType.Dojo)
+		if (boughtOffer != null)
 		{
-			DeRegisterEventHandlers();
+			m_PendingBoughtOffers.Add(boughtOffer);
 		}
-		if (blind != null)
+		m_RefreshPending = true;
+		if (!m_IsRefreshing)
 		{
-			var boughtBlind = m_ShopOfferBlinds.FirstOrDefault(b => b.GetModel() != null && b.GetModel().NameId == blind.NameId);
-			if (boughtBlind != null)
+			StartCoroutine(RefreshAndReEnterCoroutine());
+		}
+	}
+
+	private IEnumerator RefreshAndReEnterCoroutine()
+	{
+		m_IsRefreshing = true;
+		while (m_RefreshPending && !m_IsLeaving)
+		{
+			m_RefreshPending = false;
+			var boughtOffers = new List<BasicShopOfferBalancingData>(m_PendingBoughtOffers);
+			m_PendingBoughtOffers.Clear();
+			var waitTime = 0f;
+			foreach (var offer in boughtOffers)
 			{
-				boughtBlind.Hide();
+				var boughtBlind = m_ShopOfferBlinds.FirstOrDefault(b => b.GetModel() != null && b.GetModel().NameId == offer.NameId);
+				if (boughtBlind == null)
+				{
+					continue;
+				}
 				DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
-				yield return new WaitForSeconds(boughtBlind.ShowBoughtIndicator());
+				// Repeatable trades keep their tile on screen so it can be clicked again right away.
+				if (m_MenuType != ShopMenuType.Dojo && ShopOfferBlindWorldmap.CanBeBoughtAgain(offer))
+				{
+					boughtBlind.ShowBoughtIndicator();
+				}
+				else
+				{
+					boughtBlind.Hide();
+					waitTime = Mathf.Max(waitTime, boughtBlind.ShowBoughtIndicator());
+				}
 			}
+			if (waitTime > 0f)
+			{
+				yield return new WaitForSeconds(waitTime);
+			}
+			yield return StartCoroutine(RefreshBlinds(false));
+			if (m_MenuType == ShopMenuType.Dojo)
+			{
+				var cost = DIContainerBalancing.GameConstantsBalancingDataProvider.NextClassSkipRequirement;
+				var costItem = DIContainerBalancing.GetInventoryItemBalancingDataPovider().GetBalancingData(cost.NameId);
+				m_SkipCost.SetModel(costItem.AssetBaseId, null, cost.Value, string.Empty);
+				StopCoroutine("CountDownTimer");
+				StartCoroutine("CountDownTimer", DIContainerLogic.GetTimingService().GetPresentTime().AddSeconds(DIContainerLogic.GetShopService().GetClassSwitchTimeLeft(DIContainerInfrastructure.GetCurrentPlayer()).TotalSeconds));
+			}
+			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateLuckyCoinsBar();
+			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateCoinsBar();
 		}
-		yield return StartCoroutine(RefreshBlinds());
-		if (m_MenuType == ShopMenuType.Dojo)
+		m_IsRefreshing = false;
+		if (m_IsLeaving)
 		{
-			var cost = DIContainerBalancing.GameConstantsBalancingDataProvider.NextClassSkipRequirement;
-			var costItem = DIContainerBalancing.GetInventoryItemBalancingDataPovider().GetBalancingData(cost.NameId);
-			m_SkipCost.SetModel(costItem.AssetBaseId, null, cost.Value, string.Empty);
-			StopCoroutine("CountDownTimer");
-			StartCoroutine("CountDownTimer", DIContainerLogic.GetTimingService().GetPresentTime().AddSeconds(DIContainerLogic.GetShopService().GetClassSwitchTimeLeft(DIContainerInfrastructure.GetCurrentPlayer()).TotalSeconds));
+			yield break;
 		}
-		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateLuckyCoinsBar();
-		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateCoinsBar();
 		RegisterEventHandlers();
 		yield return new WaitForEndOfFrame();
 		m_OfferListGrid.Reposition();
@@ -815,6 +884,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 
 	private void OnDisable()
 	{
+		// Deactivation stops the refresh coroutine, so reset its state for the next Enter.
+		m_IsRefreshing = false;
+		m_RefreshPending = false;
+		m_PendingBoughtOffers.Clear();
 		DeRegisterEventHandlers();
 		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("worldmap_shop_animate");
 	}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: -1545704558, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
   m_Name: BlackBird
   m_EditorClassIdentifier: 
-  buildID: 202507072115545937
+  buildID: 202610112118224326
   needsRebuilt: 1
   boneDataList:
   - active: 1

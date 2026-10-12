@@ -169,12 +169,16 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		RegisterEventHandlers();
 		m_SoundTriggers = GetComponent<SoundTriggerList>();
 		RemoveAsset(m_Item);
+		// Free the preview stage from this tile's previous offer, whatever kind of icon replaces it
+		ReleaseIconPreviewStage();
+		ShowIconPreviewTexture(null);
 		m_RecipeItem = null;
 		m_Item = null;
 		m_Model = model;
 		m_StateMgr = stateMgr;
 		var shopOfferContent = DIContainerLogic.GetShopService().GetShopOfferContent(DIContainerInfrastructure.GetCurrentPlayer(), m_Model, DIContainerLogic.GetSalesManagerService().GetOfferSaleDetails(m_Model.NameId));
 		m_ItemIconSprite.gameObject.SetActive(false);
+		RestoreItemIconSize();
 		m_requirementLevel = 0;
 		m_failedLevelRequirement = false;
 		m_WeaponStatsRoot.SetActive(false);
@@ -197,7 +201,20 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 				var loot = DIContainerLogic.GetLootOperationService().GenerateLoot(craftingRecipeGameData.GetResultLoot(), craftingRecipeGameData.Data.Level);
 				var itemsFromLoot = DIContainerLogic.GetLootOperationService().GetItemsFromLoot(DIContainerInfrastructure.GetCurrentPlayer(), loot);
 				m_Item = itemsFromLoot[0];
-				if (craftingRecipeGameData.BalancingData.RecipeCategoryType == InventoryItemType.Consumable)
+				UpgradeBlueprintBalancingData upgradeBlueprint;
+				var isUpgradeBlueprint = UpgradeBlueprints.TryGetDefinition(craftingRecipeGameData, out upgradeBlueprint);
+				UpgradeBlueprints.SetGoldParchment(m_RecipeScrollRoot, isUpgradeBlueprint);
+				UpgradeStatChangeView.Clear(m_ConsumableEffectInfo.transform);
+				if (isUpgradeBlueprint)
+				{
+					// Upgrade blueprints show what they change (old -> new) instead of the equipment's stats
+					m_WeaponStatsRoot.SetActive(false);
+					m_ConsumableEffectRoot.SetActive(true);
+					m_ConsumableLabel.text = UpgradeBlueprints.GetName(upgradeBlueprint);
+					m_AdditionalSprite.spriteName = m_Item is EquipmentGameData ? EquipmentGameData.GetRestrictedBirdIcon(m_Item as EquipmentGameData) : ClassItemGameData.GetRestrictedBirdIcon(m_Item.ItemBalancing);
+					ShowUpgradeStatChanges(upgradeBlueprint);
+				}
+				else if (craftingRecipeGameData.BalancingData.RecipeCategoryType == InventoryItemType.Consumable)
 				{
 					m_WeaponStatsRoot.SetActive(false);
 					m_ConsumableEffectRoot.SetActive(true);
@@ -258,8 +275,38 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 					InstantiateAsset(m_Item, m_IconRoot);
 					m_AdditionalSprite.spriteName = ClassItemGameData.GetRestrictedBirdIcon(m_Item.ItemBalancing);
 				}
+				else if (m_Item.ItemBalancing.ItemType == InventoryItemType.Skin)
+				{
+					m_SlotRoot.SetActive(true);
+					InstantiateAsset(m_Item, m_IconRoot);
+					var skinBalancing = m_Item.ItemBalancing as ClassSkinBalancingData;
+					var skinClass = DIContainerBalancing.Service.GetBalancingData<ClassItemBalancingData>(skinBalancing.OriginalClass);
+					m_AdditionalSprite.spriteName = ClassItemGameData.GetRestrictedBirdIcon(skinClass);
+				}
+				else if (IsSpriteIconItem(m_Item))
+				{
+					ReleaseIconPreviewStage();
+					m_AdditionalSprite.gameObject.SetActive(false);
+					var atlas = GetIconAtlas(m_Item.ItemBalancing.ItemType);
+					if (atlas != null)
+					{
+						m_ItemIconSprite.atlas = atlas;
+					}
+					m_ItemIconSprite.spriteName = m_Item.ItemAssetName;
+					m_ItemIconSprite.gameObject.SetActive(true);
+					FitItemIconToSprite();
+					// m_BlindMainLabel lives under the equipment root, so use the consumable layout for the name.
+					m_ConsumableEffectRoot.SetActive(true);
+					m_ConsumableLabel.text = GetOfferItemName(m_Item);
+					m_ConsumableEffectInfo.text = GetStockText();
+				}
 				else
 				{
+					var equipment = m_Item as EquipmentGameData;
+					if (equipment != null)
+					{
+						ShowEquipmentOffer(equipment);
+					}
 					InstantiateAsset(m_Item, m_IconRoot);
 				}
 			}
@@ -298,7 +345,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			}
 			if (requirement != null)
 			{
-				m_DiscountCostBlind.SetModel(DIContainerBalancing.GetInventoryItemBalancingDataPovider().GetBalancingData(requirement.NameId).AssetBaseId, null, requirement.Value, string.Empty);
+				SetCostBlindModel(m_DiscountCostBlind, requirement);
 			}
 		}
 
@@ -308,7 +355,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			m_DiscountCostBlind.gameObject.SetActive(false);
 			if (requirement != null)
 			{
-				m_CostBlind.SetModel(DIContainerBalancing.GetInventoryItemBalancingDataPovider().GetBalancingData(requirement.NameId).AssetBaseId, null, requirement.Value, string.Empty);
+				SetCostBlindModel(m_CostBlind, requirement);
 			}
 			m_MasteryBuyButtonbody.color = Color.green;
 		}
@@ -317,7 +364,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			m_MasteryBuyButtonbody.color = Color.white;
 			if (requirement != null)
 			{
-				m_CostBlind.SetModel(DIContainerBalancing.GetInventoryItemBalancingDataPovider().GetBalancingData(requirement.NameId).AssetBaseId, null, requirement.Value, string.Empty);
+				SetCostBlindModel(m_CostBlind, requirement);
 			}
 			m_CostBlind.gameObject.SetActive(true);
 			m_DiscountCostBlind.gameObject.SetActive(false);
@@ -362,6 +409,10 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 					requirementRoot2 = requirementRoot4;
 				}
 			}
+			if (requirementRoot2 == null)
+			{
+				requirementRoot2 = GetFallbackRequirementRoot(requirement2.RequirementType);
+			}
 			foreach (var root4 in requirementRoot2.Roots)
 			{
 				root4.SetActive(true);
@@ -398,6 +449,27 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		{
 			m_MasteryTextTitle.color = new Color(0.46f, 1f, 0f);
 		}
+	}
+
+	// The world shop blinds only author roots for a few requirement types. Show class requirements with
+	// the matching item layout ("not owned" / "already owned") and anything else with the default one,
+	// rather than throwing and leaving the rest of the shop without click handlers.
+	private RequirementRoot GetFallbackRequirementRoot(RequirementType type)
+	{
+		RequirementType fallbackType;
+		switch (type)
+		{
+		case RequirementType.HaveClass:
+			fallbackType = RequirementType.HaveItem;
+			break;
+		case RequirementType.NotHaveClass:
+			fallbackType = RequirementType.NotHaveItem;
+			break;
+		default:
+			fallbackType = RequirementType.None;
+			break;
+		}
+		return m_RequirementRoots.FirstOrDefault(r => r.Type == fallbackType) ?? m_RequirementRoots.First(r => r.Type == RequirementType.None);
 	}
 
 	private void HandleMasteryRequirementFailed(Requirement firstFailed)
@@ -499,10 +571,145 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		m_MasteryTextDescription.text = m_Item.ItemLocalizedDesc.Replace("{value_2}", masteryItemGameData.GetMasteryClassName(DIContainerInfrastructure.GetCurrentPlayer()));
 	}
 
+	private void SetCostBlindModel(ResourceCostBlind costBlind, Requirement requirement)
+	{
+		var balancing = DIContainerBalancing.GetInventoryItemBalancingDataPovider().GetBalancingData(requirement.NameId);
+		costBlind.SetModel(balancing.AssetBaseId, GetIconAtlas(balancing.ItemType), requirement.Value, string.Empty);
+	}
+
+	private static bool IsSpriteIconItem(IInventoryItemGameData item)
+	{
+		switch (item.ItemBalancing.ItemType)
+		{
+		case InventoryItemType.Resources:
+		case InventoryItemType.Ingredients:
+		case InventoryItemType.PlayerStats:
+		case InventoryItemType.Premium:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	// Cost blinds are reused across offers, so always hand back an atlas rather than null;
+	// otherwise a Resources atlas set for one offer would stick to the next offer's coin icon.
+	private static UIAtlas GetIconAtlas(InventoryItemType itemType)
+	{
+		string atlasName;
+		switch (itemType)
+		{
+		case InventoryItemType.Resources:
+			atlasName = "Resources";
+			break;
+		case InventoryItemType.Ingredients:
+			atlasName = "Ingredients";
+			break;
+		case InventoryItemType.Consumable:
+			atlasName = "Consumables";
+			break;
+		default:
+			atlasName = "GenericElements";
+			break;
+		}
+		var atlasProvider = DIContainerInfrastructure.GetGenericIconAtlasAssetProvider();
+		if (!atlasProvider.ContainsAsset(atlasName))
+		{
+			return null;
+		}
+		var atlasObject = atlasProvider.GetObject(atlasName) as GameObject;
+		return atlasObject != null ? atlasObject.GetComponent<UIAtlas>() : null;
+	}
+
+	// Draws the old -> new stat rows in the effect text's place, shrunk to fit its box; falls back to the description.
+	private void ShowUpgradeStatChanges(UpgradeBlueprintBalancingData upgradeBlueprint)
+	{
+		var changes = UpgradeBlueprints.GetStatChanges(upgradeBlueprint, DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData);
+		if (changes.Count == 0)
+		{
+			m_ConsumableEffectInfo.text = UpgradeBlueprints.GetDescription(upgradeBlueprint);
+			return;
+		}
+		UpgradeStatChangeView.ShowInShopTile(m_ConsumableEffectInfo, changes);
+	}
+
+	private void ShowEquipmentOffer(EquipmentGameData equipment)
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		int rewardLevel;
+		if (DIContainerLogic.GetShopService().TryGetOfferItemRewardLevel(player, m_Model, equipment.BalancingData.NameId, out rewardLevel))
+		{
+			// Preview what the purchase actually grants: name, model and stats all depend on level.
+			equipment.Data.Level = rewardLevel;
+		}
+		m_WeaponStatsRoot.SetActive(true);
+		m_ConsumableEffectRoot.SetActive(false);
+		m_AdditionalSprite.spriteName = EquipmentGameData.GetRestrictedBirdIcon(equipment);
+		if (m_PerkSprite)
+		{
+			m_PerkSprite.spriteName = EquipmentGameData.GetPerkIcon(equipment);
+		}
+		var isMainHand = equipment.BalancingData.ItemType == InventoryItemType.MainHandEquipment;
+		var bird = player.Birds.FirstOrDefault(b => b.BalancingData.NameId == equipment.BalancingData.RestrictedBirdId);
+		var equipped = bird == null ? null : isMainHand ? bird.MainHandItem : bird.OffHandItem;
+		m_ItemStats.SetIconSprite(isMainHand ? "Character_Damage_Large" : "Character_Health_Large");
+		m_ItemStats.RefreshStat(false, equipped != null, EquipmentGameData.GetItemMainStat(equipment), equipped == null ? 0f : equipped.ItemMainStat);
+	}
+
+	// Restocking merchant offers show how many purchases are left until they sell out.
+	private string GetStockText()
+	{
+		int remaining;
+		if (!MerchantStock.TryGetRemaining(DIContainerInfrastructure.GetCurrentPlayer(), m_Model, out remaining) || remaining <= 0)
+		{
+			return string.Empty;
+		}
+		return DIContainerInfrastructure.GetLocaService().Tr("merchant_stock_left", "{value_1} in stock").Replace("{value_1}", remaining.ToString());
+	}
+
+	private static string GetOfferItemName(IInventoryItemGameData item)
+	{
+		if (item.ItemValue > 1)
+		{
+			var singular = item.ItemLocalizedName;
+			var plural = DIContainerInfrastructure.GetLocaService().Tr(item.ItemBalancing.LocaBaseId + "_name_plural", singular);
+			return DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(item.ItemValue) + " " + plural;
+		}
+		return item.ItemLocalizedName;
+	}
+
+	// Consumable and resource icons are 120px sprites with built-in margins; coin sprites are
+	// tightly cropped 80px ones, so scale the widget by sprite size to keep them visually matched.
+	private const float ItemIconReferenceSpriteSize = 120f;
+
+	private Vector2 m_ItemIconDefaultSize;
+
+	private void RestoreItemIconSize()
+	{
+		if (m_ItemIconDefaultSize == Vector2.zero)
+		{
+			m_ItemIconDefaultSize = new Vector2(m_ItemIconSprite.width, m_ItemIconSprite.height);
+		}
+		m_ItemIconSprite.width = (int)m_ItemIconDefaultSize.x;
+		m_ItemIconSprite.height = (int)m_ItemIconDefaultSize.y;
+	}
+
+	private void FitItemIconToSprite()
+	{
+		var spriteData = m_ItemIconSprite.GetAtlasSprite();
+		if (spriteData == null)
+		{
+			return;
+		}
+		var scale = Mathf.Min(1f, Mathf.Max(spriteData.width, spriteData.height) / ItemIconReferenceSpriteSize);
+		m_ItemIconSprite.width = Mathf.RoundToInt(m_ItemIconDefaultSize.x * scale);
+		m_ItemIconSprite.height = Mathf.RoundToInt(m_ItemIconDefaultSize.y * scale);
+	}
+
 	private void SetBlindLabelItemText(IInventoryItemGameData item)
 	{
 		m_BlindMainLabel.text = item.ItemLocalizedName;
-		if (item is ClassItemGameData)
+		// A class drawn on an upgrade blueprint isn't the thing being sold, so no class name under the title
+		if (m_RecipeItem == null && (item is ClassItemGameData || item.ItemBalancing.ItemType == InventoryItemType.Skin))
 		{
 			m_ClassNameRoot.SetActive(true);
 			m_ClassName.text = item.ItemLocalizedName;
@@ -600,11 +807,24 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		{
 			m_SoundTriggers.OnTriggerEventFired("purchase_successful");
 		}
-		DeRegisterEventHandlers();
+		// Repeatable trades stay clickable so quick repeat purchases are not dropped while the shop refreshes.
+		// Dojo offers are swapped out after a purchase, so they always lock until the refresh.
+		var isDojo = m_StateMgr.m_WorkShopUI != null && m_StateMgr.m_WorkShopUI.m_MenuType == ShopMenuType.Dojo;
+		if (isDojo || !CanBeBoughtAgain(m_Model))
+		{
+			DeRegisterEventHandlers();
+		}
 		if (this.ShopOfferBought != null)
 		{
 			this.ShopOfferBought(m_Model);
 		}
+	}
+
+	// True when nothing but the price stops the offer from being bought again (e.g. merchant resource trades).
+	public static bool CanBeBoughtAgain(BasicShopOfferBalancingData offer)
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		return offer != null && DIContainerLogic.GetShopService().IsOfferShowable(player, offer) && DIContainerLogic.GetShopService().IsOfferBuyableIgnoreCost(player, offer);
 	}
 
 	private void ClassRankedUp()
@@ -674,6 +894,10 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		}
 	}
 
+	// Head-gear prefabs are drawn larger than the weapon icons they share a row with.
+	private const float SkinIconScale = 0.75f;
+	private const float SkinIconYOffset = -30f;
+
 	private void InstantiateAsset(IInventoryItemGameData item, Transform root)
 	{
 		if (m_IconInstanciated)
@@ -688,6 +912,21 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		switch (item.ItemBalancing.ItemType)
 		{
 		case InventoryItemType.Class:
+			if (m_RecipeItem != null)
+			{
+				// Class on an upgrade blueprint: render it to a texture like equipment so the scroll panel clips it,
+				// shrunk to fit the parchment and tinted like other blueprint pictures
+				m_IconPreviewStage = EquipmentIconPreviewPool.Instance != null ? EquipmentIconPreviewPool.Instance.AcquireStage() : null;
+				m_IconInstanciated = DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(item.ItemAssetName, m_IconPreviewStage != null ? m_IconPreviewStage.StageRoot : m_IconRoot, Vector3.zero, Quaternion.identity, false);
+				var displayFactor = 1f;
+				if (m_IconInstanciated != null)
+				{
+					displayFactor = UpgradeStatChangeView.FitIconToStage(m_IconInstanciated, m_IconPreviewStage != null ? m_IconPreviewStage.PreviewCamera : null);
+					StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
+				}
+				ShowIconPreviewTexture(m_IconPreviewStage, displayFactor);
+				break;
+			}
 			m_IconInstanciated = DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(item.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false);
 			break;
 		case InventoryItemType.CraftingRecipes:
@@ -697,13 +936,22 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			m_IconPreviewStage = EquipmentIconPreviewPool.Instance != null ? EquipmentIconPreviewPool.Instance.AcquireStage() : null;
 			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconPreviewStage != null ? m_IconPreviewStage.StageRoot : m_IconRoot, Vector3.zero, Quaternion.identity, false);
 			ShowIconPreviewTexture(m_IconPreviewStage);
-			StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
+			if (m_RecipeItem != null)
+			{
+				StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
+			}
 			break;
 		case InventoryItemType.OffHandEquipment:
 			m_IconPreviewStage = EquipmentIconPreviewPool.Instance != null ? EquipmentIconPreviewPool.Instance.AcquireStage() : null;
 			m_IconInstanciated = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(item.ItemAssetName, m_IconPreviewStage != null ? m_IconPreviewStage.StageRoot : m_IconRoot, Vector3.zero, Quaternion.identity, false);
 			ShowIconPreviewTexture(m_IconPreviewStage);
-			StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
+			if (m_RecipeItem != null)
+			{
+				StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
+			}
+			break;
+		case InventoryItemType.Skin:
+			m_IconInstanciated = DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(item.ItemBalancing.AssetBaseId, m_IconRoot, Vector3.zero, Quaternion.identity, false);
 			break;
 		case InventoryItemType.Mastery:
 			var assetBaseId = item.ItemBalancing.AssetBaseId;
@@ -719,7 +967,15 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		
 		if (m_IconInstanciated)
 		{
-			m_IconInstanciated.transform.localScale = Vector3.one;
+			// Class pictures on upgrade blueprints were already shrunk to fit the preview stage
+			if (!(item.ItemBalancing.ItemType == InventoryItemType.Class && m_RecipeItem != null))
+			{
+				m_IconInstanciated.transform.localScale = item.ItemBalancing.ItemType == InventoryItemType.Skin ? Vector3.one * SkinIconScale : Vector3.one;
+			}
+			if (item.ItemBalancing.ItemType == InventoryItemType.Skin)
+			{
+				m_IconInstanciated.transform.localPosition = new Vector3(0f, SkinIconYOffset, 0f);
+			}
 			if (m_IconPreviewStage != null)
 			{
 				NGUITools.SetLayer(m_IconInstanciated, IconPreviewLayer);
@@ -727,7 +983,10 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		}
 	}
 
-	private void ShowIconPreviewTexture(EquipmentIconPreviewPool.PreviewStage stage)
+	private Vector2 m_IconPreviewTextureSize;
+
+	// displayFactor > 1 widens the display for a picture whose stage view was widened by the same factor.
+	private void ShowIconPreviewTexture(EquipmentIconPreviewPool.PreviewStage stage, float displayFactor = 1f)
 	{
 		if (m_IconPreviewTexture == null && m_IconRoot != null)
 		{
@@ -737,6 +996,12 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		{
 			return;
 		}
+		if (m_IconPreviewTextureSize == Vector2.zero)
+		{
+			m_IconPreviewTextureSize = new Vector2(m_IconPreviewTexture.width, m_IconPreviewTexture.height);
+		}
+		m_IconPreviewTexture.width = Mathf.RoundToInt(m_IconPreviewTextureSize.x * displayFactor);
+		m_IconPreviewTexture.height = Mathf.RoundToInt(m_IconPreviewTextureSize.y * displayFactor);
 		m_IconPreviewTexture.mainTexture = stage != null ? stage.RenderTexture : null;
 		m_IconPreviewTexture.gameObject.SetActive(stage != null);
 	}

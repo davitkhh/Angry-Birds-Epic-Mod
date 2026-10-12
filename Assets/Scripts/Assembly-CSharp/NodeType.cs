@@ -25,5 +25,8 @@ public enum NodeType
 	InstatiateProp = 22,
 	SetBirdsToHotspot = 23,
 	FindObjectByTag = 24,
-	FinishCurrentChronicleCave = 25
+	FinishCurrentChronicleCave = 25,
+	SetHandItem = 26,
+	ControlActionTree = 27,
+	FaceTarget = 28
 }

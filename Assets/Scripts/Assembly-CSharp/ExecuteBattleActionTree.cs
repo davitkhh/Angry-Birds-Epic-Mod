@@ -19,8 +19,24 @@ public class ExecuteBattleActionTree : MonoBehaviour
 
 	public bool m_LetPigsWaitForEnter;
 
+	// Set when the tree was already played mid-battle, so the wave-end lookup doesn't replay it.
+	[System.NonSerialized]
+	public bool m_Consumed;
+
+	public ActionTree Tree
+	{
+		get
+		{
+			return m_ActionTree;
+		}
+	}
+
 	public bool ShouldExecute(string id, int wave, bool won, bool before)
 	{
+		if (m_Consumed)
+		{
+			return false;
+		}
 		if (won)
 		{
 			return id == m_BattleID && wave == m_WaveIndex && m_ExecuteWhenWon && before == m_ExecuteBeforeWave;

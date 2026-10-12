@@ -10,7 +10,7 @@
   {
     "NameId": "MaxPigsInBattle",
     "StringValue": "",
-    "FloatValue": 7.0,
+    "FloatValue": 14.0,
     "RequirementValue": null,
     "FloatlistValue": null,
     "BoolValue": false

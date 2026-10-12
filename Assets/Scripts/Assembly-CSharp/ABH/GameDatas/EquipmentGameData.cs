@@ -6,6 +6,7 @@ using ABH.GameDatas.Interfaces;
 using ABH.Shared.BalancingData;
 using ABH.Shared.Generic;
 using ABH.Shared.Interfaces;
+using ABH.Shared.Models.Generic;
 using ABH.Shared.Models.InventoryItems;
 using UnityEngine;
 
@@ -18,6 +19,65 @@ namespace ABH.GameDatas
 		private SkillGameData m_SetItemSkill;
 
 		private SkillGameData m_PvpSetItemSkill;
+
+		private string m_PerkSignature;
+
+		private EquipmentPerk m_EffectivePerk;
+
+		private List<EquipmentPerk> m_BonusPerks;
+
+		// The item's perk including upgrade blueprints; read this instead of the balancing perk.
+		public EquipmentPerk Perk
+		{
+			get
+			{
+				RefreshUpgradedPerks();
+				return m_EffectivePerk;
+			}
+		}
+
+		// Extra perks granted by upgrade blueprints.
+		public List<EquipmentPerk> BonusPerks
+		{
+			get
+			{
+				RefreshUpgradedPerks();
+				return m_BonusPerks;
+			}
+		}
+
+		// The item's perk followed by its bonus perks.
+		public IEnumerable<EquipmentPerk> AllPerks
+		{
+			get
+			{
+				if (Perk != null)
+				{
+					yield return Perk;
+				}
+				foreach (var bonusPerk in BonusPerks)
+				{
+					yield return bonusPerk;
+				}
+			}
+		}
+
+		public EquipmentPerk FindPerk(PerkType type)
+		{
+			return AllPerks.FirstOrDefault(p => p.Type == type);
+		}
+
+		private void RefreshUpgradedPerks()
+		{
+			var signature = UpgradeBlueprints.UpgradeSignature(Data);
+			if (m_BonusPerks != null && m_PerkSignature == signature)
+			{
+				return;
+			}
+			m_PerkSignature = signature;
+			m_EffectivePerk = UpgradeBlueprints.GetEffectivePerk(BalancingData.Perk, Data);
+			m_BonusPerks = UpgradeBlueprints.GetBonusPerks(Data);
+		}
 
 		public IInventoryItemBalancingData ItemBalancing
 		{
@@ -302,7 +362,7 @@ namespace ABH.GameDatas
 			{
 				return string.Empty;
 			}
-			return GetPerkIconNameByPerk(equipmentGameData.BalancingData.Perk.Type);
+			return GetPerkIconNameByPerk(equipmentGameData.Perk.Type);
 		}
 
 		public static string GetPerkIcon(BannerItemGameData equipmentGameData)
@@ -331,7 +391,10 @@ namespace ABH.GameDatas
 			case PerkType.HocusPokusChiliDrain:
 				return "PassiveEffect_HocusPocus";
 			case PerkType.Might:
+			case PerkType.Brilliance:
 				return "PassiveEffect_Might";
+			case PerkType.Amplify:
+				return "PassiveEffect_Balance";
 			case PerkType.Vigor:
 				return "PassiveEffect_Vigor";
 			case PerkType.Vitality:
@@ -340,6 +403,9 @@ namespace ABH.GameDatas
 				return "PassiveEffect_Sweet";
 			case PerkType.IncreaseRage:
 				return "PassiveEffect_Balance";
+			case PerkType.PhatLoot:
+			case PerkType.CashStrike:
+				return "Resource_Coin";
 			default:
 				return "Character_Health_Large";
 			}
@@ -400,7 +466,7 @@ namespace ABH.GameDatas
 			{
 				num6 += num6 * num5;
 			}
-			return num6;
+			return UpgradeBlueprints.ApplyToMainStat(gameData.Data, num6);
 		}
 
 		private string GetItemAssetId(EquipmentGameData eqgd)
@@ -470,16 +536,31 @@ namespace ABH.GameDatas
 
 		internal static string GetPerkName(EquipmentGameData item)
 		{
-			return DIContainerInfrastructure.GetLocaService().GetPerkName(item.BalancingData.Perk.Type);
+			return DIContainerInfrastructure.GetLocaService().GetPerkName(item.Perk.Type);
 		}
 
 		internal static string GetPerkDesc(EquipmentGameData item)
 		{
+			var text = GetPerkDesc(item.Perk);
+			foreach (var bonusPerk in item.BonusPerks)
+			{
+				text += "\n[c8a000]" + DIContainerInfrastructure.GetLocaService().GetPerkName(bonusPerk.Type) + ":[-] " + GetPerkDesc(bonusPerk);
+			}
+			var upgrades = UpgradeBlueprints.GetUpgradeSummary(item);
+			if (!string.IsNullOrEmpty(upgrades))
+			{
+				text += "\n" + upgrades;
+			}
+			return text;
+		}
+
+		internal static string GetPerkDesc(EquipmentPerk perk)
+		{
 			var dictionary = new Dictionary<string, string>();
-			dictionary.Add("{value_1}", item.BalancingData.Perk.ProbablityInPercent.ToString("0"));
-			dictionary.Add("{value_2}", item.BalancingData.Perk.PerkValue.ToString("0"));
-			dictionary.Add("{value_3}", item.BalancingData.Perk.PerkValue2.ToString("0"));
-			return DIContainerInfrastructure.GetLocaService().GetPerkDesc(item.BalancingData.Perk.Type, dictionary);
+			dictionary.Add("{value_1}", UpgradeBlueprints.FormatValue(perk.ProbablityInPercent));
+			dictionary.Add("{value_2}", UpgradeBlueprints.FormatValue(perk.PerkValue));
+			dictionary.Add("{value_3}", UpgradeBlueprints.FormatValue(perk.PerkValue2));
+			return DIContainerInfrastructure.GetLocaService().GetPerkDesc(perk.Type, dictionary);
 		}
 
 		public string ItemLocalizedTooltipDesc(InventoryGameData inventory)

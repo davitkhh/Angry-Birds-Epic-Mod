@@ -39,7 +39,7 @@ namespace ABH.GameDatas.Battle.Skills
 				list.Add(m_DamagePercentage);
 				var values = list;
 				BattleEffectGameData battleEffectGameData = null;
-				battleEffectGameData = target2.CombatantMainHandEquipment.BalancingData.Perk.Type != PerkType.CriticalStrike ? new BattleEffectGameData(target2, target2, new List<BattleEffect>
+				battleEffectGameData = target2.CombatantMainHandEquipment.Perk.Type != PerkType.CriticalStrike ? new BattleEffectGameData(target2, target2, new List<BattleEffect>
 				{
 					new BattleEffect
 					{

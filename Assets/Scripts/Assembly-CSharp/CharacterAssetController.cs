@@ -54,6 +54,8 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 
 	public virtual void SetModel(ICharacter model, bool isWorldMap, bool showEquipment = true, bool useScaleController = true, bool lightWeighted = false, bool showItems = true)
 	{
+		// Rigs are pooled: drop items carried for a previous owner (see ShowHandItem).
+		RemoveCarriedHandItems();
 		var components = GetComponents<Behaviour>();
 		foreach (var behaviour in components)
 		{
@@ -161,11 +163,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 		if (isWorldMap && Model is BirdGameData)
 		{
-			m_BoneAnimation.HideBone("Headgear", true);
-			if (m_BoneAnimation.GetBoneTransform("Headgear_Back") != null)
-			{
-				m_BoneAnimation.HideBone("Headgear_Back", true);
-			}
+			SetBirdHeadgear();
 			m_BoneAnimation.HideBone("MainHand", true);
 			m_BoneAnimation.HideBone("OffHand", true);
 		}
@@ -301,16 +299,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 		else
 		{
-			if (Model is BirdGameData && (Model as BirdGameData).ClassSkin != null && Model.ClassItem != null && Model.ClassItem.BalancingData.NameId == (Model as BirdGameData).ClassSkin.BalancingData.OriginalClass)
-			{
-				SetEquipmentItem((Model as BirdGameData).ClassSkin, "Headgear", string.Empty);
-				SetEquipmentItem((Model as BirdGameData).ClassSkin, "Headgear_Back", "_Back");
-			}
-			else
-			{
-				SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
-				SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
-			}
+			SetBirdHeadgear();
 			if (showItems)
 			{
 				SetEquipmentItem(Model.MainHandItem, "MainHand", string.Empty);
@@ -327,6 +316,20 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			}
 		}
 		m_EquipmentSetOnce = true;
+	}
+
+	private void SetBirdHeadgear()
+	{
+		if (Model is BirdGameData && (Model as BirdGameData).ClassSkin != null && Model.ClassItem != null && Model.ClassItem.BalancingData.NameId == (Model as BirdGameData).ClassSkin.BalancingData.OriginalClass)
+		{
+			SetEquipmentItem((Model as BirdGameData).ClassSkin, "Headgear", string.Empty);
+			SetEquipmentItem((Model as BirdGameData).ClassSkin, "Headgear_Back", "_Back");
+		}
+		else
+		{
+			SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
+			SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
+		}
 	}
 
 	protected virtual void SetEquipmentItem(IInventoryItemGameData itemGameData, string boneName, string suffix = "")
@@ -391,6 +394,82 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			m_BoneAnimation.RestoreBoneTexture(boneName);
 		}
 		m_BoneAnimation.SwapBoneTexture(boneName, textureAtlas3.name, textureAtlas3.textureNames[num], TextureName, itemAssetName + suffix);
+	}
+
+	private readonly List<GameObject> m_CarriedHandItems = new List<GameObject>();
+
+	// Shows or hides the main/off hand item (cutscenes; the world map hides hand items). itemOwner's item is
+	// shown instead of our own when given. If this rig's atlases lack that texture (world map low-res rigs),
+	// the item is carried as a quad built from the owner's atlas and pinned to the hand bone.
+	public void ShowHandItem(InventoryItemType slot, bool show, CharacterAssetController itemOwner = null)
+	{
+		var boneName = slot == InventoryItemType.MainHandEquipment ? "MainHand" : "OffHand";
+		if (base.HasNoBoneAnimation || m_BoneAnimation == null || m_BoneAnimation.GetBoneTransform(boneName) == null)
+		{
+			return;
+		}
+		RemoveCarriedHandItems(boneName);
+		var owner = itemOwner ?? this;
+		var item = owner.Model == null ? null : slot == InventoryItemType.MainHandEquipment ? owner.Model.MainHandItem : owner.Model.OffHandItem;
+		if (!show || item == null || string.IsNullOrEmpty(item.ItemAssetName))
+		{
+			m_BoneAnimation.HideBone(boneName, true);
+			return;
+		}
+		var textureName = item.ItemAssetName.Replace("_Ancient", string.Empty);
+		if (m_BoneAnimation.textureAtlases.Any(a => a != null && a.textureNames.Contains(textureName)))
+		{
+			SetEquipmentItem(item, boneName, string.Empty);
+			return;
+		}
+		var atlas = owner.m_BoneAnimation == null ? null : owner.m_BoneAnimation.textureAtlases.FirstOrDefault(a => a != null && a.textureNames.Contains(textureName));
+		if (atlas == null)
+		{
+			DebugLog.Warn(GetType(), "ShowHandItem: no atlas has " + textureName);
+			m_BoneAnimation.HideBone(boneName, true);
+			return;
+		}
+		m_BoneAnimation.HideBone(boneName, true);
+		var hand = m_BoneAnimation.GetBoneTransform(boneName);
+		var visual = hand.Find(boneName + "_Sprite") ?? hand;
+		var carried = new GameObject("Carried_" + boneName + "_" + textureName);
+		carried.transform.SetParent(visual, false);
+		// Slightly towards the camera so the item draws over the carrier's body.
+		carried.transform.position = visual.position + Vector3.back;
+		var sprite = carried.AddComponent<CHMeshSprite>();
+		sprite.m_AtlasType = AtlasTypes.SmoothMoves;
+		sprite.m_SmoothMovesAtlas = atlas;
+		sprite.m_SpriteName = textureName;
+		sprite.UpdateSprite(true, true);
+		UnityHelper.SetLayerRecusively(carried, base.gameObject.layer);
+		m_CarriedHandItems.Add(carried);
+	}
+
+	private void RemoveCarriedHandItems(string boneName = null)
+	{
+		for (var i = m_CarriedHandItems.Count - 1; i >= 0; i--)
+		{
+			var carried = m_CarriedHandItems[i];
+			if (carried == null || boneName == null || carried.name.StartsWith("Carried_" + boneName + "_"))
+			{
+				if (carried != null)
+				{
+					Object.Destroy(carried);
+				}
+				m_CarriedHandItems.RemoveAt(i);
+			}
+		}
+	}
+
+	// SmoothMoves' clip indexer logs an error for unknown names; the rig's legacy Animation lookup is silent.
+	private bool HasClipSilently(string animationName)
+	{
+		if (base.HasNoBoneAnimation || m_BoneAnimation == null)
+		{
+			return true;
+		}
+		var clips = m_BoneAnimation.GetComponent<Animation>();
+		return clips == null || clips[animationName] != null;
 	}
 
 	protected virtual void RegisterEventHandler()
@@ -518,13 +597,13 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 
 	public virtual void PlayFocusOffHandAnimation()
 	{
-		PlayAnimation("Focus_OffHand");
+		PlayAnimation(HasClipSilently("Focus_OffHand") ? "Focus_OffHand" : "Cheer");
 		PlayAnimationQueued("Idle");
 	}
 
 	public virtual void PlayFocusWeaponAnimation()
 	{
-		PlayAnimation("Focus_MainHand");
+		PlayAnimation(HasClipSilently("Focus_MainHand") ? "Focus_MainHand" : "Cheer");
 		PlayAnimationQueued("Idle");
 	}
 

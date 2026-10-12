@@ -82,6 +82,8 @@ public class LootDisplayContoller : MonoBehaviour
 
 	private EquipmentGameData m_RecipeEquipment;
 
+	private ClassItemGameData m_RecipeClassItem;
+
 	private bool m_setShaderOnEnable;
 
 	private bool m_ShowX;
@@ -275,7 +277,7 @@ public class LootDisplayContoller : MonoBehaviour
 						continue;
 					}
 					IInventoryItemGameData data = null;
-					if (DIContainerLogic.InventoryService.TryGetItemGameData(currentPlayer.InventoryGameData, craftingRecipeGameData.ItemBalancing.NameId, out data) && data.ItemData.Level >= craftingRecipeGameData.ItemData.Level)
+					if (!UpgradeBlueprints.IsUpgradeBlueprint(craftingRecipeGameData) && DIContainerLogic.InventoryService.TryGetItemGameData(currentPlayer.InventoryGameData, craftingRecipeGameData.ItemBalancing.NameId, out data) && data.ItemData.Level >= craftingRecipeGameData.ItemData.Level)
 					{
 						var craftingRecipeGameData2 = craftingRecipeGameData;
 						var itemsFromLoot = DIContainerLogic.GetLootOperationService().GetItemsFromLoot(DIContainerLogic.InventoryService.GetFallbackLootFromRecipe(craftingRecipeGameData2, craftingRecipeGameData2.Data.Level));
@@ -321,7 +323,8 @@ public class LootDisplayContoller : MonoBehaviour
 		{
 			m_Content = items;
 			IInventoryItemGameData data2 = null;
-			if (!forceShowRecipe && DIContainerLogic.InventoryService.TryGetItemGameData(currentPlayer.InventoryGameData, m_Model.ItemBalancing.NameId, out data2) && data2.ItemData.Level >= m_Model.ItemData.Level)
+			// Owning an upgrade blueprint already just adds uses, so it never turns into fallback loot
+			if (!forceShowRecipe && !UpgradeBlueprints.IsUpgradeBlueprint(m_Model) && DIContainerLogic.InventoryService.TryGetItemGameData(currentPlayer.InventoryGameData, m_Model.ItemBalancing.NameId, out data2) && data2.ItemData.Level >= m_Model.ItemData.Level)
 			{
 				var craftingRecipeGameData3 = m_Model as CraftingRecipeGameData;
 				m_Content = null;
@@ -834,13 +837,19 @@ public class LootDisplayContoller : MonoBehaviour
 		var craftingRecipeGameData = m_Model as CraftingRecipeGameData;
 		var loot = DIContainerLogic.GetLootOperationService().GenerateLoot(craftingRecipeGameData.GetResultLoot(), craftingRecipeGameData.Data.Level);
 		var itemsFromLoot = DIContainerLogic.GetLootOperationService().GetItemsFromLoot(DIContainerInfrastructure.GetCurrentPlayer(), loot);
-		var equipmentGameData = m_RecipeEquipment = itemsFromLoot[0] as EquipmentGameData;
+		var resultItem = itemsFromLoot[0];
+		m_RecipeEquipment = resultItem as EquipmentGameData;
+		m_RecipeClassItem = resultItem as ClassItemGameData;
+		UpgradeBlueprints.SetGoldParchment(gameObject, UpgradeBlueprints.IsUpgradeBlueprint(craftingRecipeGameData));
 		if (m_IconRoot)
 		{
-			var itemType = equipmentGameData.ItemBalancing.ItemType;
-			if (itemType == InventoryItemType.MainHandEquipment || itemType == InventoryItemType.OffHandEquipment)
+			var itemType = resultItem.ItemBalancing.ItemType;
+			if (itemType == InventoryItemType.MainHandEquipment || itemType == InventoryItemType.OffHandEquipment || m_RecipeClassItem != null)
 			{
-				m_EquipmentAsset = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(equipmentGameData.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false);
+				// Class upgrade blueprints draw the class on the parchment
+				m_EquipmentAsset = m_RecipeClassItem != null
+					? DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(resultItem.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false)
+					: DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(resultItem.ItemAssetName, m_IconRoot, Vector3.zero, Quaternion.identity, false);
 				if (base.gameObject.activeInHierarchy)
 				{
 					m_setShaderOnEnable = false;
@@ -1086,6 +1095,10 @@ public class LootDisplayContoller : MonoBehaviour
 			if (m_RecipeEquipment != null && DIContainerInfrastructure.GetEquipmentAssetProvider())
 			{
 				DIContainerInfrastructure.GetEquipmentAssetProvider().DestroyObject(m_RecipeEquipment.ItemAssetName, m_EquipmentAsset);
+			}
+			else if (m_RecipeClassItem != null && DIContainerInfrastructure.GetClassAssetProvider())
+			{
+				DIContainerInfrastructure.GetClassAssetProvider().DestroyObject(m_RecipeClassItem.ItemAssetName, m_EquipmentAsset);
 			}
 			break;
 		}

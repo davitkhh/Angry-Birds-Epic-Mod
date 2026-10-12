@@ -223,6 +223,13 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		public float GetModifiedAttackExcludingPerk(PerkType excludedPerk)
+		{
+			var value = 0f;
+			CurrentStatBuffs.TryGetValue("attack", out value);
+			return DIContainerLogic.GetBattleService().ApplyBuffsOnAttack(BaseAttack, this, CurrrentEffects, value, excludedPerk) + m_AttackBuff;
+		}
+
 		public float TemporaryHealth
 		{
 			get

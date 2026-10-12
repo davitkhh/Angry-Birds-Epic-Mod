@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ABH.GameDatas.Interfaces;
+using ABH.Shared.Generic;
 
 namespace ABH.GameDatas.Battle.Skills
 {
@@ -31,11 +32,13 @@ namespace ABH.GameDatas.Battle.Skills
 
 		public override void ShareableActionPart(BattleGameData battle, ICombatant source, ICombatant target, bool isShared)
 		{
-			target.RaiseDropItems(DIContainerLogic.GetLootOperationService().RewardLootGetInputCopy(battle.m_ControllerInventory, 1, DIContainerLogic.GetLootOperationService().GenerateLoot(new Dictionary<string, int> { 
-			{
-				"gold",
-				(int)m_Coins
-			} }, 1), "skill"));
+			DIContainerLogic.GetBattleService().DropStolenGold(battle, target, source, target, (int)(m_Coins * GetPhatLootMultiplier(source)), false);
+		}
+
+		private static float GetPhatLootMultiplier(ICombatant source)
+		{
+			var phatLoot = UpgradeBlueprints.FindEquippedPerk(source, PerkType.PhatLoot);
+			return phatLoot == null ? 1f : phatLoot.PerkValue2;
 		}
 
 		public override string GetLocalizedDescription(ICombatant invoker)

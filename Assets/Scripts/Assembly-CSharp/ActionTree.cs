@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ABH.GameDatas.Interfaces;
 using ABH.Shared.Generic;
 using SmoothMoves;
@@ -68,6 +69,39 @@ public class ActionTree : MonoBehaviour
 	private List<GameObject> m_destroyList = new List<GameObject>();
 
 	private BaseLocationStateManager m_WorldMapStatMgr;
+
+	// When set, a KillBattlePigs node calls this (once) instead of killing the pigs.
+	[NonSerialized]
+	public Action KillBattlePigsOverride;
+
+	public bool TryGetRuntimeObject(string objectName, out GameObject runtimeObject)
+	{
+		return m_runtimeInstantiateDictionary.TryGetValue(objectName, out runtimeObject);
+	}
+
+	// Ends the tree after the current node; the remaining nodes and pending waits are skipped.
+	public void EndNow()
+	{
+		StopAllCoroutines();
+		skipDisabled = false;
+		node = null;
+		isFinished = true;
+	}
+
+	// Restarts a tree stopped with EndNow at the given node, keeping its runtime objects (e.g. a story state loop).
+	public void ResumeAt(int nodeId)
+	{
+		StopAllCoroutines();
+		skipDisabled = false;
+		isFinished = false;
+		Load(nodeId);
+	}
+
+	// Pre-binds a runtime name before the tree runs; FindObject/Instantiate nodes skip names already bound.
+	public void SetRuntimeObject(string objectName, GameObject runtimeObject)
+	{
+		m_runtimeInstantiateDictionary[objectName] = runtimeObject;
+	}
 
 	public List<string> m_PreInstantiatedCharacterAssetIds = new List<string>();
 
@@ -476,8 +510,19 @@ public class ActionTree : MonoBehaviour
 				StartCoroutine(WaitTillNextNode(node.customFloat));
 				return true;
 			case NodeType.SetActive:
-				GetGameObjectFromNode(node).SetActive(node.customBool);
+			{
+				// A missing object (e.g. a FindObject that found nothing) would abort the whole cutscene.
+				var target = GetGameObjectFromNode(node);
+				if (target != null)
+				{
+					target.SetActive(node.customBool);
+				}
+				else
+				{
+					DebugLog.Warn("SetActive: no object for " + node.objectName);
+				}
 				break;
+			}
 			case NodeType.Destroy:
 			{
 				UnityEngine.Object.Destroy(GetGameObjectFromNode(node));
@@ -544,6 +589,15 @@ public class ActionTree : MonoBehaviour
 				}
 
 				gameObject4.transform.localPosition = Vector3.zero;
+				// Rigs cull their animation by renderer visibility; SmoothMoves skinned bounds can be stale, so cutscene
+				// characters froze mid-pose (e.g. a walk cycle stuck on its squash frame). Always animate them.
+				foreach (var clips in gameObject4.GetComponentsInChildren<Animation>(true))
+				{
+					clips.cullingType = AnimationCullingType.AlwaysAnimate;
+				}
+				// Rigs are pooled and SmoothMoves applies texture swaps on its next mesh update, so the first frame showed the
+				// previous owner's gear (e.g. the Lolly Popper in a rogue hood). Keep the character hidden until it has updated.
+				StartCoroutine(HideWhileSettingUp(gameObject4));
 				if (m_WorldMapStatMgr != null)
 				{
 					gameObject4.transform.localScale = m_WorldMapStatMgr.GetWorldBirdScale();
@@ -660,6 +714,14 @@ public class ActionTree : MonoBehaviour
 			}
 			case NodeType.KillBattlePigs:
 			{
+				if (KillBattlePigsOverride != null)
+				{
+					var killBattlePigsOverride = KillBattlePigsOverride;
+					KillBattlePigsOverride = null;
+					killBattlePigsOverride();
+					break;
+				}
+
 				var currentBattleGameData = ClientInfo.CurrentBattleGameData;
 				var value5 = new List<ICombatant>();
 				if (currentBattleGameData != null && currentBattleGameData.m_CombatantsPerFaction != null)
@@ -795,6 +857,88 @@ public class ActionTree : MonoBehaviour
 				m_WorldMapStatMgr.ResetBirdPositions();
 				break;
 			}
+			// Shows/hides a character's hand item (hidden on the world map by default). customInt: 0 = off hand,
+			// 1 = main hand. With secondaryText set, shows that runtime character's item instead of its own.
+			case NodeType.SetHandItem:
+			{
+				var character = GetGameObjectFromNode(node);
+				var asset = character != null ? character.GetComponentInChildren<CharacterAssetController>() : null;
+				if (asset == null)
+				{
+					DebugLog.Warn("SetHandItem: no character found for " + node.objectName);
+					break;
+				}
+				CharacterAssetController itemOwner = null;
+				GameObject itemOwnerObject;
+				if (!string.IsNullOrEmpty(node.secondaryText))
+				{
+					if (m_runtimeInstantiateDictionary.TryGetValue(node.secondaryText, out itemOwnerObject))
+					{
+						itemOwner = itemOwnerObject.GetComponentInChildren<CharacterAssetController>();
+					}
+					else
+					{
+						DebugLog.Warn("SetHandItem: could not find " + node.secondaryText + " in instantiated objectList");
+					}
+				}
+				asset.ShowHandItem(node.customInt == 1 ? InventoryItemType.MainHandEquipment : InventoryItemType.OffHandEquipment, node.customBool, itemOwner);
+				break;
+			}
+			// Keeps the object turned towards the runtime object named in secondaryText (empty: stop). customBool: the object
+			// faces right at scale x = +1 (birds), otherwise left (pig rigs).
+			case NodeType.FaceTarget:
+			{
+				var subject = GetGameObjectFromNode(node);
+				if (subject == null)
+				{
+					DebugLog.Warn("FaceTarget: no object for " + node.objectName);
+					break;
+				}
+				var tracker = subject.GetComponent<FaceTargetTracker>();
+				GameObject faceTarget = null;
+				if (!string.IsNullOrEmpty(node.secondaryText) && !m_runtimeInstantiateDictionary.TryGetValue(node.secondaryText, out faceTarget))
+				{
+					DebugLog.Warn("FaceTarget: could not find " + node.secondaryText + " in instantiated objectList");
+				}
+				if (faceTarget == null)
+				{
+					if (tracker != null)
+					{
+						UnityEngine.Object.Destroy(tracker);
+					}
+					break;
+				}
+				if (tracker == null)
+				{
+					tracker = subject.AddComponent<FaceTargetTracker>();
+				}
+				tracker.Track(faceTarget.transform, node.customBool);
+				break;
+			}
+			// Stops another tree (customBool off), e.g. a story state's idle loop during a cutscene, or resumes it
+			// at node customInt (customBool on).
+			case NodeType.ControlActionTree:
+			{
+				var other = node.refObject as ActionTree;
+				if (other == null && node.refObject is GameObject)
+				{
+					other = ((GameObject)node.refObject).GetComponent<ActionTree>();
+				}
+				if (other == null || other == this)
+				{
+					DebugLog.Warn("ControlActionTree: no other ActionTree referenced");
+					break;
+				}
+				if (node.customBool)
+				{
+					other.ResumeAt(node.customInt);
+				}
+				else
+				{
+					other.EndNow();
+				}
+				break;
+			}
 		}
 
 		return NextNode();
@@ -900,6 +1044,24 @@ public class ActionTree : MonoBehaviour
 		skipDisabled = false;
 		isFinished = finish;
 		NextNode();
+	}
+
+	private IEnumerator HideWhileSettingUp(GameObject character)
+	{
+		var renderers = character.GetComponentsInChildren<Renderer>().Where(r => r.enabled).ToList();
+		foreach (var renderer in renderers)
+		{
+			renderer.enabled = false;
+		}
+		yield return null;
+		yield return null;
+		foreach (var renderer in renderers)
+		{
+			if (renderer != null)
+			{
+				renderer.enabled = true;
+			}
+		}
 	}
 
 	private IEnumerator WaitForTweenFinished(CHMotionTween tween)

@@ -384,6 +384,7 @@ public class EnchantmentUI : MonoBehaviour
 		equipmentGameData.Data.ItemSource = m_selectedBirdItem.Data.ItemSource;
 		equipmentGameData.Data.Level = m_selectedBirdItem.Data.Level;
 		equipmentGameData.Data.ScrapLoot = m_selectedBirdItem.Data.ScrapLoot;
+		equipmentGameData.Data.Upgrades = m_selectedBirdItem.Data.Upgrades;
 		UnityHelper.SetLayerRecusively(beforeSlot.gameObject, LayerMask.NameToLayer("Interface"));
 	}
 

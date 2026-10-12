@@ -110,7 +110,7 @@ namespace ABH.GameDatas
 				return;
 			}
 			var craftingRecipeGameData = (CraftingRecipeGameData)itemGameData;
-			foreach (var key in craftingRecipeGameData.GetResultLoot().Keys)
+			foreach (var key in UpgradeBlueprints.GetRecipeListKeys(craftingRecipeGameData))
 			{
 				List<IInventoryItemGameData> value = null;
 				if (CraftingRecipes[craftingRecipeGameData.BalancingData.RecipeCategoryType].TryGetValue(key, out value))
@@ -141,7 +141,7 @@ namespace ABH.GameDatas
 			{
 				var craftingRecipeGameData = (CraftingRecipeGameData)itemGameData;
 				var flag = true;
-				foreach (var key in craftingRecipeGameData.GetResultLoot().Keys)
+				foreach (var key in UpgradeBlueprints.GetRecipeListKeys(craftingRecipeGameData))
 				{
 					flag &= CraftingRecipes[craftingRecipeGameData.BalancingData.RecipeCategoryType].Remove(key);
 				}
@@ -252,7 +252,7 @@ namespace ABH.GameDatas
 							continue;
 						}
 						Items[itemcategory].Add(craftingRecipeGameData);
-						foreach (var key in craftingRecipeGameData.GetResultLoot().Keys)
+						foreach (var key in UpgradeBlueprints.GetRecipeListKeys(craftingRecipeGameData))
 						{
 							List<IInventoryItemGameData> value = null;
 							if (CraftingRecipes[craftingRecipeGameData.BalancingData.RecipeCategoryType].TryGetValue(key, out value))

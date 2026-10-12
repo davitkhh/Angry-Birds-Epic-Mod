@@ -110,9 +110,12 @@ public class DIContainerLogic
 			{
 				return m_inventoryService;
 			}
+			// Build the crafting service first: it throws if balancing isn't loaded (e.g. during a soft-restart
+			// teardown), and caching the inventory service before that left it without crafting for the session.
+			var craftingService = CraftingService;
 			m_inventoryService = new InventoryOperationServiceRealImpl();
-			m_inventoryService.SetCraftingService(CraftingService);
-			CraftingService.SetInventoryService(m_inventoryService);
+			m_inventoryService.SetCraftingService(craftingService);
+			craftingService.SetInventoryService(m_inventoryService);
 			m_inventoryService.InitializeInventoryOperations();
 			return m_inventoryService;
 		}

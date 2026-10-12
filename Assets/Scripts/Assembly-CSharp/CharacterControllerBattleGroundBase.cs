@@ -32,6 +32,10 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	public bool m_AlreadyPlaced;
 
+	// Row PlaceCharacter last put this combatant in; higher rows are further from the center (rightmost for pigs).
+	[HideInInspector]
+	public int m_PlacedRow;
+
 	public bool m_AllowClick = true;
 
 	public bool m_AllowDrag = true;
@@ -285,6 +289,23 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 			ReSizeCollider();
 			base.transform.localScale = Vector3.one * m_Model.CharacterModel.Scale;
 		}
+	}
+
+	// Swap crystal (SwapCrystalDirector): makes newAsset, built for the model's new form, this view's rig. Returns
+	// the old rig, still alive, for the caller to fade out and destroy.
+	public virtual CharacterAssetController SwapAssetController(CharacterAssetController newAsset)
+	{
+		var oldAsset = m_AssetController;
+		m_AssetController = newAsset;
+		base.gameObject.name = m_Model.CombatantNameId;
+		RegisterEventHandler();
+		var scaleController = newAsset.GetComponent<ScaleController>();
+		if (scaleController != null)
+		{
+			m_StartSize = scaleController.m_BaseScale;
+		}
+		ReSizeCollider();
+		return oldAsset;
 	}
 
 	public float GetCharacterAssetScale()
@@ -899,6 +920,20 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 		m_BattleMgr.m_CameraAnimationRoot.GetComponent<Animation>().Play("Camera_Reset");
 		m_BattleMgr.m_CameraAnimationRoot.GetComponent<Animation>().wrapMode = WrapMode.Once;
+	}
+
+	// For combatants that join mid-battle without entering from offscreen (PlaceCharacter never gives them an
+	// offset): where they walk off to and back in from when the battle switches scenery (e.g. climbing a floor).
+	public void SetStartPosOffset(Vector3 offset)
+	{
+		m_InitialStartPosOffset = offset;
+		m_StartPosition = offset;
+	}
+
+	// For combatants removed from the battle by a script (not defeated): tears the view down after a delay.
+	public void DestroyCharacterAfter(float delay)
+	{
+		Invoke("DestroyCharacter", delay);
 	}
 
 	public float PlayGoToStartPositionFromBasePosition(bool destroy)

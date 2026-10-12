@@ -165,6 +165,14 @@ public class AutoScalingTextBox : MonoBehaviour
 	[SerializeField]
 	private float m_verticalOffset;
 
+	public UILabel Label
+	{
+		get
+		{
+			return m_label;
+		}
+	}
+
 	public Vector3 textPosition
 	{
 		get

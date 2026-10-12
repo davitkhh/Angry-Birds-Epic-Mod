@@ -527,6 +527,42 @@
     "PvpSetItemSkill": ""
   },
   {
+    "NameId": "bird_offhand_red_shield_workshop",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_Shield",
+    "LocaBaseId": "bird_offhand_red_shield",
+    "SortPriority": 1,
+    "BaseStat": 50,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      10,
+      20,
+      30
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "Guardian",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 0.0
+    },
+    "RestrictedBirdId": "bird_red",
+    "DirectAssetAndLoca": false,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 2,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
     "NameId": "bird_offhand_red_shield_02",
     "ItemType": "OffHandEquipment",
     "AssetBaseId": "OffHand_Shield",
@@ -1001,7 +1037,7 @@
       "Type": "HocusPokusChiliDrain",
       "ProbablityInPercent": 50.0,
       "PerkValue": 15.0,
-      "PerkValue2": 20.0
+      "PerkValue2": 5.0
     },
     "RestrictedBirdId": "bird_yellow",
     "DirectAssetAndLoca": false,
@@ -1014,6 +1050,40 @@
     "Mainsource": "Crafting",
     "ShowAsNew": false,
     "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_weapon_yellow_wand_foolish",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "MainHand_Wand_02",
+    "LocaBaseId": "bird_weapon_yellow_wand_02_gatcha",
+    "SortPriority": 5,
+    "BaseStat": 24,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": true,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "HocusPokusChiliDrain",
+      "ProbablityInPercent": 50.0,
+      "PerkValue": 15.0,
+      "PerkValue2": 10.0
+    },
+    "RestrictedBirdId": "bird_yellow",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 9,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": true,
     "PvpSetItemSkill": ""
   },
   {
@@ -1282,9 +1352,10 @@
     "IsRanged": false,
     "ProjectileAssetId": "",
     "Perk": {
-      "Type": "Might",
+      "Type": "Brilliance",
       "ProbablityInPercent": 100.0,
-      "PerkValue": 5.0
+      "PerkValue": 5.0,
+      "PerkValue2": 5.0
     },
     "RestrictedBirdId": "bird_yellow",
     "DirectAssetAndLoca": true,
@@ -1723,6 +1794,42 @@
     "Mainsource": "Crafting",
     "ShowAsNew": false,
     "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_offhand_yellow_orb_workshop",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_Orb_06",
+    "LocaBaseId": "bird_offhand_yellow_orb_06_crafting",
+    "SortPriority": 4,
+    "BaseStat": 56,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      10,
+      20,
+      30
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "Amplify",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 15.0
+    },
+    "RestrictedBirdId": "bird_yellow",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": true,
     "PvpSetItemSkill": ""
   },
   {
@@ -4048,7 +4155,7 @@
     "NameId": "bird_weapon_merchant_01",
     "ItemType": "MainHandEquipment",
     "AssetBaseId": "MainHand_MerchantPig",
-    "LocaBaseId": "bird_offhand_blue_lucky_cards_set_03",
+    "LocaBaseId": "bird_weapon_merchant_red",
     "SortPriority": 15,
     "BaseStat": 34,
     "StatPerLevel": 25,
@@ -4081,10 +4188,79 @@
     "PvpSetItemSkill": ""
   },
   {
+    "NameId": "bird_weapon_merchant_blue",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "MainHand_MerchantPigBlue",
+    "LocaBaseId": "bird_weapon_merchant_blue",
+    "SortPriority": 15,
+    "BaseStat": 34,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      10,
+      20,
+      30
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "CashStrike",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 50.0,
+      "PerkValue2": 3.0
+    },
+    "RestrictedBirdId": "bird_merchant",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 9,
+    "HitEffectSuffix": "_Melee_Blow",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
     "NameId": "bird_offhand_merchant_01",
     "ItemType": "OffHandEquipment",
     "AssetBaseId": "OffHand_",
-    "LocaBaseId": "bird_offhand_blue_lucky_cards_set_03",
+    "LocaBaseId": "bird_offhand_merchant_none",
+    "SortPriority": 10,
+    "BaseStat": 0,
+    "StatPerLevel": 0,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": null,
+    "RestrictedBirdId": "bird_merchant",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 9,
+    "HitEffectSuffix": "_Melee_Blow",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_offhand_merchant_phatloot",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_PhatLootMcool",
+    "LocaBaseId": "bird_offhand_merchant_phatloot",
     "SortPriority": 10,
     "BaseStat": 152,
     "StatPerLevel": 25,
@@ -4099,9 +4275,10 @@
     "IsRanged": false,
     "ProjectileAssetId": "",
     "Perk": {
-      "Type": "Vitality",
+      "Type": "PhatLoot",
       "ProbablityInPercent": 100.0,
-      "PerkValue": 15.0
+      "PerkValue": 5.0,
+      "PerkValue2": 3.0
     },
     "RestrictedBirdId": "bird_merchant",
     "DirectAssetAndLoca": true,
@@ -4724,6 +4901,35 @@
     "PvpSetItemSkill": ""
   },
   {
+    "NameId": "pig_offhand_minion_mcpig_01",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_PhatLootMcool",
+    "LocaBaseId": "bird_weapon_red_sword",
+    "SortPriority": 0,
+    "BaseStat": 0,
+    "StatPerLevel": 0,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0
+    ],
+    "AnimationIndex": 2,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": null,
+    "RestrictedBirdId": "",
+    "DirectAssetAndLoca": false,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 1,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
     "NameId": "pig_weapon_minion_turban_arabic_sword_01",
     "ItemType": "MainHandEquipment",
     "AssetBaseId": "MainHand_TurbanPig",
@@ -4814,6 +5020,35 @@
     "NameId": "pig_weapon_minion_corporal_lolli_01",
     "ItemType": "MainHandEquipment",
     "AssetBaseId": "MainHand_Corporal",
+    "LocaBaseId": "bird_weapon_red_sword",
+    "SortPriority": 0,
+    "BaseStat": 0,
+    "StatPerLevel": 0,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0
+    ],
+    "AnimationIndex": 2,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": null,
+    "RestrictedBirdId": "",
+    "DirectAssetAndLoca": false,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 1,
+    "HitEffectSuffix": "_Melee_Smash",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "pig_weapon_minion_merchant_corporal_01",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "MainHand_MerchantPig",
     "LocaBaseId": "bird_weapon_red_sword",
     "SortPriority": 0,
     "BaseStat": 0,

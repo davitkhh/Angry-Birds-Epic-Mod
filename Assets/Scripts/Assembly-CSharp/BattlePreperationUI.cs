@@ -51,6 +51,13 @@ public class BattlePreperationUI : MonoBehaviour
 	[SerializeField]
 	private UIInputTrigger m_classChangeButton;
 
+	// Equipment presets button (added by EquipmentPresetSceneBuilder); swings in and out with the class button.
+	[SerializeField]
+	private UIInputTrigger m_PresetButton;
+
+	[SerializeField]
+	private Animation m_PresetButtonAnimation;
+
 	[SerializeField]
 	private GameObject m_SponsoredBuffRootLarge;
 
@@ -342,6 +349,17 @@ public class BattlePreperationUI : MonoBehaviour
 		m_classMgr.EnterClassManager(false, this);
 	}
 
+	// Same hand-off as the class manager: hide this screen (keeping the window backdrop), come back with fresh birds.
+	private void OpenEquipmentPresets()
+	{
+		Leave(true);
+		EquipmentPresetWindowUI.Open(delegate
+		{
+			CreateBirds();
+			Enter(true);
+		});
+	}
+
 	public void OnClassInfoLoaded()
 	{
 		m_classMgr = UnityEngine.Object.FindObjectOfType(typeof(ClassManagerUi)) as ClassManagerUi;
@@ -360,6 +378,10 @@ public class BattlePreperationUI : MonoBehaviour
 		m_SponsoredBuffButtonLarge.Clicked += OnSponsoredBuffButtonClicked;
 		m_energyPotionButtonTrigger.Clicked += EnergyPotionButtonTriggerClicked;
 		m_classChangeButton.Clicked += OpenClassInfoScreen;
+		if (m_PresetButton)
+		{
+			m_PresetButton.Clicked += OpenEquipmentPresets;
+		}
 		m_battleHintTrigger.Clicked += OpenBattleHint;
 		m_dungeonHardModeButton.Clicked += SwitchDungeonBoards;
 		m_dungeonNormalModeButton.Clicked += SwitchDungeonBoards;
@@ -379,6 +401,10 @@ public class BattlePreperationUI : MonoBehaviour
 		m_SponsoredBuffButtonLarge.Clicked -= OnSponsoredBuffButtonClicked;
 		m_energyPotionButtonTrigger.Clicked -= EnergyPotionButtonTriggerClicked;
 		m_classChangeButton.Clicked -= OpenClassInfoScreen;
+		if (m_PresetButton)
+		{
+			m_PresetButton.Clicked -= OpenEquipmentPresets;
+		}
 		m_battleHintTrigger.Clicked -= OpenBattleHint;
 		m_dungeonHardModeButton.Clicked -= SwitchDungeonBoards;
 		m_dungeonNormalModeButton.Clicked -= SwitchDungeonBoards;
@@ -1326,6 +1352,10 @@ public class BattlePreperationUI : MonoBehaviour
 			StartCoroutine(CreatePreviewPigs());
 		}
 		m_classChangeButtonAnimation.Play("BackButton_Enter");
+		if (m_PresetButtonAnimation)
+		{
+			m_PresetButtonAnimation.Play("BackButton_Enter");
+		}
 		m_BackAnimation.Play("BackButton_Enter");
 		yield return new WaitForSeconds(0.3f);
 		EnterEnergyBar();
@@ -1792,6 +1822,10 @@ public class BattlePreperationUI : MonoBehaviour
 			m_AddFriendBirdButtonAnimation.Play("FriendBirdButton_Leave");
 		}
 		m_classChangeButtonAnimation.Play("BackButton_Leave");
+		if (m_PresetButtonAnimation)
+		{
+			m_PresetButtonAnimation.Play("BackButton_Leave");
+		}
 		if (!forClassMgr)
 		{
 			LeaveCoinBars();
@@ -2110,7 +2144,12 @@ public class BattlePreperationUI : MonoBehaviour
 			var list2 = !flag ? DIContainerBalancing.Service.GetBalancingData<BattleParticipantTableBalancingData>(battleParticipantsId).BattleParticipants : DIContainerBalancing.Service.GetBalancingData<ChronicleCaveBattleParticipantTableBalancingData>(battleParticipantsId).BattleParticipants;
 			foreach (var item in list2)
 			{
-				list.Add(DIContainerBalancing.Service.GetBalancingData<PigBalancingData>(item.NameId));
+				// Swap crystals (crystal_*) and bosses have no pig balancing.
+				var pig = DIContainerBalancing.Service.GetBalancingData<PigBalancingData>(item.NameId);
+				if (pig != null)
+				{
+					list.Add(pig);
+				}
 			}
 		}
 		return list.OrderByDescending(p => p.PigStrength).ToList();

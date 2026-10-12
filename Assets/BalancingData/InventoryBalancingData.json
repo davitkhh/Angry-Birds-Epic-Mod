@@ -386,6 +386,15 @@
     "InitializingLevel": 0
   },
   {
+    "NameId": "bird_merchant_mcpig",
+    "DefaultInventoryContent": {
+      "bird_weapon_merchant_01": 1,
+      "bird_offhand_merchant_phatloot": 1,
+      "headgear_bird_merchant": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
     "NameId": "bird_mighty_eagle",
     "DefaultInventoryContent": {
       "bird_weapon_mighty_eagle_01": 1,
@@ -654,6 +663,14 @@
     "InitializingLevel": 0
   },
   {
+    "NameId": "pig_minion_rogue_dynamite_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_pyrobolist_01": 1,
+      "headgear_rogue": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
     "NameId": "pig_minion_guard_01",
     "DefaultInventoryContent": {
       "pig_weapon_minion_guard_featherstick_01": 1,
@@ -681,6 +698,23 @@
     "NameId": "pig_minion_corporal_01",
     "DefaultInventoryContent": {
       "pig_weapon_minion_corporal_lolli_01": 1,
+      "headgear_corporal": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_merchant_corporal_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_merchant_corporal_01": 1,
+      "pig_offhand_minion_mcpig_01": 1,
+      "headgear_corporal": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_merchant_corporal_castle_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_merchant_corporal_01": 1,
       "headgear_corporal": 1
     },
     "InitializingLevel": 0

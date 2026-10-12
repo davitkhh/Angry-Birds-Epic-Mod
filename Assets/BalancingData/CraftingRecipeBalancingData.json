@@ -352,6 +352,17 @@
     "RecipeCategoryType": "OffHandEquipment"
   },
   {
+    "NameId": "recipe_offhand_red_shield_workshop",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "recipe_sword_01",
+    "LocaBaseId": "recipe_offhand_red_shield_01",
+    "SortPriority": 9,
+    "ResultLoot": {
+      "bird_offhand_red_shield_workshop": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
     "NameId": "recipe_offhand_red_shield_02",
     "ItemType": "CraftingRecipes",
     "AssetBaseId": "recipe_sword_01",
@@ -567,9 +578,31 @@
     "LocaBaseId": "recipe_offhand_yellow_orb_04",
     "SortPriority": 18,
     "ResultLoot": {
-      "bird_offhand_yellow_orb_06": 1
+      "bird_offhand_yellow_orb_workshop": 1
     },
     "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
+    "NameId": "upgrade_offhand_yellow_book_start",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_offhand_yellow_book_start",
+    "LocaBaseId": "upgrade_offhand_yellow_book_start",
+    "SortPriority": 2,
+    "ResultLoot": {
+      "bird_offhand_yellow_book_start": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
+    "NameId": "upgrade_class_knight",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_class_knight",
+    "LocaBaseId": "upgrade_class_knight",
+    "SortPriority": 1,
+    "ResultLoot": {
+      "class_knight": 1
+    },
+    "RecipeCategoryType": "MainHandEquipment"
   },
   {
     "NameId": "recipe_offhand_yellow_orb_05",

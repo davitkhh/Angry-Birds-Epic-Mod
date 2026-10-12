@@ -5,10 +5,11 @@
     "ExclusiveOffer": false,
     "Level": 2,
     "OfferContents": {
-      "bird_weapon_yellow_wand_01": 1
+      "bird_weapon_yellow_wand_foolish": 1,
+      "story_merchant_foolish_wand_bought": 1
     },
     "SortPriority": 1,
-    "SlotId": 3,
+    "SlotId": 5,
     "Category": "merchant_01_weapon_yellow",
     "NameId": "offer_weapon_yellow_wand_01",
     "AssetId": "",
@@ -39,9 +40,9 @@
         "Value": 1.0
       },
       {
-        "RequirementType": "NotHaveItemWithLevel",
-        "NameId": "bird_weapon_yellow_wand_01",
-        "Value": 3.0
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_merchant_foolish_wand_bought",
+        "Value": 1.0
       },
       {
         "RequirementType": "PayItem",
@@ -59,12 +60,76 @@
     "DiscountPrice": 0,
     "DisplayAfterPurchase": false,
     "ExclusiveOffer": false,
-    "Level": 6,
+    "Level": 1,
     "OfferContents": {
-      "gold": 10
+      "upgrade_class_knight": 1,
+      "story_merchant_knight_upgrade_bought": 1
     },
     "SortPriority": 1,
-    "SlotId": 2,
+    "SlotId": 4,
+    "Category": "merchant_01_weapon_yellow",
+    "NameId": "offer_upgrade_class_knight",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_red",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_merchant_knight_upgrade_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 200.0
+      }
+    ],
+    "ShowRequirements": [
+      {
+        "RequirementType": "HaveUnlockedHotpsot",
+        "NameId": "hotspot_013_battleground",
+        "Value": 1.0
+      }
+    ],
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 6,
+    "OfferContents": {
+      "gold": 10,
+      "merchant_stock_trade_cobalt": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 3,
     "Category": "merchant_01_trade_cobalt",
     "NameId": "offer_gold",
     "AssetId": "",
@@ -90,6 +155,11 @@
     "EndDate": 0,
     "BuyRequirements": [
       {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_trade_cobalt",
+        "Value": 20
+      },
+      {
         "RequirementType": "PayItem",
         "NameId": "resource_cobalt_stone",
         "Value": 5
@@ -107,7 +177,8 @@
     "ExclusiveOffer": false,
     "Level": 6,
     "OfferContents": {
-      "resource_wood": 1
+      "resource_wood": 1,
+      "merchant_stock_trade_wood": 1
     },
     "SortPriority": 1,
     "SlotId": 1,
@@ -136,6 +207,11 @@
     "EndDate": 0,
     "BuyRequirements": [
       {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_trade_wood",
+        "Value": 10
+      },
+      {
         "RequirementType": "PayItem",
         "NameId": "gold",
         "Value": 3
@@ -151,12 +227,65 @@
     "DiscountPrice": 0,
     "DisplayAfterPurchase": false,
     "ExclusiveOffer": false,
-    "Level": 5,
+    "Level": 6,
     "OfferContents": {
-      "recipe_offhand_red_shield_01": 1
+      "resource_flotsam": 5,
+      "merchant_stock_trade_crates": 1
     },
     "SortPriority": 1,
-    "SlotId": 1,
+    "SlotId": 2,
+    "Category": "merchant_01_trade_crates",
+    "NameId": "offer_merchant_crates",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_trade_crates",
+        "Value": 5
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 10
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 5,
+    "OfferContents": {
+      "recipe_offhand_red_shield_workshop": 1,
+      "story_workshop_fence_shield_bought": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 3,
     "Category": "shop_00_offhand_red",
     "NameId": "offer_recipe_offhand_red_shield_00",
     "AssetId": "",
@@ -187,9 +316,9 @@
         "Value": 1.0
       },
       {
-        "RequirementType": "NotHaveItemWithLevel",
-        "NameId": "recipe_offhand_red_shield_01",
-        "Value": 3.0
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_workshop_fence_shield_bought",
+        "Value": 1.0
       },
       {
         "RequirementType": "PayItem",
@@ -209,7 +338,8 @@
     "ExclusiveOffer": false,
     "Level": 1,
     "OfferContents": {
-      "recipe_offhand_yellow_orb_04": 1
+      "recipe_offhand_yellow_orb_04": 1,
+      "story_workshop_chuck_offhand_bought": 1
     },
     "SortPriority": 1,
     "SlotId": 2,
@@ -243,9 +373,9 @@
         "Value": 1.0
       },
       {
-        "RequirementType": "NotHaveItemWithLevel",
-        "NameId": "recipe_offhand_yellow_orb_04",
-        "Value": 3.0
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_workshop_chuck_offhand_bought",
+        "Value": 1.0
       },
       {
         "RequirementType": "PayItem",
@@ -263,12 +393,70 @@
     "DiscountPrice": 0,
     "DisplayAfterPurchase": false,
     "ExclusiveOffer": false,
-    "Level": 4,
+    "Level": 1,
     "OfferContents": {
-      "recipe_weapon_red_lance_01": 1
+      "upgrade_offhand_yellow_book_start": 1,
+      "story_workshop_chuck_book_upgrade_bought": 1
     },
     "SortPriority": 1,
-    "SlotId": 3,
+    "SlotId": 1,
+    "Category": "shop_00_upgrade_yellow",
+    "NameId": "offer_upgrade_offhand_yellow_book_start",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_yellow",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_workshop_chuck_book_upgrade_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 35.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 4,
+    "OfferContents": {
+      "recipe_weapon_red_lance_01": 1,
+      "story_workshop_fork_lance_bought": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 4,
     "Category": "shop_00_lance_red",
     "NameId": "offer_recipe_weapon_red_lance_00",
     "AssetId": "",
@@ -299,9 +487,9 @@
         "Value": 1.0
       },
       {
-        "RequirementType": "NotHaveItemWithLevel",
-        "NameId": "recipe_weapon_red_lance_01",
-        "Value": 8.0
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_workshop_fork_lance_bought",
+        "Value": 1.0
       },
       {
         "RequirementType": "PayItem",
@@ -321,10 +509,11 @@
     "ExclusiveOffer": false,
     "Level": 4,
     "OfferContents": {
-      "recipe_weapon_red_sword_02": 1
+      "recipe_weapon_red_sword_02": 1,
+      "story_workshop_stick_sword_bought": 1
     },
     "SortPriority": 1,
-    "SlotId": 4,
+    "SlotId": 5,
     "Category": "shop_00_sword_red",
     "NameId": "offer_recipe_weapon_red_sword_02",
     "AssetId": "",
@@ -355,9 +544,9 @@
         "Value": 1.0
       },
       {
-        "RequirementType": "NotHaveItemWithLevel",
-        "NameId": "recipe_weapon_red_sword_02",
-        "Value": 8.0
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_workshop_stick_sword_bought",
+        "Value": 1.0
       },
       {
         "RequirementType": "PayItem",

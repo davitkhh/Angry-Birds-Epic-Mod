@@ -417,6 +417,7 @@ namespace ABH.Services.Logic
 			hotspot.RaiseHotspotChanged();
 			if (playerGameData != null)
 			{
+				AddMcCoolFriendIfMerchantUnlocked(playerGameData);
 				playerGameData.SavePlayerData();
 			}
 		}
@@ -606,7 +607,18 @@ namespace ABH.Services.Logic
 			hotspot.RaiseHotspotChanged();
 			if (playerGameData != null)
 			{
+				AddMcCoolFriendIfMerchantUnlocked(playerGameData);
 				playerGameData.SavePlayerData();
+			}
+		}
+
+		// Piggy McCool becomes the player's friend once the first merchant (his shop) is unlocked.
+		public void AddMcCoolFriendIfMerchantUnlocked(PlayerGameData playerGameData)
+		{
+			HotspotGameData merchant = null;
+			if (!playerGameData.SocialEnvironmentGameData.IsMcCoolFriend && playerGameData.WorldGameData.HotspotGameDatas.TryGetValue("hotspot_008_02_merchant", out merchant) && merchant.IsCompleted())
+			{
+				playerGameData.SocialEnvironmentGameData.AddMcCoolFriend();
 			}
 		}
 

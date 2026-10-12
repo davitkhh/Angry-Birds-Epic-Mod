@@ -60819,6 +60819,8 @@ MonoBehaviour:
     type: 3}
   m_ListElementConsumablePrefab: {fileID: 1494416850036574, guid: 8117fc9bd137b9f4aa0940662204dabf,
     type: 3}
+  m_UpgradeTargetSlotPrefab: {fileID: 1313912239709379, guid: 09ab95dd8973e8341b31a4429741ec82,
+    type: 3}
   m_ListRoot: {fileID: 83}
   m_UpdgradeItem: {fileID: 934}
   m_CraftableRoot: {fileID: 318}

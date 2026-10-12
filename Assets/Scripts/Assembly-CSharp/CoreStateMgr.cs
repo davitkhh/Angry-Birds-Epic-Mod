@@ -845,6 +845,10 @@ public class CoreStateMgr : MonoBehaviourContainerBase
 
 	public virtual void GotoFirendCampScreen(PublicPlayerData player, FriendGameData friend)
 	{
+		if (friend != null && ShowcaseCamps.IsShowcase(friend.FriendId) && GotoShowcaseCampScreen(friend.FriendId))
+		{
+			return;
+		}
 		if (this.CampEntered != null)
 		{
 			this.CampEntered();
@@ -865,6 +869,47 @@ public class CoreStateMgr : MonoBehaviourContainerBase
 		ABHAnalyticsHelper.AddFriendsCountToTracking(dictionary);
 		DIContainerInfrastructure.GetAnalyticsSystem().LogEventWithParameters("FriendInspect", dictionary);
 		SceneLoadingMgr.LoadGameScene("Camp_Friend", new List<string>());
+	}
+
+	public virtual bool GotoShowcaseCampScreen(string showcaseId)
+	{
+		ShowcaseCampDefinition definition;
+		if (!ShowcaseCamps.TryGet(showcaseId, out definition))
+		{
+			DebugLog.Error("Unknown showcase camp: " + showcaseId);
+			return false;
+		}
+		FriendGameData friend;
+		PublicPlayerData player;
+		List<BirdGameData> list;
+		InventoryGameData inventory;
+		try
+		{
+			friend = ShowcaseCamps.CreateFriend(definition);
+			player = friend.PublicPlayerData;
+			list = new List<BirdGameData>();
+			for (var i = 0; i < player.Birds.Count; i++)
+			{
+				list.Add(new BirdGameData(player.Birds[i]));
+			}
+			inventory = new InventoryGameData(player.Inventory);
+		}
+		catch (Exception ex)
+		{
+			DebugLog.Error("Failed to build showcase camp " + showcaseId + ": " + ex);
+			return false;
+		}
+		if (this.CampEntered != null)
+		{
+			this.CampEntered();
+		}
+		m_HotLinkItemName = null;
+		ClientInfo.IsFriend = true;
+		ClientInfo.InspectedFriend = friend;
+		ClientInfo.CurrentCampBirds = list;
+		ClientInfo.CurrentCampInventory = inventory;
+		SceneLoadingMgr.LoadGameScene(definition.SceneName, new List<string>());
+		return true;
 	}
 
 	public void GotoIntro()

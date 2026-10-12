@@ -38,5 +38,9 @@ namespace ABH.Shared.Models.InventoryItems
 		
 		[ProtoMember(10)]
 		public bool IsAncient { get; set; }
+
+		// Applied upgrade blueprint uses, one entry each: "<blueprintNameId>|<stars>|<refundItem>:<amount>,..."
+		[ProtoMember(11)]
+		public List<string> Upgrades { get; set; }
 	}
 }

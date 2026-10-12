@@ -116,17 +116,18 @@ public class ShopService
 
 	public List<Requirement> GetModifiedBuyRequirementsIgnoreCostAndLevel(BasicShopOfferBalancingData offer)
 	{
-		return GetModifiedRequirements(offer.BuyRequirements.Where(r => r.RequirementType != RequirementType.PayItem && r.RequirementType != RequirementType.Level).ToList());
+		return MerchantStock.ApplyRestocks(offer, GetModifiedRequirements(offer.BuyRequirements.Where(r => r.RequirementType != RequirementType.PayItem && r.RequirementType != RequirementType.Level).ToList()));
 	}
 
 	public List<Requirement> GetModifiedBuyRequirementsIgnoreCost(BasicShopOfferBalancingData offer)
 	{
-		return GetModifiedRequirements(offer.BuyRequirements.Where(r => r.RequirementType != RequirementType.PayItem).ToList());
+		return MerchantStock.ApplyRestocks(offer, GetModifiedRequirements(offer.BuyRequirements.Where(r => r.RequirementType != RequirementType.PayItem).ToList()));
 	}
 
 	public List<Requirement> GetModifiedBuyRequirements(BasicShopOfferBalancingData offer)
 	{
-		return GetModifiedRequirements(offer.BuyRequirements);
+		// Restocking merchant offers raise their purchase limit as the player clears new levels.
+		return MerchantStock.ApplyRestocks(offer, GetModifiedRequirements(offer.BuyRequirements));
 	}
 
 	public List<Requirement> GetModifiedShowRequirements(BasicShopOfferBalancingData offer)
@@ -167,6 +168,18 @@ public class ShopService
 			requirement.Value = offerSaleDetails.OfferDetails.ChangedValue;
 		}
 		return modifiedBuyRequirements;
+	}
+
+	// Gear bought from non-gacha shops is rewarded at the player's level + 2 rather than the offer level.
+	public bool TryGetOfferItemRewardLevel(PlayerGameData player, BasicShopOfferBalancingData offer, string itemNameId, out int level)
+	{
+		level = 0;
+		if (offer is GachaShopOfferBalancingData || itemNameId.Contains("recipe") || !(itemNameId.Contains("weapon") || itemNameId.Contains("offhand") || itemNameId.Contains("banner")))
+		{
+			return false;
+		}
+		level = player.Data.Level + 2;
+		return true;
 	}
 
 	public int GetOfferLevel(int playerLevel, BasicShopOfferBalancingData offerBalancing)
@@ -410,9 +423,10 @@ public class ShopService
 				{
 					item2.Value.Value = saleOffer.OfferDetails.ChangedValue;
 				}
-				if (!(offer is GachaShopOfferBalancingData) && (item2.Key.Contains("weapon") || item2.Key.Contains("offhand") || item2.Key.Contains("banner")) && !item2.Key.Contains("recipe"))
+				int rewardLevel;
+				if (TryGetOfferItemRewardLevel(playerGameData, offer, item2.Key, out rewardLevel))
 				{
-					item2.Value.Level = playerGameData.Data.Level + 2;
+					item2.Value.Level = rewardLevel;
 				}
 			}
 			var result = DIContainerLogic.GetLootOperationService().RewardLoot(playerGameData.InventoryGameData, 2, dictionary2, dictionary, EquipmentSource.Gatcha);

@@ -639,14 +639,14 @@ public class InventoryItemSlot : BaseItemSlot
 		var equipmentGameData = itemData as EquipmentGameData;
 		if (equipmentGameData != null)
 		{
-			var bird = DIContainerInfrastructure.GetCurrentPlayer().GetBird(equipmentGameData.BalancingData.RestrictedBirdId);
+			var bird = EquipmentPresetWindowUI.GetEditedBird(equipmentGameData.BalancingData.RestrictedBirdId) ?? ShowcaseCamps.GetVisitedAllyBird(equipmentGameData.BalancingData.RestrictedBirdId) ?? DIContainerInfrastructure.GetCurrentPlayer().GetBird(equipmentGameData.BalancingData.RestrictedBirdId);
 			if (bird != null)
 			{
-				if (itemData.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
+				if (itemData.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment && bird.MainHandItem != null)
 				{
 					num = bird.MainHandItem.ItemMainStat;
 				}
-				else if (itemData.ItemBalancing.ItemType == InventoryItemType.OffHandEquipment)
+				else if (itemData.ItemBalancing.ItemType == InventoryItemType.OffHandEquipment && bird.OffHandItem != null)
 				{
 					num = bird.OffHandItem.ItemMainStat;
 				}
@@ -696,6 +696,10 @@ public class InventoryItemSlot : BaseItemSlot
 
 	private void SetRecipeItem(IInventoryItemGameData item)
 	{
+		if (SetClassUpgradeRecipeItem(item as CraftingRecipeGameData))
+		{
+			return;
+		}
 		switch (((CraftingRecipeGameData)item).BalancingData.RecipeCategoryType)
 		{
 		case InventoryItemType.MainHandEquipment:
@@ -767,6 +771,42 @@ public class InventoryItemSlot : BaseItemSlot
 		m_BaseStatValue.text = DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
 	}
 
+	// Upgrade blueprints for a class draw the (tinted) class on the golden parchment.
+	private bool SetClassUpgradeRecipeItem(CraftingRecipeGameData recipe)
+	{
+		if (recipe == null || !UpgradeBlueprints.IsUpgradeBlueprint(recipe))
+		{
+			return false;
+		}
+		var loot = DIContainerLogic.GetLootOperationService().GenerateLoot(recipe.GetResultLoot(), recipe.Data.Level);
+		var itemsFromLoot = DIContainerLogic.GetLootOperationService().GetItemsFromLoot(DIContainerInfrastructure.GetCurrentPlayer(), loot);
+		var classItem = itemsFromLoot.FirstOrDefault() as ClassItemGameData;
+		if (classItem == null)
+		{
+			return false;
+		}
+		m_FinalItem = classItem;
+		if (m_SpecialSprite)
+		{
+			m_SpecialSprite.gameObject.SetActive(true);
+			m_SpecialSprite.spriteName = ClassItemGameData.GetRestrictedBirdIcon(classItem.ItemBalancing);
+		}
+		if (m_PerkType != null)
+		{
+			m_PerkType.gameObject.SetActive(false);
+		}
+		if (!m_ItemSprite)
+		{
+			m_ItemSprite = DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(classItem.ItemAssetName, m_ItemSpriteSpawnRoot, Vector3.zero, Quaternion.identity, false);
+			if (m_ItemSprite)
+			{
+				StartCoroutine(SetRecipeShader(m_ItemSprite.GetComponentsInChildren<Renderer>()));
+			}
+		}
+		SetUpgradeBlueprintLook(true);
+		return true;
+	}
+
 	private void SetRecipeOffHandItem(IInventoryItemGameData item)
 	{
 		var craftingRecipeGameData = (CraftingRecipeGameData)item;
@@ -827,6 +867,34 @@ public class InventoryItemSlot : BaseItemSlot
 			m_ItemSprite = DIContainerInfrastructure.GetEquipmentAssetProvider().InstantiateObject(m_FinalItem.ItemAssetName, m_ItemSpriteSpawnRoot, Vector3.zero, Quaternion.identity, false);
 			var componentInChildren = m_ItemSprite.GetComponentsInChildren<Renderer>();
 			StartCoroutine(SetRecipeShader(componentInChildren));
+		}
+		SetUpgradeBlueprintLook(UpgradeBlueprints.IsUpgradeBlueprint(m_Model));
+	}
+
+	// Upgrade blueprints get the golden parchment and show their uses left instead of a stat comparison;
+	// the tinted equipment in the middle stays the same.
+	private void SetUpgradeBlueprintLook(bool upgrade)
+	{
+		UpgradeBlueprints.SetGoldParchment(gameObject, upgrade);
+		if (!upgrade)
+		{
+			if (m_BaseStatType)
+			{
+				m_BaseStatType.gameObject.SetActive(true);
+			}
+			return;
+		}
+		if (m_ArrowSprite)
+		{
+			m_ArrowSprite.gameObject.SetActive(false);
+		}
+		if (m_BaseStatType)
+		{
+			m_BaseStatType.gameObject.SetActive(false);
+		}
+		if (m_BaseStatValue)
+		{
+			m_BaseStatValue.text = "x" + m_Model.ItemValue;
 		}
 	}
 
@@ -1282,7 +1350,14 @@ public class InventoryItemSlot : BaseItemSlot
 		case InventoryItemType.Consumable:
 			break;
 		case InventoryItemType.CraftingRecipes:
-			if (DIContainerInfrastructure.GetEquipmentAssetProvider())
+			if (m_FinalItem is ClassItemGameData)
+			{
+				if (DIContainerInfrastructure.GetClassAssetProvider())
+				{
+					DIContainerInfrastructure.GetClassAssetProvider().DestroyObject(m_FinalItem.ItemAssetName, m_ItemSprite);
+				}
+			}
+			else if (DIContainerInfrastructure.GetEquipmentAssetProvider())
 			{
 				DIContainerInfrastructure.GetEquipmentAssetProvider().DestroyObject(m_FinalItem.ItemAssetName, m_ItemSprite);
 			}

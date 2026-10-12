@@ -19,6 +19,39 @@ namespace ABH.GameDatas
 
 		private int m_difficultyPercentage;
 
+		// Pigs that come back as a bird ally (Corporal McPig -> Piggy McCool) share that bird's max HP and attack
+		// (equipment included), built at the pig's level. Rebuilt if the level changes.
+		private string m_AllyBirdNameId;
+
+		private BirdGameData m_AllyBird;
+
+		private int m_AllyBirdLevel = -1;
+
+		public BirdGameData AllyBird
+		{
+			get
+			{
+				if (IsPvPBird)
+				{
+					return null;
+				}
+				if (m_AllyBirdNameId == null)
+				{
+					m_AllyBirdNameId = ABH.GameDatas.Battle.Skills.RunawayAndReturnAsAlly.GetAllyBirdNameId(BalancingData) ?? string.Empty;
+				}
+				if (m_AllyBirdNameId.Length == 0)
+				{
+					return null;
+				}
+				if (m_AllyBird == null || m_AllyBirdLevel != Level)
+				{
+					m_AllyBird = new BirdGameData(m_AllyBirdNameId, Level);
+					m_AllyBirdLevel = Level;
+				}
+				return m_AllyBird;
+			}
+		}
+
 		private PigBalancingData _balancingData;
 
 		protected PigData _instancedData;
@@ -168,6 +201,10 @@ namespace ABH.GameDatas
 					}
 					return num2 + num3;
 				}
+				if (AllyBird != null)
+				{
+					return AllyBird.BaseAttack;
+				}
 				return Mathf.Round(ApplyDifficultyOnHealth(BalancingData.BaseAttack));
 			}
 		}
@@ -207,10 +244,17 @@ namespace ABH.GameDatas
 			}
 		}
 
+		// Set when a swap crystal turns a pig into this type: it keeps the max health it had (see PigCombatant.SwapForm).
+		public float? BaseHealthOverride { get; set; }
+
 		public float BaseHealth
 		{
 			get
 			{
+				if (BaseHealthOverride.HasValue)
+				{
+					return BaseHealthOverride.Value;
+				}
 				if (IsPvPBird)
 				{
 					var classIndependentHealth = ClassIndependentHealth;
@@ -221,6 +265,10 @@ namespace ABH.GameDatas
 						num = (classIndependentHealth + classHealth) * (ClassSkin.BalancingData.BonusHp / 100f);
 					}
 					return classIndependentHealth + classHealth + num;
+				}
+				if (AllyBird != null)
+				{
+					return AllyBird.BaseHealth;
 				}
 				return Mathf.Round(ApplyDifficultyOnHealth(BalancingData.BaseHealth));
 			}
@@ -395,6 +443,13 @@ namespace ABH.GameDatas
 		{
 			_balancingData = DIContainerBalancing.Service.GetBalancingData<PigBalancingData>(nameId);
 			_instancedData = CreateNewInstance(nameId);
+		}
+
+		// For pig-side battle objects that have no PigBalancingData entry (swap crystals).
+		public PigGameData(PigBalancingData balancing, int level)
+		{
+			_balancingData = balancing;
+			_instancedData = CreateNewInstance(balancing.NameId, level);
 		}
 
 		public PigGameData(string nameId, int level)

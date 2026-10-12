@@ -183,7 +183,11 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		var componentsInChildren = base.transform.GetComponentsInChildren<HotSpotWorldMapViewBase>(true);
 		DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.AddUILevel("Window_LeaderBoard_Tabs", OnLeaderBoardLoaded);
 		m_FeatureUnlockCoroutineInstance = HandleFeatureUnlocksAndLevelUps();
-		DIContainerInfrastructure.GetPowerLevelCalculator();
+		// Only a pre-warm; when Play starts on this scene the boot sequence hasn't loaded balancing yet.
+		if (DIContainerBalancing.IsInitialized)
+		{
+			DIContainerInfrastructure.GetPowerLevelCalculator();
+		}
 		SynchBalancing(componentsInChildren);
 		if (ContentLoader.Instance != null)
 		{
@@ -506,8 +510,47 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		yield return StartCoroutine(m_GoldenPigHotspotView.LeaveCoroutine());
 	}
 
+	// Hotspots bounding the ship chapter: beating 017_02 retrieves the steering wheel (ship unlocked,
+	// WS_15), beating the second castle ends it (WS_20). In between the world map plays WorldMap2.
+	private const string ShipChapterStartHotspot = "hotspot_017_02_battleground";
+
+	private const string ShipChapterEndHotspot = "hotspot_045_castle";
+
+	private static List<string> s_DefaultWorldMapMusicAssets;
+
+	private static bool IsHotspotResolved(string hotspotId)
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		HotspotGameData hotspot;
+		return player != null && player.WorldGameData.HotspotGameDatas.TryGetValue(hotspotId, out hotspot) && hotspot.Data.UnlockState >= HotspotUnlockState.ResolvedNew;
+	}
+
+	// Points the music_worldmap cue at the track for the current story chapter. The scene's action
+	// trees also play music_worldmap after cutscenes, so the cue itself is switched, not just this call.
+	private IEnumerator SelectWorldMapMusic()
+	{
+		var cue = DIContainerInfrastructure.AudioManager.GetSound("music_worldmap") as Sound;
+		if (cue == null)
+		{
+			yield break;
+		}
+		if (s_DefaultWorldMapMusicAssets == null)
+		{
+			s_DefaultWorldMapMusicAssets = new List<string>(cue.AssetNames);
+		}
+		if (IsHotspotResolved(ShipChapterStartHotspot) && !IsHotspotResolved(ShipChapterEndHotspot))
+		{
+			yield return StartCoroutine(LocationThemeOverrides.Retheme("music_worldmap", "WorldMap2"));
+		}
+		else
+		{
+			cue.AssetNames = new List<string>(s_DefaultWorldMapMusicAssets);
+		}
+	}
+
 	private IEnumerator TryPlayWorldMapMusic()
 	{
+		yield return StartCoroutine(SelectWorldMapMusic());
 		var waitForMainThemeEnd = !DIContainerInfrastructure.GetCoreStateMgr().m_EnterOnce;
 		DIContainerInfrastructure.GetCoreStateMgr().m_EnterOnce = true;
 		while (waitForMainThemeEnd && DIContainerInfrastructure.PrimaryMusicSource.isPlaying && DIContainerInfrastructure.PrimaryMusicSource.clip.name == "TitleTheme")
@@ -605,7 +648,10 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		{
 			DIContainerInfrastructure.BackButtonMgr.DeRegisterAction(0);
 		}
-		DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData.InventoryOfTypeChanged -= InventoryOfTypeChanged;
+		if (DIContainerInfrastructure.GetCurrentPlayer() != null)
+		{
+			DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData.InventoryOfTypeChanged -= InventoryOfTypeChanged;
+		}
 	}
 
 	public override bool IsShowContentPossible()
@@ -767,6 +813,45 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		m_EventNews.Enter(m_cachedNewsStartingState);
 	}
 
+	// Opens battle preparation for a hotspot without walking the birds there (e.g. the permanent golden pig cloud).
+	public void ShowBattlePreparationFor(HotspotGameData hotspot)
+	{
+		if (IsBirdWalking() || hotspot == null)
+		{
+			return;
+		}
+		if (!DIContainerLogic.WorldMapService.IsHotspotEnterable(DIContainerInfrastructure.GetCurrentPlayer(), hotspot))
+		{
+			DebugLog.Log("Hotspot not enterable: " + hotspot.BalancingData.NameId);
+			return;
+		}
+		if (string.IsNullOrEmpty(DIContainerLogic.GetBattleService().GetFirstPossibleBattle(hotspot.BalancingData.BattleId, DIContainerInfrastructure.GetCurrentPlayer())))
+		{
+			DebugLog.Error(GetType(), "No possible battle for " + hotspot.BalancingData.NameId + " (check its BattleId list)");
+			return;
+		}
+		m_directBattleHotspot = hotspot;
+		if (m_battlePreperation == null)
+		{
+			DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.AddUILevel("Window_BattlePreparation", OnWindowBattlePreparationLoadedDirect);
+		}
+		else if (!m_battlePreperation.m_Entered)
+		{
+			m_battlePreperation.SetHotSpot(hotspot, this);
+			m_battlePreperation.Enter();
+		}
+	}
+
+	private HotspotGameData m_directBattleHotspot;
+
+	private void OnWindowBattlePreparationLoadedDirect()
+	{
+		m_battlePreperation = UnityEngine.Object.FindObjectOfType(typeof(BattlePreperationUI)) as BattlePreperationUI;
+		m_battlePreperation.gameObject.SetActive(false);
+		m_battlePreperation.SetHotSpot(m_directBattleHotspot, this);
+		m_battlePreperation.Enter();
+	}
+
 	private void OnWindowBattlePreparationLoadedGoldenPig()
 	{
 		var @object = UnityEngine.Object.FindObjectOfType(typeof(BattlePreperationUI));
@@ -826,6 +911,7 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		{
 			yield return StartCoroutine(m_startingHotSpot.ActivateFollowUpStagesAsync(null, null));
 		}
+		DIContainerLogic.WorldMapService.AddMcCoolFriendIfMerchantUnlocked(DIContainerInfrastructure.GetCurrentPlayer());
 		InvokeRepeating("UpdateResourceNodeManager", 0.1f, 60f);
 	}
 
@@ -953,6 +1039,18 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		}
 	}
 
+	public override void ShowMerchantScreen(string shopNameId, HotSpotWorldMapViewBase hotspot)
+	{
+		ShopBalancingData balancing = null;
+		if (DIContainerBalancing.Service.TryGetBalancingData<ShopBalancingData>(shopNameId, out balancing))
+		{
+			m_cachedShopBalancing = balancing;
+			m_cachedShopType = ShopMenuType.Merchant;
+			m_cachedHotSpotMapView = hotspot;
+			ShowWorkShopUi();
+		}
+	}
+
 	private void ShowWorkShopUi()
 	{
 		if (m_WorkShopUI == null)
@@ -1067,8 +1165,17 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		}
 		else if (m_currentPathList.Count <= 0)
 		{
+			var path = CalculatePath(m_currentHotSpot, newSpot);
+			// No route (e.g. a hotspot on the way is disabled): stay put rather than recording a move the birds can't make,
+			// which left them walking in place and later trips starting from newSpot.
+			if (path.Count == 0 || path[0] != m_currentHotSpot || path[path.Count - 1] != newSpot)
+			{
+				DebugLog.Warn("[WorldMapStateMgr] no route from " + m_currentHotSpot.m_nameId + " to " + newSpot.m_nameId);
+				m_ActionAfterWalkingDone = null;
+				return;
+			}
 			DIContainerLogic.WorldMapService.TravelToHotSpot(DIContainerInfrastructure.GetCurrentPlayer(), newSpot.Model);
-			m_currentPathList = CalculatePath(m_currentHotSpot, newSpot);
+			m_currentPathList = path;
 			m_currentHotSpot = newSpot;
 			if (instantMove && m_ActionAfterWalkingDone != null)
 			{
@@ -1080,11 +1187,50 @@ public class WorldMapStateMgr : BaseLocationStateManager
 			{
 				m_walking[i] = true;
 				m_Birds[i].transform.parent = m_CharacterRoot;
-				PathMovingService.Instance.WalkAlongPath(m_currentPathList, m_Birds[i], m_BirdAnimations[i], m_BirdSpeed, i, m_movementStartDelay[i], this, "WalkDone");
+				PathMovingService.Instance.WalkAlongPath(m_currentPathList, m_Birds[i], m_BirdAnimations[i], m_BirdSpeed, i, m_movementStartDelay[i], this, "WalkDone", false, "Move_Loop", false, GetJumpAnimation(m_Birds[i]));
 			}
 			PathMovingService.Instance.WalkAlongPath(m_currentPathList, m_Ship, m_ShipAnimation, m_BirdSpeed, 0, 1f * m_movementStartDelay[0], this, "WalkDone", false, "Move");
 			PathMovingService.Instance.WalkAlongPath(m_currentPathList, m_AirShip, m_AirShipAnimation, m_BirdSpeed, 0, 1f * m_movementStartDelay[0], this, "WalkDone", false, "Move");
 			PathMovingService.Instance.WalkAlongPath(m_currentPathList, m_Submarine, m_m_SubmarineAnimation, m_BirdSpeed, 0, 1f * m_movementStartDelay[0], this, "WalkDone", false, "Move");
+		}
+	}
+
+	private static string GetJumpAnimation(GameObject bird)
+	{
+		var controller = bird.GetComponentInChildren<CharacterControllerWorldMap>();
+		var model = controller != null ? controller.GetModel() as BirdGameData : null;
+		if (model == null)
+		{
+			return null;
+		}
+		switch (model.BalancingData.AssetId)
+		{
+		case "RedBird":
+		{
+			// Red has a real jump clip; fall back to his attack on rigs without it
+			var redAnim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
+			if (redAnim == null || redAnim["Jump"] != null)
+			{
+				return "Jump";
+			}
+			goto case "WhiteBird";
+		}
+		case "WhiteBird":
+		{
+			var attack = model.MainHandItem == null ? "Action_Attack_1" : "Action_Attack_" + model.MainHandItem.BalancingData.AnimationIndex;
+			var anim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
+			return anim == null || anim[attack] != null ? attack : "Action_Attack_1";
+		}
+		case "YellowBird":
+		{
+			// Chuck has a real jump clip; fall back to his support clip on rigs without it
+			var anim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
+			return anim == null || anim["Jump"] != null ? "Jump" : "Action_Support";
+		}
+		case "BlackBird":
+			return "Action_Support";
+		default:
+			return "Move_Loop";
 		}
 	}
 

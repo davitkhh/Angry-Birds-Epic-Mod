@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ABH.Shared.Interfaces;
 using ProtoBuf;
 
@@ -24,5 +25,9 @@ namespace ABH.Shared.Models.InventoryItems
 
 		[ProtoMember(6)]
 		public float ExperienceForNextLevel { get; set; }
+
+		// Applied upgrade blueprint uses, same format as EquipmentData.Upgrades
+		[ProtoMember(7)]
+		public List<string> Upgrades { get; set; }
 	}
 }

@@ -48,8 +48,19 @@ public class PopupMissingCurrency : MonoBehaviour
 		DeregisterPopupTriggers();
 	}
 
+	// Only these currencies have an icon and a premium shop page; for anything else (e.g. merchant
+	// trades paid in resources) the popup would throw half-way and stay open without its triggers.
+	public static bool IsSupportedCurrency(string currencyIdent)
+	{
+		return currencyIdent == "gold" || currencyIdent == "lucky_coin" || currencyIdent == "friendship_essence";
+	}
+
 	public void EnterPopup(string missingCurrencyIdent, float missingCurrencyValue)
 	{
+		if (!IsSupportedCurrency(missingCurrencyIdent))
+		{
+			return;
+		}
 		base.gameObject.SetActive(true);
 		m_currencyIdent = missingCurrencyIdent;
 		m_currencyValue = missingCurrencyValue;

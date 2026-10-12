@@ -774,6 +774,7 @@ GameObject:
   - component: {fileID: 137}
   - component: {fileID: 138}
   - component: {fileID: 140}
+  - component: {fileID: 146}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -2291,6 +2292,12 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: wav
+  - NameId: Dungeon_Secret
+    AssetLoadingType: 0
+    Path: Sound/Music/Dungeons/Secret
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: ogg
   - NameId: Camp
     AssetLoadingType: 0
     Path: Sound/Music/Camp
@@ -17076,6 +17083,128 @@ MonoBehaviour:
       EffectTextIdent: 
       HasText: 0
       DoNotMirror: 0
+  - BalancingId: HelmetThrow
+    VisualEffects:
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Generic_Aura_Rage
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 4
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: ScreenFX_Rage
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0.3
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Heavy
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0.3
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Impact_Top
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0.3
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 1
+      PrefabName: SkillFX_GroundImpact_Dust_Large
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0.3
+      Type: 0
+      TargetCombatant: 5
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: Camera_Shake_Massive
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
   - BalancingId: Heyday
     VisualEffects:
     - SpawnTiming: 0
@@ -22176,6 +22305,190 @@ MonoBehaviour:
       SoundId: 
       DoNotParentOnBone: 0
       PrefabName: SkillFX_Generic_BodyAirstream_Small
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+  - BalancingId: ForkJab
+    VisualEffects:
+    - SpawnTiming: 1
+      DelayInSeconds: 0.1
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 2
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_WeaponEffect_Strike_Medium
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 1
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 1
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Generic_BodyAirstream_Small
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Single
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SKillFX_Hit_Impact_Frontal
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 5
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: Camera_Shake_Subtle
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+  - BalancingId: ForkJab_Chain
+    VisualEffects:
+    - SpawnTiming: 0
+      DelayInSeconds: 0.15
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Single
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0.15
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SKillFX_Hit_Impact_Frontal
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0.15
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_ChainAttack
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0.15
+      Type: 0
+      TargetCombatant: 5
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: Camera_Shake_Subtle
       OnHitEffect: 0
       OnHitPrefix: 
       ShowEffectInvokerIcon: 0
@@ -39618,6 +39931,21 @@ MonoBehaviour:
       Value: 1
     AssetPrioritiy: 2
     Source: {fileID: 0}
+  - NameId: music_secret_dungeon
+    AssetNames:
+    - Dungeon_Secret
+    ChannelId: 0
+    Muted: 0
+    Volume: 1
+    Params:
+    - Type: 0
+      Value: 0
+    - Type: 2
+      Value: 0
+    - Type: 3
+      Value: 1
+    AssetPrioritiy: 2
+    Source: {fileID: 0}
   - NameId: Music_ActionJingle_01
     AssetNames:
     - ActionJingle_01
@@ -41082,7 +41410,7 @@ MonoBehaviour:
     - Heartache
     ChannelId: 0
     Muted: 0
-    Volume: 0.98
+    Volume: 1
     Params:
     - Type: 0
       Value: 0
@@ -47930,6 +48258,30 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
+  - NameId: OffHand_
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/OffHand/9_McCool/OffHand_
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: OffHand_PhatLootMcool
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/OffHand/9_McCool/OffHand_PhatLootMcool
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MainHand_MerchantPig
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/MainHand/9_McCool/MainHand_MerchantPig
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MainHand_MerchantPigBlue
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/MainHand/9_McCool/MainHand_MerchantPigBlue
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
   - NameId: OffHand_Orb_02
     AssetLoadingType: 0
     Path: Prefabs/0_Generic/1_Interface/BirdEquipment/OffHand/2_YellowBird/OffHand_Orb_02
@@ -48215,6 +48567,12 @@ MonoBehaviour:
   - NameId: PigCharents
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigCharents
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: PigPirateBruce
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigPirateBruce
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
@@ -48545,6 +48903,12 @@ MonoBehaviour:
   - NameId: Projectile_PigDrone_Snowball
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/4_Projectiles/Projectile_PigDrone_Snowball
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: Projectile_McPig_Helmet
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/4_Projectiles/Projectile_McPig_Helmet
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
@@ -53372,6 +53736,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76c70cff24f46d07bd9c8215e33a6ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

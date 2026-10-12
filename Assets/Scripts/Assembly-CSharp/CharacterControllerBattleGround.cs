@@ -262,6 +262,18 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		m_BattleMgr.m_blocked = false;
 	}
 
+	public override CharacterAssetController SwapAssetController(CharacterAssetController newAsset)
+	{
+		var oldAsset = base.SwapAssetController(newAsset);
+		if (oldAsset)
+		{
+			// Registered twice on spawn: RegisterEventHandler's DeregisterEventHandler call registers it too.
+			oldAsset.m_BoneAnimation.UnregisterUserTriggerDelegate(UserTrigger);
+			oldAsset.m_BoneAnimation.UnregisterUserTriggerDelegate(UserTrigger);
+		}
+		return oldAsset;
+	}
+
 	public override void DeregisterEventHandler()
 	{
 		base.DeregisterEventHandler();

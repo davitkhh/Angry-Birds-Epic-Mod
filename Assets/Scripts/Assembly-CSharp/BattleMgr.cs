@@ -154,6 +154,19 @@ public class BattleMgr : BattleMgrBase
 						m_PreCachedCharacterAssets.Add(balancingData3.AssetId, 1);
 					}
 				}
+				else if (SwapCrystalConfig.IsCrystalEntry(battleParticipantTableEntry.NameId))
+				{
+					// Pigs can swap into a type the wave doesn't list.
+					var crystal = SwapCrystalConfig.Get(battleParticipantTableEntry.NameId);
+					foreach (var pigNameId in crystal != null ? crystal.PigNameIds : new string[0])
+					{
+						var pig = DIContainerBalancing.Service.GetBalancingData<PigBalancingData>(pigNameId);
+						if (pig != null && !m_PreCachedCharacterAssets.ContainsKey(pig.AssetId))
+						{
+							m_PreCachedCharacterAssets.Add(pig.AssetId, 1);
+						}
+					}
+				}
 			}
 			DIContainerInfrastructure.GetCurrentPlayer().m_LastBattle = base.Model.Balancing.NameId;
 			DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("entered_battle_wave", m_Model.CurrentWaveIndex.ToString());
@@ -400,7 +413,21 @@ public class BattleMgr : BattleMgrBase
 
 	protected void m_Summon_Combatants(List<float> values, Faction faction, int init, BossAssetController bossController)
 	{
-		m_CurrentSummonAction = () => SummonCombatants(values, faction, init, bossController);
+		// Queue behind any summon already pending this turn instead of overwriting it, so several
+		// summoners triggering on the same turn each get their summon.
+		var previousSummon = m_CurrentSummonAction;
+		if (previousSummon == null)
+		{
+			m_CurrentSummonAction = () => SummonCombatants(values, faction, init, bossController);
+			return;
+		}
+		m_CurrentSummonAction = () => SummonCombatantsAfter(previousSummon, values, faction, init, bossController);
+	}
+
+	private IEnumerator SummonCombatantsAfter(Func<IEnumerator> previousSummon, List<float> values, Faction faction, int init, BossAssetController bossController)
+	{
+		yield return StartCoroutine(previousSummon());
+		yield return StartCoroutine(SummonCombatants(values, faction, init, bossController));
 	}
 
 	protected virtual void m_Model_WaveDone(int obj)
@@ -425,7 +452,16 @@ public class BattleMgr : BattleMgrBase
 		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("battle_end");
 		DIContainerInfrastructure.BackButtonMgr.RegisterBlockReason("battle_wave_change");
 		m_LockControlHUDs = true;
+		WaveClearedInterlude interlude;
+		if (m_WaveClearedInterludes.TryGetValue(m_Model.CurrentWaveIndex - 1, out interlude))
+		{
+			m_WaveClearedInterludes.Remove(m_Model.CurrentWaveIndex - 1);
+		}
 		yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeFromAttackPosToBasePosInSec);
+		if (interlude != null && interlude.BeforeCheer != null)
+		{
+			yield return StartCoroutine(interlude.BeforeCheer());
+		}
 		for (var i = m_Model.m_CombatantsByInitiative.Count - 1; i >= 0; i--)
 		{
 			var c2 = m_Model.m_CombatantsByInitiative[i];
@@ -435,7 +471,13 @@ public class BattleMgr : BattleMgrBase
 				c2.CombatantView.ActivateControlHUD(false);
 			}
 		}
+		var duringCheer = interlude != null && interlude.DuringCheer != null ? StartCoroutine(interlude.DuringCheer()) : null;
 		yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().BaseBattleEndDelay);
+		if (duringCheer != null)
+		{
+			yield return duringCheer;
+		}
+		var birdsLeaveInterlude = interlude != null ? interlude.DuringBirdsLeave : null;
 		m_WaveSceneryRepeatCount++;
 		if (m_ScenePerWaveSettings.Count == 0 || m_ScenePerWaveSettings[m_SceneryIndex].RepeatCount >= m_WaveSceneryRepeatCount || m_ScenePerWaveSettings[m_SceneryIndex].SceneryRoot == null)
 		{
@@ -523,7 +565,13 @@ public class BattleMgr : BattleMgrBase
 			case SceneSwitchMode.Up:
 			case SceneSwitchMode.Down:
 			{
+				var duringBirdsLeave = birdsLeaveInterlude != null ? StartCoroutine(birdsLeaveInterlude()) : null;
+				birdsLeaveInterlude = null;
 				yield return StartCoroutine(LeaveBirds(false));
+				if (duringBirdsLeave != null)
+				{
+					yield return duringBirdsLeave;
+				}
 				var duration3 = DIContainerLogic.GetPacingBalancing().ScenerySwitchTimeWalk;
 				m_BattleArea.position = m_BattleAreaPositioning.position;
 				m_BattleCameraTween.m_StartTransform = m_BattleCameraTween.transform;
@@ -541,6 +589,11 @@ public class BattleMgr : BattleMgrBase
 				m_BattleUI.UpdateProgressBar();
 				break;
 			}
+		}
+		// The birds didn't walk off (no floor change): play it now.
+		if (birdsLeaveInterlude != null)
+		{
+			yield return StartCoroutine(birdsLeaveInterlude());
 		}
 		for (var l = m_Model.m_CombatantsByInitiative.Count - 1; l >= 0; l--)
 		{
@@ -560,6 +613,7 @@ public class BattleMgr : BattleMgrBase
 			}
 		}
 		yield return StartCoroutine(PlaceCharacter(m_PigCenterPosition, Faction.Pigs));
+		SwapCrystalDirector.For(this).OnWavePigsPlaced();
 		var summedEnterDelay = (float)m_Model.m_CombatantsByInitiative.Count(c => c.CombatantFaction == Faction.Pigs) * DIContainerLogic.GetPacingBalancing().PerCombatantEnterDelay + DIContainerLogic.GetPacingBalancing().BaseBattleEnterDelay;
 		if (base.Model.Balancing.EnvironmentalStartWave == base.Model.CurrentWaveIndex + 1)
 		{
@@ -925,6 +979,8 @@ public class BattleMgr : BattleMgrBase
 		var notActedBirds = base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds && !c.ActedThisTurn).ToList();
 		if (base.Model.CurrentCombatant.CombatantFaction == Faction.Birds)
 		{
+			// Swap crystals placed after every pig act at the end of the pigs' turn.
+			yield return StartCoroutine(SwapCrystalDirector.For(this).TakeCrystalTurns(null));
 			var pigsCopy2 = base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Pigs).ToList();
 			for (var i = 0; i < pigsCopy2.Count; i++)
 			{
@@ -1102,6 +1158,11 @@ public class BattleMgr : BattleMgrBase
 		}
 		else
 		{
+			if (base.Model.CurrentCombatant.CombatantFaction == Faction.Pigs)
+			{
+				// Swap crystals placed before this pig act first.
+				yield return StartCoroutine(SwapCrystalDirector.For(this).TakeCrystalTurns(base.Model.CurrentCombatant));
+			}
 			yield return StartCoroutine(StartCombatantTurn(base.Model.CurrentCombatant));
 			StartCoroutine("DoNextStep");
 		}
@@ -1350,6 +1411,10 @@ public class BattleMgr : BattleMgrBase
 
 	protected IEnumerator CheckForStageProgressOrBattleEnd()
 	{
+		while (m_ScriptedSequenceLocks > 0)
+		{
+			yield return null;
+		}
 		if (m_Ended)
 		{
 			yield break;

@@ -9,6 +9,8 @@ namespace ABH.GameDatas.Battle.Skills
 	{
 		private float m_HealthInPercent;
 
+		private float m_FixedHealth;
+
 		private float m_ChargeTurns;
 
 		private bool m_All;
@@ -17,6 +19,7 @@ namespace ABH.GameDatas.Battle.Skills
 		{
 			base.Init(model);
 			base.Model.SkillParameters.TryGetValue("health_in_percent", out m_HealthInPercent);
+			base.Model.SkillParameters.TryGetValue("health_fixed", out m_FixedHealth);
 			base.Model.SkillParameters.TryGetValue("charge", out m_ChargeTurns);
 			m_All = base.Model.SkillParameters.ContainsKey("all");
 		}
@@ -42,7 +45,8 @@ namespace ABH.GameDatas.Battle.Skills
 			SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting, possibleTargets);
 			for (var i = 0; i < possibleTargets.Count; i++)
 			{
-				possibleTargets[i].HealDamage(possibleTargets[i].ModifiedHealth * m_HealthInPercent / 100f, source);
+				var healAmount = m_FixedHealth > 0f ? m_FixedHealth : possibleTargets[i].ModifiedHealth * m_HealthInPercent / 100f;
+				possibleTargets[i].HealDamage(healAmount, source);
 				DIContainerLogic.GetBattleService().HealCurrentTurn(possibleTargets[i], battle, true, false, false, false, true, source);
 			}
 			SpawnVisualEffects(VisualEffectSpawnTiming.Affected, m_VisualEffectSetting, possibleTargets);
@@ -54,7 +58,7 @@ namespace ABH.GameDatas.Battle.Skills
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();
-			dictionary.Add("{value_1}", string.Empty + m_HealthInPercent);
+			dictionary.Add("{value_1}", string.Empty + (m_FixedHealth > 0f ? m_FixedHealth : m_HealthInPercent));
 			dictionary.Add("{value_2}", string.Empty + m_ChargeTurns);
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}

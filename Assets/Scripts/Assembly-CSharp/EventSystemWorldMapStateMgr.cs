@@ -135,6 +135,11 @@ public class EventSystemWorldMapStateMgr : MonoBehaviour
 
 	private void DeregisterEventHandlers()
 	{
+		// Pressing Play on a non-boot scene destroys this before balancing/the profile exist; nothing was registered then.
+		if (!DIContainerBalancing.IsInitialized || DIContainerInfrastructure.GetCurrentPlayer() == null)
+		{
+			return;
+		}
 		if (DIContainerLogic.EventSystemService.IsCurrentEventAvailable(DIContainerInfrastructure.GetCurrentPlayer()))
 		{
 			DIContainerInfrastructure.GetCurrentPlayer().CurrentEventManagerGameData.StateChanged -= CurrentEventManagerGameDataStateChanged;

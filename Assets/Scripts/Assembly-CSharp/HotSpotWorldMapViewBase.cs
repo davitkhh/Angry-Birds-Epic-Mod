@@ -16,6 +16,14 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 	[SerializeField]
 	public RageSplineLite m_litePath;
 
+	// Birds jump along m_litePath instead of walking it. Draw it as a fairly straight line across the gap; the jump
+	// animation supplies the arc.
+	public bool m_jumpPath;
+
+	// Unlocks by its own VisibleRequirements even while m_previousHotSpot is still hidden or unbeaten. The previous
+	// hotspot's path is shown so the birds can pass through it, but the previous hotspot itself stays locked.
+	public bool m_unlocksPastPrevious;
+
 	[SerializeField]
 	public HotSpotWorldMapViewBase m_previousHotSpot;
 
@@ -214,6 +222,21 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 		return Model.IsCompleted();
 	}
 
+	// Whether the renderer's whole bounds are inside the world map camera's view (the HUD is not taken into account).
+	protected static bool IsFullyOnScreen(Renderer renderer)
+	{
+		var locationStateMgr = DIContainerInfrastructure.LocationStateMgr;
+		var camera = locationStateMgr != null ? locationStateMgr.SceneryCamera : null;
+		if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy || camera == null)
+		{
+			return false;
+		}
+		var bounds = renderer.bounds;
+		var min = camera.WorldToViewportPoint(bounds.min);
+		var max = camera.WorldToViewportPoint(bounds.max);
+		return Mathf.Min(min.x, max.x) >= 0f && Mathf.Max(min.x, max.x) <= 1f && Mathf.Min(min.y, max.y) >= 0f && Mathf.Max(min.y, max.y) <= 1f;
+	}
+
 	public void SetState(HotSpotState state)
 	{
 		m_state = state;
@@ -263,6 +286,7 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 	{
 		if (!DIContainerLogic.WorldMapService.IsHotspotVisible(DIContainerInfrastructure.GetCurrentPlayer(), Model))
 		{
+			yield return StartCoroutine(ActivateFollowUpsPastThis(parentHotSpot, activateTo, instant));
 			yield break;
 		}
 		if (!m_active && m_litePath != null && !m_litePath.gameObject.activeInHierarchy)
@@ -292,6 +316,7 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 		m_active = true;
 		if (!IsCompleted())
 		{
+			yield return StartCoroutine(ActivateFollowUpsPastThis(parentHotSpot, activateTo, instant));
 			yield break;
 		}
 		for (var i = m_outgoingHotSpots.Count - 1; i >= 0; i--)
@@ -300,6 +325,29 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 			if (hotspot == parentHotSpot || (activateTo != null && this == activateTo)) 
 				continue;
 			
+			yield return StartCoroutine(hotspot.ActivateFollowUpStagesAsync(this, activateTo, instant));
+		}
+	}
+
+	// Follow-ups flagged m_unlocksPastPrevious unlock even though this hotspot is hidden or unbeaten.
+	protected IEnumerator ActivateFollowUpsPastThis(HotSpotWorldMapViewBase parentHotSpot, HotSpotWorldMapViewBase activateTo, bool instant)
+	{
+		if (m_outgoingHotSpots == null)
+		{
+			yield break;
+		}
+		for (var i = m_outgoingHotSpots.Count - 1; i >= 0; i--)
+		{
+			var hotspot = m_outgoingHotSpots[i];
+			if (hotspot == null || hotspot == parentHotSpot || !hotspot.m_unlocksPastPrevious || hotspot.Model == null || !DIContainerLogic.WorldMapService.IsHotspotVisible(DIContainerInfrastructure.GetCurrentPlayer(), hotspot.Model))
+			{
+				continue;
+			}
+			// The route runs along this hotspot's own path, so show it.
+			if (m_litePath != null && !m_litePath.gameObject.activeInHierarchy)
+			{
+				m_litePath.gameObject.SetActive(true);
+			}
 			yield return StartCoroutine(hotspot.ActivateFollowUpStagesAsync(this, activateTo, instant));
 		}
 	}
@@ -346,12 +394,23 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 
 	public bool CalculatePath(HotSpotWorldMapViewBase parent, HotSpotWorldMapViewBase target, ref List<HotSpotWorldMapViewBase> list)
 	{
+		return CalculatePath(parent, target, ref list, new HashSet<HotSpotWorldMapViewBase>());
+	}
+
+	// visited: the links aren't guaranteed to form a tree (e.g. a hotspot whose previous isn't the one listing it),
+	// and an unguarded search loops until the stack overflows.
+	private bool CalculatePath(HotSpotWorldMapViewBase parent, HotSpotWorldMapViewBase target, ref List<HotSpotWorldMapViewBase> list, HashSet<HotSpotWorldMapViewBase> visited)
+	{
+		if (!visited.Add(this))
+		{
+			return false;
+		}
 		if (this == target)
 		{
 			list.Add(this);
 			return true;
 		}
-		if (m_previousHotSpot != null && m_previousHotSpot != parent && m_previousHotSpot.CalculatePath(this, target, ref list))
+		if (m_previousHotSpot != null && m_previousHotSpot != parent && m_previousHotSpot.CalculatePath(this, target, ref list, visited))
 		{
 			list.Add(this);
 			return true;
@@ -363,7 +422,7 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 			{
 				DebugLog.Error("Not Assigned Hotspot in array at " + base.gameObject.name);
 			}
-			else if (hotSpotWorldMapViewBase.gameObject.activeInHierarchy && !(hotSpotWorldMapViewBase == parent) && hotSpotWorldMapViewBase.CalculatePath(this, target, ref list))
+			else if (hotSpotWorldMapViewBase.gameObject.activeInHierarchy && !(hotSpotWorldMapViewBase == parent) && hotSpotWorldMapViewBase.CalculatePath(this, target, ref list, visited))
 			{
 				list.Add(this);
 				return true;

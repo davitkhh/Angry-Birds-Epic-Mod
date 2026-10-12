@@ -223,6 +223,11 @@ public class FriendInfoElement : MonoBehaviour
 		case "NPC_High":
 			return "Avatar_MightyEagle";
 		default:
+			ShowcaseCampDefinition showcase;
+			if (ShowcaseCamps.TryGet(id, out showcase) && !string.IsNullOrEmpty(showcase.AvatarSprite))
+			{
+				return showcase.AvatarSprite;
+			}
 			return "Avatar_" + id;
 		}
 	}

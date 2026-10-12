@@ -536,6 +536,12 @@ public class BattleResultLost : MonoBehaviour
 
 	private void CreateStrongestPig(List<ICombatant> combatantList)
 	{
+		// A pig that defects to the birds (Corporal McPig) doesn't represent the pigs here unless he's the only one.
+		var loyalPigs = combatantList.Where(c => !ABH.GameDatas.Battle.Skills.RunawayAndReturnAsAlly.DefectsToBirds(c)).ToList();
+		if (loyalPigs.Count > 0)
+		{
+			combatantList = loyalPigs;
+		}
 		var highestPigStrength = 0;
 		ICombatant strongestCombatant = null;
 		foreach (var combatant in combatantList)

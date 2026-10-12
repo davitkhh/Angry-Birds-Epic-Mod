@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using ABH.GameDatas;
+using ABH.Shared.BalancingData;
 using ABH.Shared.Generic;
 using SmoothMoves;
 using UnityEngine;
@@ -163,6 +164,37 @@ public class CraftingResultUI : MonoBehaviour
 	private bool m_diceAnimationPlayed;
 	
 	private int m_timesRerolled;
+
+	// >= 0 while showing an upgrade blueprint application (its index on m_item) instead of a crafted item.
+	private int m_upgradeIndex = -1;
+
+	private bool IsUpgradeResult
+	{
+		get
+		{
+			return m_upgradeIndex >= 0;
+		}
+	}
+
+	private int DisplayedStars
+	{
+		get
+		{
+			return IsUpgradeResult ? UpgradeBlueprints.GetStars(m_item, m_upgradeIndex) : m_item.ItemData.Quality;
+		}
+	}
+
+	// Main stat shown while the stars count up: for an upgrade, the item with this application at that many stars.
+	private float StatShown(int stars)
+	{
+		var equipment = m_item as EquipmentGameData;
+		if (equipment == null)
+		{
+			// Class upgrades change the bird, not an item stat
+			return 0f;
+		}
+		return IsUpgradeResult ? UpgradeBlueprints.PreviewMainStat(equipment, m_upgradeIndex, stars) : EquipmentGameData.GetItemMainStat(equipment, stars);
+	}
 
 	[method: MethodImpl(32)]
 	public event Action<BirdGameData> EquipBirdClicked;
@@ -387,17 +419,17 @@ public class CraftingResultUI : MonoBehaviour
 			if (m_item.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
 			{
 				m_StatsWithChangeIndicator.SetIconSprite("Character_Damage_Large");
-				m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, 0), m_PossibleBird.MainHandItem.ItemMainStat);
+				m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(0), m_PossibleBird.MainHandItem.ItemMainStat);
 				m_StatsWithComparsionIndicator.SetIconSprite("Character_Damage_Large");
 			}
 			else if (m_item.ItemBalancing.ItemType == InventoryItemType.OffHandEquipment)
 			{
 				m_StatsWithChangeIndicator.SetIconSprite("Character_Health_Large");
 				m_StatsWithComparsionIndicator.SetIconSprite("Character_Damage_Large");
-				m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, 0), m_PossibleBird.OffHandItem.ItemMainStat);
+				m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(0), m_PossibleBird.OffHandItem.ItemMainStat);
 			}
 		}
-		m_StatsWithChangeIndicator.RefreshStat(false, false, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, 0), 0f);
+		m_StatsWithChangeIndicator.RefreshStat(false, false, StatShown(0), 0f);
 		m_ResultAnimation.Play("Crafting_Result_Enter");
 		m_ItemDisplay.transform.localScale = Vector3.one;
 		m_ItemDisplay.OverrideAmount(1 * m_amount);
@@ -413,14 +445,14 @@ public class CraftingResultUI : MonoBehaviour
 			num2++;
 			if (m_equipableItem)
 			{
-				m_StatsWithChangeIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, num2), EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, num2 - 1));
+				m_StatsWithChangeIndicator.RefreshStat(false, true, StatShown(num2), StatShown(num2 - 1));
 				if (m_item.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
 				{
-					m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, num2), m_PossibleBird.MainHandItem.ItemMainStat);
+					m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(num2), m_PossibleBird.MainHandItem.ItemMainStat);
 				}
 				else
 				{
-					m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, num2), m_PossibleBird.OffHandItem.ItemMainStat);
+					m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(num2), m_PossibleBird.OffHandItem.ItemMainStat);
 				}
 			}
 			else
@@ -517,7 +549,22 @@ public class CraftingResultUI : MonoBehaviour
 		if (DIContainerLogic.CraftingService.IsRerollPossible(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData) && DIContainerLogic.CraftingService.ExecuteRerollCost(m_timesRerolled, DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_amount))
 		{
 			DeregisterEventHandler();
-			DIContainerLogic.CraftingService.RerollItemQuality(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, ref m_item, m_amount);
+			if (IsUpgradeResult)
+			{
+				var inventory = DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
+				var stars = DIContainerLogic.CraftingService.GetQuality(false);
+				if (DIContainerLogic.CraftingService.ForcedGoodRoll(inventory))
+				{
+					stars = 3;
+					DIContainerLogic.CraftingService.ApplyGoodRoll(inventory);
+				}
+				UpgradeBlueprints.SetStars(m_item, m_upgradeIndex, stars);
+				DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
+			}
+			else
+			{
+				DIContainerLogic.CraftingService.RerollItemQuality(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, ref m_item, m_amount);
+			}
 			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateFriendshipEssenceBar();
 			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.RegisterBar(new BarRegistry
 			{
@@ -555,13 +602,21 @@ public class CraftingResultUI : MonoBehaviour
 	private IEnumerator ReEnterCraftingPopup()
 	{
 		yield return StartCoroutine(LeaveCoroutine(false, false));
-		SetItem(m_item, m_recipe);
+		if (IsUpgradeResult)
+		{
+			SetUpgradeItem(m_item, m_recipe, m_upgradeIndex);
+		}
+		else
+		{
+			SetItem(m_item, m_recipe);
+		}
 		Enter(false, m_amount);
 	}
 
 	public void OnScrapButtonClicked()
 	{
-		if (m_item != null)
+		// The upgraded item existed before this screen; it is not offered for scrapping here
+		if (m_item != null && !IsUpgradeResult)
 		{
 			if (m_SoundTriggers)
 			{
@@ -648,7 +703,7 @@ public class CraftingResultUI : MonoBehaviour
 			DIContainerInfrastructure.GetCoreStateMgr().m_PopupRoot.Enter();
 		}
 		m_DiceRoots[m_ForgeLevel - 1].SetActive(true);
-		m_DiceControllers[m_ForgeLevel - 1].SetOrientationFromStars(m_item.ItemData.Quality);
+		m_DiceControllers[m_ForgeLevel - 1].SetOrientationFromStars(DisplayedStars);
 		m_CraftingRoot.SetActive(true);
 		m_CraftingAnimation.Play("Crafting_DiceRoll");
 		yield return new WaitForSeconds(m_CraftingAnimation.GetComponent<Animation>()["Crafting_DiceRoll"].length);
@@ -696,17 +751,17 @@ public class CraftingResultUI : MonoBehaviour
 			if (m_item.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
 			{
 				m_StatsWithChangeIndicator.SetIconSprite("Character_Damage_Large");
-				m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, 0), m_PossibleBird.MainHandItem.ItemMainStat);
+				m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(0), m_PossibleBird.MainHandItem.ItemMainStat);
 				m_StatsWithComparsionIndicator.SetIconSprite("Character_Damage_Large");
 			}
 			else if (m_item.ItemBalancing.ItemType == InventoryItemType.OffHandEquipment)
 			{
 				m_StatsWithChangeIndicator.SetIconSprite("Character_Health_Large");
 				m_StatsWithComparsionIndicator.SetIconSprite("Character_Damage_Large");
-				m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, 0), m_PossibleBird.OffHandItem.ItemMainStat);
+				m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(0), m_PossibleBird.OffHandItem.ItemMainStat);
 			}
 		}
-		m_StatsWithChangeIndicator.RefreshStat(false, false, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, 0), 0f);
+		m_StatsWithChangeIndicator.RefreshStat(false, false, StatShown(0), 0f);
 		m_ResultAnimation.Play("Crafting_Result_Enter");
 		m_ItemDisplay.OverrideAmount(1 * m_amount);
 		m_ItemDisplay.PlayGainedAnimation();
@@ -724,14 +779,14 @@ public class CraftingResultUI : MonoBehaviour
 			yield return new WaitForSeconds(0.5f);
 			if (m_equipableItem)
 			{
-				m_StatsWithChangeIndicator.RefreshStat(true, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, qualityUsed), EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, qualityUsed - 1));
+				m_StatsWithChangeIndicator.RefreshStat(true, true, StatShown(qualityUsed), StatShown(qualityUsed - 1));
 				if (m_item.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
 				{
-					m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, qualityUsed), m_PossibleBird.MainHandItem.ItemMainStat);
+					m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(qualityUsed), m_PossibleBird.MainHandItem.ItemMainStat);
 				}
 				else
 				{
-					m_StatsWithComparsionIndicator.RefreshStat(false, true, EquipmentGameData.GetItemMainStat(m_item as EquipmentGameData, qualityUsed), m_PossibleBird.OffHandItem.ItemMainStat);
+					m_StatsWithComparsionIndicator.RefreshStat(false, true, StatShown(qualityUsed), m_PossibleBird.OffHandItem.ItemMainStat);
 				}
 			}
 			else
@@ -795,6 +850,10 @@ public class CraftingResultUI : MonoBehaviour
 
 	private void SpawnScrappingBubble()
 	{
+		if (IsUpgradeResult)
+		{
+			return;
+		}
 		m_ScrapInfoShown = true;
 		var num = m_item.ItemMainStat - m_PossibleBird.MainHandItem.ItemMainStat;
 		m_ScrapInfoAnmiation.Play("ScrapInfo_Show");
@@ -831,11 +890,11 @@ public class CraftingResultUI : MonoBehaviour
 			m_BubbleComparison.gameObject.SetActive(true);
 			if (m_item.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
 			{
-				m_BubbleComparison.SetComparisionValues("Character_Damage_Large", m_item.ItemBalancing.ItemType, m_PossibleBird.MainHandItem.ItemMainStat, m_PossibleBird.MainHandItem.BalancingData.Perk.Type);
+				m_BubbleComparison.SetComparisionValues("Character_Damage_Large", m_item.ItemBalancing.ItemType, m_PossibleBird.MainHandItem.ItemMainStat, m_PossibleBird.MainHandItem.Perk.Type);
 			}
 			else
 			{
-				m_BubbleComparison.SetComparisionValues("Character_Health_Large", m_item.ItemBalancing.ItemType, m_PossibleBird.OffHandItem.ItemMainStat, m_PossibleBird.OffHandItem.BalancingData.Perk.Type);
+				m_BubbleComparison.SetComparisionValues("Character_Health_Large", m_item.ItemBalancing.ItemType, m_PossibleBird.OffHandItem.ItemMainStat, m_PossibleBird.OffHandItem.Perk.Type);
 			}
 			m_equipBird.PositionComparisionBubble(m_equipBird, m_BubbleComparison.gameObject);
 			m_BubbleComparison.Show();
@@ -889,8 +948,25 @@ public class CraftingResultUI : MonoBehaviour
 		}
 	}
 
+	// Shows one use of an upgrade blueprint on equipment: the stars rolled are that use's, a reroll rerolls only them.
+	public void SetUpgradeItem(IInventoryItemGameData equipment, CraftingRecipeGameData recipe, int applicationIndex)
+	{
+		SetItem(equipment, recipe);
+		m_upgradeIndex = applicationIndex;
+		for (var i = 0; i < m_starList.Count; i++)
+		{
+			m_starList[i] = i < DisplayedStars;
+		}
+		UpgradeBlueprintBalancingData upgradeBlueprint;
+		if (UpgradeBlueprints.TryGetDefinition(recipe, out upgradeBlueprint))
+		{
+			m_ItemName.text = equipment.ItemLocalizedName + "\n[c8a000]" + UpgradeBlueprints.GetName(upgradeBlueprint) + "[-]";
+		}
+	}
+
 	public void SetItem(IInventoryItemGameData newItem, CraftingRecipeGameData recipe)
 	{
+		m_upgradeIndex = -1;
 		m_item = newItem;
 		m_recipe = recipe;
 		if (m_item.ItemBalancing.ItemType == InventoryItemType.Ingredients || m_item.ItemBalancing.ItemType == InventoryItemType.Resources || m_item.ItemBalancing.ItemType == InventoryItemType.Consumable)

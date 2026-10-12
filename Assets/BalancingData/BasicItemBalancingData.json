@@ -1600,6 +1600,94 @@
     "SetAsNewInShop": 0
   },
   {
+    "NameId": "story_merchant_foolish_wand_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_merchant_elite_knight_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_merchant_knight_upgrade_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_workshop_stick_sword_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_workshop_fork_lance_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_workshop_fence_shield_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_workshop_chuck_offhand_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_workshop_chuck_book_upgrade_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "merchant_stock_trade_crates",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "merchant_stock_trade_wood",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "merchant_stock_trade_cobalt",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
     "NameId": "star_aquiredreward_01",
     "ItemType": "Story",
     "AssetBaseId": "",

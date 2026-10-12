@@ -247,12 +247,8 @@ public class WorldMapMenuUI : MonoBehaviour, IMapUI
 		{
 			m_CrossPromoButton.gameObject.SetActive(allowXpromo);
 		}
-		var newsUnlocked = DIContainerLogic.InventoryService.GetItemValue(player.InventoryGameData, "news_introduction") >= 1;
-		m_NewsBanner.SetActive(newsUnlocked);
-		if (newsUnlocked)
-		{
-			SetupNewsBanner();
-		}
+		// News banner is disabled on the world map; news_introduction still gates the event hotlink button.
+		m_NewsBanner.SetActive(false);
 		StartCoroutine(CreateHotlinkButtons());
 		HandleDailyLoginBonus();
 		m_CampButton.gameObject.SetActive(true);

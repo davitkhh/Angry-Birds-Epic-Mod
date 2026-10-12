@@ -35,6 +35,10 @@ namespace ABH.GameDatas
 		{
 			get
 			{
+				if (m_publicPlayerData != null)
+				{
+					return m_publicPlayerData;
+				}
 				PublicPlayerData value = null;
 				if (DIContainerInfrastructure.GetCurrentPlayer() != null)
 				{
@@ -220,6 +224,12 @@ namespace ABH.GameDatas
 			return this;
 		}
 
+		public FriendGameData SetPublicPlayerData(PublicPlayerData publicPlayerData)
+		{
+			m_publicPlayerData = publicPlayerData;
+			return this;
+		}
+
 		public void UseFriendBird()
 		{
 			m_LastBirdRequest = 0u;
@@ -258,6 +268,11 @@ namespace ABH.GameDatas
 			case "NPC_Low":
 				return DIContainerInfrastructure.GetLocaService().Tr("npc_friend_merchant");
 			default:
+				ShowcaseCampDefinition showcase;
+				if (ShowcaseCamps.TryGet(friendId, out showcase))
+				{
+					return DIContainerInfrastructure.GetLocaService().Tr(showcase.NameLocaKey);
+				}
 				return DIContainerInfrastructure.GetLocaService().Tr("npc_" + friendId);
 			}
 		}

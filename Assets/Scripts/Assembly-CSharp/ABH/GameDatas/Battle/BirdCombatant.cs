@@ -3,6 +3,7 @@ using System.Linq;
 using ABH.GameDatas.Interfaces;
 using ABH.Shared.Generic;
 using ABH.Shared.Models.Generic;
+using ABH.Shared.BalancingData;
 using UnityEngine;
 
 namespace ABH.GameDatas.Battle
@@ -243,7 +244,7 @@ namespace ABH.GameDatas.Battle
 			if (m_Skills.Count == 0)
 			{
 				AddBattleSkillImpl(!m_pvpBird ? Model.ClassItem.PrimarySkill : Model.ClassItem.PrimaryPvPSkill);
-				AddBattleSkillImpl(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill);
+				AddBattleSkillImpl(ApplySupportPerk(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill));
 				AddBattleSkillImpl(!m_pvpBird ? Model.RageSkill : Model.PvPRageSkill);
 				if (Model.PassiveSkill != null)
 					AddBattleSkillImpl(Model.PassiveSkill);
@@ -254,6 +255,43 @@ namespace ABH.GameDatas.Battle
 				skill = skill.CheckForReplacement(this);
 			}
 			return skill;
+		}
+
+		// Amplify off hands raise every value of the support skill by PerkValue%.
+		// Percentages and chances scale exactly; whole-number values (charges, turn durations, the
+		// skill's EffectDuration) are rounded, so they only grow once they are large enough
+		// (3 * 1.15 = 3.45 stays 3, 6 * 1.15 = 6.9 becomes 7). Flags (value 1) therefore never change.
+		// Works on a per-bird copy: the class item's SkillGameData is shared by every bird of that class.
+		private SkillGameData ApplySupportPerk(SkillGameData support)
+		{
+			var amplify = UpgradeBlueprints.FindEquippedPerk(this, PerkType.Amplify);
+			if (support == null || amplify == null)
+			{
+				return support;
+			}
+			var factor = 1f + amplify.PerkValue / 100f;
+			var parameters = new Dictionary<string, float>();
+			foreach (var pair in support.SkillParameters)
+			{
+				var exact = pair.Key.Contains("percent") || pair.Key.Contains("chance");
+				parameters.Add(pair.Key, exact ? pair.Value * factor : Mathf.Round(pair.Value * factor));
+			}
+			var balancing = CloneSkillBalancing(support.Balancing);
+			balancing.EffectDuration = Mathf.RoundToInt(balancing.EffectDuration * factor);
+			return new SkillGameData(support.SkillNameId, parameters).OverrideBalancing(balancing);
+		}
+
+		private static SkillBalancingData CloneSkillBalancing(SkillBalancingData source)
+		{
+			var clone = new SkillBalancingData();
+			foreach (var property in typeof(SkillBalancingData).GetProperties())
+			{
+				if (property.CanRead && property.CanWrite)
+				{
+					property.SetValue(clone, property.GetValue(source, null), null);
+				}
+			}
+			return clone;
 		}
 
 		public override void RaiseSkillTriggered(ICombatant invoker, ICombatant target)

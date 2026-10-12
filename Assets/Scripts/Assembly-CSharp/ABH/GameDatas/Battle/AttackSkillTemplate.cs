@@ -22,6 +22,10 @@ namespace ABH.GameDatas.Battle
 
 		protected bool m_IsMelee;
 
+		// Never treat the attack as melee, even with a single target and no ranged MainHandItem (e.g. thrown items on
+		// pigs without an inventory).
+		protected bool m_ForceRanged;
+
 		protected bool m_UseCenterPosition;
 
 		protected bool m_UseFocusPosition;
@@ -35,6 +39,9 @@ namespace ABH.GameDatas.Battle
 		protected bool m_Shared;
 
 		protected float m_FallBackTime;
+
+		// Calming Waves rolls once per attack (null = not rolled yet); a success heals from every target hit
+		protected bool? m_CalmingWavesRoll;
 
 		protected Func<ICombatant, float> m_AttackAnimation;
 
@@ -76,6 +83,22 @@ namespace ABH.GameDatas.Battle
 
 		public override void ShareableActionPart(BattleGameData battle, ICombatant source, ICombatant target, bool isShared)
 		{
+		}
+
+		protected bool ApplyDelayedPerkSharedRoll(ICombatant source, ICombatant target, BattleGameData battle, ref float effectedParam)
+		{
+			var perk = source.CombatantMainHandEquipment.Perk;
+			var shared = perk != null && perk.Type == PerkType.HocusPokusChiliDrain;
+			if (shared && m_CalmingWavesRoll == false)
+			{
+				return false;
+			}
+			var triggered = DIContainerLogic.GetBattleService().ApplyDelayedPerk(perk, source, target, battle, ref effectedParam, shared && m_CalmingWavesRoll == true);
+			if (shared && m_CalmingWavesRoll == null)
+			{
+				m_CalmingWavesRoll = triggered;
+			}
+			return triggered;
 		}
 
 		public override void Init(SkillGameData model)
@@ -286,6 +309,7 @@ namespace ABH.GameDatas.Battle
 				yield break;
 			}
 			var firstTarget = true;
+			m_CalmingWavesRoll = null;
 			var attackCount = 1f;
 			if (base.Model.SkillParameters.ContainsKey("attack_count"))
 			{
@@ -343,9 +367,19 @@ namespace ABH.GameDatas.Battle
 					{
 						action6(skillAttackBase, m_Battle, m_Source, skillTarget);
 					}
-					if (source.CombatantMainHandEquipment != null && m_ApplyPerks && DIContainerLogic.GetBattleService().ApplyEarlyPerk(source.CombatantMainHandEquipment.BalancingData.Perk, source, skillTarget, battle, ref perkDamagedealt))
+					if (source.CombatantMainHandEquipment != null && m_ApplyPerks && DIContainerLogic.GetBattleService().ApplyEarlyPerk(source.CombatantMainHandEquipment.Perk, source, skillTarget, battle, ref perkDamagedealt))
 					{
-						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.BalancingData.Perk.Type;
+						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;
+					}
+					if (m_ApplyPerks)
+					{
+						foreach (var bonusPerk in UpgradeBlueprints.GetAttackBonusPerks(source))
+						{
+							if (DIContainerLogic.GetBattleService().ApplyEarlyPerk(bonusPerk, source, skillTarget, battle, ref perkDamagedealt))
+							{
+								skillTarget.CombatantView.m_CurrentPerkType = bonusPerk.Type;
+							}
+						}
 					}
 					foreach (var func3 in ModificationsOnEarlyDamageDealtCalculation)
 					{
@@ -367,9 +401,19 @@ namespace ABH.GameDatas.Battle
 						dictionary4[key3] = key;
 						continue;
 					}
-					if (source.CombatantMainHandEquipment != null && m_ApplyPerks && DIContainerLogic.GetBattleService().ApplyPerk(source.CombatantMainHandEquipment.BalancingData.Perk, source, skillTarget, battle, ref perkDamagedealt))
+					if (source.CombatantMainHandEquipment != null && m_ApplyPerks && DIContainerLogic.GetBattleService().ApplyPerk(source.CombatantMainHandEquipment.Perk, source, skillTarget, battle, ref perkDamagedealt))
 					{
-						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.BalancingData.Perk.Type;
+						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;
+					}
+					if (m_ApplyPerks)
+					{
+						foreach (var bonusPerk in UpgradeBlueprints.GetAttackBonusPerks(source))
+						{
+							if (DIContainerLogic.GetBattleService().ApplyPerk(bonusPerk, source, skillTarget, battle, ref perkDamagedealt))
+							{
+								skillTarget.CombatantView.m_CurrentPerkType = bonusPerk.Type;
+							}
+						}
 					}
 					modificationdealt2 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(modificationdealt2, EffectTriggerType.OnDealDamage, m_Source, skillTarget);
 					if (modificationdealt2 != 1f)
@@ -429,9 +473,19 @@ namespace ABH.GameDatas.Battle
 					{
 						action5(normalizedDamage, m_Battle, m_Source, skillTarget);
 					}
-					if (normalizedDamage > 0 && source.CombatantMainHandEquipment != null && m_ApplyPerks && DIContainerLogic.GetBattleService().ApplyDelayedPerk(source.CombatantMainHandEquipment.BalancingData.Perk, source, skillTarget, battle, ref perkDamagedealt))
+					if (normalizedDamage > 0 && source.CombatantMainHandEquipment != null && m_ApplyPerks && ApplyDelayedPerkSharedRoll(source, skillTarget, battle, ref perkDamagedealt))
 					{
-						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.BalancingData.Perk.Type;
+						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;
+					}
+					if (normalizedDamage > 0 && m_ApplyPerks)
+					{
+						foreach (var bonusPerk in UpgradeBlueprints.GetAttackBonusPerks(source))
+						{
+							if (DIContainerLogic.GetBattleService().ApplyDelayedPerk(bonusPerk, source, skillTarget, battle, ref perkDamagedealt))
+							{
+								skillTarget.CombatantView.m_CurrentPerkType = bonusPerk.Type;
+							}
+						}
 					}
 					firstTarget = false;
 				}
@@ -515,6 +569,10 @@ namespace ABH.GameDatas.Battle
 
 		public bool IsMeeleAttack(ICombatant source)
 		{
+			if (m_ForceRanged)
+			{
+				return false;
+			}
 			return m_IsMelee || ((m_Targets == null || m_Targets.Count <= 1) && (source.CharacterModel.MainHandItem == null || !source.CharacterModel.MainHandItem.IsRanged));
 		}
 	}

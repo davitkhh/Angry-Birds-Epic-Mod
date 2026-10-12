@@ -2485,6 +2485,26 @@
     "TargetCulling": null
   },
   {
+    "NameId": "bird_rage_merchant_mcpig_helmet",
+    "AssetId": "HelmetThrow",
+    "LocaId": "bird_rage_merchant_mcpig_helmet",
+    "SkillParameters": {
+      "damage_in_percent": 200.0
+    },
+    "SkillTemplateType": "RageThrowHelmetOnce",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "HeroicStrike",
+    "IconAtlasId": "Skills_Birds_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
     "NameId": "bird_attack_pirate_adventurer",
     "AssetId": "Whiplash",
     "LocaId": "bird_attack_pirate_adventurer",
@@ -2889,7 +2909,7 @@
       "all": 1.0,
       "charge": 2.0
     },
-    "SkillTemplateType": "SimpleAttackSkill",
+    "SkillTemplateType": "ThrowMainHandAttack",
     "EffectDuration": 0,
     "TargetType": "Attack",
     "EffectType": "Curse",
@@ -2934,7 +2954,7 @@
     "EffectDuration": 2,
     "TargetType": "Attack",
     "EffectType": "Blessing",
-    "TargetingBehavior": "Strongest",
+    "TargetingBehavior": "None",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": true,
     "IconAssetId": "Attack",
@@ -3007,6 +3027,49 @@
     "TargetCulling": null
   },
   {
+    "NameId": "pig_support_minion_corporal_boss_instant",
+    "AssetId": "Lick",
+    "LocaId": "pig_support_minion_corporal",
+    "SkillParameters": {
+      "health_in_percent": 35.0,
+      "self": 1.0,
+      "heal_chance_at_no_health": 70.0,
+      "heal_chance_at_half_health": 50.0
+    },
+    "SkillTemplateType": "HealChargeSkill",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Heal",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },  {
+    "NameId": "pig_support_minion_corporal_boss_castle1",
+    "AssetId": "Lick",
+    "LocaId": "pig_support_minion_corporal",
+    "SkillParameters": {
+      "health_in_percent": 30.0,
+      "prioritize_big_boss_below_percent": 35.0
+    },
+    "SkillTemplateType": "HealChargeSkill",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "Weakest",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Heal",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
     "NameId": "pig_attack_minion_corporal",
     "AssetId": "Smack",
     "LocaId": "pig_attack_minion_corporal",
@@ -3031,7 +3094,7 @@
     "AssetId": "Lick",
     "LocaId": "pig_support_minion_corporal",
     "SkillParameters": {
-      "health_in_percent": 20.0
+      "health_in_percent": 30.0
     },
     "SkillTemplateType": "HealChargeSkill",
     "EffectDuration": 0,
@@ -3044,6 +3107,73 @@
     "IconAtlasId": "Skills_Pigs_01",
     "EffectIconAtlasId": "",
     "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_merchant_corporal",
+    "AssetId": "Smack",
+    "LocaId": "pig_attack_merchant_corporal",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "coins": 2.0
+    },
+    "SkillTemplateType": "AttackAndStealPlayerCoins",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_support_merchant_corporal",
+    "AssetId": "RunAway",
+    "LocaId": "pig_support_merchant_corporal",
+    "SkillParameters": {
+      "charge": 2.0,
+      "return_turns": 3.0,
+      "ambush_damage_in_percent": 100.0
+    },
+    "SkillTemplateType": "RunawayAndReturnAsAlly",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Run",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Run",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_support_merchant_corporal_castle",
+    "AssetId": "RunAway",
+    "LocaId": "pig_support_merchant_corporal",
+    "SkillParameters": {
+      "charge": 2.0,
+      "return_turns": 2.0,
+      "ambush_damage_in_percent": 100.0,
+      "castle_reunion": 1.0,
+      "farewell_after_wave": 4.0
+    },
+    "SkillTemplateType": "RunawayAndReturnAsAlly",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Run",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Run",
     "TargetCulling": null
   },
   {
@@ -3268,13 +3398,14 @@
   },
   {
     "NameId": "pig_attack_minion_guard_fork_castle",
-    "AssetId": "Tickle",
+    "AssetId": "ForkJab",
     "LocaId": "pig_attack_minion_guard_fork_castle",
     "SkillParameters": {
       "damage_in_percent": 100.0,
       "chain": 1.0,
       "chain_reduction": 50.0,
-      "chain_chance": 100.0
+      "chain_chance": 100.0,
+      "ForkJab_Chain": -1.0
     },
     "SkillTemplateType": "AttackWithChainSkill",
     "EffectDuration": 0,
@@ -3294,7 +3425,7 @@
     "AssetId": "Alarm",
     "LocaId": "pig_support_minion_apprentice",
     "SkillParameters": {
-      "percent": 10.0
+      "percent": 40.0
     },
     "SkillTemplateType": "BlockDamageSkill",
     "EffectDuration": 3,
@@ -4613,7 +4744,7 @@
     "EffectDuration": 0,
     "TargetType": "Attack",
     "EffectType": "Curse",
-    "TargetingBehavior": "Strongest",
+    "TargetingBehavior": "None",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": false,
     "IconAssetId": "Attack",
@@ -4850,7 +4981,7 @@
     "AssetId": "Alarm",
     "LocaId": "pig_support_knight_guard_captain",
     "SkillParameters": {
-      "percent": 30.0,
+      "percent": 20.0,
       "all": 1.0
     },
     "SkillTemplateType": "BlockDamageSkill",
@@ -6958,9 +7089,9 @@
     "TargetCulling": null
   },
   {
-    "NameId": "pig_attack_bomb",
+    "NameId": "pig_attack_bomb_dot",
     "AssetId": "",
-    "LocaId": "pig_attack_bomb",
+    "LocaId": "pig_attack_bomb_dot",
     "SkillParameters": {
       "dot_damage_in_percent": 50.0,
       "all": 1.0,
@@ -6984,7 +7115,8 @@
     "AssetId": "DudExplosion",
     "LocaId": "pig_attack_bomb_dud",
     "SkillParameters": {
-      "charge": 2.0
+      "charge": 2.0,
+      "all": 1.0
     },
     "SkillTemplateType": "RunawaySkill",
     "EffectDuration": 0,
@@ -7000,11 +7132,33 @@
     "TargetCulling": null
   },
   {
+    "NameId": "pig_attack_bomb",
+    "AssetId": "BombExplosion",
+    "LocaId": "pig_attack_bomb",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "all": 1.0,
+      "charge": 2.0
+    },
+    "SkillTemplateType": "AttackAndSelfDestruct",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Attack",
+    "TargetCulling": null
+  },
+  {
     "NameId": "pig_support_bomb_curing",
     "AssetId": "HealExplosion",
     "LocaId": "pig_support_bomb_curing",
     "SkillParameters": {
-      "health_in_percent": 30.0,
+      "health_in_percent": 15.0,
       "all": 1.0,
       "charge": 2.0
     },
@@ -7026,7 +7180,7 @@
     "AssetId": "HealExplosion",
     "LocaId": "pig_support_bomb_curing",
     "SkillParameters": {
-      "health_in_percent": 30.0,
+      "health_in_percent": 15.0,
       "all": 1.0,
       "charge": 2.0
     },
@@ -7100,6 +7254,28 @@
     "TargetType": "Support",
     "EffectType": "Blessing",
     "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Blessing",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Blessing",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_support_prince_porky_bombs",
+    "AssetId": "RoyalCountdown",
+    "LocaId": "pig_support_prince_porky_bombs",
+    "SkillParameters": {
+      "reduce_charge_turns": 1.0,
+      "charge": 2.0,
+      "all": 1.0
+    },
+    "SkillTemplateType": "ShortenChargesAndThrowBombs",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "ChargeTarget",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": true,
     "IconAssetId": "Blessing",
@@ -7518,8 +7694,8 @@
     "AssetId": "FullPockets",
     "LocaId": "pig_passive_fullpockets",
     "SkillParameters": {
-      "min_amount": 1.0,
-      "max_amount": 1.0
+      "min_amount": 2.0,
+      "max_amount": 3.0
     },
     "SkillTemplateType": "FullPockets",
     "EffectDuration": -1,
@@ -8911,7 +9087,7 @@
       "table_index": 12.0,
       "delay_in_turns": 2.0,
       "amount": 2.0,
-      "royal_table_index": 2.0,
+      "royal_table_index": 28.0,
       "royal_amount": 1.0,
       "mixed_table_index": 13.0,
       "mixed_amount": 3.0,
@@ -17224,5 +17400,79 @@
     "EffectIconAtlasId": "Skills_Pigs_01",
     "EffectIconAssetId": "Reinforcements",
     "TargetCulling": null
+  },
+  {
+    "NameId": "crystal_swap_dynamite_fork",
+    "AssetId": "SwapCrystal",
+    "LocaId": "crystal_swap_example",
+    "SkillParameters": {
+      "turns": 1.0,
+      "start_color": 0.0,
+      "scale": 1.5
+    },
+    "SkillTemplateType": "SwapCrystal",
+    "EffectDuration": 0,
+    "TargetType": "Passive",
+    "EffectType": "Passive",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": false,
+    "TargetSelfPossible": false,
+    "IconAssetId": "",
+    "IconAtlasId": "",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": [
+      "pig_minion_rogue_dynamite",
+      "pig_minion_guard_fork"
+    ]
+  },
+  {
+    "NameId": "crystal_swap_guardyellow_catcher",
+    "AssetId": "SwapCrystal",
+    "LocaId": "crystal_swap_example",
+    "SkillParameters": {
+      "turns": 3.0,
+      "start_color": 0.0
+    },
+    "SkillTemplateType": "SwapCrystal",
+    "EffectDuration": 0,
+    "TargetType": "Passive",
+    "EffectType": "Passive",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": false,
+    "TargetSelfPossible": false,
+    "IconAssetId": "",
+    "IconAtlasId": "",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": [
+      "pig_knight_guard_yellow",
+      "pig_minion_bird_catcher"
+    ]
+  },
+  {
+    "NameId": "crystal_swap_rogue_stick",
+    "AssetId": "SwapCrystal",
+    "LocaId": "crystal_swap_example",
+    "SkillParameters": {
+      "turns": 1.0,
+      "start_color": 0.0,
+      "scale": 1.5
+    },
+    "SkillTemplateType": "SwapCrystal",
+    "EffectDuration": 0,
+    "TargetType": "Passive",
+    "EffectType": "Passive",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": false,
+    "TargetSelfPossible": false,
+    "IconAssetId": "",
+    "IconAtlasId": "",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": [
+      "pig_minion_stickpig",
+      "pig_minion_rogue"
+    ]
   }
 ]

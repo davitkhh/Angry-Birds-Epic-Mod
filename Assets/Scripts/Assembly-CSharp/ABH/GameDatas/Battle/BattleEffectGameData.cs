@@ -41,6 +41,8 @@ namespace ABH.GameDatas.Battle
 
 		public bool m_TargetAll;
 
+		public int m_SummonTurnCounter;
+
 		private bool m_PersistIfDefeated = true;
 
 		private int m_StartTurn;

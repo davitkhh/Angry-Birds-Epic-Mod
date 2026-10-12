@@ -653,6 +653,16 @@ MonoBehaviour:
     y: 0
     width: 0.16796875
     height: 0.16210938
+  - serializedVersion: 2
+    x: 0.6904296875
+    y: 0.8916015625
+    width: 0.14453125
+    height: 0.107421875
+  - serializedVersion: 2
+    x: 0.763671875
+    y: 0.7470703125
+    width: 0.20703125
+    height: 0.08203125
   textureGUIDs:
   - 017edb45556b40040873b89b06ba0ccc
   - 0ce83de1de018b845a2f897f7abdc09c
@@ -782,6 +792,8 @@ MonoBehaviour:
   - 1dfa5b418091c134fa7e6ac7ddca593f
   - 7781b28a2cc8dbc429d5f2d13c40f688
   - dc19782f373023643b1044a510e27503
+  - 77cb02b35cafccc34b47a426c435e151
+  - 9693fbde53c341aaa98c5ae2cd874364
   textureSizes:
   - {x: 22, y: 24}
   - {x: 8, y: 8}
@@ -911,6 +923,8 @@ MonoBehaviour:
   - {x: 73, y: 86}
   - {x: 162, y: 34}
   - {x: 172, y: 166}
+  - {x: 148, y: 110}
+  - {x: 212, y: 84}
   defaultPivotOffsets:
   - {x: -0.05, y: 0.09}
   - {x: 0, y: 0}
@@ -1040,6 +1054,8 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: -0.38035715, y: -0.77851886}
   - {x: 0.10178571, y: 0.086037}
+  - {x: -0.17, y: -0.17}
+  - {x: -0.42, y: -0.28}
   textureNames:
   - Eye_Right
   - Pupil_Left
@@ -1169,6 +1185,8 @@ MonoBehaviour:
   - OffHand_Valkyrie
   - MainHand_Valkyrie
   - Headgear_Valkyrie
+  - OffHand_PhatLootMcool
+  - MainHand_MerchantPigBlue
   texturePaths:
   - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/Eye_Right.png
   - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/Pupil_Left.png
@@ -1298,6 +1316,8 @@ MonoBehaviour:
   - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/OffHand_Valkyrie.png
   - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/MainHand_Valkyrie.png
   - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/Headgear_Valkyrie.png
+  - Assets/content/4_Characters/8_Base/1_MinionPig/OffHand_PhatLootMcool.png
+  - Assets/content/4_Characters/8_Base/1_MinionPig/BodyParts/MainHand_MerchantPigBlue.png
   lastBuildID: 20170215120314972
   needsRebuilt: 0
   dataVersion: 4

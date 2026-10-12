@@ -6,9 +6,14 @@ public class PathMovingService : MonoBehaviour
 {
 	public Camera m_Cam;
 
+	// Jumps with a looping animation (the Blues) cover the arc this many times faster than walking it.
+	public float m_JumpSpeedMultiplier = 1f;
+
 	private static PathMovingService _instance;
 
 	private Bounds m_CamRect;
+
+	private readonly Dictionary<AnimationClip, Vector2> m_AirborneWindows = new Dictionary<AnimationClip, Vector2>();
 
 	public static PathMovingService Instance
 	{
@@ -23,12 +28,12 @@ public class PathMovingService : MonoBehaviour
 		_instance = this;
 	}
 
-	public void WalkAlongPath(List<HotSpotWorldMapViewBase> pathList, GameObject bird, Animation anim, float speed, int index, float delay, MonoBehaviour callbackScript, string callbackFunction, bool mirror = false, string moveAnimation = "Move_Loop", bool ignoreOutOfScreen = false)
+	public void WalkAlongPath(List<HotSpotWorldMapViewBase> pathList, GameObject bird, Animation anim, float speed, int index, float delay, MonoBehaviour callbackScript, string callbackFunction, bool mirror = false, string moveAnimation = "Move_Loop", bool ignoreOutOfScreen = false, string jumpAnimation = null)
 	{
-		StartCoroutine(WalkToTarget(pathList, bird, anim, speed, index, delay, callbackScript, callbackFunction, mirror, moveAnimation, ignoreOutOfScreen));
+		StartCoroutine(WalkToTarget(pathList, bird, anim, speed, index, delay, callbackScript, callbackFunction, mirror, moveAnimation, ignoreOutOfScreen, jumpAnimation));
 	}
 
-	private IEnumerator WalkToTarget(List<HotSpotWorldMapViewBase> pathList, GameObject movingObject, Animation anim, float speed, int index, float delay, MonoBehaviour callbackScript, string callbackFunction, bool mirror = false, string moveAnimation = "Move_Loop", bool ignoreOutOfScreen = false)
+	private IEnumerator WalkToTarget(List<HotSpotWorldMapViewBase> pathList, GameObject movingObject, Animation anim, float speed, int index, float delay, MonoBehaviour callbackScript, string callbackFunction, bool mirror = false, string moveAnimation = "Move_Loop", bool ignoreOutOfScreen = false, string jumpAnimation = null)
 	{
 		if (delay > 0f)
 		{
@@ -37,6 +42,15 @@ public class PathMovingService : MonoBehaviour
 		else
 		{
 			yield return null;
+		}
+		if (pathList == null || pathList.Count == 0)
+		{
+			DebugLog.Error("[PathMovingService] empty path for " + (movingObject != null ? movingObject.name : "null"));
+			if (callbackScript != null && callbackFunction != string.Empty)
+			{
+				callbackScript.SendMessage(callbackFunction, index);
+			}
+			yield break;
 		}
 		var listIndex = GetStartIndex(pathList, 0, ignoreOutOfScreen);
 		var splinePosition = 0f;
@@ -50,6 +64,10 @@ public class PathMovingService : MonoBehaviour
 		}
 		var startingOffset = movingObject.transform.position - pathList[0].transform.position;
 		yield return StartCoroutine(WalkToPosition(movingObject, pathList[0].transform.position, speed));
+		if (movingObject == null)
+		{
+			yield break;
+		}
 		if (listIndex < pathList.Count)
 		{
 			var previousHotspot2 = pathList[0];
@@ -65,28 +83,23 @@ public class PathMovingService : MonoBehaviour
 			}
 			else
 			{
-				var lastPosition = movingObject.transform.position;
-				movingObject.transform.position = currentPath.GetPositionWorldSpace(splinePosition) + new Vector3(0f, 0f, -20f);
-				if (!mirror)
+				if (pathList[listIndex].m_jumpPath)
 				{
-					if (lastPosition.x > movingObject.transform.position.x)
+					yield return StartCoroutine(JumpAlongPath(currentPath, reversePath, movingObject, anim, speed, mirror, jumpAnimation ?? moveAnimation, moveAnimation));
+					if (movingObject == null)
 					{
-						movingObject.transform.localScale = new Vector3(-1f, 1f, 1f);
+						yield break;
 					}
-					else if (lastPosition.x < movingObject.transform.position.x)
-					{
-						movingObject.transform.localScale = new Vector3(1f, 1f, 1f);
-					}
+					// Past the end with no overshoot, so the next segment starts at its beginning.
+					splinePosition = !reversePath ? 2f : -1f;
 				}
-				else if (lastPosition.x > movingObject.transform.position.x)
+				else
 				{
-					movingObject.transform.localScale = new Vector3(1f, 1f, 1f);
+					var lastPosition = movingObject.transform.position;
+					movingObject.transform.position = currentPath.GetPositionWorldSpace(splinePosition) + new Vector3(0f, 0f, -20f);
+					FaceMovementDirection(movingObject, lastPosition.x, movingObject.transform.position.x, mirror);
+					splinePosition = !reversePath ? splinePosition + speed / currentPath.GetLength() * Time.deltaTime : splinePosition - speed / currentPath.GetLength() * Time.deltaTime;
 				}
-				else if (lastPosition.x < movingObject.transform.position.x)
-				{
-					movingObject.transform.localScale = new Vector3(-1f, 1f, 1f);
-				}
-				splinePosition = !reversePath ? splinePosition + speed / currentPath.GetLength() * Time.deltaTime : splinePosition - speed / currentPath.GetLength() * Time.deltaTime;
 				if (splinePosition > 1f || splinePosition < 0f)
 				{
 					lastIndex = listIndex + (reversePath ? 1 : 0);
@@ -112,13 +125,25 @@ public class PathMovingService : MonoBehaviour
 				}
 			}
 			yield return null;
+			if (movingObject == null)
+			{
+				yield break;
+			}
 		}
 		while (listIndex < pathList.Count);
 		yield return null;
+		if (movingObject == null)
+		{
+			yield break;
+		}
 		var lastHotspot = pathList[pathList.Count - 1];
 		lastHotspot.HandleMovingObjectVisibility(movingObject, lastHotspot);
 		var offset = lastHotspot.m_HotSpotPositions.Length <= index ? Vector3.zero : lastHotspot.m_HotSpotPositions[index];
 		yield return StartCoroutine(WalkToPosition(movingObject, pathList[pathList.Count - 1].transform.position + offset, speed));
+		if (movingObject == null)
+		{
+			yield break;
+		}
 		if (anim != null)
 		{
 			anim.CrossFade("Idle");
@@ -134,6 +159,200 @@ public class PathMovingService : MonoBehaviour
 		}
 	}
 
+	private IEnumerator JumpAlongPath(RageSplineLite path, bool reversePath, GameObject movingObject, Animation anim, float speed, bool mirror, string jumpAnimation, string moveAnimation)
+	{
+		var arcDuration = path.GetLength() / Mathf.Max(speed * m_JumpSpeedMultiplier, 0.01f);
+		AnimationState jumpState = null;
+		if (anim != null)
+		{
+			if (anim[jumpAnimation] == null)
+			{
+				jumpAnimation = moveAnimation;
+			}
+			jumpState = anim[jumpAnimation];
+		}
+		var start = path.GetPositionWorldSpace(!reversePath ? 0f : 1f);
+		var end = path.GetPositionWorldSpace(!reversePath ? 1f : 0f);
+		FaceMovementDirection(movingObject, start.x, end.x, mirror);
+		var frontZ = GetJumpFrontZ(path);
+		var oneShot = jumpState != null && jumpAnimation != moveAnimation && !jumpAnimation.EndsWith("_Loop");
+		if (!oneShot)
+		{
+			if (jumpState != null)
+			{
+				anim.CrossFade(jumpAnimation);
+			}
+			var t = 0f;
+			while (t < 1f)
+			{
+				t = Mathf.Min(1f, t + Time.deltaTime / arcDuration);
+				SetJumpPosition(movingObject, path, reversePath, t, frontZ);
+				yield return null;
+				if (movingObject == null)
+				{
+					yield break;
+				}
+			}
+			SetJumpPosition(movingObject, path, reversePath, 1f);
+			yield break;
+		}
+		// Travel takes exactly as long as the bird is off the ground in its animation; wind-up and recovery play in place.
+		var window = GetAirborneWindow(anim, jumpState);
+		var takeoffTime = window.x * jumpState.length;
+		var airClipTime = (window.y - window.x) * jumpState.length;
+		// Leave jumpState.speed alone: SmoothMoves sets each Unity state's speed to the clip's fps, so 1 is not natural speed.
+		anim.Stop();
+		anim.Play(jumpAnimation);
+		while (anim.IsPlaying(jumpAnimation) && jumpState.time < takeoffTime)
+		{
+			SetJumpPosition(movingObject, path, reversePath, 0f);
+			yield return null;
+			if (movingObject == null)
+			{
+				yield break;
+			}
+		}
+		var progress = 0f;
+		while (progress < 1f)
+		{
+			progress = anim.IsPlaying(jumpAnimation) && airClipTime > 0f ? Mathf.Clamp01((jumpState.time - takeoffTime) / airClipTime) : 1f;
+			SetJumpPosition(movingObject, path, reversePath, progress, frontZ);
+			if (progress < 1f)
+			{
+				yield return null;
+				if (movingObject == null)
+				{
+					yield break;
+				}
+			}
+		}
+		// Landed: back to the normal depth.
+		SetJumpPosition(movingObject, path, reversePath, 1f);
+		while (anim.IsPlaying(jumpAnimation) && jumpState.time < jumpState.length)
+		{
+			yield return null;
+			if (movingObject == null)
+			{
+				yield break;
+			}
+		}
+		anim.CrossFade(moveAnimation);
+	}
+
+	// frontZ: while airborne, the bird is pulled in front of this depth (see GetJumpFrontZ).
+	private static void SetJumpPosition(GameObject movingObject, RageSplineLite path, bool reversePath, float t, float frontZ = float.PositiveInfinity)
+	{
+		var position = path.GetPositionWorldSpace(!reversePath ? t : 1f - t) + new Vector3(0f, 0f, -20f);
+		position.z = Mathf.Min(position.z, frontZ);
+		movingObject.transform.position = position;
+	}
+
+	// Depth just in front of the WorldMapJumpForeground visuals (with m_BirdsJumpInFront) that the jump passes over, or
+	// +infinity when there are none. The area covers the path plus room for the bird and its jump animation's lift.
+	private static float GetJumpFrontZ(RageSplineLite path)
+	{
+		var area = new Bounds(path.GetPositionWorldSpace(0f), Vector3.zero);
+		for (var i = 1; i <= 16; i++)
+		{
+			area.Encapsulate(path.GetPositionWorldSpace(i / 16f));
+		}
+		area.min -= new Vector3(150f, 50f, 0f);
+		area.max += new Vector3(150f, 300f, 0f);
+		var frontZ = float.PositiveInfinity;
+		foreach (var foreground in WorldMapJumpForeground.Active)
+		{
+			if (foreground.m_BirdsJumpInFront)
+			{
+				frontZ = Mathf.Min(frontZ, foreground.GetFrontZ(area));
+			}
+		}
+		return float.IsPositiveInfinity(frontZ) ? frontZ : frontZ - 1f;
+	}
+
+	// Normalized (takeoff, landing) times of a clip, found by sampling how high its Body bone rises.
+	private Vector2 GetAirborneWindow(Animation anim, AnimationState state)
+	{
+		Vector2 window;
+		if (state.clip != null && m_AirborneWindows.TryGetValue(state.clip, out window))
+		{
+			return window;
+		}
+		window = new Vector2(0f, 1f);
+		var body = FindBone(anim.transform, "Body") ?? FindBone(anim.transform, "Body_A");
+		if (body != null && state.length > 0f)
+		{
+			var steps = Mathf.Max(2, Mathf.CeilToInt(state.length * 96f));
+			var heights = new float[steps + 1];
+			anim.Stop();
+			state.enabled = true;
+			state.weight = 1f;
+			for (var i = 0; i <= steps; i++)
+			{
+				state.time = state.length * i / steps;
+				anim.Sample();
+				heights[i] = body.localPosition.y;
+			}
+			state.enabled = false;
+			var maxRise = 0f;
+			for (var i = 0; i <= steps; i++)
+			{
+				maxRise = Mathf.Max(maxRise, heights[i] - heights[0]);
+			}
+			if (maxRise > 0f)
+			{
+				var threshold = heights[0] + maxRise * 0.1f;
+				var first = -1;
+				var last = -1;
+				for (var i = 0; i <= steps; i++)
+				{
+					if (heights[i] > threshold)
+					{
+						if (first < 0)
+						{
+							first = i;
+						}
+						last = i;
+					}
+				}
+				window = new Vector2((float)Mathf.Max(0, first - 1) / steps, (float)Mathf.Min(steps, last + 1) / steps);
+			}
+		}
+		if (state.clip != null)
+		{
+			m_AirborneWindows[state.clip] = window;
+		}
+		return window;
+	}
+
+	private static Transform FindBone(Transform root, string boneName)
+	{
+		if (root.name == boneName)
+		{
+			return root;
+		}
+		for (var i = 0; i < root.childCount; i++)
+		{
+			var bone = FindBone(root.GetChild(i), boneName);
+			if (bone != null)
+			{
+				return bone;
+			}
+		}
+		return null;
+	}
+
+	private static void FaceMovementDirection(GameObject movingObject, float fromX, float toX, bool mirror)
+	{
+		if (fromX > toX)
+		{
+			movingObject.transform.localScale = new Vector3(!mirror ? -1f : 1f, 1f, 1f);
+		}
+		else if (fromX < toX)
+		{
+			movingObject.transform.localScale = new Vector3(!mirror ? 1f : -1f, 1f, 1f);
+		}
+	}
+
 	private IEnumerator WalkToPosition(GameObject bird, Vector3 target, float speed)
 	{
 		var delta = bird.transform.position - target;
@@ -143,6 +362,11 @@ public class PathMovingService : MonoBehaviour
 			do
 			{
 				yield return null;
+				// Cutscenes may destroy a character mid-walk.
+				if (bird == null)
+				{
+					yield break;
+				}
 				var stepSize = delta.normalized * (speed / 5f * Time.deltaTime);
 				if (stepSize.sqrMagnitude > delta.sqrMagnitude)
 				{

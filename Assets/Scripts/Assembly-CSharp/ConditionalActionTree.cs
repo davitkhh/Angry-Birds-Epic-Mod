@@ -59,6 +59,10 @@ public class ConditionalActionTree
 		{
 			hasBeatFirstHotspot = true;
 		}
+		if (DIContainerInfrastructure.GetCurrentPlayer() == null)
+		{
+			return false;
+		}
 		var hotspotGameDatas = DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.HotspotGameDatas;
 		HotspotGameData value = null;
 		if (hotspotGameDatas.TryGetValue(StartNodeId, out value))

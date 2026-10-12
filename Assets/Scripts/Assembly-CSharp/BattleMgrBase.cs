@@ -63,6 +63,22 @@ public abstract class BattleMgrBase : MonoBehaviour
 
 	public Func<IEnumerator> m_CurrentSummonAction;
 
+	// Scripted sequence played during a wave change (BattleMgr.SetupNextWave); any stage may be null.
+	public class WaveClearedInterlude
+	{
+		// Runs to completion before the birds cheer.
+		public Func<IEnumerator> BeforeCheer;
+
+		// Runs alongside the birds' cheer; the wave change waits for it.
+		public Func<IEnumerator> DuringCheer;
+
+		// Runs alongside the birds walking off to the next scenery; the camera waits for it.
+		public Func<IEnumerator> DuringBirdsLeave;
+	}
+
+	// Keyed by the index of the wave that was just cleared; each interlude plays once.
+	public readonly Dictionary<int, WaveClearedInterlude> m_WaveClearedInterludes = new Dictionary<int, WaveClearedInterlude>();
+
 	public GameObject m_CameraAnimationRoot;
 
 	public GameObject m_ScreenFxRoot;
@@ -72,6 +88,11 @@ public abstract class BattleMgrBase : MonoBehaviour
 	public float m_StartPosOffset = 500f;
 
 	public bool m_blocked;
+
+	// While > 0, BattleMgr holds every turn at its stage-progress check (no timeout, unlike m_blocked),
+	// so a mid-turn scripted sequence can finish before the battle moves on.
+	[NonSerialized]
+	public int m_ScriptedSequenceLocks;
 
 	public bool m_HorizontalPositioning;
 
@@ -256,6 +277,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 		var offsetPos = maxDistance / (float)pigCount;
 		yield return StartCoroutine(PlaceCharacter(m_BirdCenterPosition, Faction.Birds));
 		yield return StartCoroutine(PlaceCharacter(m_PigCenterPosition, Faction.Pigs));
+		SwapCrystalDirector.For(this).OnWavePigsPlaced();
 		var summedEnterDelay = (float)m_Model.m_CombatantsByInitiative.Count * DIContainerLogic.GetPacingBalancing().PerCombatantEnterDelay + DIContainerLogic.GetPacingBalancing().BaseBattleEnterDelay;
 		StartCoroutine(EnterCombatants());
 		yield return new WaitForSeconds(summedEnterDelay);
@@ -521,7 +543,8 @@ public abstract class BattleMgrBase : MonoBehaviour
 
 	public virtual IEnumerator PlaceCharacter(Transform centerTransform, Faction faction)
 	{
-		var factionCombatants = m_Model.m_CombatantsPerFaction[faction].Where(c => c.IsParticipating || (c is PigCombatant && c.IsKnockedOut)).ToList();
+		// Swap crystals never participate but still take a formation slot (and get an initiative from it).
+		var factionCombatants = m_Model.m_CombatantsPerFaction[faction].Where(c => c.IsParticipating || (c is PigCombatant && c.IsKnockedOut) || c is SwapCrystalCombatant).ToList();
 		for (var i = 0; i < factionCombatants.Count; i++)
 		{
 			var comb = factionCombatants[i];
@@ -713,6 +736,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			for (var j3 = 0; j3 < m_CharactersPerRow[iRow].Count; j3++)
 			{
 				var character2 = m_CharactersPerRow[iRow][j3];
+				character2.m_PlacedRow = iRow;
 				var basePos = m_Rows[iRow][j3];
 				var extentForThisCharacter = ExtentDeltaPerCharacter * (float)(j3 + 1);
 				if (character2.GetModel().IsBanner && m_BirdBannerPosition != null && m_PigBannerPosition != null)

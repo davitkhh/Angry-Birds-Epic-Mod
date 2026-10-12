@@ -10389,7 +10389,7 @@
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
         "Probability": 1.0,
-        "BaseValue": 1,
+        "BaseValue": 3,
         "Span": 0,
         "CurrentPlayerLevelDelta": 0
       },

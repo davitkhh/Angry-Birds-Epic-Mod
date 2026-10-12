@@ -162,7 +162,7 @@ public class BaseCampStateMgr : MonoBehaviour
 		var birdGameData = m_Birds.Where(b => b.BalancingData.NameId == m_birdName).FirstOrDefault();
 		if (birdGameData != null)
 		{
-			m_BirdManager.SetStateMgr(this).SetModel(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_Birds, m_Birds.IndexOf(birdGameData));
+			m_BirdManager.SetStateMgr(this).SetModel(GetBirdManagerInventory(birdGameData), m_Birds, m_Birds.IndexOf(birdGameData));
 		}
 	}
 
@@ -280,7 +280,7 @@ public class BaseCampStateMgr : MonoBehaviour
 
 	public void OnBirdClicked(ICharacter data)
 	{
-		if (!ClientInfo.IsFriend)
+		if (!ClientInfo.IsFriend || ShowcaseCamps.GetVisitedAllyCamp() != null)
 		{
 			if (m_BirdManager == null)
 			{
@@ -289,9 +289,21 @@ public class BaseCampStateMgr : MonoBehaviour
 			}
 			else if (data != null)
 			{
-				m_BirdManager.SetStateMgr(this).SetModel(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_Birds, m_Birds.IndexOf(data as BirdGameData));
+				var bird = data as BirdGameData;
+				m_BirdManager.SetStateMgr(this).SetModel(GetBirdManagerInventory(bird), m_Birds, m_Birds.IndexOf(bird));
 			}
 		}
+	}
+
+	// A showcase ally picks from its own gear list instead of the player's inventory.
+	private InventoryGameData GetBirdManagerInventory(BirdGameData bird)
+	{
+		var allyCamp = ShowcaseCamps.GetVisitedAllyCamp();
+		if (allyCamp != null && bird != null)
+		{
+			return ShowcaseCamps.CreateAllyArmory(allyCamp, bird.Level);
+		}
+		return DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
 	}
 
 	public void RemoveAllNewMarkersFromBird(BirdGameData bird)
@@ -344,10 +356,13 @@ public class BaseCampStateMgr : MonoBehaviour
 			var inventory = new InventoryGameData(ClientInfo.InspectedFriend.PublicPlayerData.Inventory);
 			flag = DIContainerLogic.InventoryService.GetItemValue(inventory, "story_goldenpig_advanced") >= 1;
 		}
-		if (flag)
+		if (flag && m_AdvGoldenPigCamp != null)
 		{
 			m_AdvGoldenPigCamp.gameObject.SetActive(true);
-			m_GoldenPigCamp.gameObject.SetActive(false);
+			if (m_GoldenPigCamp != null)
+			{
+				m_GoldenPigCamp.gameObject.SetActive(false);
+			}
 			m_GoldenPigCamp = m_AdvGoldenPigCamp;
 		}
 	}
@@ -355,12 +370,19 @@ public class BaseCampStateMgr : MonoBehaviour
 	public virtual void RegisterEventHandler()
 	{
 		DeRegisterEventHandler();
-		if (m_GoldenPigCamp.gameObject.activeInHierarchy && !ClientInfo.IsFriend)
+		if (m_GoldenPigCamp != null && m_GoldenPigCamp.gameObject.activeInHierarchy && !ClientInfo.IsFriend)
 		{
 			m_GoldenPigCamp.OnPropClicked += GoldenPigCampOnPropClicked;
 		}
 		if (ClientInfo.IsFriend)
 		{
+			if (ShowcaseCamps.GetVisitedAllyCamp() != null)
+			{
+				foreach (var character in m_CharactersCamp)
+				{
+					character.BirdClicked += OnBirdClicked;
+				}
+			}
 			return;
 		}
 		DIContainerInfrastructure.GetCurrentPlayer().SocialEnvironmentGameData.MessageAdded += CampStateMgr_MessageChanged;
@@ -403,6 +425,13 @@ public class BaseCampStateMgr : MonoBehaviour
 	{
 		if (ClientInfo.IsFriend)
 		{
+			if (m_CharactersCamp != null)
+			{
+				foreach (var character in m_CharactersCamp)
+				{
+					character.BirdClicked -= OnBirdClicked;
+				}
+			}
 			return;
 		}
 		if (m_GoldenPigCamp != null && m_GoldenPigCamp.gameObject.activeInHierarchy)
@@ -508,6 +537,10 @@ public class BaseCampStateMgr : MonoBehaviour
 	{
 		var presentTime = DIContainerLogic.GetTimingService().GetPresentTime();
 		var currentPlayer = DIContainerInfrastructure.GetCurrentPlayer();
+		if (!currentPlayer.SocialEnvironmentGameData.IsMcCoolFriend)
+		{
+			return;
+		}
 		if (currentPlayer.Data.SocialEnvironment.McCoolSendsEssenceTimestamp == 0)
 		{
 			currentPlayer.SocialEnvironmentGameData.SetNewPiggieMcCoolDate(MessageType.ResponseFriendshipEssenceMessage);

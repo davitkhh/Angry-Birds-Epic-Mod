@@ -52,6 +52,9 @@ namespace ABH.GameDatas.Interfaces
 
 		float ModifiedAttack { get; }
 
+		// ModifiedAttack as if no equipped perk of this type were boosting it.
+		float GetModifiedAttackExcludingPerk(PerkType excludedPerk);
+
 		float DamageModifier { get; set; }
 
 		float CurrentHealth { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using ABH.Shared.BalancingData;
 using ABH.Shared.Generic;
 using ABH.Shared.Models.Generic;
+using SmoothMoves;
 using UnityEngine;
 
 public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
@@ -22,6 +23,22 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 	[SerializeField]
 	private GameObject[] m_activateObjects;
 
+	// Merchant only: McCool at the stall plays this once each time he comes fully on screen while the update indicator shows.
+	private const string MerchantUpdateAnimation = "Action_Support";
+
+	// Action_Support fires this trigger, but the stall rig's sound list (minion sounds) had no entry for it.
+	private const string MerchantSupportTrigger = "PlaySound_Support";
+
+	private const string MerchantSupportSound = "Character_Minion_Support";
+
+	private BoneAnimation m_StallMerchant;
+
+	private Renderer m_StallMerchantRenderer;
+
+	private bool m_StallMerchantSearched;
+
+	private bool m_StallMerchantReacted;
+
 	public override void ActivateAsset(bool activate)
 	{
 		var activateObjects = m_activateObjects;
@@ -34,6 +51,45 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 	public override bool IsCompleted()
 	{
 		return base.Model.Data.UnlockState == HotspotUnlockState.Resolved;
+	}
+
+	private void Update()
+	{
+		if (!m_UpdateIndikator || !FindStallMerchant())
+		{
+			return;
+		}
+		var react = m_UpdateIndikator.activeInHierarchy && IsFullyOnScreen(m_StallMerchantRenderer);
+		if (react && !m_StallMerchantReacted)
+		{
+			var legacy = m_StallMerchant.GetComponent<Animation>();
+			if (legacy != null && legacy.GetClip(MerchantUpdateAnimation) != null)
+			{
+				m_StallMerchant.Play(MerchantUpdateAnimation);
+				m_StallMerchant.PlayQueued("Idle");
+			}
+		}
+		m_StallMerchantReacted = react;
+	}
+
+	// The stall's MerchantPig is one of the objects the merchant switches on when it unlocks.
+	private bool FindStallMerchant()
+	{
+		if (!m_StallMerchantSearched && base.Model != null)
+		{
+			m_StallMerchantSearched = true;
+			if (IsMerchantShop() && m_activateObjects != null)
+			{
+				m_StallMerchant = m_activateObjects.Where(o => o != null).Select(o => o.GetComponentInChildren<BoneAnimation>(true)).FirstOrDefault(b => b != null);
+				m_StallMerchantRenderer = m_StallMerchant != null ? m_StallMerchant.GetComponent<Renderer>() : null;
+				var sounds = m_StallMerchant != null ? m_StallMerchant.GetComponent<TriggerSoundByBoneAnimation>() : null;
+				if (sounds != null && !sounds.m_SoundTriggerPairs.Any(p => p.TriggerId == MerchantSupportTrigger))
+				{
+					sounds.m_SoundTriggerPairs.Add(new SoundTriggerPair { TriggerId = MerchantSupportTrigger, SoundId = MerchantSupportSound });
+				}
+			}
+		}
+		return m_StallMerchant != null;
 	}
 
 	public override void HandleMouseButtonUp(bool directMove = false)
@@ -81,6 +137,12 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 			list = DIContainerLogic.GetShopService().GetShopOffers(DIContainerInfrastructure.GetCurrentPlayer(), base.Model.BalancingData.HotspotContents.Keys.FirstOrDefault());
 		}
 		var flag = false;
+		var showUpdate = false;
+		var onlyLimitedStock = IsMerchantShop();
+		if (onlyLimitedStock)
+		{
+			MerchantStock.Sync(DIContainerInfrastructure.GetCurrentPlayer(), list);
+		}
 		if (m_ShopMenuType != ShopMenuType.Dojo)
 		{
 			foreach (var item in list)
@@ -88,18 +150,45 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 				if (DIContainerLogic.GetShopService().IsOfferShowable(DIContainerInfrastructure.GetCurrentPlayer(), item) && DIContainerLogic.GetShopService().IsOfferBuyableIgnoreCost(DIContainerInfrastructure.GetCurrentPlayer(), item))
 				{
 					flag = true;
-					break;
+					if (!onlyLimitedStock || IsLimitedStockOffer(item))
+					{
+						showUpdate = true;
+						break;
+					}
 				}
 			}
 		}
+		if (onlyLimitedStock)
+		{
+			// Restocking offers are only ever sold out until their next restock, so the merchant never counts as finished.
+			flag |= list.Any(MerchantStock.IsRestockable);
+			showUpdate |= MerchantStock.HasRestockNotice(DIContainerInfrastructure.GetCurrentPlayer(), list);
+		}
 		if (m_UpdateIndikator)
 		{
-			m_UpdateIndikator.SetActive(flag);
+			m_UpdateIndikator.SetActive(showUpdate);
 		}
 		if (m_SoldOutIndicator)
 		{
 			m_SoldOutIndicator.SetActive(!flag);
 		}
+	}
+
+	// Merchants flag one-time offers while they are in stock, and restocking offers only when a restock refilled a sold-out offer.
+	private bool IsMerchantShop()
+	{
+		var shopId = base.Model.BalancingData.HotspotContents.Keys.FirstOrDefault();
+		return shopId != null && shopId.StartsWith("merchant_");
+	}
+
+	// Limited offers can only be bought X times: they grant a counter item that a NotHaveItem requirement checks.
+	private static bool IsLimitedStockOffer(BasicShopOfferBalancingData offer)
+	{
+		if (MerchantStock.IsRestockable(offer))
+		{
+			return false;
+		}
+		return (offer.BuyRequirements != null && offer.BuyRequirements.Any(r => r.RequirementType == RequirementType.NotHaveItem)) || (offer.ShowRequirements != null && offer.ShowRequirements.Any(r => r.RequirementType == RequirementType.NotHaveItem));
 	}
 
 	public override void ShowContentView()
@@ -124,7 +213,8 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 			return;
 		}
 		base.ShowContentView();
-		switch (m_ShopMenuType)
+		// Merchant hotspots are serialized as Workshop; route them to the merchant layout instead of the anvil one.
+		switch (IsMerchantShop() ? ShopMenuType.Merchant : m_ShopMenuType)
 		{
 		case ShopMenuType.Workshop:
 			DIContainerInfrastructure.LocationStateMgr.ShowWorkshopScreen(base.Model.BalancingData.HotspotContents.Keys.FirstOrDefault(), this);
@@ -137,6 +227,9 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 			break;
 		case ShopMenuType.Dojo:
 			DIContainerInfrastructure.LocationStateMgr.ShowDojoScreen(base.Model.BalancingData.HotspotContents.Keys.FirstOrDefault(), this);
+			break;
+		case ShopMenuType.Merchant:
+			DIContainerInfrastructure.LocationStateMgr.ShowMerchantScreen(base.Model.BalancingData.HotspotContents.Keys.FirstOrDefault(), this);
 			break;
 		}
 	}

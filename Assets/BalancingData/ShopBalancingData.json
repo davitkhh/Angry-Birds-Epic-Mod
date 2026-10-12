@@ -1,10 +1,11 @@
 [ {
     "NameId": "merchant_001",
-    "Slots": 3,
+    "Slots": 5,
     "Categories": [
       "merchant_01_weapon_yellow",
       "merchant_01_trade_cobalt",
-      "merchant_01_trade_wood"
+      "merchant_01_trade_wood",
+      "merchant_01_trade_crates"
     ],
     "AssetId": "",
     "LocaId": "",
@@ -12,12 +13,13 @@
   },
   {
     "NameId": "workshop_000",
-    "Slots": 4,
+    "Slots": 5,
     "Categories": [
       "shop_00_lance_red",
       "shop_00_sword_red",
       "shop_00_offhand_red",
-      "shop_00_offhand_yellow"
+      "shop_00_offhand_yellow",
+      "shop_00_upgrade_yellow"
     ],
     "AssetId": "",
     "LocaId": "",
@@ -539,6 +541,7 @@
       "merchant_01_emblem",
       "merchant_01_trade_cobalt",
       "merchant_01_trade_wood",
+      "merchant_01_trade_crates",
       "shop_01_weapon_yellow",
       "shop_01_offhand_red",
       "shop_01_offhand_yellow",

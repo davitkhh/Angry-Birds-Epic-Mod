@@ -120,6 +120,9 @@ EditorBuildSettings:
     path: Assets/Scenes/2_Camp/1_Scenery/Camp_Friend.unity
     guid: d9b4ed2e2e7876048bd48e2eab7cdaee
   - enabled: 1
+    path: Assets/Scenes/2_Camp/1_Scenery/Camp_McCool.unity
+    guid: 6258c21415532202da729bac992563e3
+  - enabled: 1
     path: Assets/Scenes/0_Generic/1_Interface/Popup_NetworkFailure.unity
     guid: b45acf1480ad2914ab53d31c86f3db3d
   - enabled: 1
@@ -776,4 +779,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/0_Generic/1_Interface/Popup_Sunset.unity
     guid: e3b3ee4854283954997991f0580af643
+  - enabled: 1
+    path: Assets/Scenes/2_Camp/2_Interface/Window_EquipmentPresets.unity
+    guid: 7d722d3a85879d793be38e66e0d44503
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

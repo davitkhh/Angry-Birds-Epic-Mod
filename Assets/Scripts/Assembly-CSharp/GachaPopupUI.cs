@@ -1971,7 +1971,7 @@ public class GachaPopupUI : MonoBehaviour
 					return;
 				}
 				m_BubbleStats.gameObject.SetActive(true);
-				m_BubbleStats.SetComparisionValues("Character_Damage_Large", InventoryItemType.MainHandEquipment, m_PossibleBird.MainHandItem.ItemMainStat, m_PossibleBird.MainHandItem.BalancingData.Perk.Type);
+				m_BubbleStats.SetComparisionValues("Character_Damage_Large", InventoryItemType.MainHandEquipment, m_PossibleBird.MainHandItem.ItemMainStat, m_PossibleBird.MainHandItem.Perk.Type);
 			}
 			else
 			{
@@ -1980,7 +1980,7 @@ public class GachaPopupUI : MonoBehaviour
 					return;
 				}
 				m_BubbleStats.gameObject.SetActive(true);
-				m_BubbleStats.SetComparisionValues("Character_Health_Large", InventoryItemType.OffHandEquipment, m_PossibleBird.OffHandItem.ItemMainStat, m_PossibleBird.OffHandItem.BalancingData.Perk.Type);
+				m_BubbleStats.SetComparisionValues("Character_Health_Large", InventoryItemType.OffHandEquipment, m_PossibleBird.OffHandItem.ItemMainStat, m_PossibleBird.OffHandItem.Perk.Type);
 			}
 			m_equipCharacter.PositionComparisionBubble(m_equipCharacter, m_BubbleStats.gameObject);
 			m_BubbleStats.Show();

@@ -212,6 +212,7 @@ public sealed class ABHModelSerializer : TypeModel
     ABHModelSerializer.knownTypes.Add(typeof (SocialEventType), 189);
     ABHModelSerializer.knownTypes.Add(typeof (KeyValuePair<string, byte[]>), 190);
     ABHModelSerializer.knownTypes.Add(typeof (LocationType), 191);
+    ABHModelSerializer.knownTypes.Add(typeof (UpgradeBlueprintBalancingData), 192);
   }
 
   protected override int GetKeyImpl(Type _param1)
@@ -18380,6 +18381,226 @@ public sealed class ABHModelSerializer : TypeModel
     return _param0;
   }
 
+  private static void Write(UpgradeBlueprintBalancingData _param0, ProtoWriter _param1)
+  {
+    if (_param0.GetType() != typeof (UpgradeBlueprintBalancingData))
+      TypeModel.ThrowUnexpectedSubtype(typeof (UpgradeBlueprintBalancingData), _param0.GetType());
+    var vNameId = _param0.NameId;
+    if (vNameId != null)
+    {
+      ProtoWriter.WriteFieldHeader(1, WireType.String, _param1);
+      ProtoWriter.WriteString(vNameId, _param1);
+    }
+    var vLocaBaseId = _param0.LocaBaseId;
+    if (vLocaBaseId != null)
+    {
+      ProtoWriter.WriteFieldHeader(2, WireType.String, _param1);
+      ProtoWriter.WriteString(vLocaBaseId, _param1);
+    }
+    var vUses = _param0.Uses;
+    if (vUses != 0)
+    {
+      ProtoWriter.WriteFieldHeader(3, WireType.Variant, _param1);
+      ProtoWriter.WriteInt32(vUses, _param1);
+    }
+    var vTargetNameIds = _param0.TargetNameIds;
+    if (vTargetNameIds != null)
+    {
+      foreach (var str in vTargetNameIds)
+      {
+        ProtoWriter.WriteFieldHeader(4, WireType.String, _param1);
+        ProtoWriter.WriteString(str, _param1);
+      }
+    }
+    var vTargetNameIdPrefixes = _param0.TargetNameIdPrefixes;
+    if (vTargetNameIdPrefixes != null)
+    {
+      foreach (var str in vTargetNameIdPrefixes)
+      {
+        ProtoWriter.WriteFieldHeader(5, WireType.String, _param1);
+        ProtoWriter.WriteString(str, _param1);
+      }
+    }
+    var vTargetBirdId = _param0.TargetBirdId;
+    if (vTargetBirdId != null)
+    {
+      ProtoWriter.WriteFieldHeader(6, WireType.String, _param1);
+      ProtoWriter.WriteString(vTargetBirdId, _param1);
+    }
+    var vTargetItemType = _param0.TargetItemType;
+    if (vTargetItemType != null)
+    {
+      ProtoWriter.WriteFieldHeader(7, WireType.String, _param1);
+      ProtoWriter.WriteString(vTargetItemType, _param1);
+    }
+    var vFlatStat = _param0.FlatStat;
+    if (vFlatStat != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(8, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vFlatStat, _param1);
+    }
+    var vStatPercent = _param0.StatPercent;
+    if (vStatPercent != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(9, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vStatPercent, _param1);
+    }
+    var vPerkValuePercent = _param0.PerkValuePercent;
+    if (vPerkValuePercent != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(10, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vPerkValuePercent, _param1);
+    }
+    var vPerkChanceBonus = _param0.PerkChanceBonus;
+    if (vPerkChanceBonus != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(11, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vPerkChanceBonus, _param1);
+    }
+    var vSetPerkValue = _param0.SetPerkValue;
+    if (vSetPerkValue != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(12, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vSetPerkValue, _param1);
+    }
+    var vSetPerkValue2 = _param0.SetPerkValue2;
+    if (vSetPerkValue2 != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(13, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vSetPerkValue2, _param1);
+    }
+    var vAddPerkType = _param0.AddPerkType;
+    if (vAddPerkType != null)
+    {
+      ProtoWriter.WriteFieldHeader(14, WireType.String, _param1);
+      ProtoWriter.WriteString(vAddPerkType, _param1);
+    }
+    var vAddPerkChance = _param0.AddPerkChance;
+    if (vAddPerkChance != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(15, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vAddPerkChance, _param1);
+    }
+    var vAddPerkValue = _param0.AddPerkValue;
+    if (vAddPerkValue != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(16, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vAddPerkValue, _param1);
+    }
+    var vAddPerkValue2 = _param0.AddPerkValue2;
+    if (vAddPerkValue2 != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(17, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vAddPerkValue2, _param1);
+    }
+    var vAttackPercent = _param0.AttackPercent;
+    if (vAttackPercent != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(18, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vAttackPercent, _param1);
+    }
+    var vHealthPercent = _param0.HealthPercent;
+    if (vHealthPercent != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(19, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vHealthPercent, _param1);
+    }
+  }
+
+  private static UpgradeBlueprintBalancingData Read(UpgradeBlueprintBalancingData _param0, ProtoReader _param1)
+  {
+    int field;
+    while ((field = _param1.ReadFieldHeader()) > 0)
+    {
+      if (_param0 == null)
+      {
+        _param0 = new UpgradeBlueprintBalancingData();
+        ProtoReader.NoteObject((object) _param0, _param1);
+      }
+      switch (field)
+      {
+        case 1:
+          _param0.NameId = _param1.ReadString();
+          continue;
+        case 2:
+          _param0.LocaBaseId = _param1.ReadString();
+          continue;
+        case 3:
+          _param0.Uses = _param1.ReadInt32();
+          continue;
+        case 4:
+          if (_param0.TargetNameIds == null)
+            _param0.TargetNameIds = new List<string>();
+          do
+          {
+            _param0.TargetNameIds.Add(_param1.ReadString());
+          }
+          while (_param1.TryReadFieldHeader(4));
+          continue;
+        case 5:
+          if (_param0.TargetNameIdPrefixes == null)
+            _param0.TargetNameIdPrefixes = new List<string>();
+          do
+          {
+            _param0.TargetNameIdPrefixes.Add(_param1.ReadString());
+          }
+          while (_param1.TryReadFieldHeader(5));
+          continue;
+        case 6:
+          _param0.TargetBirdId = _param1.ReadString();
+          continue;
+        case 7:
+          _param0.TargetItemType = _param1.ReadString();
+          continue;
+        case 8:
+          _param0.FlatStat = _param1.ReadSingle();
+          continue;
+        case 9:
+          _param0.StatPercent = _param1.ReadSingle();
+          continue;
+        case 10:
+          _param0.PerkValuePercent = _param1.ReadSingle();
+          continue;
+        case 11:
+          _param0.PerkChanceBonus = _param1.ReadSingle();
+          continue;
+        case 12:
+          _param0.SetPerkValue = _param1.ReadSingle();
+          continue;
+        case 13:
+          _param0.SetPerkValue2 = _param1.ReadSingle();
+          continue;
+        case 14:
+          _param0.AddPerkType = _param1.ReadString();
+          continue;
+        case 15:
+          _param0.AddPerkChance = _param1.ReadSingle();
+          continue;
+        case 16:
+          _param0.AddPerkValue = _param1.ReadSingle();
+          continue;
+        case 17:
+          _param0.AddPerkValue2 = _param1.ReadSingle();
+          continue;
+        case 18:
+          _param0.AttackPercent = _param1.ReadSingle();
+          continue;
+        case 19:
+          _param0.HealthPercent = _param1.ReadSingle();
+          continue;
+        default:
+          _param1.SkipField();
+          continue;
+      }
+    }
+    if (_param0 == null)
+    {
+      _param0 = new UpgradeBlueprintBalancingData();
+      ProtoReader.NoteObject((object) _param0, _param1);
+    }
+    return _param0;
+  }
+
   private static void Write(ShopBalancingData _param0, ProtoWriter _param1)
   {
     if (_param0.GetType() != typeof (ShopBalancingData))
@@ -30365,6 +30586,18 @@ public sealed class ABHModelSerializer : TypeModel
         case PerkType.Weaken:
           ProtoWriter.WriteInt32(20, _param1);
           break;
+        case PerkType.PhatLoot:
+          ProtoWriter.WriteInt32(21, _param1);
+          break;
+        case PerkType.CashStrike:
+          ProtoWriter.WriteInt32(22, _param1);
+          break;
+        case PerkType.Amplify:
+          ProtoWriter.WriteInt32(23, _param1);
+          break;
+        case PerkType.Brilliance:
+          ProtoWriter.WriteInt32(24, _param1);
+          break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -30469,6 +30702,18 @@ public sealed class ABHModelSerializer : TypeModel
               break;
             case 20:
               perkType = PerkType.Weaken;
+              break;
+            case 21:
+              perkType = PerkType.PhatLoot;
+              break;
+            case 22:
+              perkType = PerkType.CashStrike;
+              break;
+            case 23:
+              perkType = PerkType.Amplify;
+              break;
+            case 24:
+              perkType = PerkType.Brilliance;
               break;
             default:
               _param1.ThrowEnumException(typeof (PerkType), num2);
@@ -31644,10 +31889,20 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteBoolean(num2 != 0, _param1);
     }
     var experienceForNextLevel = (double) _param0.ExperienceForNextLevel;
-    if (experienceForNextLevel == 0.0)
-      return;
-    ProtoWriter.WriteFieldHeader(6, WireType.Fixed32, _param1);
-    ProtoWriter.WriteSingle((float) experienceForNextLevel, _param1);
+    if (experienceForNextLevel != 0.0)
+    {
+      ProtoWriter.WriteFieldHeader(6, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle((float) experienceForNextLevel, _param1);
+    }
+    var upgrades = _param0.Upgrades;
+    if (upgrades != null)
+    {
+      foreach (var upgrade in upgrades)
+      {
+        ProtoWriter.WriteFieldHeader(7, WireType.String, _param1);
+        ProtoWriter.WriteString(upgrade, _param1);
+      }
+    }
   }
 
   private static ClassItemData Read(ClassItemData _param0, ProtoReader _param1)
@@ -31720,6 +31975,22 @@ public sealed class ABHModelSerializer : TypeModel
           }
           var num5 = _param1.ReadSingle();
           _param0.ExperienceForNextLevel = num5;
+          continue;
+        case 7:
+          if (_param0 == null)
+          {
+            var classItemData = new ClassItemData();
+            ProtoReader.NoteObject((object) classItemData, _param1);
+            _param0 = classItemData;
+          }
+          if (_param0.Upgrades == null)
+            _param0.Upgrades = new List<string>();
+          var classUpgradesField = _param1.FieldNumber;
+          do
+          {
+            _param0.Upgrades.Add(_param1.ReadString());
+          }
+          while (_param1.TryReadFieldHeader(classUpgradesField));
           continue;
         default:
           if (_param0 == null)
@@ -33591,6 +33862,15 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteFieldHeader(10, WireType.Variant, _param1);
       ProtoWriter.WriteBoolean(isAncient != 0, _param1);
     }
+    var upgrades = _param0.Upgrades;
+    if (upgrades != null)
+    {
+      foreach (var upgrade in upgrades)
+      {
+        ProtoWriter.WriteFieldHeader(11, WireType.String, _param1);
+        ProtoWriter.WriteString(upgrade, _param1);
+      }
+    }
   }
 
   private static EquipmentData Read(EquipmentData _param0, ProtoReader _param1)
@@ -33749,6 +34029,22 @@ public sealed class ABHModelSerializer : TypeModel
           }
           var isAncient = _param1.ReadBoolean();
           _param0.IsAncient = isAncient;
+          continue;
+        case 11:
+          if (_param0 == null)
+          {
+            var equipmentData = new EquipmentData();
+            ProtoReader.NoteObject((object) equipmentData, _param1);
+            _param0 = equipmentData;
+          }
+          if (_param0.Upgrades == null)
+            _param0.Upgrades = new List<string>();
+          var upgradesField = _param1.FieldNumber;
+          do
+          {
+            _param0.Upgrades.Add(_param1.ReadString());
+          }
+          while (_param1.TryReadFieldHeader(upgradesField));
           continue;
         default:
           if (_param0 == null)
@@ -41272,6 +41568,18 @@ public sealed class ABHModelSerializer : TypeModel
       case PerkType.Weaken:
         ProtoWriter.WriteInt32(20, _param1);
         break;
+      case PerkType.PhatLoot:
+        ProtoWriter.WriteInt32(21, _param1);
+        break;
+      case PerkType.CashStrike:
+        ProtoWriter.WriteInt32(22, _param1);
+        break;
+      case PerkType.Amplify:
+        ProtoWriter.WriteInt32(23, _param1);
+        break;
+      case PerkType.Brilliance:
+        ProtoWriter.WriteInt32(24, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -41346,6 +41654,18 @@ public sealed class ABHModelSerializer : TypeModel
         break;
       case 20:
         perkType = PerkType.Weaken;
+        break;
+      case 21:
+        perkType = PerkType.PhatLoot;
+        break;
+      case 22:
+        perkType = PerkType.CashStrike;
+        break;
+      case 23:
+        perkType = PerkType.Amplify;
+        break;
+      case 24:
+        perkType = PerkType.Brilliance;
         break;
       default:
         _param1.ThrowEnumException(typeof (PerkType), num);
@@ -42709,6 +43029,9 @@ public sealed class ABHModelSerializer : TypeModel
           case 191:
             ABHModelSerializer.Write((LocationType) _param2, _param3);
             return;
+          case 192:
+            ABHModelSerializer.Write((UpgradeBlueprintBalancingData) _param2, _param3);
+            return;
           default:
             return;
         }
@@ -43112,6 +43435,8 @@ public sealed class ABHModelSerializer : TypeModel
             return ABHModelSerializer._190(_param2, _param3);
           case 191:
             return ABHModelSerializer._191(_param2, _param3);
+          case 192:
+            return (object) ABHModelSerializer.Read((UpgradeBlueprintBalancingData) _param2, _param3);
         }
         break;
     }

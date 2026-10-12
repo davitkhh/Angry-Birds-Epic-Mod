@@ -149,4 +149,16 @@ public class SkillBlind : MonoBehaviour
 			m_SkillTargetIcon.spriteName = text;
 		}
 	}
+
+	public float GetBottomSlack(float spacing, float padding)
+	{
+		if (m_SkillDescription == null || m_Background == null)
+		{
+			return 0f;
+		}
+		var nextBlindTop = transform.InverseTransformPoint(m_Background.worldCorners[1]).y - spacing;
+		var descriptionTop = transform.InverseTransformPoint(m_SkillDescription.worldCorners[1]).y;
+		var contentBottom = descriptionTop - m_SkillDescription.printedSize.y;
+		return Mathf.Max(0f, contentBottom - padding - nextBlindTop);
+	}
 }

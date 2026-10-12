@@ -14,7 +14,7 @@ public class ZoneCloudingActiveState
 	{
 		var flag = false;
 		HotspotGameData value = null;
-		if (DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.HotspotGameDatas.TryGetValue(EndNodeId, out value))
+		if (DIContainerInfrastructure.GetCurrentPlayer() != null && DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.HotspotGameDatas.TryGetValue(EndNodeId, out value))
 		{
 			flag = value.Data.UnlockState >= HotspotUnlockState.ResolvedNew;
 		}

@@ -376,8 +376,43 @@ public class InfoOverlayMgr : MonoBehaviour
 			}
 			break;
 		case InventoryItemType.CraftingRecipes:
+		{
+			UpgradeBlueprintBalancingData upgradeBlueprint;
+			if (UpgradeBlueprints.TryGetDefinition(item, out upgradeBlueprint))
+			{
+				// Upgrade blueprints list every item they can go on (owned ones in green)
+				var inventory = DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
+				var text = UpgradeBlueprints.GetDescription(upgradeBlueprint);
+				var changes = UpgradeBlueprints.GetStatChanges(upgradeBlueprint, inventory);
+				var label = m_GenericOverlayWithHeader.m_TextBox.Label;
+				// Blank lines at the end make room for the old -> new stat rows drawn over them
+				var reserved = string.Empty;
+				if (changes.Count > 0 && label != null)
+				{
+					var lineHeight = Mathf.Max(1f, label.fontSize + label.spacingY);
+					var lines = Mathf.CeilToInt(UpgradeStatChangeView.GetHeight(changes.Count) / lineHeight);
+					for (var i = 0; i < lines; i++)
+					{
+						reserved += "\n";
+					}
+					reserved += " ";
+				}
+				text = (string.IsNullOrEmpty(text) ? string.Empty : text + "\n\n") + UpgradeBlueprints.GetSupportedEquipmentText(upgradeBlueprint, inventory) + (reserved.Length > 0 ? "\n" + reserved : string.Empty);
+				ShowGenericOverlay(root, UpgradeBlueprints.GetName(upgradeBlueprint), text, interfaceCam);
+				if (changes.Count > 0 && label != null)
+				{
+					var size = label.printedSize;
+					var pivot = label.pivotOffset;
+					var bottom = -pivot.y * size.y;
+					var centered = label.alignment == NGUIText.Alignment.Center;
+					var x = centered ? (0.5f - pivot.x) * label.width : -pivot.x * label.width;
+					UpgradeStatChangeView.Build(label.transform, label, new Vector3(x, bottom + UpgradeStatChangeView.GetHeight(changes.Count), 0f), changes, centered);
+				}
+				break;
+			}
 			EvaluateRecipeOverlay(root, item, interfaceCam, camera, levelreq);
 			break;
+		}
 		case InventoryItemType.Resources:
 		case InventoryItemType.Ingredients:
 			EvaluateCraftingItemOverlay(root, interfaceCam, camera, item);
@@ -499,6 +534,11 @@ public class InfoOverlayMgr : MonoBehaviour
 
 	internal void ShowGenericOverlay(Transform root, string localizedHeader, string localizedText, bool interfaceCam)
 	{
+		// Only upgrade blueprints draw stat rows into this overlay; drop leftovers from the last one
+		if (m_GenericOverlayWithHeader.m_TextBox != null && m_GenericOverlayWithHeader.m_TextBox.Label != null)
+		{
+			UpgradeStatChangeView.Clear(m_GenericOverlayWithHeader.m_TextBox.Label.transform);
+		}
 		m_GenericOverlayWithHeader.gameObject.SetActive(true);
 		var orientatedCamera = AdjustToCamera(interfaceCam);
 		m_GenericOverlayWithHeader.ShowGenericOverlay(root, localizedHeader, localizedText, orientatedCamera);

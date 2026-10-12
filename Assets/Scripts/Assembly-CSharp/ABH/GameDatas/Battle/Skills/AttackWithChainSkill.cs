@@ -73,9 +73,9 @@ namespace ABH.GameDatas.Battle.Skills
 						SpawnVisualEffects(VisualEffectSpawnTiming.Start, setting, new List<ICombatant> { combatant });
 					}
 					var effectedParam2 = 1f;
-					if (num2 > 0f && source.CombatantMainHandEquipment != null && m_ApplyPerks && DIContainerLogic.GetBattleService().ApplyDelayedPerk(source.CombatantMainHandEquipment.BalancingData.Perk, source, combatant, battle, ref effectedParam2) && combatant.CombatantView != null)
+					if (num2 > 0f && source.CombatantMainHandEquipment != null && m_ApplyPerks && ApplyDelayedPerkSharedRoll(source, combatant, battle, ref effectedParam2) && combatant.CombatantView != null)
 					{
-						combatant.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.BalancingData.Perk.Type;
+						combatant.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;
 					}
 					combatant.ReceiveDamage(num2, source);
 					battle.m_DamageLastTurn += DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);

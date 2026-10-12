@@ -150,6 +150,11 @@ namespace ABH.Services.Logic
 
 		public BirdData GetNPCBird(int level, string id, int mastery)
 		{
+			return ShowcaseCamps.ApplyAllyLoadout(GetNPCBirdWithoutLoadout(level, id, mastery));
+		}
+
+		private BirdData GetNPCBirdWithoutLoadout(int level, string id, int mastery)
+		{
 			switch (id)
 			{
 			case "NPC_Low":
@@ -287,10 +292,15 @@ namespace ABH.Services.Logic
 
 		private InventoryData GetNPCInventory(int level)
 		{
+			return GetNPCInventory("loot_npc_inventory");
+		}
+
+		public InventoryData GetNPCInventory(string lootTableNameId)
+		{
 			var inventoryData = new InventoryData();
 			inventoryData.StoryItems = new List<BasicItemData>();
 			inventoryData.PlayerStats = new List<BasicItemData>();
-			var balancingData = DIContainerBalancing.LootTableBalancingDataPovider.GetBalancingData("loot_npc_inventory");
+			var balancingData = DIContainerBalancing.LootTableBalancingDataPovider.GetBalancingData(lootTableNameId) ?? DIContainerBalancing.LootTableBalancingDataPovider.GetBalancingData("loot_npc_inventory");
 			DebugLog("[SocialService] Generate NPC Inventory");
 			foreach (var lootTableEntry in balancingData.LootTableEntries)
 			{

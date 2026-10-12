@@ -313,7 +313,7 @@
       },
       {
         "RequirementType": "HaveUnlockedHotpsot",
-        "NameId": "hotspot_018_battleground",
+        "NameId": "hotspot_013_battleground",
         "Value": 1.0
       }
     ],

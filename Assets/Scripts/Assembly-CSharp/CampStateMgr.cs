@@ -56,9 +56,9 @@ public class CampStateMgr : BaseCampStateMgr
 		DIContainerInfrastructure.GetCoreStateMgr().m_SceneryAudioListener = base.transform.GetComponentInChildren<AudioListener>();
 		DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.ForceLoading = true;
 		DIContainerInfrastructure.GetCoreStateMgr().m_IsWithinPvP = false;
-		m_CampProps.AddRange(m_ForgeCampLeveled);
-		m_CampProps.AddRange(m_CauldronCampLeveled);
-		if (m_FriendInfo != null && ClientInfo.IsFriend)
+		m_CampProps.AddRange(m_ForgeCampLeveled.Where(p => p != null));
+		m_CampProps.AddRange(m_CauldronCampLeveled.Where(p => p != null));
+		if (m_StarCollectionLabel != null && ClientInfo.IsFriend)
 		{
 			if (ClientInfo.InspectedFriend.PublicPlayerData.Inventory != null)
 			{
@@ -78,7 +78,7 @@ public class CampStateMgr : BaseCampStateMgr
 				m_StarCollectionLabel.transform.parent.gameObject.SetActive(false);
 			}
 		}
-		else
+		else if (m_StarCollectionLabel != null)
 		{
 			m_StarCollectionLabel.text = DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "star_collection").ToString();
 		}
@@ -413,6 +413,10 @@ public class CampStateMgr : BaseCampStateMgr
 		m_CauldronLevel = data.ItemData.Level;
 		for (var i = 0; i < m_CauldronCampLeveled.Count; i++)
 		{
+			if (m_CauldronCampLeveled[i] == null)
+			{
+				continue;
+			}
 			if (i + 1 == m_CauldronLevel)
 			{
 				m_CauldronCampLeveled[i].gameObject.SetActive(true);
@@ -479,6 +483,10 @@ public class CampStateMgr : BaseCampStateMgr
 		m_ForgeLevel = data.ItemData.Level;
 		for (var i = 0; i < m_ForgeCampLeveled.Count; i++)
 		{
+			if (m_ForgeCampLeveled[i] == null)
+			{
+				continue;
+			}
 			if (i + 1 == m_ForgeLevel)
 			{
 				m_ForgeCampLeveled[i].gameObject.SetActive(true);
@@ -535,11 +543,11 @@ public class CampStateMgr : BaseCampStateMgr
 		{
 			m_SkinOverviewButton.OnPropClicked += OpenSkinInfo;
 		}
-		foreach (var item in m_CauldronCampLeveled)
+		foreach (var item in m_CauldronCampLeveled.Where(p => p != null))
 		{
 			item.OnPropClicked += CauldronCampOnPropClicked;
 		}
-		foreach (var item2 in m_ForgeCampLeveled)
+		foreach (var item2 in m_ForgeCampLeveled.Where(p => p != null))
 		{
 			item2.OnPropClicked += ForgeCampOnPropClicked;
 		}
@@ -566,11 +574,11 @@ public class CampStateMgr : BaseCampStateMgr
 		{
 			m_SkinOverviewButton.OnPropClicked -= OpenSkinInfo;
 		}
-		foreach (var item in m_CauldronCampLeveled)
+		foreach (var item in m_CauldronCampLeveled.Where(p => p != null))
 		{
 			item.OnPropClicked -= CauldronCampOnPropClicked;
 		}
-		foreach (var item2 in m_ForgeCampLeveled)
+		foreach (var item2 in m_ForgeCampLeveled.Where(p => p != null))
 		{
 			item2.OnPropClicked -= ForgeCampOnPropClicked;
 		}
@@ -658,6 +666,13 @@ public class CampStateMgr : BaseCampStateMgr
 		m_ForgeResultWindow.Enter(true, amount);
 	}
 
+	public void ShowUpgradeResult(IInventoryItemGameData item, CraftingRecipeGameData recipe, int applicationIndex)
+	{
+		m_ForgeResultWindow.SetStateMgr(this);
+		m_ForgeResultWindow.SetUpgradeItem(item, recipe, applicationIndex);
+		m_ForgeResultWindow.Enter(true, 1);
+	}
+
 	private void OnDisable()
 	{
 		var balancingData = DIContainerBalancing.Service.GetBalancingData<PigBalancingData>("pig_instructor");
@@ -671,7 +686,7 @@ public class CampStateMgr : BaseCampStateMgr
 	internal void ForceAddCauldron()
 	{
 		RefreshLeveledCauldron();
-		var campProp = m_CauldronCampLeveled.FirstOrDefault();
+		var campProp = m_CauldronCampLeveled.FirstOrDefault(p => p != null);
 		if (campProp != null)
 		{
 			campProp.Awake();

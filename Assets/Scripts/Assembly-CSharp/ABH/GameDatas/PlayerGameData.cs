@@ -278,10 +278,7 @@ namespace ABH.GameDatas
 				{
 					this.WorldGameData.Data.HotSpotInstances.RemoveAll(hs => hs.NameId == "hotspot_003_battleground");
 				}
-				if (this.WorldGameData.HotspotGameDatas.Remove("hotspot_005_battleground"))
-				{
-					this.WorldGameData.Data.HotSpotInstances.RemoveAll(hs => hs.NameId == "hotspot_005_battleground");
-				}
+				ResolveRestoredHotspot005();
 			}
 			if (this.Data.TutorialTracks != null && this.Data.TutorialTracks.ContainsKey("tutorial_equip_crafted_item"))
 			{
@@ -471,6 +468,32 @@ namespace ABH.GameDatas
 			else if (WorldGameData.CurrentHotspotGameData.BalancingData.NameId == "hotspot_094_10_trainerhut")
 			{
 				WorldGameData.CurrentHotspotGameData = WorldGameData.HotspotGameDatas["hotspot_094_10_battleground"];
+			}
+		}
+
+		// hotspot_005 was cut and has been put back between 004 and 006. The world map only
+		// reveals hotspots past a completed one, so saves already past 006 get 005 resolved
+		// (0 stars, replayable) instead of hiding the rest of the map behind it.
+		private void ResolveRestoredHotspot005()
+		{
+			HotspotGameData hotspot006 = null;
+			if (!WorldGameData.HotspotGameDatas.TryGetValue("hotspot_006_battleground", out hotspot006) || !hotspot006.IsCompleted())
+			{
+				return;
+			}
+			HotspotGameData hotspot005 = null;
+			if (!WorldGameData.HotspotGameDatas.TryGetValue("hotspot_005_battleground", out hotspot005))
+			{
+				HotspotBalancingData balancing = null;
+				if (!DIContainerBalancing.Service.TryGetBalancingData<HotspotBalancingData>("hotspot_005_battleground", out balancing))
+				{
+					return;
+				}
+				hotspot005 = WorldGameData.AddNewHotspot(balancing);
+			}
+			if (!hotspot005.IsCompleted())
+			{
+				hotspot005.Data.UnlockState = HotspotUnlockState.Resolved;
 			}
 		}
 

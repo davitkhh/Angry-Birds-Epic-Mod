@@ -100,6 +100,13 @@ namespace ABH.GameDatas.Battle.Skills
 					EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
 				}
 			}, base.Model.Balancing.EffectDuration, battle, summonEffectIdent, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
+			// Passives are re-applied every turn (AddPassiveEffects), replacing this effect - carry the
+			// per-summoner turn counter over so the timer keeps running instead of resetting to 0.
+			BattleEffectGameData previousSummonEffect;
+			if (target.CurrrentEffects != null && target.CurrrentEffects.TryGetValue(summonEffectIdent, out previousSummonEffect) && previousSummonEffect != null)
+			{
+				battleEffectGameData2.m_SummonTurnCounter = previousSummonEffect.m_SummonTurnCounter;
+			}
 			battleEffectGameData2.AddEffect();
 		}
 

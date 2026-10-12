@@ -42,7 +42,7 @@ namespace ABH.GameDatas.Battle.Skills
 				list.Add(m_HealthSteal);
 				var values = list;
 				BattleEffectGameData battleEffectGameData = null;
-				battleEffectGameData = target2.CombatantMainHandEquipment == null || (target2.CombatantMainHandEquipment.BalancingData.Perk.Type != PerkType.HocusPokus && target2.CombatantMainHandEquipment.BalancingData.Perk.Type != PerkType.HocusPokusChiliDrain) ? new BattleEffectGameData(source, target2, new List<BattleEffect>
+				battleEffectGameData = target2.CombatantMainHandEquipment == null || (target2.CombatantMainHandEquipment.Perk.Type != PerkType.HocusPokus && target2.CombatantMainHandEquipment.Perk.Type != PerkType.HocusPokusChiliDrain) ? new BattleEffectGameData(source, target2, new List<BattleEffect>
 				{
 					new BattleEffect
 					{

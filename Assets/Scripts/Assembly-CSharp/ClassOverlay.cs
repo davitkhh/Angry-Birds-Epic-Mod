@@ -32,6 +32,16 @@ public class ClassOverlay : MonoBehaviour
 
 	private Vector3 initialArrowSize;
 
+	private const float NoPassiveSkinOffset = 40f;
+
+	private readonly List<UISprite> m_centerSprites = new List<UISprite>();
+
+	private readonly List<int> initialCenterHeights = new List<int>();
+
+	private readonly List<UISprite> m_bottomSprites = new List<UISprite>();
+
+	private readonly List<Vector3> initialBottomPositions = new List<Vector3>();
+
 	public Color m_PigColor = Color.green;
 
 	public Color m_RedColor = Color.red;
@@ -68,10 +78,52 @@ public class ClassOverlay : MonoBehaviour
 		{
 			initialArrowSize = m_Arrow.cachedTransform.localScale;
 		}
+		var body = m_ContainerControl.transform.Find("Body");
+		if (body)
+		{
+			foreach (var spriteName in new[] { "C", "L", "R" })
+			{
+				var sprite = FindSprite(body, spriteName);
+				if (sprite)
+				{
+					m_centerSprites.Add(sprite);
+					initialCenterHeights.Add(sprite.height);
+				}
+			}
+			foreach (var spriteName in new[] { "B", "BL", "BR" })
+			{
+				var sprite = FindSprite(body, spriteName);
+				if (sprite)
+				{
+					m_bottomSprites.Add(sprite);
+					initialBottomPositions.Add(sprite.cachedTransform.localPosition);
+				}
+			}
+		}
+	}
+
+	private static UISprite FindSprite(Transform parent, string childName)
+	{
+		var child = parent.Find(childName);
+		return child ? child.GetComponent<UISprite>() : null;
+	}
+
+	private void SetSkinExtraOffset(float offset)
+	{
+		for (var i = 0; i < m_centerSprites.Count; i++)
+		{
+			m_centerSprites[i].height = (int)(initialCenterHeights[i] - offset);
+		}
+		for (var i = 0; i < m_bottomSprites.Count; i++)
+		{
+			m_bottomSprites[i].cachedTransform.localPosition = initialBottomPositions[i] + new Vector3(0f, offset, 0f);
+		}
+		m_ContainerControl.m_Size = initialContainerControlSize - new Vector3(0f, offset, 0f);
 	}
 
 	public void ShowClassOverlay(Transform root, IInventoryItemGameData classItem, BirdGameData bird, Camera orientatedCamera)
 	{
+		SetSkinExtraOffset(0f);
 		if (classItem is ClassItemGameData)
 		{
 			FillContent(classItem as ClassItemGameData, bird);
@@ -115,6 +167,7 @@ public class ClassOverlay : MonoBehaviour
 		{
 			m_skinPassiveSkillSprite.gameObject.SetActive(false);
 			m_skinPassiveDesc.gameObject.SetActive(false);
+			SetSkinExtraOffset(NoPassiveSkinOffset);
 		}
 		m_skinAttackBonus.text = "+" + skin.BalancingData.BonusDamage + "%";
 		m_skinHealthBonus.text = "+" + skin.BalancingData.BonusHp + "%";

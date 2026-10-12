@@ -113,6 +113,13 @@ namespace ABH.GameDatas
 			return this;
 		}
 
+		// Swaps in a per-instance copy of the balancing (e.g. a scaled EffectDuration); never pass the shared one modified.
+		public SkillGameData OverrideBalancing(SkillBalancingData balancing)
+		{
+			Balancing = balancing;
+			return this;
+		}
+
 		public string GetIndepthDescription()
 		{
 			return DIContainerInfrastructure.GetLocaService().GetExtendedSkillDescriptions(Balancing.LocaId);

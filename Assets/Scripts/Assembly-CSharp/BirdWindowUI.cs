@@ -64,6 +64,9 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private InventoryItemType m_CurrentItemType = InventoryItemType.Class;
 
+	// Set while editing a showcase NPC ally: only Main Hand / Off Hand, no scrapping or enchanting.
+	private ShowcaseCampDefinition m_AllyShowcase;
+
 	private IInventoryItemGameData m_SelectedItem;
 
 	private bool m_buyableClass;
@@ -151,6 +154,27 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private int m_ScrappingLocks;
 
+	// "Remove upgrades" buttons: copies of the scrap buttons made at runtime, shown when the item has upgrade blueprints.
+	[SerializeField]
+	private Vector3 m_ScrapUpgradesOffset = new Vector3(-142f, 0f, 0f);
+
+	private GameObject m_ScrapUpgradesRoot;
+
+	private GameObject m_ScrapUpgradesRootEnch;
+
+	private UIInputTrigger m_ScrapUpgradesButton;
+
+	private UIInputTrigger m_ScrapUpgradesButtonEnch;
+
+	// Class screen copy: sits in the options column where the Buy button is (Buy only shows for classes not owned).
+	[SerializeField]
+	private Vector3 m_ClassScrapUpgradesPosition = new Vector3(0f, -40f, -2f);
+
+	[SerializeField]
+	private float m_ClassScrapUpgradesScale = 0.6f;
+
+	private GameObject m_ScrapUpgradesRootClass;
+
 	private bool m_finishedSpring;
 
 	private BaseCampStateMgr m_StateMgr;
@@ -194,12 +218,29 @@ public class BirdWindowUI : BirdWindowUIBase
 		DIContainerInfrastructure.GetCoreStateMgr().m_WindowRoot.Enter();
 		base.gameObject.SetActive(true);
 		m_Inventory = inventory;
+		m_AllyShowcase = ShowcaseCamps.GetVisitedAllyCamp();
+		if (m_AllyShowcase != null)
+		{
+			if (!IsAllyEquipmentType(m_CurrentItemType))
+			{
+				m_CurrentItemType = InventoryItemType.MainHandEquipment;
+			}
+			foreach (var openInventoryButton in m_OpenInventoryButtons)
+			{
+				openInventoryButton.gameObject.SetActive(IsAllyEquipmentType(openInventoryButton.m_ItemType));
+			}
+		}
 		if (m_BirdsList == null || m_BirdsList.Count == 0)
 		{
 			m_BirdsList = birds;
 		}
 		m_buyableClass = false;
 		StartCoroutine(InitializeBirdWindowUI(selectedIndex));
+	}
+
+	private static bool IsAllyEquipmentType(InventoryItemType type)
+	{
+		return type == InventoryItemType.MainHandEquipment || type == InventoryItemType.OffHandEquipment;
 	}
 
 	public override void UpdateSlotIndicators()
@@ -440,9 +481,20 @@ public class BirdWindowUI : BirdWindowUIBase
 	{
 		var allowEnchanting = false;
 		var equipmentGameData = m_SelectedItem as EquipmentGameData;
-		if (equipmentGameData != null)
+		if (equipmentGameData != null && m_AllyShowcase == null)
 		{
 			allowEnchanting = equipmentGameData.AllowEnchanting();
+		}
+		if (m_AllyShowcase != null)
+		{
+			if (m_ScrapItemRoot)
+			{
+				m_ScrapItemRoot.SetActive(false);
+			}
+			if (m_ScrapItemRootEnch)
+			{
+				m_ScrapItemRootEnch.SetActive(false);
+			}
 		}
 		switch (m_SelectedItem.ItemBalancing.ItemType)
 		{
@@ -511,6 +563,7 @@ public class BirdWindowUI : BirdWindowUIBase
 			m_ClassInfo.gameObject.SetActive(false);
 			break;
 		}
+		RefreshScrapUpgradesButtons();
 		if (allowEnchanting)
 		{
 			m_EnchantableEquipmentInfo.gameObject.SetActive(true);
@@ -693,6 +746,10 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private void OnSlotToScrap(InventoryItemSlot slot)
 	{
+		if (m_AllyShowcase != null)
+		{
+			return;
+		}
 		slot.SetUsed(true);
 		StartCoroutine(OnSlotScrappedCoroutine(slot));
 	}
@@ -738,6 +795,109 @@ public class BirdWindowUI : BirdWindowUIBase
 		{
 			ScrapEquipment(slot);
 		}
+	}
+
+	private void RefreshScrapUpgradesButtons()
+	{
+		if (m_ScrapUpgradesRoot == null && m_ScrapItemRoot && m_ScrapItemButton)
+		{
+			m_ScrapUpgradesRoot = CloneScrapButton(m_ScrapItemRoot, m_ScrapUpgradesOffset, out m_ScrapUpgradesButton);
+		}
+		if (m_ScrapUpgradesRootEnch == null && m_ScrapItemRootEnch && m_ScrapItemButtonEnch)
+		{
+			// The enchantable bar already has the enchant button left of scrap
+			m_ScrapUpgradesRootEnch = CloneScrapButton(m_ScrapItemRootEnch, m_ScrapUpgradesOffset * 2f, out m_ScrapUpgradesButtonEnch);
+		}
+		if (m_ScrapUpgradesRootClass == null && m_ScrapItemRoot && m_ClassInfo)
+		{
+			var options = m_ClassInfo.transform.Find("5_Options");
+			UIInputTrigger classTrigger;
+			m_ScrapUpgradesRootClass = CloneScrapButton(m_ScrapItemRoot, Vector3.zero, out classTrigger);
+			m_ScrapUpgradesRootClass.transform.parent = options != null ? options : m_ClassInfo.transform;
+			m_ScrapUpgradesRootClass.transform.localPosition = m_ClassScrapUpgradesPosition;
+			m_ScrapUpgradesRootClass.transform.localScale = Vector3.one * m_ClassScrapUpgradesScale;
+		}
+		var upgraded = m_AllyShowcase == null && UpgradeBlueprints.HasUpgrades(m_SelectedItem);
+		var isEquipment = m_SelectedItem is EquipmentGameData;
+		if (m_ScrapUpgradesRoot)
+		{
+			m_ScrapUpgradesRoot.SetActive(upgraded && isEquipment);
+		}
+		if (m_ScrapUpgradesRootEnch)
+		{
+			m_ScrapUpgradesRootEnch.SetActive(upgraded && isEquipment);
+		}
+		if (m_ScrapUpgradesRootClass)
+		{
+			m_ScrapUpgradesRootClass.SetActive(upgraded && m_SelectedItem is ClassItemGameData && !m_buyableClass);
+		}
+	}
+
+	private GameObject CloneScrapButton(GameObject scrapRoot, Vector3 offset, out UIInputTrigger trigger)
+	{
+		var clone = UnityEngine.Object.Instantiate(scrapRoot);
+		clone.name = "Button_ScrapUpgrades";
+		clone.transform.parent = scrapRoot.transform.parent;
+		clone.transform.localPosition = scrapRoot.transform.localPosition + offset;
+		clone.transform.localRotation = scrapRoot.transform.localRotation;
+		clone.transform.localScale = scrapRoot.transform.localScale;
+		foreach (var sprite in clone.GetComponentsInChildren<UISprite>(true))
+		{
+			if (sprite.spriteName == "ScrapItem")
+			{
+				sprite.color = new Color(1f, 0.8f, 0.2f, 1f);
+			}
+		}
+		trigger = clone.GetComponentInChildren<UIInputTrigger>(true);
+		if (trigger != null)
+		{
+			trigger.Clicked += OnScrapUpgradesClicked;
+		}
+		return clone;
+	}
+
+	private void OnScrapUpgradesClicked()
+	{
+		var equipment = m_SelectedItem;
+		if (m_ScrappingLocks > 0 || !UpgradeBlueprints.HasUpgrades(equipment))
+		{
+			return;
+		}
+		DIContainerInfrastructure.GetCoreStateMgr().ShowConfirmationPopup(DIContainerInfrastructure.GetLocaService().Tr("confirmation_scrap_upgrades", "Remove all upgrades from this item? The blueprints come back, along with part of the resources spent."), delegate
+		{
+			ScrapUpgrades(equipment);
+		}, delegate
+		{
+		});
+	}
+
+	private void ScrapUpgrades(IInventoryItemGameData equipment)
+	{
+		var buttonRoot = equipment is ClassItemGameData ? m_ScrapUpgradesRootClass : m_EnchantableEquipmentInfo.gameObject.activeSelf ? m_ScrapUpgradesRootEnch : m_ScrapUpgradesRoot;
+		var gained = DIContainerLogic.CraftingService.ScrapUpgrades(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, equipment);
+		DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
+		DIContainerInfrastructure.GetAsynchStatusService().ShowInfo(DIContainerInfrastructure.GetLocaService().Tr("toast_scrap_upgrades_success", "Upgrades removed"), "scrapUpgradesSuccess", DispatchMessage.Status.Info);
+		if (gained.Count > 0 && buttonRoot)
+		{
+			var loot = UnityEngine.Object.Instantiate(m_LootForExplosionPrefab, buttonRoot.transform.position, Quaternion.identity) as LootDisplayContoller;
+			loot.SetModel(equipment, gained, LootDisplayType.None);
+			foreach (var explodedLoot in loot.Explode(true, false, 0f, true, 0f, 0f))
+			{
+				UnityEngine.Object.Destroy(explodedLoot.gameObject, explodedLoot.gameObject.GetComponent<Animation>().clip.length);
+			}
+			UnityEngine.Object.Destroy(loot.gameObject, 2f);
+		}
+		if (m_SoundTriggers)
+		{
+			m_SoundTriggers.OnTriggerEventFired("item_scrapped");
+		}
+		if (m_SelectedSlot)
+		{
+			m_SelectedSlot.RemoveAssets();
+			m_SelectedSlot.SetModel(equipment, false);
+		}
+		SetItemInfo();
+		m_BirdEquipmentPreviewUI.RefreshStats(true);
 	}
 
 	private void ScrapEquipment(InventoryItemSlot slot)
@@ -911,6 +1071,10 @@ public class BirdWindowUI : BirdWindowUIBase
 		if (m_CurrentItemType != InventoryItemType.Class || m_ownedClass)
 		{
 			DIContainerLogic.InventoryService.EquipBirdWithItem(new List<IInventoryItemGameData> { m_SelectedItem }, m_CurrentItemType, m_SelectedBird.InventoryGameData);
+			if (m_AllyShowcase != null)
+			{
+				ShowcaseCamps.SaveAllyLoadout(m_AllyShowcase, m_SelectedBird);
+			}
 			DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
 			foreach (var itemSlot in m_ItemSlots)
 			{
@@ -1168,6 +1332,10 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private void OnOpenInventoryButtonClicked(InventoryItemType itemType)
 	{
+		if (m_AllyShowcase != null && !IsAllyEquipmentType(itemType))
+		{
+			return;
+		}
 		if (itemType != m_CurrentItemType)
 		{
 			for (var i = 0; i < m_ItemSlots.Count; i++)
@@ -1248,6 +1416,10 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private void OpenEnchantmentUi()
 	{
+		if (m_AllyShowcase != null)
+		{
+			return;
+		}
 		if (m_SelectedSlot && m_SelectedSlot.GetModel() != null && m_CurrentItemType == m_SelectedSlot.GetModel().ItemBalancing.ItemType)
 		{
 			StartCoroutine(ActivateEnchanting());

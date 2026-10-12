@@ -59,6 +59,8 @@ public class SetFusionLogic
 			
 		foreach (var fusedItem in m_itemsFusedCache)
 		{
+			// Upgrade blueprints on fused equipment go back to the inventory like on scrapping
+			UpgradeBlueprints.RemoveAll(player.InventoryGameData, fusedItem as EquipmentGameData);
 			DIContainerLogic.InventoryService.RemoveItem(player.InventoryGameData, fusedItem, 1, "item_fused");
 		}
 

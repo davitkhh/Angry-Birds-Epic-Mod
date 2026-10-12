@@ -630,6 +630,18 @@ namespace ABH.Services.Logic
 			{
 				return 1;
 			}
+			UpgradeBlueprintBalancingData upgradeBlueprint;
+			if (UpgradeBlueprints.TryGetDefinition(craftingRecipeGameData, out upgradeBlueprint))
+			{
+				// Value counts uses left: a new blueprint brings all its uses, a scrap refund returns the uses it lists.
+				string reason;
+				var refund = addreason != null && addreason.TryGetValue("TypeOfUse", out reason) && reason == UpgradeBlueprints.RefundReason;
+				if (item.ItemValue <= 0)
+				{
+					item.ItemData.IsNew = true;
+				}
+				return item.ItemValue + added.added * (refund ? 1 : Math.Max(1, upgradeBlueprint.Uses));
+			}
 			var list = inventory.Items[InventoryItemType.CraftingRecipes];
 			if (craftingRecipeGameData.BalancingData.RecipeCategoryType == InventoryItemType.Consumable && list.Count > 0)
 			{
@@ -980,6 +992,12 @@ namespace ABH.Services.Logic
 			}
 			
 			if (item.ItemBalancing.NameId.StartsWith("daily_post_card"))
+			{
+				return item.ItemValue + added.added;
+			}
+			
+			// Merchant purchase counters stack so restocking offers can limit purchases.
+			if (MerchantStock.IsCounterItem(item.ItemBalancing.NameId))
 			{
 				return item.ItemValue + added.added;
 			}
