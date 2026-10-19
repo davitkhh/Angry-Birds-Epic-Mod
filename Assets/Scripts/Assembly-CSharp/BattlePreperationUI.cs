@@ -198,6 +198,15 @@ public class BattlePreperationUI : MonoBehaviour
 	[SerializeField]
 	private Animation m_AddFriendBirdButtonAnimation;
 
+	private Coroutine m_AddFriendBirdSlide;
+
+	// The add-friend-bird button slides at least as far as its leave clip, and this much past the screen edge.
+	private const float AddFriendBirdLeaveDistance = 200f;
+
+	private const float AddFriendBirdLeaveMargin = 20f;
+
+	private const float AddFriendBirdLeaveTime = 0.22f;
+
 	[SerializeField]
 	private Transform m_FriendBirdParent;
 
@@ -349,15 +358,89 @@ public class BattlePreperationUI : MonoBehaviour
 		m_classMgr.EnterClassManager(false, this);
 	}
 
+	// Swings in with its enter clip. The leave clip only moves it 200 to the right, which leaves it peeking in on wide
+	// screens, so it slides out past the screen's right edge instead (same as the equipment preset window's button).
+	private void ShowAddFriendBirdButton(bool show)
+	{
+		if (m_AddFriendBirdSlide != null)
+		{
+			StopCoroutine(m_AddFriendBirdSlide);
+			m_AddFriendBirdSlide = null;
+		}
+		if (show)
+		{
+			m_AddFriendBirdButtonAnimation.Play("FriendBirdButton_Enter");
+			return;
+		}
+		m_AddFriendBirdButtonAnimation.Stop();
+		var mover = m_chooseFriendBirdButtonTrigger.transform.parent;
+		var start = mover.localPosition;
+		var target = Mathf.Max(start.x, AddFriendBirdLeaveDistance);
+		var interfaceCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+		if (interfaceCamera != null)
+		{
+			// Where its left edge (glow included) clears the screen's right edge.
+			var screenRight = mover.parent.InverseTransformPoint(interfaceCamera.ViewportToWorldPoint(new Vector3(1f, 0.5f, 0f))).x;
+			var buttonLeft = NGUIMath.CalculateRelativeWidgetBounds(mover.parent, m_chooseFriendBirdButtonTrigger.transform).min.x;
+			target = Mathf.Max(target, start.x + screenRight - buttonLeft + AddFriendBirdLeaveMargin);
+		}
+		if (target <= start.x)
+		{
+			return;
+		}
+		if (!base.gameObject.activeInHierarchy)
+		{
+			mover.localPosition = new Vector3(target, start.y, start.z);
+			return;
+		}
+		m_AddFriendBirdSlide = StartCoroutine(SlideAddFriendBirdButton(mover, start, target));
+	}
+
+	private IEnumerator SlideAddFriendBirdButton(Transform mover, Vector3 start, float target)
+	{
+		for (var time = 0f; time < AddFriendBirdLeaveTime; time += Time.unscaledDeltaTime)
+		{
+			var t = time / AddFriendBirdLeaveTime;
+			mover.localPosition = new Vector3(Mathf.Lerp(start.x, target, t * t), start.y, start.z);
+			yield return null;
+		}
+		mover.localPosition = new Vector3(target, start.y, start.z);
+		m_AddFriendBirdSlide = null;
+	}
+
 	// Same hand-off as the class manager: hide this screen (keeping the window backdrop), come back with fresh birds.
 	private void OpenEquipmentPresets()
 	{
 		Leave(true);
 		EquipmentPresetWindowUI.Open(delegate
 		{
+			RefreshShowcaseAllyGear();
 			CreateBirds();
 			Enter(true);
-		});
+		}, SelectPresetAlly);
+	}
+
+	// A preset's ally joins the same way one picked from the friend list does, if this battle lends one and it isn't resting.
+	private bool SelectPresetAlly(FriendGameData friend)
+	{
+		if (m_battleBalancing.UsableFriendBirdsCount <= 0 || !string.IsNullOrEmpty(m_forcedBird) || !DIContainerLogic.SocialService.IsGetFriendBirdPossible(DIContainerInfrastructure.GetCurrentPlayer(), friend))
+		{
+			return false;
+		}
+		SelectFriend(friend);
+		return true;
+	}
+
+	// A preset may have changed a showcase ally's loadout; dress the already chosen ally to match.
+	private void RefreshShowcaseAllyGear()
+	{
+		if (m_SelectedFriend == null || m_SelectedFriend.FriendBird == null || !ShowcaseCamps.IsShowcase(m_SelectedFriend.FriendId))
+		{
+			return;
+		}
+		var bird = new BirdGameData(ShowcaseCamps.ApplyAllyLoadout(m_SelectedFriend.FriendBird.Data));
+		bird.IsNPC = true;
+		m_SelectedFriend.SetFriendBird(bird);
 	}
 
 	public void OnClassInfoLoaded()
@@ -1578,12 +1661,12 @@ public class BattlePreperationUI : MonoBehaviour
 			{
 				button.Selectable(true);
 			}
-			m_AddFriendBirdButtonAnimation.Play("FriendBirdButton_Enter");
+			ShowAddFriendBirdButton(true);
 			m_FriendBirdRoot.SetActive(false);
 		}
 		else if (m_FriendBirdsCount != 0 || m_SelectedFriend != null || !noForcedBird)
 		{
-			m_AddFriendBirdButtonAnimation.Play("FriendBirdButton_Leave");
+			ShowAddFriendBirdButton(false);
 			m_FriendBirdRoot.SetActive(true);
 			if (m_FriendBirdParent.childCount > 0)
 			{
@@ -1819,7 +1902,7 @@ public class BattlePreperationUI : MonoBehaviour
 		m_BackAnimation.Play("BackButton_Leave");
 		if (m_FriendBirdsCount > 0 && m_SelectedFriend == null)
 		{
-			m_AddFriendBirdButtonAnimation.Play("FriendBirdButton_Leave");
+			ShowAddFriendBirdButton(false);
 		}
 		m_classChangeButtonAnimation.Play("BackButton_Leave");
 		if (m_PresetButtonAnimation)

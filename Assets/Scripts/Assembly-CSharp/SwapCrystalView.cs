@@ -34,11 +34,41 @@ public class SwapCrystalView : MonoBehaviour
 	// Used by PigSwapMorph for the pigs this crystal transforms.
 	public Material m_PigMorphMaterial;
 
+	// Saturation of the transforming pigs' fill: 0 = grey, 1 = default, 2 = fully saturated (see GetPigTintColors).
+	// A crystal's "pig_saturation" skill parameter overrides it.
+	public float m_PigTintSaturation = 1f;
+
 	public float m_BobHeight = 6f;
 
 	public float m_BobSpeed = 1.6f;
 
 	public float m_GlowSize = 150f;
+
+	// Swap beam (PlayBeam): a ray of light from the crystal that turns about the X axis, tipping toward the camera
+	// from straight up to straight down and on around, flickering red/blue, for as long as its sound plays.
+	public Texture2D m_BeamTexture;
+
+	public float m_BeamLength = 520f;
+
+	public float m_BeamBaseWidth = 26f;
+
+	public float m_BeamTipWidth = 120f;
+
+	// Seconds from pointing straight up to straight down (constant speed).
+	public float m_BeamHalfTurnSeconds = 1f;
+
+	// Red/blue switches per second.
+	public float m_BeamFlickerRate = 8f;
+
+	public float m_BeamOpacity = 0.85f;
+
+	public string m_BeamSoundId = "SkillFX_Blessing_MagicalConcealment_Start";
+
+	// How long the beam stays if its sound can't be found.
+	public float m_BeamFallbackSeconds = 1.5f;
+
+	// How long before the crystal's highest point (end of the swap's tint-in) the beam starts.
+	public float m_BeamLeadSeconds = 0.15f;
 
 	private readonly List<Material> m_Materials = new List<Material>();
 
@@ -46,6 +76,13 @@ public class SwapCrystalView : MonoBehaviour
 	private readonly List<Material> m_PodiumMaterials = new List<Material>();
 
 	private readonly List<Mesh> m_Meshes = new List<Mesh>();
+
+	// Not faded with the rest: their color is the beam's flicker.
+	private readonly List<Material> m_BeamMaterials = new List<Material>();
+
+	private Transform m_Beam;
+
+	private Coroutine m_BeamRoutine;
 
 	private Material m_CrystalMaterial;
 
@@ -77,7 +114,113 @@ public class SwapCrystalView : MonoBehaviour
 		m_Materials.AddRange(m_PodiumMaterials);
 		CreateGlow();
 		CreateGroundShadow();
+		CreateBeam();
 		SetAlpha(0f);
+	}
+
+	private void CreateBeam()
+	{
+		m_Beam = new GameObject("Beam").transform;
+		m_Beam.gameObject.layer = base.gameObject.layer;
+		m_Beam.parent = m_Crystal;
+		// Pivot at the crystal's center, just behind it, so the crystal draws over the beam's base.
+		m_Beam.localPosition = new Vector3(0f, 0f, 0.5f);
+		m_Beam.localRotation = Quaternion.identity;
+		m_Beam.localScale = Vector3.one;
+		// A wide colored ray with a narrow, paler core.
+		CreateBeamPart("Ray", m_BeamBaseWidth, m_BeamTipWidth, 0f);
+		CreateBeamPart("Core", m_BeamBaseWidth * 0.35f, m_BeamTipWidth * 0.3f, -0.1f);
+		m_Beam.gameObject.SetActive(false);
+	}
+
+	// A quad tapering from baseWidth at the pivot to tipWidth at m_BeamLength straight up.
+	private void CreateBeamPart(string name, float baseWidth, float tipWidth, float z)
+	{
+		var part = new GameObject(name);
+		part.layer = base.gameObject.layer;
+		part.transform.parent = m_Beam;
+		part.transform.localPosition = new Vector3(0f, 0f, z);
+		part.transform.localRotation = Quaternion.identity;
+		part.transform.localScale = Vector3.one;
+		var mesh = new Mesh
+		{
+			name = "SwapCrystalBeam" + name,
+			vertices = new[] { new Vector3(-baseWidth * 0.5f, 0f, 0f), new Vector3(-tipWidth * 0.5f, m_BeamLength, 0f), new Vector3(tipWidth * 0.5f, m_BeamLength, 0f), new Vector3(baseWidth * 0.5f, 0f, 0f) },
+			uv = new[] { new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(1f, 0f) },
+			colors = new[] { Color.white, Color.white, Color.white, Color.white },
+			triangles = new[] { 0, 1, 2, 0, 2, 3 }
+		};
+		part.AddComponent<MeshFilter>().sharedMesh = mesh;
+		var material = new Material(m_CrystalMaterial);
+		material.SetTexture("_MainTex", m_BeamTexture);
+		material.SetTexture("_AltTex", m_BeamTexture);
+		material.SetFloat("_GlintStrength", 0f);
+		part.AddComponent<MeshRenderer>().sharedMaterial = material;
+		m_BeamMaterials.Add(material);
+		m_Meshes.Add(mesh);
+	}
+
+	// Starts the beam and its sound after delay; it lasts as long as the sound.
+	public void PlayBeam(float delay)
+	{
+		if (m_BeamRoutine != null)
+		{
+			StopCoroutine(m_BeamRoutine);
+		}
+		m_BeamRoutine = StartCoroutine(BeamRoutine(delay));
+	}
+
+	private IEnumerator BeamRoutine(float delay)
+	{
+		if (delay > 0f)
+		{
+			yield return new WaitForSeconds(delay);
+		}
+		var duration = SoundLength(m_BeamSoundId);
+		if (duration <= 0f)
+		{
+			duration = m_BeamFallbackSeconds;
+		}
+		DIContainerInfrastructure.AudioManager.PlaySound(m_BeamSoundId);
+		var startBlue = m_BlueAmount > 0.5f;
+		m_Beam.gameObject.SetActive(true);
+		for (var t = 0f; t < duration; t += Time.deltaTime)
+		{
+			// Negative angles tip the top of the beam toward the camera (-z) first.
+			m_Beam.localRotation = Quaternion.Euler(-180f * t / Mathf.Max(0.01f, m_BeamHalfTurnSeconds), 0f, 0f);
+			var blue = ((int)(t * m_BeamFlickerRate) % 2 == 0) == startBlue;
+			var fade = Mathf.Clamp01(t / 0.1f) * Mathf.Clamp01((duration - t) / 0.15f);
+			SetBeamColor(blue ? Blue : Red, m_BeamOpacity * fade * m_Alpha);
+			yield return null;
+		}
+		m_Beam.gameObject.SetActive(false);
+		m_BeamRoutine = null;
+	}
+
+	private void SetBeamColor(Color color, float alpha)
+	{
+		for (var i = 0; i < m_BeamMaterials.Count; i++)
+		{
+			// The core is paler than the ray.
+			var c = i == 0 ? color : Color.Lerp(color, Color.white, 0.6f);
+			c.a = alpha;
+			m_BeamMaterials[i].SetColor("_Color", c);
+		}
+	}
+
+	// Length of the clip behind a sound key, or 0 if it can't be found.
+	private static float SoundLength(string soundId)
+	{
+		var audio = DIContainerInfrastructure.AudioManager;
+		var sound = audio != null ? audio.GetSound(soundId) as Sound : null;
+		if (sound == null)
+		{
+			return 0f;
+		}
+		var assetName = sound.AssetNames.Count > 0 ? sound.AssetNames[0] : sound.NameId;
+		var provider = DIContainerInfrastructure.GetAudioAssetProvider(sound.AssetPrioritiy);
+		var clip = provider != null ? provider.GetAudioClip(assetName) : null;
+		return clip != null ? clip.length : 0f;
 	}
 
 	private void CreateGlow()
@@ -124,6 +267,10 @@ public class SwapCrystalView : MonoBehaviour
 	private void OnDestroy()
 	{
 		foreach (var material in m_Materials)
+		{
+			Destroy(material);
+		}
+		foreach (var material in m_BeamMaterials)
 		{
 			Destroy(material);
 		}
@@ -213,10 +360,16 @@ public class SwapCrystalView : MonoBehaviour
 
 	// Crystal colors: a dark fill for the inside of a transforming pig, a lighter one for its rim, and an even
 	// lighter, more saturated border (all HSL, so the border really is both lighter and more saturated).
-	public static Color[] GetPigTintColors(bool blue)
+	// saturation: 0 = grey, 1 = default, 2 = fully saturated (in between, each color moves toward full saturation).
+	public static Color[] GetPigTintColors(bool blue, float saturation)
 	{
 		var hue = blue ? 0.6f : 0f;
-		return new[] { Hsl(hue, 0.75f, 0.3f), Hsl(hue, 0.75f, 0.66f), Hsl(hue, 1f, 0.8f) };
+		return new[] { Hsl(hue, Saturate(0.75f, saturation), 0.3f), Hsl(hue, Saturate(0.75f, saturation), 0.66f), Hsl(hue, Saturate(1f, saturation), 0.8f) };
+	}
+
+	private static float Saturate(float s, float saturation)
+	{
+		return saturation <= 1f ? s * Mathf.Max(0f, saturation) : Mathf.Lerp(s, 1f, Mathf.Clamp01(saturation - 1f));
 	}
 
 	private static Color Hsl(float h, float s, float l)

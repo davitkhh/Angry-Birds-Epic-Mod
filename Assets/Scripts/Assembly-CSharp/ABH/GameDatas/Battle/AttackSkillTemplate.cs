@@ -222,9 +222,20 @@ namespace ABH.GameDatas.Battle
 				yield break;
 			}
 			var chargeDone = source is PigCombatant && (source as PigCombatant).ChargeDone;
+			// AI combatants start a charge at the top of their turn and evaluate it again here. Player-picked bird
+			// skills skip the first evaluation, so run it now: a charge then lasts as many turns as a pig's.
+			if (source is BirdCombatant && base.Model.SkillParameters.ContainsKey("charge") && !source.ChargeDone && (source.CurrrentEffects == null || !source.CurrrentEffects.ContainsKey("Charge_" + base.Model.Balancing.AssetId)))
+			{
+				EvaluateCharge(battle, source, m_Targets, target);
+			}
 			if (EvaluateCharge(battle, source, m_Targets, target))
 			{
 				m_Source.CombatantView.targetSheltered = null;
+				if (source is BirdCombatant && source.CombatantView != null)
+				{
+					// Charging up, like a pig does at the start of each charging turn.
+					yield return new WaitForSeconds(source.CombatantView.PlayAffectedAnimation());
+				}
 				source.IsAttacking = false;
 				yield break;
 			}
@@ -473,6 +484,7 @@ namespace ABH.GameDatas.Battle
 					{
 						action5(normalizedDamage, m_Battle, m_Source, skillTarget);
 					}
+					PickPocketPassive.StealOnHit(m_Battle, this, m_Source, skillTarget);
 					if (normalizedDamage > 0 && source.CombatantMainHandEquipment != null && m_ApplyPerks && ApplyDelayedPerkSharedRoll(source, skillTarget, battle, ref perkDamagedealt))
 					{
 						skillTarget.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;

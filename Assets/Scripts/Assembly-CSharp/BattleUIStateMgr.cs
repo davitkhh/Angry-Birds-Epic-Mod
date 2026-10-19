@@ -339,10 +339,55 @@ public class BattleUIStateMgr : MonoBehaviour
 		}
 	}
 
+	// Set while the turn banner is hidden (e.g. for a cutscene), so the next birds' turn brings it back with its entry
+	// animation instead of the pigs-to-birds flip.
+	private bool m_TurnIndicatorHidden;
+
+	// The banner's own Hide clip is instant; this leave animation is the outgoing half of the battle's turn change
+	// (Guide_BattleTurnHelper_ChangeTo*Turn: pop to 1.1, shrink away). Built once, for both banners (the hidden one is
+	// offscreen anyway).
+	private const string TurnIndicatorLeaveClip = "Guide_BattleTurnHelper_Leave";
+
+	// How long the turn banner takes to leave (so a cutscene can wait for it before its bars come in).
+	public float TurnIndicatorHideTime
+	{
+		get
+		{
+			var leave = TurnIndicatorLeave();
+			return leave != null ? leave.length : 0f;
+		}
+	}
+
+	private AnimationClip TurnIndicatorLeave()
+	{
+		var clips = m_TurnIndicator != null ? m_TurnIndicator.GetComponent<Animation>() : null;
+		if (clips == null)
+		{
+			return null;
+		}
+		if (clips[TurnIndicatorLeaveClip] == null)
+		{
+			var clip = new AnimationClip { legacy = true, name = TurnIndicatorLeaveClip };
+			var scale = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.041666668f, 1.1f), new Keyframe(0.125f, 1.1f), new Keyframe(0.25f, 0.001f));
+			foreach (var banner in new[] { "Root/BirdsTurn", "Root/PigsTurn" })
+			{
+				clip.SetCurve(banner, typeof(Transform), "localScale.x", scale);
+				clip.SetCurve(banner, typeof(Transform), "localScale.y", scale);
+			}
+			clips.AddClip(clip, TurnIndicatorLeaveClip);
+		}
+		return clips[TurnIndicatorLeaveClip].clip;
+	}
+
 	public void HideTurnIndicator()
 	{
 		DebugLog.Log("[BattleUIStateMgr] HideTurnIndicator");
-		if (m_TurnIndicator != null)
+		m_TurnIndicatorHidden = true;
+		if (m_TurnIndicator != null && TurnIndicatorLeave() != null)
+		{
+			m_TurnIndicator.GetComponent<Animation>().Play(TurnIndicatorLeaveClip);
+		}
+		else if (m_TurnIndicator != null)
 		{
 			m_TurnIndicator.GetComponent<Animation>().Play("Guide_BattleTurnHelper_Hide");
 		}
@@ -359,6 +404,11 @@ public class BattleUIStateMgr : MonoBehaviour
 				m_TurnIndicator.SetActive(true);
 			}
 			DebugLog.Log("[BattleUIStateMgr] ShowTurnIndicator: Changing animation state");
+			if (m_TurnIndicatorHidden && nextTurnFaction == Faction.Birds)
+			{
+				lastTurnFaction = Faction.None;
+			}
+			m_TurnIndicatorHidden = false;
 			if (lastTurnFaction == Faction.None && nextTurnFaction == Faction.Birds)
 			{
 				m_TurnIndicator.GetComponent<Animation>().Play("Guide_BattleTurnHelper_BirdTurn");
@@ -374,9 +424,18 @@ public class BattleUIStateMgr : MonoBehaviour
 		}
 	}
 
+	// The intro battle (battle_000) shows no wave counter: its second wave is a scripted loss.
+	private bool ShowsWaveCounter
+	{
+		get
+		{
+			return m_BattleMgr.Model.Balancing.BattleParticipantsIds.Count > 1 && m_BattleMgr.Model.Balancing.NameId != "battle_000";
+		}
+	}
+
 	public IEnumerator Enter()
 	{
-		if (m_BattleMgr.Model.Balancing.BattleParticipantsIds.Count > 1)
+		if (ShowsWaveCounter)
 		{
 			m_ProgressIndicator.Enter();
 		}
@@ -400,7 +459,7 @@ public class BattleUIStateMgr : MonoBehaviour
 
 	public IEnumerator Leave()
 	{
-		if (m_BattleMgr.Model.Balancing.BattleParticipantsIds.Count > 1)
+		if (ShowsWaveCounter)
 		{
 			m_ProgressIndicator.Leave();
 		}
@@ -701,6 +760,10 @@ public class BattleUIStateMgr : MonoBehaviour
 
 	public void UpdateProgressBar()
 	{
+		if (m_BattleMgr.Model.Balancing.NameId == "battle_000")
+		{
+			return;
+		}
 		StartCoroutine(m_ProgressIndicator.UpdateProgress());
 	}
 

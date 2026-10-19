@@ -221,13 +221,13 @@ public class BirdWindowUI : BirdWindowUIBase
 		m_AllyShowcase = ShowcaseCamps.GetVisitedAllyCamp();
 		if (m_AllyShowcase != null)
 		{
-			if (!IsAllyEquipmentType(m_CurrentItemType))
+			if (!IsAllyTab(m_CurrentItemType))
 			{
 				m_CurrentItemType = InventoryItemType.MainHandEquipment;
 			}
 			foreach (var openInventoryButton in m_OpenInventoryButtons)
 			{
-				openInventoryButton.gameObject.SetActive(IsAllyEquipmentType(openInventoryButton.m_ItemType));
+				openInventoryButton.gameObject.SetActive(IsAllyTab(openInventoryButton.m_ItemType));
 			}
 		}
 		if (m_BirdsList == null || m_BirdsList.Count == 0)
@@ -238,9 +238,10 @@ public class BirdWindowUI : BirdWindowUIBase
 		StartCoroutine(InitializeBirdWindowUI(selectedIndex));
 	}
 
-	private static bool IsAllyEquipmentType(InventoryItemType type)
+	// Allies show their class (to inspect it, with its costume passive) and can swap Main Hand / Off Hand.
+	private static bool IsAllyTab(InventoryItemType type)
 	{
-		return type == InventoryItemType.MainHandEquipment || type == InventoryItemType.OffHandEquipment;
+		return type == InventoryItemType.Class || type == InventoryItemType.MainHandEquipment || type == InventoryItemType.OffHandEquipment;
 	}
 
 	public override void UpdateSlotIndicators()
@@ -514,8 +515,14 @@ public class BirdWindowUI : BirdWindowUIBase
 			{
 				type = string.IsNullOrEmpty(selectedSkin.BalancingData.PassiveSkillNameId) ? 1 : 2;
 			}
+			else if (m_AllyShowcase != null && selectedSkin != null && !string.IsNullOrEmpty(selectedSkin.BalancingData.PassiveSkillNameId))
+			{
+				// An ally's default costume can carry the class passive (McCool's Pick Pocket): show it.
+				type = 2;
+			}
 			
 			m_ClassInfoAnimator.SetInteger("Type", type);
+			m_ClassInfo.m_IsAlly = m_AllyShowcase != null;
 			
 			m_ClassInfo.SetModel(classItem, m_SelectedBird, m_buyableClass, selectedSkin, m_hiddenClass, m_SelectedSlot);
 			break;
@@ -674,9 +681,17 @@ public class BirdWindowUI : BirdWindowUIBase
 		m_SelectedItem = slot.GetModel();
 		
 		var classItem = m_SelectedItem.ItemBalancing as ClassItemBalancingData;
-		if (classItem != null)
+		if (classItem != null && m_AllyShowcase != null)
 		{
-			m_ownedClass = DIContainerLogic.InventoryService.CheckForItem(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_SelectedItem.ItemBalancing.NameId);
+			// The ally's own class, from its armory: owned by the ally, nothing to buy.
+			m_ownedClass = true;
+			m_hiddenClass = false;
+			m_buyableClass = false;
+			m_alreadyEquipped = m_SelectedBird.ClassItem != null && m_SelectedBird.ClassItem.BalancingData.NameId == classItem.NameId;
+		}
+		else if (classItem != null)
+		{
+			m_ownedClass = DIContainerInfrastructure.GetCurrentPlayer() != null && DIContainerLogic.InventoryService.CheckForItem(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_SelectedItem.ItemBalancing.NameId);
 			m_hiddenClass = !m_ownedClass && (m_SelectedItem as ClassItemGameData).ClassNotYetAvailableForPurchase();
 			m_buyableClass = !m_hiddenClass && !DIContainerLogic.InventoryService.CheckForItem(m_Inventory, m_SelectedItem.ItemBalancing.NameId);
 			if (m_ownedClass)
@@ -938,7 +953,7 @@ public class BirdWindowUI : BirdWindowUIBase
 	private void SetItemListContent()
 	{
 		m_GameDatas = m_Inventory.Items[m_CurrentItemType]
-			.Where(i => i.IsValidForBird(m_SelectedBird))
+			.Where(i => i.IsValidForBird(m_SelectedBird) || (m_AllyShowcase != null && i is ClassItemGameData))
 			.OrderByDescending(d => d.ItemMainStat)
 			.ToList();
 		IList<ClassItemBalancingData> list = DIContainerBalancing.Service.GetBalancingDataList<ClassItemBalancingData>()
@@ -1332,7 +1347,7 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private void OnOpenInventoryButtonClicked(InventoryItemType itemType)
 	{
-		if (m_AllyShowcase != null && !IsAllyEquipmentType(itemType))
+		if (m_AllyShowcase != null && !IsAllyTab(itemType))
 		{
 			return;
 		}

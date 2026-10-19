@@ -16,6 +16,8 @@ public class SwapCrystalDirector : MonoBehaviour
 {
 	private const float AppearDuration = 0.6f;
 
+	private const string CounterBubbleId = "SwapCrystalTurns";
+
 	private const float VanishDuration = 0.5f;
 
 	// A turn without a swap: a short pulse so it's clear the crystal had its go.
@@ -44,6 +46,17 @@ public class SwapCrystalDirector : MonoBehaviour
 
 		// Its turn in the current pigs' turn hasn't come yet.
 		public bool Pending;
+
+		// Turns left until it swaps, when that's more than one turn (the timer bubble pigs use for charging).
+		public CharacterSpeechBubble Counter;
+
+		public int TurnsLeft
+		{
+			get
+			{
+				return Config.Turns - TurnsTaken % Config.Turns;
+			}
+		}
 
 		public SwapCrystalConfig Config
 		{
@@ -121,6 +134,27 @@ public class SwapCrystalDirector : MonoBehaviour
 		}
 	}
 
+	// The regular battle bubble spawner skips non-participating combatants, so the crystal's is set up here.
+	private static CharacterSpeechBubble CreateCounter(SwapCrystalCombatant combatant, int turnsLeft)
+	{
+		var view = combatant.CombatantView;
+		// The timer-only bubble isn't assigned in the visual effects balancing; the charge bubble is.
+		var effects = DIContainerLogic.GetVisualEffectsBalancing();
+		var prefab = effects.OnlyTimerBubble != null ? effects.OnlyTimerBubble : effects.LargeBubble;
+		if (prefab == null)
+		{
+			return null;
+		}
+		var bubble = Instantiate(prefab);
+		UnityHelper.SetLayerRecusively(bubble.gameObject, view.gameObject.layer);
+		view.PositionBubble(view, bubble.gameObject);
+		view.m_SpeechBubbles[CounterBubbleId] = bubble;
+		bubble.SetModel(combatant, string.Empty, turnsLeft);
+		bubble.DisableTargetIcon(true);
+		bubble.ShowAndMinimize();
+		return bubble;
+	}
+
 	private void Subscribe()
 	{
 		if (m_SubscribedBattle == Battle)
@@ -191,11 +225,14 @@ public class SwapCrystalDirector : MonoBehaviour
 			crystal.TurnsTaken++;
 			if (crystal.TurnsTaken % crystal.Config.Turns == 0)
 			{
+				// Like a pig's charge counter, it goes when the charged action happens.
+				RemoveCounter(crystal);
 				yield return StartCoroutine(Swap(crystal));
 			}
 			else
 			{
 				var view = crystal.View;
+				UpdateCounter(crystal);
 				yield return Animate(IdleTurnDuration, t => view.SetFlash(Mathf.Sin(t * Mathf.PI) * 0.35f));
 			}
 			if (crystal.View != null)
@@ -205,11 +242,42 @@ public class SwapCrystalDirector : MonoBehaviour
 		}
 	}
 
+	// Like a pig's charge counter: shown from the first turn of charging (turns left until the swap), counting down.
+	private static void UpdateCounter(Crystal crystal)
+	{
+		if (crystal.Counter != null)
+		{
+			crystal.Counter.UpdateBubbleTurnValue(crystal.TurnsLeft);
+			return;
+		}
+		try
+		{
+			crystal.Counter = CreateCounter(crystal.Combatant, crystal.TurnsLeft);
+		}
+		catch (Exception e)
+		{
+			DebugLog.Error("[SwapCrystal] Couldn't create the turn counter: " + e);
+		}
+	}
+
+	private static void RemoveCounter(Crystal crystal)
+	{
+		if (crystal.Counter != null)
+		{
+			crystal.Counter.RemoveBubble();
+			crystal.Counter = null;
+		}
+		var view = crystal.Combatant.CombatantView;
+		if (view != null)
+		{
+			view.m_SpeechBubbles.Remove(CounterBubbleId);
+		}
+	}
+
 	private IEnumerator Swap(Crystal crystal)
 	{
 		var view = crystal.View;
-		var fromColors = SwapCrystalView.GetPigTintColors(crystal.Blue);
-		var toColors = SwapCrystalView.GetPigTintColors(!crystal.Blue);
+		var saturation = crystal.Config.PigSaturation >= 0f ? crystal.Config.PigSaturation : view.m_PigTintSaturation;
 		var swaps = new List<KeyValuePair<PigCombatant, string>>();
 		var pigs = Battle.m_CombatantsPerFaction.ContainsKey(Faction.Pigs) ? Battle.m_CombatantsPerFaction[Faction.Pigs].OfType<PigCombatant>().ToList() : new List<PigCombatant>();
 		foreach (var pig in pigs)
@@ -224,7 +292,7 @@ public class SwapCrystalDirector : MonoBehaviour
 		// Each pig's new rig is spawned in its own frame while the crystal charges (all at once dropped frames); the
 		// pigs look unchanged until the tint starts.
 		var morphs = new List<PigSwapMorph>();
-		var beginning = StartCoroutine(BeginMorphs(swaps, morphs, view.m_PigMorphMaterial, fromColors, toColors));
+		var beginning = StartCoroutine(BeginMorphs(swaps, morphs, view.m_PigMorphMaterial, crystal.Config, saturation));
 		// The crystal rises while it charges and colors the pigs, stays up through the swap, and settles as the color fades.
 		yield return Animate(ChargeDuration, t =>
 		{
@@ -235,6 +303,8 @@ public class SwapCrystalDirector : MonoBehaviour
 		// Their captures start the frame after Begin.
 		yield return null;
 
+		// The crystal reaches its highest point at the end of the tint-in; its beam (and sound) start just before.
+		view.PlayBeam(Mathf.Max(0f, TintInDuration - view.m_BeamLeadSeconds));
 		yield return Animate(TintInDuration, t =>
 		{
 			var strength = Mathf.SmoothStep(0f, 1f, t);
@@ -277,13 +347,18 @@ public class SwapCrystalDirector : MonoBehaviour
 		}
 	}
 
-	private IEnumerator BeginMorphs(List<KeyValuePair<PigCombatant, string>> swaps, List<PigSwapMorph> morphs, Material material, Color[] fromColors, Color[] toColors)
+	// Each pig type has its own color: the first listed type is blue, the second red. A pig fades from its type's color
+	// into the other one as it becomes the other type.
+	private IEnumerator BeginMorphs(List<KeyValuePair<PigCombatant, string>> swaps, List<PigSwapMorph> morphs, Material material, SwapCrystalConfig config, float saturation)
 	{
+		var blueColors = SwapCrystalView.GetPigTintColors(true, saturation);
+		var redColors = SwapCrystalView.GetPigTintColors(false, saturation);
 		foreach (var swap in swaps)
 		{
 			if (swap.Key.IsParticipating && swap.Key.CombatantView != null)
 			{
-				morphs.Add(PigSwapMorph.Begin(swap.Key, swap.Value, m_BattleMgr, material, fromColors, toColors));
+				var fromBlue = swap.Key.CombatantNameId == config.PigNameIds[0];
+				morphs.Add(PigSwapMorph.Begin(swap.Key, swap.Value, m_BattleMgr, material, fromBlue ? blueColors : redColors, fromBlue ? redColors : blueColors));
 			}
 			yield return null;
 		}

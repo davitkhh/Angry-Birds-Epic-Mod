@@ -225,8 +225,8 @@ namespace ABH.Services.Logic
 		private List<BirdGameData> GetCinematicIntroBirds()
 		{
 			var list = new List<BirdGameData>();
-			var birdGameData = new BirdGameData("bird_red_cinematic", 60);
-			var birdGameData2 = new BirdGameData("bird_yellow_cinematic", 60);
+			var birdGameData = new BirdGameData("bird_red_cinematic", 1);
+			var birdGameData2 = new BirdGameData("bird_yellow_cinematic", 1);
 			birdGameData.ClassSkin = birdGameData.InventoryGameData.Items[InventoryItemType.Skin].OrderBy(s => (s as SkinItemGameData).BalancingData.SortPriority).LastOrDefault() as SkinItemGameData;
 			birdGameData2.ClassSkin = birdGameData2.InventoryGameData.Items[InventoryItemType.Skin].OrderBy(s => (s as SkinItemGameData).BalancingData.SortPriority).LastOrDefault() as SkinItemGameData;
 			list.Add(birdGameData);

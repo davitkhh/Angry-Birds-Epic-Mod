@@ -6076,32 +6076,32 @@ MonoBehaviour:
       boneNodeIndex: 27
       triggerEventTypes: 02000000040000000300000006000000
       pivotOffset: {x: 0, y: 0}
-      upperLeft: {x: 0, y: 0, z: 0}
-      bottomLeft: {x: 0, y: 0, z: 0}
-      bottomRight: {x: 0, y: 0, z: 0}
-      upperRight: {x: 0, y: 0, z: 0}
+      upperLeft: {x: -93, y: 35, z: 0}
+      bottomLeft: {x: -93, y: -35, z: 0}
+      bottomRight: {x: 93, y: -35, z: 0}
+      upperRight: {x: 93, y: 35, z: 0}
       uv:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 0
-        height: 0
+        y: 0.6875
+        width: 0.18164062
+        height: 0.068359375
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: bf7d4ef0286996c459d63a23938b5895, type: 2}
+      atlas: {fileID: 11400000, guid: 8f709b32c609ada48b16240e10139026, type: 2}
       textureGUID: 7b8c52054c4a83e41855b691ec7632db
-      materialIndex: 0
+      materialIndex: 1
       depth: 25
-      originalAtlas: {fileID: 11400000, guid: bf7d4ef0286996c459d63a23938b5895, type: 2}
+      originalAtlas: {fileID: 11400000, guid: 8f709b32c609ada48b16240e10139026, type: 2}
       originalTextureGUID: 7b8c52054c4a83e41855b691ec7632db
-      originalMaterialIndex: 0
+      originalMaterialIndex: 1
       originalUV:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 0
-        height: 0
+        y: 0.6875
+        width: 0.18164062
+        height: 0.068359375
       originalPivotOffset: {x: 0, y: 0}
   - clipIndex: 2
     frame: 1
@@ -6916,32 +6916,32 @@ MonoBehaviour:
       boneNodeIndex: 27
       triggerEventTypes: 02000000040000000300000006000000
       pivotOffset: {x: 0, y: 0}
-      upperLeft: {x: 0, y: 0, z: 0}
-      bottomLeft: {x: 0, y: 0, z: 0}
-      bottomRight: {x: 0, y: 0, z: 0}
-      upperRight: {x: 0, y: 0, z: 0}
+      upperLeft: {x: -93, y: 35, z: 0}
+      bottomLeft: {x: -93, y: -35, z: 0}
+      bottomRight: {x: 93, y: -35, z: 0}
+      upperRight: {x: 93, y: 35, z: 0}
       uv:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 0
-        height: 0
+        y: 0.6875
+        width: 0.18164062
+        height: 0.068359375
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: bf7d4ef0286996c459d63a23938b5895, type: 2}
+      atlas: {fileID: 11400000, guid: 8f709b32c609ada48b16240e10139026, type: 2}
       textureGUID: 7b8c52054c4a83e41855b691ec7632db
-      materialIndex: 0
+      materialIndex: 1
       depth: 25
-      originalAtlas: {fileID: 11400000, guid: bf7d4ef0286996c459d63a23938b5895, type: 2}
+      originalAtlas: {fileID: 11400000, guid: 8f709b32c609ada48b16240e10139026, type: 2}
       originalTextureGUID: 7b8c52054c4a83e41855b691ec7632db
-      originalMaterialIndex: 0
+      originalMaterialIndex: 1
       originalUV:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 0
-        height: 0
+        y: 0.6875
+        width: 0.18164062
+        height: 0.068359375
       originalPivotOffset: {x: 0, y: 0}
   - clipIndex: 3
     frame: 0

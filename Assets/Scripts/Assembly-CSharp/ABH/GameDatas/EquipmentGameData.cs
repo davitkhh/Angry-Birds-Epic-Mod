@@ -179,7 +179,8 @@ namespace ABH.GameDatas
 				{
 					return m_EquipmentItemBalancing;
 				}
-				DIContainerBalancing.Service.TryGetBalancingData<EquipmentBalancingData>(BalancingData.CorrespondingSetItemId, out m_EquipmentItemBalancing);
+				var partner = string.IsNullOrEmpty(BalancingData.CorrespondingSetItemId) ? CustomEquipmentSets.GetPartnerNameId(BalancingData.NameId) : BalancingData.CorrespondingSetItemId;
+				DIContainerBalancing.Service.TryGetBalancingData<EquipmentBalancingData>(partner, out m_EquipmentItemBalancing);
 				return m_EquipmentItemBalancing;
 			}
 		}
@@ -196,8 +197,8 @@ namespace ABH.GameDatas
 				{
 					return m_SetItemSkill;
 				}
-				DebugLog.Log("Set Item Skill Name Id: " + BalancingData.SetItemSkill);
-				m_SetItemSkill = new SkillGameData(BalancingData.SetItemSkill);
+				DebugLog.Log("Set Item Skill Name Id: " + SetItemSkillNameId);
+				m_SetItemSkill = new SkillGameData(SetItemSkillNameId);
 				return m_SetItemSkill;
 			}
 		}
@@ -216,7 +217,7 @@ namespace ABH.GameDatas
 				}
 				if (string.IsNullOrEmpty(BalancingData.PvpSetItemSkill))
 				{
-					m_PvpSetItemSkill = new SkillGameData(BalancingData.SetItemSkill);
+					m_PvpSetItemSkill = new SkillGameData(SetItemSkillNameId);
 				}
 				else
 				{
@@ -226,11 +227,30 @@ namespace ABH.GameDatas
 			}
 		}
 
+		// Vanilla sets come from the balancing; pairs outside the gacha set system (Piggy McCool's Glass Cannon) from
+		// CustomEquipmentSets.
 		public bool IsSetItem
 		{
 			get
 			{
+				return !string.IsNullOrEmpty(BalancingData.CorrespondingSetItemId) || CustomEquipmentSets.GetPartnerNameId(BalancingData.NameId) != null;
+			}
+		}
+
+		// Only the balancing-defined sets of the gacha (not CustomEquipmentSets pairs).
+		public bool IsGachaSetItem
+		{
+			get
+			{
 				return !string.IsNullOrEmpty(BalancingData.CorrespondingSetItemId);
+			}
+		}
+
+		private string SetItemSkillNameId
+		{
+			get
+			{
+				return string.IsNullOrEmpty(BalancingData.SetItemSkill) ? CustomEquipmentSets.GetSetSkillNameId(BalancingData.NameId) : BalancingData.SetItemSkill;
 			}
 		}
 
@@ -358,11 +378,42 @@ namespace ABH.GameDatas
 
 		public static string GetPerkIcon(EquipmentGameData equipmentGameData)
 		{
-			if (equipmentGameData == null)
+			// Perk-less items (e.g. McCool's "No Off Hand") have no perk icon.
+			if (equipmentGameData == null || equipmentGameData.Perk == null)
 			{
 				return string.Empty;
 			}
 			return GetPerkIconNameByPerk(equipmentGameData.Perk.Type);
+		}
+
+		// Shows the item's perk icon, or hides it together with the round slot it sits on (any sibling drawn with
+		// Label_Round_XL) when the item has no perk.
+		public static void ShowPerkIcon(UISprite icon, EquipmentGameData equipmentGameData)
+		{
+			if (icon == null)
+			{
+				return;
+			}
+			var spriteName = GetPerkIcon(equipmentGameData);
+			var hasPerk = !string.IsNullOrEmpty(spriteName);
+			if (hasPerk)
+			{
+				icon.spriteName = spriteName;
+			}
+			icon.gameObject.SetActive(hasPerk);
+			var parent = icon.cachedTransform.parent;
+			if (parent == null)
+			{
+				return;
+			}
+			foreach (Transform sibling in parent)
+			{
+				var slot = sibling.GetComponent<UISprite>();
+				if (slot != null && slot != icon && slot.spriteName == "Label_Round_XL")
+				{
+					slot.gameObject.SetActive(hasPerk);
+				}
+			}
 		}
 
 		public static string GetPerkIcon(BannerItemGameData equipmentGameData)
@@ -393,6 +444,8 @@ namespace ABH.GameDatas
 			case PerkType.Might:
 			case PerkType.Brilliance:
 				return "PassiveEffect_Might";
+			case PerkType.Dynamite:
+				return "PassiveEffect_ChainAttack";
 			case PerkType.Amplify:
 				return "PassiveEffect_Balance";
 			case PerkType.Vigor:
@@ -466,7 +519,24 @@ namespace ABH.GameDatas
 			{
 				num6 += num6 * num5;
 			}
-			return UpgradeBlueprints.ApplyToMainStat(gameData.Data, num6);
+			return ApplyDynamiteToMainStat(gameData, UpgradeBlueprints.ApplyToMainStat(gameData.Data, num6));
+		}
+
+		// A Dynamite main hand's throw only hits with PerkValue% of the bird's attack. That loss is shown as part of the
+		// weapon's damage instead (so equipment comparisons show it) and the throw itself hits with 100%:
+		// f * (bird + weapon) == bird + (f * weapon - (1 - f) * bird), with the bird's base attack at the item's level.
+		// Class mastery, skins and Might all multiply the whole attack, so they keep the same ratio.
+		private static float ApplyDynamiteToMainStat(EquipmentGameData gameData, float stat)
+		{
+			var dynamite = gameData.FindPerk(PerkType.Dynamite);
+			BirdBalancingData bird;
+			if (dynamite == null || dynamite.PerkValue <= 0f || dynamite.PerkValue >= 100f || !DIContainerBalancing.Service.TryGetBalancingData<BirdBalancingData>(gameData.BalancingData.RestrictedBirdId, out bird))
+			{
+				return stat;
+			}
+			var factor = dynamite.PerkValue / 100f;
+			var birdAttack = Mathf.Round(bird.BaseAttack + bird.BaseAttack * (bird.PerLevelAttack / 100f) * (gameData.Data.Level - 1));
+			return Mathf.Max(0f, Mathf.Round(stat * factor - (1f - factor) * birdAttack));
 		}
 
 		private string GetItemAssetId(EquipmentGameData eqgd)
@@ -536,12 +606,16 @@ namespace ABH.GameDatas
 
 		internal static string GetPerkName(EquipmentGameData item)
 		{
+			if (item.Perk == null)
+			{
+				return string.Empty;
+			}
 			return DIContainerInfrastructure.GetLocaService().GetPerkName(item.Perk.Type);
 		}
 
 		internal static string GetPerkDesc(EquipmentGameData item)
 		{
-			var text = GetPerkDesc(item.Perk);
+			var text = item.Perk != null ? GetPerkDesc(item.Perk) : string.Empty;
 			foreach (var bonusPerk in item.BonusPerks)
 			{
 				text += "\n[c8a000]" + DIContainerInfrastructure.GetLocaService().GetPerkName(bonusPerk.Type) + ":[-] " + GetPerkDesc(bonusPerk);

@@ -31,6 +31,10 @@ namespace ABH.GameDatas
 
 		public bool IsNPC { get; set; }
 
+		// Set on a friend's bird lent to the player (FriendGameData.SetFriendBird); runtime only, never saved.
+		// Info overlays show it in place of the class name.
+		public string FriendName { get; set; }
+
 		public SkillGameData PassiveSkill
 		{
 			get
@@ -245,8 +249,18 @@ namespace ABH.GameDatas
 			get
 			{
 				var characterHealth = CharacterHealth;
-				var num = OffHandItem == null ? 0f : OffHandItem.ItemMainStat;
+				// Glass Cannon set: the off hand's health doesn't count
+				var num = OffHandItem == null || HasGlassCannon ? 0f : OffHandItem.ItemMainStat;
 				return characterHealth + num;
+			}
+		}
+
+		// Glass Cannon set (CustomEquipmentSets): the equipment gives no health at all.
+		public bool HasGlassCannon
+		{
+			get
+			{
+				return CustomEquipmentSets.GetGlassCannon(this) != null;
 			}
 		}
 

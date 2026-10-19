@@ -365,7 +365,8 @@
     "NameId": "battle_000",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_000"
+      "bpart_000",
+      "bpart_000_1"
     ],
     "LootTableWheel": null,
     "LootTableAdditional": null,
@@ -377,9 +378,7 @@
     "SoundAssetId": "Music_Combat_Special",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
-    "EnvironmentalEffects": {
-      "Birds": "env_increase_rage_gain03"
-    },
+    "EnvironmentalEffects": null,
     "EnvironmentalStartWave": 0,
     "MaxBirdsInBattle": 2,
     "AdditionalAttackInPercent": 0.0,

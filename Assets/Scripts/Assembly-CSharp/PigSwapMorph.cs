@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ABH.GameDatas.Battle;
+using ABH.Shared.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -100,6 +101,30 @@ public class PigSwapMorph : MonoBehaviour
 
 		var oldScale = pig.CharacterModel.Scale;
 		pig.SwapForm(newPigNameId, mgr.Model);
+		// Its charge counter went with the charge (SwapForm); any other turn counter on it goes too.
+		foreach (var bubble in view.m_SpeechBubbles.Values)
+		{
+			if (bubble != null)
+			{
+				bubble.RemoveBubble();
+			}
+		}
+		view.m_SpeechBubbles.Clear();
+		// Birds charging at it show its icon in their counter.
+		foreach (var bird in mgr.Model.m_CombatantsByInitiative)
+		{
+			if (bird.CombatantFaction != Faction.Birds || bird.AttackTarget != pig || !bird.IsCharging || bird.CombatantView == null)
+			{
+				continue;
+			}
+			foreach (var targeting in bird.CombatantView.m_SpeechBubbles.Values)
+			{
+				if (targeting != null && targeting.m_IsTargetedBubble)
+				{
+					targeting.SetTargetIcon("Target_" + pig.CombatantAssetId);
+				}
+			}
+		}
 		var oldAsset = view.m_AssetController;
 		var newAsset = DIContainerInfrastructure.GetCharacterAssetProvider(false).InstantiateObject(pig.CombatantAssetId, view.transform, Vector3.zero, Quaternion.identity).GetComponent<CharacterAssetController>();
 		newAsset.SetModel(pig.CharacterModel, false);

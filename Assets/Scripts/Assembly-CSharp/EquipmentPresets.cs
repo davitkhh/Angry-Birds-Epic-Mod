@@ -9,6 +9,9 @@ public class EquipmentPresetBird
 {
 	public string BirdNameId;
 
+	// Set on a preset's allies: the ShowcaseCamps id (the lending NPC friend's id).
+	public string AllyId;
+
 	public string ClassNameId;
 
 	public string MainHandNameId;
@@ -36,6 +39,17 @@ public class EquipmentPreset
 	public string Name;
 
 	public List<EquipmentPresetBird> Birds = new List<EquipmentPresetBird>();
+
+	// NPC allies with pickable gear (ShowcaseCamps allies), one per showcase, each with its Main Hand / Off Hand
+	// as bare NameIds (ally gear is generated, never owned).
+	public List<EquipmentPresetBird> Allies = new List<EquipmentPresetBird>();
+}
+
+public class EquipmentPresetAlly
+{
+	public ShowcaseCampDefinition Definition;
+
+	public BirdGameData Bird;
 }
 
 // Player-made equipment loadouts (class, main hand, off hand per bird).
@@ -89,8 +103,15 @@ public static class EquipmentPresets
 		DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
 	}
 
+	public static readonly InventoryItemType[] AllySlots = { InventoryItemType.MainHandEquipment, InventoryItemType.OffHandEquipment };
+
 	// Snapshot of what the given birds are wearing right now.
 	public static EquipmentPreset Capture(string name, IEnumerable<BirdGameData> birds)
+	{
+		return Capture(name, birds, new List<EquipmentPresetAlly>());
+	}
+
+	public static EquipmentPreset Capture(string name, IEnumerable<BirdGameData> birds, IEnumerable<EquipmentPresetAlly> allies)
 	{
 		var preset = new EquipmentPreset { Name = SanitizeName(name) };
 		foreach (var bird in birds)
@@ -103,7 +124,48 @@ public static class EquipmentPresets
 				OffHandNameId = ItemRef(bird.OffHandItem)
 			});
 		}
+		foreach (var ally in allies)
+		{
+			preset.Allies.Add(new EquipmentPresetBird
+			{
+				AllyId = ally.Definition.Id,
+				BirdNameId = ally.Bird.BalancingData.NameId,
+				MainHandNameId = ally.Bird.MainHandItem != null ? ally.Bird.MainHandItem.ItemBalancing.NameId : null,
+				OffHandNameId = ally.Bird.OffHandItem != null ? ally.Bird.OffHandItem.ItemBalancing.NameId : null
+			});
+		}
 		return preset;
+	}
+
+	// The showcase of one of a preset's allies, or null if that showcase no longer exists.
+	public static ShowcaseCampDefinition GetAllyDefinition(EquipmentPresetBird ally)
+	{
+		ShowcaseCampDefinition definition;
+		return ally != null && ShowcaseCamps.TryGet(ally.AllyId, out definition) && definition.Ally != null ? definition : null;
+	}
+
+	// The preset's allies whose showcase still exists, in lineup order.
+	public static List<EquipmentPresetBird> GetAllies(EquipmentPreset preset)
+	{
+		return preset == null ? new List<EquipmentPresetBird>() : preset.Allies.Where(a => GetAllyDefinition(a) != null).ToList();
+	}
+
+	// A throwaway ally bird wearing the preset's ally gear (options that no longer exist keep the saved loadout's piece).
+	public static BirdGameData CreateAllyPreviewBird(ShowcaseCampDefinition definition, EquipmentPresetBird entry)
+	{
+		var bird = ShowcaseCamps.CreateAllyBird(definition);
+		if (entry != null)
+		{
+			foreach (var type in AllySlots)
+			{
+				var nameId = entry.Get(type);
+				if (!IsEquipped(bird, type, nameId))
+				{
+					ShowcaseCamps.EquipAllyOption(definition, bird, type, nameId);
+				}
+			}
+		}
+		return bird;
 	}
 
 	// Equips every piece of the preset the player still owns. Returns how many pieces were missing (scrapped/sold).
@@ -133,6 +195,13 @@ public static class EquipmentPresets
 				}
 				DIContainerLogic.InventoryService.EquipBirdWithItem(new List<IInventoryItemGameData> { item }, type, bird.InventoryGameData);
 			}
+		}
+		foreach (var entry in GetAllies(preset))
+		{
+			// The ally's choice lives in its showcase loadout, which every lent copy of the ally wears.
+			var ally = GetAllyDefinition(entry);
+			missing += CountMissingAllyPieces(ally, entry);
+			ShowcaseCamps.SaveAllyLoadout(ally, CreateAllyPreviewBird(ally, entry));
 		}
 		player.SavePlayerData();
 		return missing;
@@ -238,7 +307,17 @@ public static class EquipmentPresets
 				}
 			}
 		}
+		foreach (var entry in GetAllies(preset))
+		{
+			missing += CountMissingAllyPieces(GetAllyDefinition(entry), entry);
+		}
 		return missing;
+	}
+
+	// Ally gear removed from the balancing data (or no longer restricted to that ally).
+	private static int CountMissingAllyPieces(ShowcaseCampDefinition ally, EquipmentPresetBird entry)
+	{
+		return AllySlots.Count(t => !string.IsNullOrEmpty(entry.Get(t)) && !ShowcaseCamps.IsAllyOption(ally, t, entry.Get(t)));
 	}
 
 	public static EquipmentPresetBird GetEntry(EquipmentPreset preset, string birdNameId)
@@ -283,11 +362,21 @@ public static class EquipmentPresets
 		return player.Data.EquippedSkins;
 	}
 
-	// Format: name|bird=class,main,off;bird=class,main,off
+	// Format: name|bird=class,main,off;bird=class,main,off[|allyId=,main,off;allyId=,main,off]
 	private static string Serialize(EquipmentPreset preset)
 	{
-		var birds = preset.Birds.Select(b => b.BirdNameId + "=" + b.ClassNameId + "," + b.MainHandNameId + "," + b.OffHandNameId);
-		return SanitizeName(preset.Name) + "|" + string.Join(";", birds.ToArray());
+		var birds = preset.Birds.Select(b => SerializeBird(b.BirdNameId, b));
+		var value = SanitizeName(preset.Name) + "|" + string.Join(";", birds.ToArray());
+		if (preset.Allies.Count > 0)
+		{
+			value += "|" + string.Join(";", preset.Allies.Select(a => SerializeBird(a.AllyId, a)).ToArray());
+		}
+		return value;
+	}
+
+	private static string SerializeBird(string key, EquipmentPresetBird bird)
+	{
+		return key + "=" + bird.ClassNameId + "," + bird.MainHandNameId + "," + bird.OffHandNameId;
 	}
 
 	private static EquipmentPreset Parse(string value)
@@ -302,23 +391,53 @@ public static class EquipmentPresets
 		{
 			return preset;
 		}
-		foreach (var birdPart in value.Substring(split + 1).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+		var sections = value.Substring(split + 1).Split('|');
+		foreach (var birdPart in sections[0].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
 		{
-			var eq = birdPart.IndexOf('=');
-			if (eq <= 0)
+			string key;
+			var bird = ParseBird(birdPart, out key);
+			if (bird != null)
 			{
-				continue;
+				bird.BirdNameId = key;
+				preset.Birds.Add(bird);
 			}
-			var items = birdPart.Substring(eq + 1).Split(',');
-			preset.Birds.Add(new EquipmentPresetBird
+		}
+		if (sections.Length > 1)
+		{
+			foreach (var allyPart in sections[1].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
 			{
-				BirdNameId = birdPart.Substring(0, eq),
-				ClassNameId = items.Length > 0 ? NullIfEmpty(items[0]) : null,
-				MainHandNameId = items.Length > 1 ? NullIfEmpty(items[1]) : null,
-				OffHandNameId = items.Length > 2 ? NullIfEmpty(items[2]) : null
-			});
+				string allyId;
+				var ally = ParseBird(allyPart, out allyId);
+				ShowcaseCampDefinition definition;
+				if (ally != null && ShowcaseCamps.TryGet(allyId, out definition) && definition.Ally != null && preset.Allies.All(a => a.AllyId != allyId))
+				{
+					ally.AllyId = allyId;
+					ally.BirdNameId = definition.Ally.BirdNameId;
+					ally.ClassNameId = null;
+					preset.Allies.Add(ally);
+				}
+			}
 		}
 		return preset;
+	}
+
+	// "key=class,main,off"
+	private static EquipmentPresetBird ParseBird(string part, out string key)
+	{
+		var eq = part.IndexOf('=');
+		if (eq <= 0)
+		{
+			key = null;
+			return null;
+		}
+		key = part.Substring(0, eq);
+		var items = part.Substring(eq + 1).Split(',');
+		return new EquipmentPresetBird
+		{
+			ClassNameId = items.Length > 0 ? NullIfEmpty(items[0]) : null,
+			MainHandNameId = items.Length > 1 ? NullIfEmpty(items[1]) : null,
+			OffHandNameId = items.Length > 2 ? NullIfEmpty(items[2]) : null
+		};
 	}
 
 	private static string NullIfEmpty(string s)

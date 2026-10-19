@@ -173,7 +173,7 @@ public class MainMenuStateMgr : MonoBehaviour
 				DIContainerInfrastructure.GetCoreStateMgr().m_returnFromMainMenuAction();
 			});
 		}
-		else if (DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.CurrentHotspotGameData.Data.UnlockState != HotspotUnlockState.Resolved && DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.CurrentHotspotGameData.Data.NameId == "hotspot_001_camp")
+		else if (DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.CurrentHotspotGameData.Data.UnlockState != HotspotUnlockState.Resolved && DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.CurrentHotspotGameData.Data.NameId == "hotspot_001_camp" && !(DIContainerInfrastructure.GetPlayerPrefsService().HasKey(CoreStateMgr.IntroBattleEnteredKey) && !DIContainerInfrastructure.GetCurrentPlayer().Data.CinematricIntroStarted))
 		{
 			Leave(delegate
 			{

@@ -124,6 +124,16 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	private Vector3 m_StartSize;
 
+	// Walk-in from the start position: when it ends and how fast it moves (units/sec), so a reposition
+	// while still walking in keeps that pace (and the Move_Loop playing) instead of snapping into place.
+	private float m_EnterEndTime;
+
+	private float m_EnterUnitsPerSecond;
+
+	private float m_EnterAnimSpeed = 1f;
+
+	private Coroutine m_EnterAnimRoutine;
+
 	public Vector3 Center
 	{
 		get
@@ -224,6 +234,24 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 				}
 			}
 		}
+		if (m_tauntedTarget == null)
+		{
+			m_tauntedTarget = GetChargeLockedTarget();
+		}
+	}
+
+	// A player-controlled bird advances a charge by using the charged skill again (AttackSkillTemplate). A single-target
+	// charge only continues on the combatant it was started on, so that one works like a taunter for its faction;
+	// the bird's other skill stays free to use.
+	private ICombatant GetChargeLockedTarget()
+	{
+		var charged = m_Model.ChachedSkill;
+		if (charged == null || charged.Model.SkillParameters.ContainsKey("all"))
+		{
+			return null;
+		}
+		var target = charged.m_InitialTargetSelection;
+		return target != null && target.IsParticipating ? target : null;
 	}
 
 	public void SetCachedUnfocusedPos(Vector3 startPoint)
@@ -849,7 +877,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	protected abstract void FocusInitiaive();
 
-	public float PlayGoToBasePositionFromStartPosition()
+	public float PlayGoToBasePositionFromStartPosition(float speedMultiplier = 1f)
 	{
 		if (m_Model.IsBanner)
 		{
@@ -891,11 +919,64 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 			m_BattleMgr.m_CameraAnimationRoot.GetComponent<Animation>().Play("Camera_Shake_KrakenBossMovement");
 			num *= 2.5f;
 		}
+		if (speedMultiplier > 0f && speedMultiplier != 1f)
+		{
+			num /= speedMultiplier;
+		}
 		m_TweenMovement.m_DurationInSeconds = num;
 		m_TweenMovement.Play();
-		m_AssetController.PlayAnimationForTime("Move_Loop", "Idle", num);
+		m_EnterEndTime = Time.time + num;
+		m_EnterUnitsPerSecond = num > 0f ? m_TweenMovement.GetMoveDistance() / num : 0f;
+		m_EnterAnimSpeed = speedMultiplier > 0f ? speedMultiplier : 1f;
+		PlayEnterWalkAnim();
 		ReSizeCollider();
 		return num;
+	}
+
+	private bool IsWalkingIn
+	{
+		get
+		{
+			return m_EnterAnimRoutine != null && Time.time < m_EnterEndTime && m_EnterUnitsPerSecond > 0f;
+		}
+	}
+
+	// Move_Loop for the walk-in, played at the walk-in's speed multiplier so the steps match the movement;
+	// switches to Idle once the (possibly extended) walk-in ends.
+	private void PlayEnterWalkAnim()
+	{
+		if (m_EnterAnimRoutine != null)
+		{
+			StopCoroutine(m_EnterAnimRoutine);
+		}
+		m_AssetController.PlayAnimation("Move_Loop");
+		SetMoveLoopSpeed(m_EnterAnimSpeed);
+		m_EnterAnimRoutine = StartCoroutine(StopEnterWalkAnimWhenDone());
+	}
+
+	private IEnumerator StopEnterWalkAnimWhenDone()
+	{
+		while (Time.time < m_EnterEndTime)
+		{
+			yield return null;
+		}
+		m_EnterAnimRoutine = null;
+		SetMoveLoopSpeed(1f);
+		if (m_AssetController.HasNoBoneAnimation)
+		{
+			m_AssetController.gameObject.PlayAnimationOrAnimatorState("Idle");
+			yield break;
+		}
+		m_AssetController.m_BoneAnimation.Stop("Move_Loop");
+		m_AssetController.PlayAnimation("Idle");
+	}
+
+	private void SetMoveLoopSpeed(float speed)
+	{
+		if (!m_AssetController.HasNoBoneAnimation && m_AssetController.m_BoneAnimation != null && m_AssetController.m_BoneAnimation["Move_Loop"] != null)
+		{
+			m_AssetController.m_BoneAnimation["Move_Loop"].speed = speed;
+		}
 	}
 
 	private IEnumerator PlaySpawnWithDelay()
@@ -1030,7 +1111,21 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 			SetupTweenMovementPositions(base.transform, Vector3.zero, isBoss ? transform.parent : m_BattleMgr.m_PigCenterPosition, CachedUnfocusedPos);
 		}
 		
-		m_TweenMovement.m_DurationInSeconds = DIContainerLogic.GetPacingBalancing().TimeFromFocusPosToBasePosInSec;
+		var repositionTime = DIContainerLogic.GetPacingBalancing().TimeFromFocusPosToBasePosInSec;
+		if (IsWalkingIn)
+		{
+			// Still walking in (e.g. a later summon re-laid the formation): keep the walk-in pace and
+			// Move_Loop rather than covering the rest of the way in the short reposition time.
+			var remaining = m_TweenMovement.GetMoveDistance() / m_EnterUnitsPerSecond;
+			if (remaining > 0f)
+			{
+				m_TweenMovement.m_DurationInSeconds = remaining;
+				m_TweenMovement.Play();
+				m_EnterEndTime = Time.time + remaining;
+				return Mathf.Min(remaining, repositionTime);
+			}
+		}
+		m_TweenMovement.m_DurationInSeconds = repositionTime;
 		m_TweenMovement.Play();
 		PlayMoveAnim();
 		return m_TweenMovement.MovementDuration;
@@ -1211,6 +1306,11 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		var timeFromFocusPosToAttackPosInSec = DIContainerLogic.GetPacingBalancing().TimeFromFocusPosToAttackPosInSec;
 		m_TweenMovement.m_DurationInSeconds = timeFromFocusPosToAttackPosInSec;
 		m_TweenMovement.Play();
+		// Porky kicks up dust as he dashes in to attack in the intro battle.
+		if (m_Model.CombatantNameId == "pig_prince_porky_intro" && BattleMgr.IsIntroBattle(m_BattleMgr.Model) && m_AssetController)
+		{
+			StartCoroutine(DustTrail.For(m_AssetController.transform, Vector3.zero, timeFromFocusPosToAttackPosInSec, 30f, 3));
+		}
 		return timeFromFocusPosToAttackPosInSec;
 	}
 
@@ -1296,7 +1396,9 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	public float PlayKnockOutCharacter()
 	{
-		if (m_AssetController && (!m_BattleMgr.Model.IsPvP || m_Model.IsBanner))
+		// The intro battle: the birds go down like in the arena (and Red gets back up in the raid cutscene).
+		var arenaKnockOut = m_BattleMgr.Model.IsPvP || (m_Model.CombatantFaction == Faction.Birds && BattleMgr.IsIntroBattle(m_BattleMgr.Model));
+		if (m_AssetController && (!arenaKnockOut || m_Model.IsBanner))
 		{
 			m_AssetController.PlayDefeatAnim();
 			return m_AssetController.GetDefeatAnimationLength();
@@ -1629,7 +1731,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 				UnityEngine.Object.Destroy(effect);
 			}
 		}
-		if (m_ReviveMePrefab != null && !m_BattleMgr.Model.IsPvP && DIContainerConfig.GetClientConfig().EnableSingleBirdRevive)
+		if (m_ReviveMePrefab != null && !m_BattleMgr.Model.IsPvP && DIContainerConfig.GetClientConfig().EnableSingleBirdRevive && !BattleMgr.IsIntroBattle(m_BattleMgr.Model))
 		{
 			SpawnReviveMe();
 		}
@@ -1667,7 +1769,18 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 				ShowScore(score);
 			}
 		}
-		yield return new WaitForSeconds(PlayKnockOutCharacter());
+		var knockOutTime = PlayKnockOutCharacter();
+		// In the intro battle Chuck is knocked back to the left while he bounces (his rig slides, so the battle's own
+		// moves of the view don't fight it).
+		if (m_Model.CombatantNameId == "bird_yellow_cinematic" && BattleMgr.IsIntroBattle(m_BattleMgr.Model) && m_AssetController)
+		{
+			StartCoroutine(SlideRig(m_AssetController.transform, m_AssetController.m_BoneAnimation));
+			// The feather on his mage hat lies by the beach: drawn on its own between the waves and the wet sand under them.
+			SplitBoneSprite.Split(m_AssetController.m_BoneAnimation, "Headgear", base.transform, Resources.Load<Sprite>(IntroHatPath), Resources.Load<Sprite>(IntroFeatherPath), IntroFeatherDepth);
+			// His shadow sits a little lower and larger under him while he lies there.
+			BoneNudge.Apply(m_AssetController.m_BoneAnimation.GetBoneTransform("Shadow"), new Vector3(0f, 0f - IntroShadowDrop, 0f), IntroShadowScale, knockOutTime);
+		}
+		yield return new WaitForSeconds(knockOutTime);
 		if (m_Model.KnockedOutSkill != null)
 		{
 			m_Model.KnockOutOnDefeat = true;
@@ -1683,10 +1796,69 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 				m_Model.CombatantView.m_AssetController.m_BoneAnimation.UnregisterUserTriggerDelegate(m_Model.KnockedOutSkill.BoneAnimationUserTrigger);
 			}
 		}
-		if (m_Model is BirdCombatant && !m_BattleMgr.Model.IsPvP)
+		// The intro's knocked out birds stay on the field like in the arena (the raid cutscene needs them).
+		if (m_Model is BirdCombatant && !m_BattleMgr.Model.IsPvP && !BattleMgr.IsIntroBattle(m_BattleMgr.Model))
 		{
 			base.gameObject.SetActive(false);
 		}
+	}
+
+	// How fast Chuck slides left while KnockedOut has him in the air, and how hard he slows down on the ground after his
+	// last bounce (rig units).
+	private const float IntroKnockBackAirSpeed = 150f;
+
+	private const float IntroKnockBackGroundDeceleration = 600f;
+
+	// KnockedOut's Center bone rests at about 47 lying down (55 standing): above this, no part of him touches the ground.
+	private const float AirborneCenterHeight = 60f;
+
+	// His last bounce lands at about frame 16.8 of KnockedOut's 18.
+	private const float LastLandingFraction = 16.5f / 18f;
+
+	// Between the waves (Prop_Ocean_Front 595, Prop_Ocean 596) and the wet sand under them (Ocean_Shadow 597).
+	private const float IntroFeatherDepth = 596.5f;
+
+	// Chuck's starting mage hat (Headgear_Mage) cut in two: the hat, and the feather sticking out of it.
+	private const string IntroHatPath = "Textures/Intro/Intro_ChuckHat_NoFeather";
+
+	private const string IntroFeatherPath = "Textures/Intro/Intro_ChuckHat_Feather";
+
+	// How far Chuck's shadow bone drops, and how much it grows, while he lies knocked out (rig units).
+	private const float IntroShadowDrop = 7f;
+
+	private const float IntroShadowScale = 1.2f;
+
+	// Slides the rig left only while KnockedOut has Chuck in the air (between bounces he stops); after his last landing he
+	// slides on along the ground, slowing to a stop, with a dust trail.
+	private static IEnumerator SlideRig(Transform rig, SmoothMoves.BoneAnimation bones)
+	{
+		var center = bones != null ? bones.GetBoneTransform("Center") : null;
+		var start = rig.localPosition;
+		var travelled = 0f;
+		yield return null;
+		while (rig != null && bones != null && bones.IsPlaying("KnockedOut"))
+		{
+			var airborne = center == null || center.localPosition.y > AirborneCenterHeight;
+			// SmoothMoves states run in frames (their speed is the clip's fps), so go by the normalized time.
+			if (!airborne && bones["KnockedOut"].normalizedTime >= LastLandingFraction)
+			{
+				break;
+			}
+			if (airborne)
+			{
+				travelled += IntroKnockBackAirSpeed * Time.deltaTime;
+				rig.localPosition = start - new Vector3(travelled, 0f, 0f);
+			}
+			yield return null;
+		}
+		var dust = rig != null ? DustTrail.Begin(rig, Vector3.zero, 40f, 6) : null;
+		for (var speed = IntroKnockBackAirSpeed; speed > 0f && rig != null; speed -= IntroKnockBackGroundDeceleration * Time.deltaTime)
+		{
+			travelled += speed * Time.deltaTime;
+			rig.localPosition = start - new Vector3(travelled, 0f, 0f);
+			yield return null;
+		}
+		DustTrail.End(dust);
 	}
 
 	public void RemoveAllAppliedEffects()

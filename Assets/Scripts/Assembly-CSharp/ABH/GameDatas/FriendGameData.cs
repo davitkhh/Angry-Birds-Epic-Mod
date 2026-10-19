@@ -108,6 +108,10 @@ namespace ABH.GameDatas
 		{
 			get
 			{
+				if (m_FriendBird != null)
+				{
+					m_FriendBird.FriendName = FriendName;
+				}
 				return m_FriendBird;
 			}
 		}

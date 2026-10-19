@@ -226,7 +226,7 @@ public static class SmoothMovesClipBuilder
 			}
 		}
 		var kept = GetList(target, "triggerFrames").Cast<object>().Where(t => ClipIndex(t) != index).ToList();
-		kept.AddRange(triggers);
+		kept.AddRange(label.EndsWith("_low.prefab") ? RemapAtlases(target, triggers, log) : triggers);
 		SetList(target, "triggerFrames", kept);
 
 		// Reference the saved clip asset (Animation.AddClip would store an unsaved copy)
@@ -251,6 +251,55 @@ public static class SmoothMovesClipBuilder
 		animation.ApplyModifiedPropertiesWithoutUndo();
 		log.AppendLine(label + (existing >= 0 ? " replaced " : " added ") + clipName);
 		return true;
+	}
+
+	// The clip is built from the high-res prefab, so its trigger frames reference the high-res atlases. The _low prefab
+	// gets copies pointing at its own counterparts (X <-> X_low): texture swaps to an atlas the
+	// rig doesn't use pull in that atlas's material, which reordered Matilda's and Bomb's parts (body drawn over the rest).
+	private static List<object> RemapAtlases(Component target, List<object> triggers, StringBuilder log)
+	{
+		var rigAtlases = GetList(target, "textureAtlases").Cast<Object>().Where(a => a != null).ToList();
+		var remapped = 0;
+		var missing = new HashSet<string>();
+		var result = new List<object>();
+		foreach (var trigger in triggers)
+		{
+			// No parameterless constructor; the JSON overwrite fills every serialized field.
+			var copy = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(trigger.GetType());
+			EditorJsonUtility.FromJsonOverwrite(EditorJsonUtility.ToJson(trigger), copy);
+			var bones = copy.GetType().GetField("triggerFrameBones", Fields).GetValue(copy) as IList;
+			if (bones != null)
+			{
+				foreach (var bone in bones)
+				{
+					foreach (var field in new[] { "atlas", "originalAtlas" })
+					{
+						var info = bone.GetType().GetField(field, Fields);
+						var atlas = info != null ? info.GetValue(bone) as Object : null;
+						if (atlas == null || rigAtlases.Contains(atlas))
+						{
+							continue;
+						}
+						var counterpart = rigAtlases.FirstOrDefault(a => a.name == atlas.name + "_low" || a.name + "_low" == atlas.name);
+						if (counterpart != null)
+						{
+							info.SetValue(bone, counterpart);
+							remapped++;
+						}
+						else
+						{
+							missing.Add(atlas.name);
+						}
+					}
+				}
+			}
+			result.Add(copy);
+		}
+		if (remapped > 0 || missing.Count > 0)
+		{
+			log.AppendLine("  atlas refs remapped to the rig's atlases: " + remapped + (missing.Count > 0 ? ", no counterpart for " + string.Join(", ", missing.ToArray()) : ""));
+		}
+		return result;
 	}
 
 	private static Component FindBoneAnimation(GameObject root)

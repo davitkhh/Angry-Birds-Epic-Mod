@@ -137,7 +137,7 @@ public class EquipmentItemInfo : MonoBehaviour
 		}
 		if (m_PerkSprite)
 		{
-			m_PerkSprite.spriteName = EquipmentGameData.GetPerkIcon(equipmentGameData);
+			EquipmentGameData.ShowPerkIcon(m_PerkSprite, equipmentGameData);
 		}
 		if (m_PerkName)
 		{

@@ -30,15 +30,15 @@ namespace ABH.GameDatas.Battle.Skills
 			});
 		}
 
+		// The class's own steal comes from its costume (PickPocketPassive); "coins" here only adds to it.
 		public override void ShareableActionPart(BattleGameData battle, ICombatant source, ICombatant target, bool isShared)
 		{
-			DIContainerLogic.GetBattleService().DropStolenGold(battle, target, source, target, (int)(m_Coins * GetPhatLootMultiplier(source)), false);
-		}
-
-		private static float GetPhatLootMultiplier(ICombatant source)
-		{
+			if (m_Coins <= 0f)
+			{
+				return;
+			}
 			var phatLoot = UpgradeBlueprints.FindEquippedPerk(source, PerkType.PhatLoot);
-			return phatLoot == null ? 1f : phatLoot.PerkValue2;
+			DIContainerLogic.GetBattleService().DropStolenGold(battle, target, source, target, (int)(m_Coins * (phatLoot == null ? 1f : phatLoot.PerkValue2)), false);
 		}
 
 		public override string GetLocalizedDescription(ICombatant invoker)
@@ -49,7 +49,8 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_5}", string.Empty + m_ChargeTurns);
 			dictionary.Add("{value_4}", string.Empty + m_AttackCount);
 			dictionary.Add("{value_2}", string.Empty + base.Model.Balancing.EffectDuration);
-			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
+			var description = DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
+			return PickPocketPassive.AppendStealText(description, invoker, base.Model.SkillParameters.ContainsKey("all"), m_Coins);
 		}
 
 		public override string GetLocalizedName()

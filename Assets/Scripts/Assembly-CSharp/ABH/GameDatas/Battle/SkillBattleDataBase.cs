@@ -351,7 +351,12 @@ namespace ABH.GameDatas.Battle
 					Values = values
 				}
 			}, (int)Model.SkillParameters["charge"], battle, "Charge_" + Model.Balancing.AssetId, SkillEffectTypes.None, GetLocalizedName(), Model.SkillNameId);
-			SpawnChargeBubble(battleEffectGameData.GetTurnsLeft(), !m_ForceSourceIcon ? targets : new List<ICombatant> { source }, source, battle);
+			// A 1-turn charge goes off as soon as it is evaluated again this same turn: no turn counter for it.
+			// (Knocked-out PvP birds still show theirs; that bubble counts down to the revive.)
+			if (battleEffectGameData.GetTurnsLeft() > 1 || !source.IsAlive)
+			{
+				SpawnChargeBubble(battleEffectGameData.GetTurnsLeft(), !m_ForceSourceIcon ? targets : new List<ICombatant> { source }, source, battle);
+			}
 			battleEffectGameData.SetManualIncrement(true).AddEffect();
 			return true;
 		}

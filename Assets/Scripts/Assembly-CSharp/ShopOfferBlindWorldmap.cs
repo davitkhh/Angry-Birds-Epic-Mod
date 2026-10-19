@@ -739,7 +739,9 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			{
 				m_SoundTriggers.OnTriggerEventFired("purchase_failed");
 			}
-			if (failed.Any(r => r.RequirementType == RequirementType.PayItem))
+			// Not enough Snoutlings just plays the failed sound, like the resource trades (whose resources the
+			// missing-currency popup doesn't support), instead of interrupting with the popup.
+			if (failed.Any(r => r.RequirementType == RequirementType.PayItem && r.NameId != "gold"))
 			{
 				BuyCoinsClicked();
 			}
@@ -922,6 +924,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 				if (m_IconInstanciated != null)
 				{
 					displayFactor = UpgradeStatChangeView.FitIconToStage(m_IconInstanciated, m_IconPreviewStage != null ? m_IconPreviewStage.PreviewCamera : null);
+					ApplyRecipeShaderNow(m_IconInstanciated);
 					StartCoroutine(SetRecipeShader(m_IconInstanciated.GetComponentsInChildren<Renderer>()));
 				}
 				ShowIconPreviewTexture(m_IconPreviewStage, displayFactor);
@@ -1019,11 +1022,36 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		}
 	}
 
+	// Class pictures reset their material from the atlas in CHMeshSpriteCharacterMaterialReplacer.Start, which
+	// would undo a tint applied right away. Do that reset now and skip Start, so the tint shows on the first
+	// rendered frame instead of flashing the untinted picture until SetRecipeShader runs at the end of it.
+	private void ApplyRecipeShaderNow(GameObject icon)
+	{
+		foreach (var replacer in icon.GetComponentsInChildren<CHMeshSpriteCharacterMaterialReplacer>(true))
+		{
+			replacer.enabled = false;
+			var sprite = replacer.GetComponent<CHMeshSprite>();
+			if (sprite != null && !(sprite.m_AtlasType == AtlasTypes.SmoothMoves && sprite.m_SmoothMovesAtlas == null))
+			{
+				sprite.UpdateSprite(true);
+			}
+		}
+		ApplyRecipeShader(icon.GetComponentsInChildren<Renderer>());
+	}
+
 	private IEnumerator SetRecipeShader(Renderer[] renderers)
 	{
 		yield return new WaitForEndOfFrame();
+		ApplyRecipeShader(renderers);
+	}
+
+	private static void ApplyRecipeShader(Renderer[] renderers)
+	{
 		foreach (var rend in renderers)
 		{
+			if (rend == null)
+				continue;
+
 			if (rend.material.shader == DIContainerLogic.GetVisualEffectsBalancing().m_RecipeItemMaterial.shader)
 				continue;
 
@@ -1033,13 +1061,47 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		}
 	}
 
+	// Each tile has one thumbs up: buying again while it plays restarts its animation instead of stacking
+	// another copy on top.
+	private GameObject m_BoughtIndicator;
+
+	private int m_BoughtIndicatorPlayId;
+
 	public float ShowBoughtIndicator()
 	{
-		var gameObject = UnityEngine.Object.Instantiate(m_BuyIndicatorPrefab);
-		UnityHelper.SetLayerRecusively(gameObject, LayerMask.NameToLayer("Interface"));
-		gameObject.transform.localPosition = base.transform.position;
-		UnityEngine.Object.Destroy(gameObject, gameObject.GetComponent<Animation>().clip.length);
-		return gameObject.GetComponent<Animation>().clip.length;
+		if (m_BoughtIndicator == null)
+		{
+			m_BoughtIndicator = UnityEngine.Object.Instantiate(m_BuyIndicatorPrefab);
+			UnityHelper.SetLayerRecusively(m_BoughtIndicator, LayerMask.NameToLayer("Interface"));
+			m_BoughtIndicator.transform.localPosition = base.transform.position;
+			// Parented to the tile root (keeping its world size) so it scrolls with the offer. The show/hide
+			// animations only scale the tile's "Animation" child, so they leave it alone. Kept out of the scroll
+			// view's bounds, which would otherwise grow around it and pull the list toward the bought offer.
+			var indicatorPanel = m_BoughtIndicator.GetComponent<UIPanel>();
+			if (indicatorPanel != null)
+			{
+				indicatorPanel.excludeFromParentBounds = true;
+			}
+			m_BoughtIndicator.transform.parent = base.transform;
+		}
+		var animation = m_BoughtIndicator.GetComponent<Animation>();
+		animation.Stop();
+		animation.Play(animation.clip.name);
+		var length = animation.clip.length;
+		// Run on CoreStateMgr: a sold-out tile gets disabled, which would stop its own coroutines.
+		DIContainerInfrastructure.GetCoreStateMgr().StartCoroutine(DestroyBoughtIndicator(++m_BoughtIndicatorPlayId, length));
+		return length;
+	}
+
+	private IEnumerator DestroyBoughtIndicator(int playId, float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		// A later purchase restarted the animation and owns the indicator now
+		if (playId == m_BoughtIndicatorPlayId && m_BoughtIndicator != null)
+		{
+			UnityEngine.Object.Destroy(m_BoughtIndicator);
+			m_BoughtIndicator = null;
+		}
 	}
 
 	public float ShowInstant()
@@ -1069,6 +1131,17 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 			}
 		}
 		return 0f;
+	}
+
+	public float GetShowTimeLeft()
+	{
+		var animation = GetComponent<Animation>();
+		if (!base.gameObject.activeInHierarchy || animation == null || !animation["WorldShopOffer_Show"] || !animation.IsPlaying("WorldShopOffer_Show"))
+		{
+			return 0f;
+		}
+		var state = animation["WorldShopOffer_Show"];
+		return Mathf.Max(0f, state.length - state.time);
 	}
 
 	internal float Hide()

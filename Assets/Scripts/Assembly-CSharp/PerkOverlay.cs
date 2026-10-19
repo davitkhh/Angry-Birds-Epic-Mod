@@ -51,8 +51,8 @@ public class PerkOverlay : MonoBehaviour
 		}
 		var anchorPosition = m_InterfaceCamera.ScreenToWorldPoint(orientatedCamera.WorldToScreenPoint(root.position));
 		m_PerkDesc.text = EquipmentGameData.GetPerkDesc(equip);
-		m_PerkIcon.spriteName = EquipmentGameData.GetPerkIcon(equip);
-		DebugLog.Log("Begin show PerkOverlay " + DIContainerInfrastructure.GetLocaService().GetPerkName(equip.Perk.Type));
+		EquipmentGameData.ShowPerkIcon(m_PerkIcon, equip);
+		DebugLog.Log("Begin show PerkOverlay " + EquipmentGameData.GetPerkName(equip));
 		base.transform.localPosition = new Vector3(anchorPosition.x, anchorPosition.y, base.transform.localPosition.z);
 		m_ContainerControl.transform.localPosition = PositionRelativeToAnchorPositionFixedOnAnchor(anchorPosition, m_OffsetLeft);
 		if (m_Arrow)

@@ -29,6 +29,11 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 
 	private const float SlideOutTime = 0.22f;
 
+	// The add-ally button slides at least this far when it leaves, and this much past the screen edge.
+	private const float AddAllyLeaveDistance = 200f;
+
+	private const float AddAllyLeaveMargin = 20f;
+
 	// Half the width of the round item slot body (Button_Round_Large, 178).
 	private const float ItemSlotHalfWidth = 89f;
 
@@ -159,14 +164,58 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	[SerializeField]
 	private InventoryItemSlot m_EquipmentSlotPrefab;
 
+	// Battle preparation's ally parts. The template (inactive) is the ally's slot (no friend plate); every ally in the
+	// lineup gets a copy, the rightmost where battle preparation puts its friend bird, more allies to its left.
+	[Header("Allies")]
+	[SerializeField]
+	private GameObject m_AllyTemplate;
+
+	[SerializeField]
+	private UIInputTrigger m_AddAllyButton;
+
+	[SerializeField]
+	private Animation m_AddAllyAnimation;
+
+	// Extra room between the last bird and the first ally, on top of a lineup cell (battle preparation: 193 = 185 + 8).
+	[SerializeField]
+	private float m_AllyGapExtra = 8f;
+
+	// The leftmost lineup member stays at least this far from the screen's left edge (the lineup squeezes together).
+	[SerializeField]
+	private float m_LineupEdgeMargin = 95f;
+
+	// Shown when more than one ally could be added: a board of friend plates to tap, over a tap-to-cancel blocker.
+	[SerializeField]
+	private GameObject m_AllyPicker;
+
+	[SerializeField]
+	private UIInputTrigger m_AllyPickerBlocker;
+
+	[SerializeField]
+	private UIWidget m_AllyPickerBoard;
+
+	[SerializeField]
+	private UIGrid m_AllyPickerGrid;
+
+	[SerializeField]
+	private GameObject m_AllyPickerEntry;
+
+	[SerializeField]
+	private float m_AllyPickerPadding = 60f;
+
 	private static EquipmentPresetWindowUI s_Instance;
 
 	private static bool s_Loading;
 
 	private static Action s_PendingOnClosed;
 
+	private static Func<FriendGameData, bool> s_PendingSelectAlly;
+
 	// Set when another window (e.g. battle preparation) opened this one: it keeps the window backdrop and gets called back.
 	private Action m_OnClosed;
+
+	// Set by battle preparation: equipping a preset with an ally also takes that ally into the battle (false if it can't).
+	private Func<FriendGameData, bool> m_SelectAlly;
 
 	private bool m_Hosted;
 
@@ -214,6 +263,32 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 
 	private InventoryItemSlot m_SelectedSlot;
 
+	// The allies in the edited lineup, left to right.
+	private readonly List<LineupAlly> m_Allies = new List<LineupAlly>();
+
+	private readonly List<GameObject> m_PickerEntries = new List<GameObject>();
+
+	private bool m_AddAllyShown;
+
+	private Coroutine m_AddAllySlide;
+
+	// Where the template puts the ally's slot (lineup space); layout is measured from it.
+	private Vector3 m_AllySlotOffset;
+
+	private class LineupAlly
+	{
+		public ShowcaseCampDefinition Definition;
+
+		// A preview copy wearing the edited gear, and the generated gear it can pick from.
+		public BirdGameData Bird;
+
+		public InventoryGameData Armory;
+
+		public BattlePrepCharacterButton Button;
+
+		public GameObject Root;
+	}
+
 	public static bool IsOpen
 	{
 		get
@@ -238,6 +313,13 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	// onClosed: the caller already shows the window backdrop and wants to know when this window is gone.
 	public static void Open(Action onClosed)
 	{
+		Open(onClosed, null);
+	}
+
+	// selectAlly: called with the ally's friend when a preset with an ally is equipped (battle preparation takes it along);
+	// returns false when the ally can't join (cooldown, or a battle without an ally slot).
+	public static void Open(Action onClosed, Func<FriendGameData, bool> selectAlly)
+	{
 		if (DIContainerInfrastructure.GetCurrentPlayer() == null)
 		{
 			if (onClosed != null)
@@ -249,6 +331,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		if (s_Instance != null)
 		{
 			s_Instance.m_OnClosed = onClosed;
+			s_Instance.m_SelectAlly = selectAlly;
 			s_Instance.Enter();
 			return;
 		}
@@ -258,15 +341,18 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		}
 		s_Loading = true;
 		s_PendingOnClosed = onClosed;
+		s_PendingSelectAlly = selectAlly;
 		DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.AddUILevel(SceneName, delegate
 		{
 			s_Loading = false;
 			if (s_Instance != null)
 			{
 				s_Instance.m_OnClosed = s_PendingOnClosed;
+				s_Instance.m_SelectAlly = s_PendingSelectAlly;
 				s_Instance.Enter();
 			}
 			s_PendingOnClosed = null;
+			s_PendingSelectAlly = null;
 		});
 	}
 
@@ -276,6 +362,11 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		if (s_Instance == null || s_Instance.m_EditBirds == null)
 		{
 			return null;
+		}
+		var ally = s_Instance.m_Allies.FirstOrDefault(a => a.Bird.BalancingData.NameId == birdNameId);
+		if (ally != null)
+		{
+			return ally.Bird;
 		}
 		return s_Instance.m_EditBirds.FirstOrDefault(b => b.BalancingData.NameId == birdNameId);
 	}
@@ -287,6 +378,20 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		m_BarTemplate.gameObject.SetActive(false);
 		m_ListScreen.SetActive(false);
 		m_EditScreen.SetActive(false);
+		if (m_AllyTemplate)
+		{
+			m_AllyTemplate.SetActive(false);
+			var slot = m_AllyTemplate.GetComponentInChildren<UiSortBehaviour>(true).transform;
+			m_AllySlotOffset = m_AllyTemplate.transform.localPosition + slot.localPosition;
+		}
+		if (m_AllyPicker)
+		{
+			m_AllyPicker.SetActive(false);
+		}
+		if (m_AllyPickerEntry)
+		{
+			m_AllyPickerEntry.SetActive(false);
+		}
 		m_ListBase = m_ListScreen.transform.localPosition;
 		m_LineupBase = m_LineupRoot.localPosition;
 		m_CategoriesBase = m_CategoriesRoot.localPosition;
@@ -346,6 +451,14 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		m_CreateButton.Clicked += OnCreateClicked;
 		m_BackButton.Clicked += OnBackClicked;
 		m_SaveButton.Clicked += OnSaveClicked;
+		if (m_AddAllyButton)
+		{
+			m_AddAllyButton.Clicked += OnAddAllyClicked;
+		}
+		if (m_AllyPickerBlocker)
+		{
+			m_AllyPickerBlocker.Clicked += CloseAllyPicker;
+		}
 		foreach (var tab in m_TabButtons)
 		{
 			tab.OnButtonClicked += OnTabClicked;
@@ -370,6 +483,14 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		{
 			m_SaveButton.Clicked -= OnSaveClicked;
 		}
+		if (m_AddAllyButton)
+		{
+			m_AddAllyButton.Clicked -= OnAddAllyClicked;
+		}
+		if (m_AllyPickerBlocker)
+		{
+			m_AllyPickerBlocker.Clicked -= CloseAllyPicker;
+		}
 		foreach (var tab in m_TabButtons)
 		{
 			if (tab)
@@ -381,7 +502,11 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 
 	private void HandleBackButton()
 	{
-		if (m_EditScreen.activeSelf)
+		if (IsAllyPickerOpen)
+		{
+			CloseAllyPicker();
+		}
+		else if (m_EditScreen.activeSelf)
 		{
 			OnBackClicked();
 		}
@@ -415,6 +540,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		}
 		var onClosed = m_OnClosed;
 		m_OnClosed = null;
+		m_SelectAlly = null;
 		SceneManager.UnloadSceneAsync(base.gameObject.scene);
 		if (onClosed != null)
 		{
@@ -446,7 +572,8 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		LayoutNameText();
 		if (m_FocusMarker != null && m_FocusedBird != null)
 		{
-			var focused = m_Lineup.FirstOrDefault(b => b.GetBirdGameData() == m_FocusedBird);
+			var ally = FindAlly(m_FocusedBird);
+			var focused = ally != null ? ally.Button : m_Lineup.FirstOrDefault(b => b.GetBirdGameData() == m_FocusedBird);
 			if (focused != null)
 			{
 				var position = m_FocusMarker.parent.InverseTransformPoint(focused.transform.position);
@@ -663,6 +790,14 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			bar.m_Birds.Add(controller);
 			index++;
 		}
+		foreach (var ally in EquipmentPresets.GetAllies(preset))
+		{
+			var controller = SpawnBird(bar.m_BirdRoot, EquipmentPresets.CreateAllyPreviewBird(EquipmentPresets.GetAllyDefinition(ally), ally), ListBirdLayer);
+			controller.transform.localPosition = new Vector3(index * m_BarBirdSpacing, 0f, -index);
+			controller.transform.localScale = Vector3.one * m_BarBirdScale;
+			bar.m_Birds.Add(controller);
+			index++;
+		}
 
 		bar.m_EquipButton.Clicked += delegate
 		{
@@ -736,7 +871,18 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			return;
 		}
 		var missing = EquipmentPresets.Apply(preset);
-		bar.ShowStatus(missing == 0 ? "Equipped!" : "Equipped - " + missing + " missing item(s) skipped");
+		var status = missing == 0 ? "Equipped!" : "Equipped - " + missing + " missing item(s) skipped";
+		var allies = EquipmentPresets.GetAllies(preset);
+		if (allies.Count > 0 && m_SelectAlly != null)
+		{
+			// Battle preparation lends a single friend bird: the first of the preset's allies that can join.
+			var joined = allies.Select(a => ShowcaseCamps.CreateAllyFriend(EquipmentPresets.GetAllyDefinition(a))).Any(f => f != null && m_SelectAlly(f));
+			if (!joined)
+			{
+				status += missing == 0 ? " Ally can't join this battle" : ", ally can't join";
+			}
+		}
+		bar.ShowStatus(status);
 		foreach (var bird in bar.m_Birds)
 		{
 			bird.PlayCheerCharacter();
@@ -812,7 +958,12 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			button.Select(m_Included.Contains(bird.BalancingData.NameId), true);
 			m_Lineup.Add(button);
 		}
+		foreach (var ally in EquipmentPresets.GetAllies(preset))
+		{
+			AddAlly(EquipmentPresets.GetAllyDefinition(ally), ally);
+		}
 		StartCoroutine(RepositionLineup());
+		RefreshAddAllyButton();
 		m_EditSignature = EditSignature();
 
 		Focus(m_EditBirds.FirstOrDefault(b => m_Included.Contains(b.BalancingData.NameId)));
@@ -828,17 +979,58 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 
 	private IEnumerator RepositionLineup()
 	{
-		m_LineupGrid.Reposition();
+		LayoutLineup();
 		yield return null;
-		m_LineupGrid.Reposition();
-		for (var i = 0; i < m_Lineup.Count; i++)
-		{
-			m_Lineup[i].transform.localPosition += new Vector3(0f, 0f, i);
-		}
+		LayoutLineup();
 		if (m_LineupSorting)
 		{
 			m_LineupSorting.ClearAndAutoSearchRenderers();
 		}
+	}
+
+	// Battle preparation's arrangement: birds one grid cell apart around the grid's spot, allies right of them with the
+	// rightmost where battle preparation puts its friend bird. Birds move left to make room for more allies, and the
+	// whole row squeezes together if it would run off the screen's left edge.
+	private void LayoutLineup()
+	{
+		var spacing = m_LineupGrid.cellWidth;
+		var gridX = m_LineupGrid.transform.localPosition.x;
+		var birds = m_Lineup.Count;
+		var allies = m_Allies.Count;
+		var allyRight = m_AllySlotOffset.x;
+		var allyLeft = allyRight - (allies - 1) * spacing;
+		var half = (birds - 1) * spacing * 0.5f;
+		var birdsCenter = gridX;
+		if (allies > 0 && birds > 0)
+		{
+			birdsCenter -= Mathf.Max(0f, birdsCenter + half - (allyLeft - spacing - m_AllyGapExtra));
+		}
+		var right = allies > 0 ? allyRight : birdsCenter + half;
+		var leftmost = birds > 0 ? birdsCenter - half : allyLeft;
+		var limit = ScreenLeftInLineup() + m_LineupEdgeMargin;
+		var squeeze = leftmost < limit && right > limit ? (right - limit) / (right - leftmost) : 1f;
+		for (var i = 0; i < birds; i++)
+		{
+			var x = right - (right - (birdsCenter - half + i * spacing)) * squeeze;
+			m_Lineup[i].transform.localPosition = new Vector3(x - gridX, 0f, i);
+		}
+		var rootPosition = m_AllyTemplate != null ? m_AllyTemplate.transform.localPosition : Vector3.zero;
+		for (var k = 0; k < allies; k++)
+		{
+			var ally = m_Allies[k];
+			var x = right - (right - (allyLeft + k * spacing)) * squeeze;
+			ally.Root.transform.localPosition = new Vector3(x - (m_AllySlotOffset.x - rootPosition.x), rootPosition.y, rootPosition.z);
+		}
+	}
+
+	private float ScreenLeftInLineup()
+	{
+		var interfaceCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+		if (interfaceCamera == null)
+		{
+			return -640f;
+		}
+		return m_LineupRoot.InverseTransformPoint(interfaceCamera.ViewportToWorldPoint(new Vector3(0f, 0.5f, 0f))).x;
 	}
 
 	private void ClearEditor()
@@ -852,6 +1044,12 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			}
 		}
 		m_Lineup.Clear();
+		CloseAllyPicker();
+		foreach (var ally in m_Allies.ToList())
+		{
+			RemoveAlly(ally);
+		}
+		ShowAddAllyButton(false);
 		ClearItemSlots();
 		foreach (var tab in m_TabButtons)
 		{
@@ -868,6 +1066,10 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	// Tap an excluded bird to add it; tap an included bird to show its gear; tap the bird already shown to drop it.
 	private void OnLineupTapped(BattlePrepCharacterButton button)
 	{
+		if (IsAllyPickerOpen)
+		{
+			return;
+		}
 		var bird = button.GetBirdGameData();
 		var id = bird.BalancingData.NameId;
 		if (!m_Included.Contains(id))
@@ -888,6 +1090,232 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			button.PlaySelectionReaction(false);
 			Focus(m_EditBirds.FirstOrDefault(b => m_Included.Contains(b.BalancingData.NameId)));
 		}
+	}
+
+	// ---------------------------------------------------------------- Allies
+
+	private bool IsAllyPickerOpen
+	{
+		get
+		{
+			return m_AllyPicker != null && m_AllyPicker.activeSelf;
+		}
+	}
+
+	private LineupAlly FindAlly(BirdGameData bird)
+	{
+		return bird == null ? null : m_Allies.FirstOrDefault(a => a.Bird == bird);
+	}
+
+	// Allies the add button can still bring in: befriended showcase allies with pickable gear, not in the lineup yet.
+	private List<ShowcaseCampDefinition> GetAllyCandidates()
+	{
+		return ShowcaseCamps.GetAllyDefinitions().Where(d => ShowcaseCamps.IsAllyUnlocked(d) && m_Allies.All(a => a.Definition != d)).ToList();
+	}
+
+	// One candidate joins straight away; with several the player picks one.
+	private void OnAddAllyClicked()
+	{
+		if (m_Transitioning || m_Leaving || IsAllyPickerOpen)
+		{
+			return;
+		}
+		var candidates = GetAllyCandidates();
+		if (candidates.Count == 1 || (candidates.Count > 1 && m_AllyPicker == null))
+		{
+			AddAllyAndFocus(candidates[0]);
+		}
+		else if (candidates.Count > 1)
+		{
+			OpenAllyPicker(candidates);
+		}
+	}
+
+	private void AddAllyAndFocus(ShowcaseCampDefinition definition)
+	{
+		var ally = AddAlly(definition, null);
+		if (ally == null)
+		{
+			return;
+		}
+		LayoutLineup();
+		RefreshAddAllyButton();
+		ally.Button.PlaySelectionReaction(true);
+		Focus(ally.Bird);
+	}
+
+	private void OpenAllyPicker(List<ShowcaseCampDefinition> candidates)
+	{
+		CloseAllyPicker();
+		foreach (var definition in candidates)
+		{
+			var friend = ShowcaseCamps.CreateAllyFriend(definition);
+			if (friend == null)
+			{
+				continue;
+			}
+			var entry = Instantiate(m_AllyPickerEntry, m_AllyPickerGrid.transform);
+			entry.name = m_PickerEntries.Count.ToString("00") + "_" + definition.Id;
+			entry.transform.localPosition = Vector3.zero;
+			entry.transform.localScale = Vector3.one;
+			entry.SetActive(true);
+			entry.GetComponent<FriendInfoElement>().SetModel(friend);
+			var chosen = definition;
+			entry.GetComponent<UIInputTrigger>().Clicked += delegate
+			{
+				CloseAllyPicker();
+				AddAllyAndFocus(chosen);
+			};
+			m_PickerEntries.Add(entry);
+		}
+		if (m_PickerEntries.Count == 0)
+		{
+			return;
+		}
+		m_AllyPicker.SetActive(true);
+		m_AllyPickerGrid.Reposition();
+		if (m_AllyPickerBoard)
+		{
+			m_AllyPickerBoard.width = Mathf.RoundToInt(m_PickerEntries.Count * m_AllyPickerGrid.cellWidth + m_AllyPickerPadding);
+		}
+	}
+
+	private void CloseAllyPicker()
+	{
+		foreach (var entry in m_PickerEntries)
+		{
+			if (entry != null)
+			{
+				Destroy(entry);
+			}
+		}
+		m_PickerEntries.Clear();
+		if (m_AllyPicker)
+		{
+			m_AllyPicker.SetActive(false);
+		}
+	}
+
+	// Same parts as battle preparation's friend bird: a CharacterSlot in the ally slot (without the friend's name plate).
+	private LineupAlly AddAlly(ShowcaseCampDefinition definition, EquipmentPresetBird entry)
+	{
+		if (definition == null || m_AllyTemplate == null || m_Allies.Any(a => a.Definition == definition))
+		{
+			return null;
+		}
+		var ally = new LineupAlly { Definition = definition };
+		ally.Bird = EquipmentPresets.CreateAllyPreviewBird(definition, entry);
+		ally.Armory = ShowcaseCamps.CreateAllyArmory(definition, ally.Bird);
+		ally.Root = Instantiate(m_AllyTemplate, m_AllyTemplate.transform.parent);
+		ally.Root.name = "Ally_" + definition.Id;
+		ally.Root.transform.localScale = m_AllyTemplate.transform.localScale;
+		ally.Root.SetActive(true);
+		var sorting = ally.Root.GetComponentInChildren<UiSortBehaviour>(true);
+		var slot = Instantiate(m_CharacterSlotPrefab);
+		slot.transform.parent = sorting.transform;
+		slot.transform.localPosition = Vector3.zero;
+		slot.transform.localScale = Vector3.one;
+		ally.Button = slot.GetComponent<BattlePrepCharacterButton>();
+		ally.Button.InitExternal(ally.Bird);
+		ally.Button.Tapped += OnAllyTapped;
+		ally.Button.Select(true, true);
+		StartCoroutine(SortAlly(sorting));
+		m_Allies.Add(ally);
+		return ally;
+	}
+
+	// Like RepositionLineup: the bird's renderers are only there to sort a frame later.
+	private IEnumerator SortAlly(UiSortBehaviour sorting)
+	{
+		yield return null;
+		if (sorting)
+		{
+			sorting.ClearAndAutoSearchRenderers();
+		}
+	}
+
+	private void RemoveAlly(LineupAlly ally)
+	{
+		if (ally.Button != null)
+		{
+			ally.Button.Tapped -= OnAllyTapped;
+		}
+		if (ally.Root != null)
+		{
+			Destroy(ally.Root);
+		}
+		m_Allies.Remove(ally);
+	}
+
+	// Like an own bird: tap to show its gear, tap it again while shown to take it out of the preset.
+	private void OnAllyTapped(BattlePrepCharacterButton button)
+	{
+		var ally = FindAlly(button.GetBirdGameData());
+		if (ally == null || IsAllyPickerOpen)
+		{
+			return;
+		}
+		if (m_FocusedBird != ally.Bird)
+		{
+			Focus(ally.Bird);
+			return;
+		}
+		RemoveAlly(ally);
+		LayoutLineup();
+		RefreshAddAllyButton();
+		Focus(m_EditBirds.FirstOrDefault(b => m_Included.Contains(b.BalancingData.NameId)));
+	}
+
+	// The button stays put while allies join; it only swings out once no ally is left to add.
+	private void RefreshAddAllyButton()
+	{
+		ShowAddAllyButton(GetAllyCandidates().Count > 0);
+	}
+
+	// Swings in with battle preparation's enter clip. Its leave clip only goes 200 to the right, which leaves the button
+	// peeking in on wide screens, so it slides out past the screen's right edge instead.
+	private void ShowAddAllyButton(bool show)
+	{
+		if (m_AddAllyButton == null || show == m_AddAllyShown)
+		{
+			return;
+		}
+		m_AddAllyShown = show;
+		m_AddAllyButton.GetComponent<Collider>().enabled = show;
+		if (m_AddAllySlide != null)
+		{
+			StopCoroutine(m_AddAllySlide);
+			m_AddAllySlide = null;
+		}
+		if (show)
+		{
+			PlayAnimation(m_AddAllyAnimation, "FriendBirdButton_Enter");
+		}
+		else if (base.gameObject.activeInHierarchy)
+		{
+			m_AddAllySlide = StartCoroutine(SlideAddAllyOut());
+		}
+	}
+
+	private IEnumerator SlideAddAllyOut()
+	{
+		if (m_AddAllyAnimation)
+		{
+			m_AddAllyAnimation.Stop();
+		}
+		var mover = m_AddAllyButton.transform.parent;
+		var start = mover.localPosition;
+		var target = start.x + AddAllyLeaveDistance;
+		var interfaceCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+		if (interfaceCamera != null)
+		{
+			// Far enough that the button's left edge clears the screen's right edge.
+			var screenRight = mover.parent.InverseTransformPoint(interfaceCamera.ViewportToWorldPoint(new Vector3(1f, 0.5f, 0f))).x;
+			var buttonLeft = NGUIMath.CalculateRelativeWidgetBounds(mover.parent, m_AddAllyButton.transform).min.x;
+			target = Mathf.Max(target, start.x + (screenRight - buttonLeft) + AddAllyLeaveMargin);
+		}
+		yield return StartCoroutine(Tween(SlideOutTime, false, e => mover.localPosition = new Vector3(Mathf.Lerp(start.x, target, e), start.y, start.z)));
+		m_AddAllySlide = null;
 	}
 
 	private void Focus(BirdGameData bird)
@@ -927,12 +1355,15 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		{
 			return;
 		}
+		// An ally never owns anything: it picks from its armory, and shows its own (fixed) class there like the showcase camp.
+		var ally = FindAlly(m_FocusedBird);
+		var inventory = ally != null ? ally.Armory : DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
 		List<IInventoryItemGameData> owned;
-		if (!DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData.Items.TryGetValue(m_CurrentType, out owned))
+		if (inventory == null || !inventory.Items.TryGetValue(m_CurrentType, out owned))
 		{
 			return;
 		}
-		var items = owned.Where(i => i.IsValidForBird(m_FocusedBird));
+		var items = owned.Where(i => i.IsValidForBird(m_FocusedBird) || (ally != null && i is ClassItemGameData));
 		items = m_CurrentType == InventoryItemType.Class ? items.OrderBy(i => i.ItemBalancing.SortPriority) : items.OrderByDescending(i => i.ItemMainStat);
 		var index = 0;
 		foreach (var item in items)
@@ -944,9 +1375,20 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			slot.transform.parent = m_ItemGrid.transform;
 			slot.transform.localPosition = Vector3.zero;
 			slot.transform.localScale = Vector3.one;
-			slot.SetModel(item, false);
-			slot.OnUsed += OnSlotUsed;
+			// Tracked before SetModel, so a slot that fails to set up can't stay behind in the strip as an empty circle.
 			m_ItemSlots.Add(slot);
+			try
+			{
+				slot.SetModel(item, false);
+			}
+			catch (Exception e)
+			{
+				Debug.LogException(e);
+				m_ItemSlots.Remove(slot);
+				Destroy(slot.gameObject);
+				continue;
+			}
+			slot.OnUsed += OnSlotUsed;
 			if (m_SelectedSlot == null && EquipmentPresets.IsEquipped(m_FocusedBird, m_CurrentType, EquipmentPresets.ItemRef(item)))
 			{
 				m_SelectedSlot = slot;
@@ -1058,7 +1500,12 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 			return string.Empty;
 		}
 		var birds = m_EditBirds.Where(b => m_Included.Contains(b.BalancingData.NameId)).Select(b => b.BalancingData.NameId + "=" + string.Join(",", EquipmentPresets.Slots.Select(t => EquipmentPresets.ItemRef(GetEquipped(b, t))).ToArray()));
-		return EquipmentPresets.SanitizeName(m_NameInput.value) + "|" + string.Join(";", birds.ToArray());
+		var signature = EquipmentPresets.SanitizeName(m_NameInput.value) + "|" + string.Join(";", birds.ToArray());
+		foreach (var ally in m_Allies)
+		{
+			signature += "|" + ally.Definition.Id + "=" + string.Join(",", EquipmentPresets.AllySlots.Select(t => EquipmentPresets.ItemRef(GetEquipped(ally.Bird, t))).ToArray());
+		}
+		return signature;
 	}
 
 	private static IInventoryItemGameData GetEquipped(BirdGameData bird, InventoryItemType type)
@@ -1078,7 +1525,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		{
 			return;
 		}
-		var preset = EquipmentPresets.Capture(m_NameInput.value, birds);
+		var preset = EquipmentPresets.Capture(m_NameInput.value, birds, m_Allies.Select(a => new EquipmentPresetAlly { Definition = a.Definition, Bird = a.Bird }));
 		if (m_EditIndex >= 0 && m_EditIndex < m_Presets.Count)
 		{
 			m_Presets[m_EditIndex] = preset;

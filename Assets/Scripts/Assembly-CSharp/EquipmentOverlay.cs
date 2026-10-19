@@ -171,7 +171,7 @@ public class EquipmentOverlay : MonoBehaviour
 		}
 		if (m_PerkIcon)
 		{
-			m_PerkIcon.spriteName = EquipmentGameData.GetPerkIcon(equip);
+			EquipmentGameData.ShowPerkIcon(m_PerkIcon, equip);
 		}
 		if (m_PerkDesc)
 		{
@@ -238,7 +238,7 @@ public class EquipmentOverlay : MonoBehaviour
 		}
 		if (m_PerkIcon)
 		{
-			m_PerkIcon.spriteName = EquipmentGameData.GetPerkIcon(equip);
+			EquipmentGameData.ShowPerkIcon(m_PerkIcon, equip);
 		}
 		if (m_PerkDesc)
 		{

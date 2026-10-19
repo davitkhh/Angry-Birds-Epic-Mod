@@ -243,9 +243,9 @@ namespace ABH.GameDatas.Battle
 			}
 			if (m_Skills.Count == 0)
 			{
-				AddBattleSkillImpl(!m_pvpBird ? Model.ClassItem.PrimarySkill : Model.ClassItem.PrimaryPvPSkill);
-				AddBattleSkillImpl(ApplySupportPerk(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill));
-				AddBattleSkillImpl(!m_pvpBird ? Model.RageSkill : Model.PvPRageSkill);
+				AddBattleSkillImpl(ApplySetChargeReduction(ApplyDynamitePerk(!m_pvpBird ? Model.ClassItem.PrimarySkill : Model.ClassItem.PrimaryPvPSkill)));
+				AddBattleSkillImpl(ApplySetChargeReduction(ApplySupportPerk(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill)));
+				AddBattleSkillImpl(ApplySetChargeReduction(!m_pvpBird ? Model.RageSkill : Model.PvPRageSkill));
 				if (Model.PassiveSkill != null)
 					AddBattleSkillImpl(Model.PassiveSkill);
 			}
@@ -279,6 +279,49 @@ namespace ABH.GameDatas.Battle
 			var balancing = CloneSkillBalancing(support.Balancing);
 			balancing.EffectDuration = Mathf.RoundToInt(balancing.EffectDuration * factor);
 			return new SkillGameData(support.SkillNameId, parameters).OverrideBalancing(balancing);
+		}
+
+		// Dynamite main hands turn the class attack into DynamiteThrowSkillId (a ThrowMainHandAttack like the Dynamite
+		// Rogue's): PerkValue2 = charge turns. PerkValue (the throw's power, % of attack) is already taken off the
+		// weapon's damage stat (EquipmentGameData.ApplyDynamiteToMainStat), so the throw hits with its own 100%. It keeps the class attack's NameId, which the AI
+		// combos and GetSkill(name) look it up by; class bonuses (e.g. Pick Pocket) still apply as it fills skill slot 0.
+		private const string DynamiteThrowSkillId = "bird_attack_dynamite_throw";
+
+		private SkillGameData ApplyDynamitePerk(SkillGameData attack)
+		{
+			var dynamite = UpgradeBlueprints.FindEquippedPerk(this, PerkType.Dynamite);
+			SkillBalancingData throwBalancing;
+			if (attack == null || dynamite == null || !DIContainerBalancing.Service.TryGetBalancingData<SkillBalancingData>(DynamiteThrowSkillId, out throwBalancing))
+			{
+				return attack;
+			}
+			var parameters = new Dictionary<string, float>(throwBalancing.SkillParameters ?? new Dictionary<string, float>());
+			parameters["charge"] = dynamite.PerkValue2;
+			var balancing = CloneSkillBalancing(throwBalancing);
+			balancing.NameId = attack.SkillNameId;
+			balancing.SkillParameters = parameters;
+			return new SkillGameData(DynamiteThrowSkillId, parameters).OverrideBalancing(balancing);
+		}
+
+		// Glass Cannon set: every charge is shorter by the set's charge_reduction, but lasts at least 1 turn.
+		// The charge is also read from the balancing (SkillBattleDataBase.EvaluateCharge), so both are replaced.
+		private SkillGameData ApplySetChargeReduction(SkillGameData skill)
+		{
+			float charge;
+			if (skill == null || !skill.SkillParameters.TryGetValue("charge", out charge))
+			{
+				return skill;
+			}
+			var glassCannon = CustomEquipmentSets.GetGlassCannon(Model);
+			if (glassCannon == null || glassCannon.ChargeReduction <= 0f)
+			{
+				return skill;
+			}
+			var parameters = new Dictionary<string, float>(skill.SkillParameters);
+			parameters["charge"] = Mathf.Max(1f, charge - glassCannon.ChargeReduction);
+			var balancing = CloneSkillBalancing(skill.Balancing);
+			balancing.SkillParameters = parameters;
+			return new SkillGameData(skill.Balancing.NameId, parameters).OverrideBalancing(balancing);
 		}
 
 		private static SkillBalancingData CloneSkillBalancing(SkillBalancingData source)

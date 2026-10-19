@@ -26878,6 +26878,7 @@ MonoBehaviour:
   textureAtlases:
   - {fileID: 11400000, guid: 81ef008026084a94a881cbb99fcdb71e, type: 2}
   - {fileID: 11400000, guid: 4d9c840e678851340991edfc95c8a866, type: 2}
+  - {fileID: 11400000, guid: 5b4b2776fce4445bae7b5dd1bada728d, type: 2}
   mAnimationClips:
   - animationName: Idle
     fps: 24

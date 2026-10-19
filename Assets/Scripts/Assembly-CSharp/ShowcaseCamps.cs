@@ -159,6 +159,19 @@ public static class ShowcaseCamps
 		return publicPlayerData;
 	}
 
+	// Every showcase whose ally bird has gear the player can pick (the allies equipment presets can hold).
+	public static List<ShowcaseCampDefinition> GetAllyDefinitions()
+	{
+		return m_Definitions.Values.Where(d => d.Ally != null).ToList();
+	}
+
+	// The NPC is in the player's friend list yet (McCool only joins it through the story).
+	public static bool IsAllyUnlocked(ShowcaseCampDefinition definition)
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		return player != null && player.SocialEnvironmentGameData != null && player.SocialEnvironmentGameData.Friends.ContainsKey(definition.Id);
+	}
+
 	public static bool TryGetAlly(string birdNameId, out ShowcaseCampDefinition definition)
 	{
 		definition = m_Definitions.Values.FirstOrDefault(d => d.Ally != null && d.Ally.BirdNameId == birdNameId);
@@ -195,6 +208,44 @@ public static class ShowcaseCamps
 		bird.IsNPC = true;
 		bird.ClassItem.Data.Level = GetAllyMastery();
 		return ApplyAllyLoadout(bird.Data);
+	}
+
+	// The ally as it is lent right now, wearing the saved loadout.
+	public static BirdGameData CreateAllyBird(ShowcaseCampDefinition definition)
+	{
+		var bird = new BirdGameData(BuildAllyBird(definition));
+		bird.IsNPC = true;
+		return bird;
+	}
+
+	// The NPC friend that lends this ally, carrying a fresh ally bird, for picking it in battle preparation.
+	// Null when the player's friend list has no such friend.
+	public static FriendGameData CreateAllyFriend(ShowcaseCampDefinition definition)
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		FriendGameData friend;
+		if (player == null || player.SocialEnvironmentGameData == null || !player.SocialEnvironmentGameData.Friends.TryGetValue(definition.Id, out friend) || friend == null)
+		{
+			return null;
+		}
+		friend.SetFriendBird(CreateAllyBird(definition));
+		return friend;
+	}
+
+	public static bool IsAllyOption(ShowcaseCampDefinition definition, InventoryItemType type, string nameId)
+	{
+		return !string.IsNullOrEmpty(nameId) && GetAllyEquipmentOptions(definition, type).Any(e => e.NameId == nameId);
+	}
+
+	// Puts one of the ally's gear options on the bird. False if the item is no longer an option for this ally.
+	public static bool EquipAllyOption(ShowcaseCampDefinition definition, BirdGameData bird, InventoryItemType type, string nameId)
+	{
+		if (!IsAllyOption(definition, type, nameId))
+		{
+			return false;
+		}
+		EquipAlly(bird, type, nameId);
+		return true;
 	}
 
 	private static int GetAllyMastery()
@@ -255,15 +306,24 @@ public static class ShowcaseCamps
 			.ToList();
 	}
 
-	// The item list the equipment screen offers for this ally.
-	public static InventoryGameData CreateAllyArmory(ShowcaseCampDefinition definition, int level)
+	// The item list the equipment screen offers for this ally: its own class (to inspect it) and its gear options.
+	public static InventoryGameData CreateAllyArmory(ShowcaseCampDefinition definition, BirdGameData bird)
 	{
 		var armory = new InventoryGameData(DIContainerBalancing.Service.GetBalancingData<BirdBalancingData>(definition.Ally.BirdNameId).DefaultInventoryNameId);
+		if (bird.ClassItem != null)
+		{
+			var classItem = DIContainerLogic.InventoryService.GenerateNewInventoryItemGameData(bird.ClassItem.Data.Level, 1, bird.ClassItem.BalancingData.NameId, 1);
+			if (classItem != null)
+			{
+				classItem.ItemData.IsNew = false;
+				armory.AddNewItemToInventory(classItem);
+			}
+		}
 		foreach (var type in new[] { InventoryItemType.MainHandEquipment, InventoryItemType.OffHandEquipment })
 		{
 			foreach (var option in GetAllyEquipmentOptions(definition, type))
 			{
-				armory.AddNewItemToInventory(CreateEquipment(option.NameId, level));
+				armory.AddNewItemToInventory(CreateEquipment(option.NameId, bird.Level));
 			}
 		}
 		return armory;

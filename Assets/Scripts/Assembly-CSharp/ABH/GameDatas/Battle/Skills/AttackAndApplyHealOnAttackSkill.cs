@@ -18,6 +18,10 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private float m_Modifier;
 
+		// OnReceiveDamage heals by m_Modifier % of the attacker's max health before the hit; AfterReceiveDamage by
+		// m_Modifier % of the damage it dealt.
+		protected EffectTriggerType m_HealTrigger = EffectTriggerType.OnReceiveDamage;
+
 		public override void Init(SkillGameData model)
 		{
 			base.Init(model);
@@ -45,7 +49,7 @@ namespace ABH.GameDatas.Battle.Skills
 				{
 					new BattleEffect
 					{
-						EffectTrigger = EffectTriggerType.OnReceiveDamage,
+						EffectTrigger = m_HealTrigger,
 						EffectType = BattleEffectType.HealOnAttackTarget,
 						Values = values,
 						AfflicionType = base.Model.Balancing.EffectType,

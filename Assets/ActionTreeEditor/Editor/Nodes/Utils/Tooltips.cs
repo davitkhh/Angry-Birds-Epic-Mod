@@ -180,6 +180,27 @@ namespace ActionTreeEditor.Loca
         public const string FaceTargetNodeTypeDesc =
             "Keeps a character turned towards another saved character every frame (e.g. birds watching a pig run past). Empty target stops tracking.";
         
+        public const string MoveArcNodeTypeDesc =
+            "Flies a saved character offscreen along a curve that is lowest at another saved character's x (e.g. Wiz Pig swooping over a knocked out bird).";
+        
+        public const string MoveByClipNodeTypeDesc =
+            "Plays a prop clip's movement (e.g. Porky's entrance) on a saved character so that it ends where the character stands, e.g. its battle slot.";
+        
+        public const string MoveToObjectNodeTypeDesc =
+            "Moves a character at a set speed to another saved character (or a reference) plus an offset, looping a clip on the way.";
+        
+        public const string FaceDirectionNodeTypeDesc =
+            "Turns a character left or right and keeps it facing that way.";
+        
+        public const string ShowBubbleNodeTypeDesc =
+            "Shows a bubble prefab where a battle character's speech bubbles appear.";
+        
+        public const string DropHandItemsNodeTypeDesc =
+            "A battle bird drops its hand items: each becomes a saved object lying where it was.";
+        
+        public const string MovePathNodeTypeDesc =
+            "Moves a character along a smooth curve through world points, optionally with a shadow following the ground under it.";
+        
         public static string GetDescriptionForType(NodeType type)
         {
             return type switch
@@ -214,6 +235,13 @@ namespace ActionTreeEditor.Loca
                NodeType.SetHandItem          => SetHandItemNodeTypeDesc,
                NodeType.ControlActionTree    => ControlActionTreeNodeTypeDesc,
                NodeType.FaceTarget           => FaceTargetNodeTypeDesc,
+               NodeType.MoveArc              => MoveArcNodeTypeDesc,
+               NodeType.MoveByClip           => MoveByClipNodeTypeDesc,
+               NodeType.MoveToObject         => MoveToObjectNodeTypeDesc,
+               NodeType.FaceDirection        => FaceDirectionNodeTypeDesc,
+               NodeType.ShowBubble           => ShowBubbleNodeTypeDesc,
+               NodeType.DropHandItems        => DropHandItemsNodeTypeDesc,
+               NodeType.MovePath             => MovePathNodeTypeDesc,
                _ => ""
             };
         }

@@ -273,6 +273,14 @@ public class BattleMgr : BattleMgrBase
 		}
 		DebugLog.Log(GetType(), "Start: Setting up initial positions for combatants");
 		yield return StartCoroutine(SetupInitialPositions());
+		if (IsIntroBattle(m_Model))
+		{
+			// Red's rig loses its shadow in some clips (Hit, Action_Attack_1); give him one that can't drop out.
+			foreach (var bird in m_Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.CombatantNameId == "bird_red_cinematic" && b.CombatantView != null))
+			{
+				SteadyShadow.Attach(bird.CombatantView.m_AssetController);
+			}
+		}
 		for (var j = 0; j < 11; j++)
 		{
 			m_CharacterInteractionBlockedItems.Add(UnityEngine.Object.Instantiate(m_CharacterInteractionBlockedPrefab));
@@ -411,14 +419,30 @@ public class BattleMgr : BattleMgrBase
 		}
 	}
 
+	// Walk-in speed for summons when several are queued on the same turn, so the queue doesn't drag on.
+	private const float QueuedSummonEnterSpeedMultiplier = 2f;
+
+	private int m_QueuedSummonCount;
+
+	// Read when the queued summons run (not when queued), so every summon in a multi-summon turn -
+	// including the first and the last - walks in at the same speed.
+	private float QueuedSummonEnterSpeed
+	{
+		get
+		{
+			return m_QueuedSummonCount > 1 ? QueuedSummonEnterSpeedMultiplier : 1f;
+		}
+	}
+
 	protected void m_Summon_Combatants(List<float> values, Faction faction, int init, BossAssetController bossController)
 	{
 		// Queue behind any summon already pending this turn instead of overwriting it, so several
 		// summoners triggering on the same turn each get their summon.
+		m_QueuedSummonCount++;
 		var previousSummon = m_CurrentSummonAction;
 		if (previousSummon == null)
 		{
-			m_CurrentSummonAction = () => SummonCombatants(values, faction, init, bossController);
+			m_CurrentSummonAction = () => SummonCombatants(values, faction, init, bossController, QueuedSummonEnterSpeed);
 			return;
 		}
 		m_CurrentSummonAction = () => SummonCombatantsAfter(previousSummon, values, faction, init, bossController);
@@ -427,7 +451,7 @@ public class BattleMgr : BattleMgrBase
 	private IEnumerator SummonCombatantsAfter(Func<IEnumerator> previousSummon, List<float> values, Faction faction, int init, BossAssetController bossController)
 	{
 		yield return StartCoroutine(previousSummon());
-		yield return StartCoroutine(SummonCombatants(values, faction, init, bossController));
+		yield return StartCoroutine(SummonCombatants(values, faction, init, bossController, QueuedSummonEnterSpeed));
 	}
 
 	protected virtual void m_Model_WaveDone(int obj)
@@ -457,6 +481,12 @@ public class BattleMgr : BattleMgrBase
 		{
 			m_WaveClearedInterludes.Remove(m_Model.CurrentWaveIndex - 1);
 		}
+		// The intro: the last wave's turn banner leaves with its own animation before the cutscene bars come in.
+		var introAllyDown = IsIntroBossWave(m_Model) && m_Model.m_CombatantsPerFaction[Faction.Birds].Any(b => b.IsKnockedOut);
+		if (IsIntroBossWave(m_Model))
+		{
+			m_BattleUI.HideTurnIndicator();
+		}
 		yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeFromAttackPosToBasePosInSec);
 		if (interlude != null && interlude.BeforeCheer != null)
 		{
@@ -467,7 +497,19 @@ public class BattleMgr : BattleMgrBase
 			var c2 = m_Model.m_CombatantsByInitiative[i];
 			if (c2.CombatantFaction == Faction.Birds)
 			{
-				c2.CombatantView.PlayCheerCharacter();
+				// A knocked out bird stays down (the intro's birds stay on the field knocked out); in the intro the bird still
+				// standing is shocked instead of cheering.
+				if (!c2.IsKnockedOut)
+				{
+					if (introAllyDown)
+					{
+						StartCoroutine(SurprisedAtKnockedOutAlly(c2));
+					}
+					else
+					{
+						c2.CombatantView.PlayCheerCharacter();
+					}
+				}
 				c2.CombatantView.ActivateControlHUD(false);
 			}
 		}
@@ -614,6 +656,23 @@ public class BattleMgr : BattleMgrBase
 		}
 		yield return StartCoroutine(PlaceCharacter(m_PigCenterPosition, Faction.Pigs));
 		SwapCrystalDirector.For(this).OnWavePigsPlaced();
+		if (IsIntroBossWave(m_Model))
+		{
+			// Porky and Wiz Pig make their cutscene entrances (MoveByClip nodes in the wave's tree, which run in this same
+			// frame) and land on their slots: put them on the slots and skip the battle's walk-in.
+			foreach (var pig in m_Model.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.CombatantView != null))
+			{
+				pig.CombatantView.transform.localPosition -= pig.CombatantView.m_InitialStartPosOffset;
+				pig.Entered = true;
+			}
+			AttachIntroGroundShadows();
+			// A bird knocked out in wave 0 stays down through the cutscene (no rage).
+			var introTree = GetActionTreeForBattle(m_Model.CurrentWaveIndex, true, true);
+			if (introTree != null)
+			{
+				BindKnockedOutBirdsToNothing(introTree.Tree);
+			}
+		}
 		var summedEnterDelay = (float)m_Model.m_CombatantsByInitiative.Count(c => c.CombatantFaction == Faction.Pigs) * DIContainerLogic.GetPacingBalancing().PerCombatantEnterDelay + DIContainerLogic.GetPacingBalancing().BaseBattleEnterDelay;
 		if (base.Model.Balancing.EnvironmentalStartWave == base.Model.CurrentWaveIndex + 1)
 		{
@@ -655,12 +714,14 @@ public class BattleMgr : BattleMgrBase
 		{
 			yield return StartCoroutine(EnterPigs());
 		}
-		yield return new WaitForSeconds(summedEnterDelay);
+		// The intro's boss wave pigs are already on their slots after its cutscene: no walk-in to wait for.
+		var introPigsPlaced = IsIntroBossWave(m_Model);
+		yield return new WaitForSeconds(introPigsPlaced ? 0f : summedEnterDelay);
 		foreach (var combatant in m_Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Pigs))
 		{
 			combatant.CombatantView.SpawnHealthBar();
 		}
-		yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().AfterEnterBattleGroundDelay - summedEnterDelay);
+		yield return new WaitForSeconds(introPigsPlaced ? 0f : DIContainerLogic.GetPacingBalancing().AfterEnterBattleGroundDelay - summedEnterDelay);
 		DIContainerLogic.GetBattleService().AddPassiveEffects(base.Model);
 		foreach (var bird in base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds))
 		{
@@ -670,6 +731,14 @@ public class BattleMgr : BattleMgrBase
 			}
 			bird.ActedThisTurn = false;
 			bird.UsedConsumable = false;
+		}
+		if (IsIntroBossWave(m_Model))
+		{
+			// The birds open the fight against Porky and Wiz Pig: drop what is left of the turn the last wave ended in, so
+			// the next step starts a new turn in initiative order (birds before pigs).
+			m_Model.m_CombatantsNotActed.Clear();
+			m_Model.m_CombatantsOutOfInitiativeOrder.Clear();
+			m_Model.CurrentCombatant = null;
 		}
 		m_LockControlHUDs = false;
 		m_Ended = false;
@@ -1153,6 +1222,7 @@ public class BattleMgr : BattleMgrBase
 			{
 				yield return StartCoroutine(m_CurrentSummonAction());
 				m_CurrentSummonAction = null;
+				m_QueuedSummonCount = 0;
 			}
 			StartCoroutine("DoNextStep");
 		}
@@ -1438,10 +1508,25 @@ public class BattleMgr : BattleMgrBase
 		{
 			DebugLog.Log(GetType(), "CheckForStageProgressOrBattleEnd: Battle All Birds are defeated!");
 			base.AutoBattle = false;
-			var minTime = 2.5f;
+			// The intro's scripted loss carries straight on into the raid.
+			var minTime = IsIntroBossWave(m_Model) ? 1f : 2.5f;
 			DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("battle_end");
-			
+
 			yield return new WaitForSeconds(minTime);
+			if (IsIntroBossWave(m_Model))
+			{
+				// Scripted loss: no revive offer, no lost result. The raid cutscene plays and the intro carries on.
+				yield return StartCoroutine(HandleIntroBattleLost());
+				WaveEnded = true;
+				yield break;
+			}
+			if (IsIntroBattle(m_Model))
+			{
+				// Lost to the first wave: its pigs flee with the raid, and Porky and Wiz Pig's cutscenes play back to back.
+				yield return StartCoroutine(HandleIntroFirstWaveLost());
+				WaveEnded = true;
+				yield break;
+			}
 			yield return StartCoroutine("ShowRevivePopUp");
 			
 			DIContainerInfrastructure.BackButtonMgr.RegisterBlockReason("battle_end");
@@ -1617,11 +1702,250 @@ public class BattleMgr : BattleMgrBase
 		}
 	}
 
+	public static bool IsIntroBattle(BattleGameData model)
+	{
+		return model != null && model.Balancing.NameId == "battle_000";
+	}
+
+	// The intro battle's second wave (Prince Porky and Wiz Pig), which the birds lose by design.
+	public static bool IsIntroBossWave(BattleGameData model)
+	{
+		return IsIntroBattle(model) && model.CurrentWaveIndex == 1;
+	}
+
+	// Makes the tree's FindObject nodes for knocked out birds bind to an empty object, so the tree's animations on them
+	// do nothing (they stay down).
+	private void BindKnockedOutBirdsToNothing(ActionTree tree)
+	{
+		GameObject nothing = null;
+		foreach (var bird in m_Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.IsKnockedOut))
+		{
+			var find = tree.nodes.FirstOrDefault(n => n.type == NodeType.FindObject && n.text == bird.CombatantNameId);
+			if (find == null)
+			{
+				continue;
+			}
+			if (nothing == null)
+			{
+				nothing = new GameObject("KnockedOutBird_NoAnimations");
+				nothing.transform.SetParent(tree.transform, false);
+			}
+			tree.SetRuntimeObject(find.secondaryText, nothing);
+		}
+	}
+
+	private static void HideBattleOverlays(IEnumerable<ICombatant> combatants)
+	{
+		foreach (var combatant in combatants.Where(c => c.CombatantView != null))
+		{
+			combatant.CombatantView.ToggleReviveme(false);
+			foreach (var bar in combatant.CombatantView.GetComponentsInChildren<CharacterHealthBar>())
+			{
+				bar.gameObject.SetActive(false);
+			}
+		}
+	}
+
+	// Both birds went down in wave 0. Its remaining pigs laugh and run off left like the raid's swarm, while Porky and
+	// Wiz Pig come in: the pre-wave-1 tree plays without its ending (camera out, bars off), then the lost tree carries on
+	// from its laugh (its own bars and zoom are already in place). Wave 1 is never fought.
+	protected IEnumerator HandleIntroFirstWaveLost()
+	{
+		LeaveBattleMainLoop();
+		yield return new WaitForSeconds(m_BattleUI.TurnIndicatorHideTime);
+		HideBattleOverlays(base.Model.m_CombatantsPerFaction.Values.SelectMany(f => f).ToList());
+		var fleeing = m_Model.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.IsParticipating && c.CombatantView != null).Select(c => c.CombatantView).ToList();
+		foreach (var pig in fleeing)
+		{
+			StartCoroutine(LaughAndRunOff(pig));
+		}
+		DIContainerLogic.GetBattleService().HandleNextWaveOrFinishBattle(m_Model, 1);
+		yield return StartCoroutine(PlaceCharacter(m_PigCenterPosition, Faction.Pigs));
+		foreach (var pig in m_Model.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.CombatantView != null))
+		{
+			pig.CombatantView.transform.localPosition -= pig.CombatantView.m_InitialStartPosOffset;
+			pig.Entered = true;
+		}
+		AttachIntroGroundShadows();
+		var before = GetActionTreeForBattle(1, true, true);
+		var after = GetActionTreeForBattle(1, false, false);
+		if (before != null && after != null && !DIContainerInfrastructure.GetCoreStateMgr().m_DisableStorySequences)
+		{
+			BindKnockedOutBirdsToNothing(before.Tree);
+			var cameraOut = before.Tree.nodes.LastOrDefault(n => n.type == NodeType.MoveTo && n.refObject != null && n.refObject.name == "1_Camera");
+			var cut = cameraOut != null ? before.Tree.nodes.FirstOrDefault(n => n.nodesOut != null && n.nodesOut.Contains(cameraOut.nodeID)) : null;
+			var cutOut = cut != null ? cut.nodesOut : null;
+			if (cut != null)
+			{
+				cut.nodesOut = new int[0];
+			}
+			yield return StartCoroutine(ExecuteActionTree(before));
+			if (cut != null)
+			{
+				cut.nodesOut = cutOut;
+			}
+			var lostTree = after.Tree;
+			foreach (var find in lostTree.nodes.Where(n => n.type == NodeType.FindObject))
+			{
+				var parent = find.refObject as GameObject;
+				var found = parent != null ? FindChildRecursively(parent.transform, find.text) : null;
+				if (found != null)
+				{
+					lostTree.SetRuntimeObject(find.secondaryText, found.gameObject);
+				}
+			}
+			var laugh = lostTree.nodes.FirstOrDefault(n => n.type == NodeType.PlayBoneAnimation && n.objectName == "Porky" && n.text == "Taunt");
+			if (laugh != null)
+			{
+				lostTree.ResumeAt(laugh.nodeID);
+				while (lostTree.node != null)
+				{
+					yield return null;
+				}
+			}
+		}
+		FinishIntro();
+	}
+
+	// "Laughs" (Taunt, or Cheer for rigs without one), then runs off left at the raid swarm's pace and is gone.
+	private IEnumerator LaughAndRunOff(CharacterControllerBattleGroundBase pig)
+	{
+		var asset = pig.m_AssetController;
+		if (asset != null)
+		{
+			var laugh = asset.HasAnimation("Taunt") ? "Taunt" : "Cheer";
+			asset.PlayAnimation(laugh);
+			yield return new WaitForSeconds(asset.GetAnimationLength(laugh));
+			asset.PlayAnimation("Move_Loop");
+		}
+		var start = pig.transform.position;
+		var end = start - new Vector3(IntroFleeDistance, 0f, 0f);
+		var duration = IntroFleeDistance / IntroSwarmSpeed;
+		for (var t = 0f; t < duration && pig != null; t += Time.deltaTime)
+		{
+			pig.transform.position = Vector3.Lerp(start, end, t / duration);
+			yield return null;
+		}
+		if (pig != null)
+		{
+			pig.gameObject.SetActive(false);
+		}
+	}
+
+	// The raid's minions run about 343 units a second (MinionPigA_Move); far enough to leave the screen on the left.
+	private const float IntroSwarmSpeed = 343f;
+
+	private const float IntroFleeDistance = 2600f;
+
+	private static Transform FindChildRecursively(Transform parent, string name)
+	{
+		if (parent.name == name)
+		{
+			return parent;
+		}
+		for (var i = 0; i < parent.childCount; i++)
+		{
+			var found = FindChildRecursively(parent.GetChild(i), name);
+			if (found != null)
+			{
+				return found;
+			}
+		}
+		return null;
+	}
+
+	// Set when only Red is still standing as wave 0 ends (Chuck is knocked out): the raid's look back at Chuck becomes Rage.
+	private bool m_IntroRedAloneAtWaveChange;
+
+	// The bird still standing as wave 0 ends with its ally knocked out: shocked instead of cheering. Red turns to the
+	// knocked out Chuck (left) for it and back.
+	private IEnumerator SurprisedAtKnockedOutAlly(ICombatant bird)
+	{
+		var view = bird.CombatantView;
+		var asset = view.m_AssetController;
+		var isRed = bird.CombatantNameId == "bird_red_cinematic";
+		m_IntroRedAloneAtWaveChange = isRed;
+		var scale = view.transform.localScale;
+		if (isRed)
+		{
+			view.transform.localScale = new Vector3(0f - Mathf.Abs(scale.x), scale.y, scale.z);
+			yield return new WaitForSeconds(0.2f);
+		}
+		var length = asset != null ? asset.GetAnimationLength("Surprised") : 0f;
+		if (asset != null)
+		{
+			asset.PlayAnimationForTime("Surprised", "Idle", length);
+		}
+		yield return new WaitForSeconds(length + 0.2f);
+		if (isRed && view != null)
+		{
+			view.transform.localScale = new Vector3(Mathf.Abs(scale.x), scale.y, scale.z);
+		}
+	}
+
+	// Wiz Pig's own shadow is hidden while he flies; give him one on the ground under his battle slot.
+	private void AttachIntroGroundShadows()
+	{
+		foreach (var pig in m_Model.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.CombatantNameId == "pig_wiz_pig_intro" && c.CombatantView != null))
+		{
+			GroundShadow.Attach(pig.CombatantView);
+		}
+	}
+
+	private void FinishIntro()
+	{
+		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("battle_end");
+		DIContainerInfrastructure.GetCurrentPlayer().Data.CinematricIntroStarted = true;
+		DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
+		DIContainerInfrastructure.GetCoreStateMgr().GotoWorldMap();
+	}
+
+	// The intro's second wave can't be won. Losing it plays the battle's lost tree with the combatants as they are (the pigs
+	// laugh, Porky sends his pigs to raid the camp, Red gets back up) and carries on to the world map.
+	protected IEnumerator HandleIntroBattleLost()
+	{
+		LeaveBattleMainLoop();
+		HideBattleOverlays(base.Model.m_CombatantsPerFaction.Values.SelectMany(f => f).ToList());
+		// Porky and Wiz Pig's buffs and the like don't carry into the cutscene.
+		foreach (var pig in m_Model.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.CombatantView != null))
+		{
+			pig.CombatantView.RemoveAllAppliedEffects();
+			foreach (var effect in pig.CombatantView.LastingVisualEffects.Values.Where(e => e != null))
+			{
+				Destroy(effect);
+			}
+			pig.CombatantView.LastingVisualEffects.Clear();
+		}
+		yield return new WaitForSeconds(m_BattleUI.TurnIndicatorHideTime);
+		var tree = GetActionTreeForBattle(m_Model.CurrentWaveIndex, false, false);
+		if (tree != null)
+		{
+			if (m_IntroRedAloneAtWaveChange)
+			{
+				// Red already saw Chuck go down in wave 0: instead of looking back at him (the nodes marked
+				// IntroRedLookBack), he rages facing right.
+				foreach (var node in tree.Tree.nodes.Where(n => n.param != null && n.param.Contains("IntroRedLookBack")))
+				{
+					if (node.type == NodeType.FaceDirection)
+					{
+						node.customInt = 1;
+					}
+					else if (node.type == NodeType.PlayBoneAnimation)
+					{
+						node.text = "Rage";
+					}
+				}
+			}
+			yield return StartCoroutine(ExecuteActionTree(tree));
+		}
+		FinishIntro();
+	}
+
 	protected IEnumerator HandleBirdsWon()
 	{
-		if (base.Model.Balancing.NameId == "battle_000")
+		if (IsIntroBattle(base.Model))
 		{
-			DIContainerInfrastructure.GetCoreStateMgr().GotoWorldMap();
+			FinishIntro();
 			yield break;
 		}
 		LeaveBattleMainLoop();

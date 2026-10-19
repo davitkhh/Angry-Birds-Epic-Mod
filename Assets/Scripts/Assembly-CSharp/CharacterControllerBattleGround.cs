@@ -332,7 +332,9 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			m_SkillToDo = DIContainerLogic.GetBattleService().GetNextSkill(m_BattleMgr.Model, m_Model);
 			SafeEvaluateTarget();
 			DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(0f, EffectTriggerType.OnTarget, m_Model, m_Model.AttackTarget);
-			if (m_SkillToDo != null && m_SkillToDo.EvaluateCharge(m_BattleMgr.Model, m_Model, new List<ICombatant> { m_Model.AttackTarget }, null))
+			// The player picks a manual bird's skill later; a charge starts once that skill runs (AttackSkillTemplate).
+			var playerPicksSkill = m_Model is BirdCombatant && !m_BattleMgr.AutoBattle;
+			if (m_SkillToDo != null && !playerPicksSkill && m_SkillToDo.EvaluateCharge(m_BattleMgr.Model, m_Model, new List<ICombatant> { m_Model.AttackTarget }, null))
 			{
 				yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForPigToChooseTargetAndDoSkillInSec);
 			}
@@ -916,7 +918,8 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			for (var i = 0; i < m_BattleMgr.Model.m_CombatantsByInitiative.Count; i++)
 			{
 				var combatant = m_BattleMgr.Model.m_CombatantsByInitiative[i];
-				if (combatant != m_tauntedTarget && combatant.CombatantFaction == Faction.Pigs)
+				// Taunts lock the pigs; a charge lock (CheckForTauntTarget) can lock the birds instead.
+				if (combatant != m_tauntedTarget && combatant.CombatantFaction == m_tauntedTarget.CombatantFaction)
 				{
 					m_BattleMgr.m_CharacterInteractionBlockedItems[i].SetActive(true);
 					m_BattleMgr.m_CharacterInteractionBlockedItems[i].transform.position = combatant.CombatantView.m_AssetController.BodyCenter.position + new Vector3(0f, 0f, -5f);

@@ -169,6 +169,8 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 		else if (Model is PigGameData)
 		{
+			// Pig clips hide the shadow while the pig hops; keep it on the ground instead.
+			AirborneShadow.Attach(this);
 			if (isWorldMap)
 			{
 				if (HeadGearBone && HeadGearBone.name.EndsWith("_A"))
@@ -208,6 +210,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
 					SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
+					SetPigBody(Model.ClassItem);
 					if (m_BoneAnimation.GetBoneTransform("MainHand") != null)
 					{
 						m_BoneAnimation.HideBone("MainHand", true);
@@ -265,11 +268,13 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					SetEquipmentItem((Model as PigGameData).ClassSkin, "Headgear", string.Empty);
 					SetEquipmentItem((Model as PigGameData).ClassSkin, "Headgear_Back", "_Back");
+					SetPigBody((Model as PigGameData).ClassSkin);
 				}
 				else
 				{
 					SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
 					SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
+					SetPigBody(Model.ClassItem);
 				}
 				if (showItems)
 				{
@@ -357,6 +362,16 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			return;
 		}
 		var itemAssetName = itemGameData.ItemAssetName.Replace("_Ancient", string.Empty);
+		if (!SwapBoneToTexture(boneName, triggerFrameBone.originalTextureGUID, itemAssetName + suffix))
+		{
+			m_BoneAnimation.HideBone(boneName, true);
+		}
+	}
+
+	// Swaps boneName's original texture for textureName from whichever of the rig's atlases has it.
+	// Returns false (and changes nothing) when no atlas has it.
+	private bool SwapBoneToTexture(string boneName, string originalTextureGUID, string textureName)
+	{
 		TextureAtlas textureAtlas = null;
 		var textureAtlases = m_BoneAnimation.textureAtlases;
 		foreach (var textureAtlas2 in textureAtlases)
@@ -365,7 +380,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			{
 				Debug.LogError(GetType() + ": There is a null value referenced as a texture atlas on a BoneAnimation script!", base.gameObject);
 			}
-			else if (textureAtlas2.textureNames.Contains(itemAssetName + suffix))
+			else if (textureAtlas2.textureNames.Contains(textureName))
 			{
 				textureAtlas = textureAtlas2;
 				TextureName = textureAtlas.name;
@@ -373,15 +388,14 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 		if (textureAtlas == null)
 		{
-			m_BoneAnimation.HideBone(boneName, true);
-			return;
+			return false;
 		}
 		var num = -1;
 		TextureAtlas textureAtlas3 = null;
 		var textureAtlases2 = m_BoneAnimation.textureAtlases;
 		foreach (var textureAtlas4 in textureAtlases2)
 		{
-			num = textureAtlas4.GetTextureIndex(triggerFrameBone.originalTextureGUID);
+			num = textureAtlas4.GetTextureIndex(originalTextureGUID);
 			if (num != -1)
 			{
 				textureAtlas3 = textureAtlas4;
@@ -393,7 +407,37 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		{
 			m_BoneAnimation.RestoreBoneTexture(boneName);
 		}
-		m_BoneAnimation.SwapBoneTexture(boneName, textureAtlas3.name, textureAtlas3.textureNames[num], TextureName, itemAssetName + suffix);
+		m_BoneAnimation.SwapBoneTexture(boneName, textureAtlas3.name, textureAtlas3.textureNames[num], TextureName, textureName);
+		return true;
+	}
+
+	// Pirate-aligned pigs (wearing a pirate captain hat) swap their Body for the rig's "BodyPirate" texture,
+	// when the rig has one (MoustachePig).
+	private void SetPigBody(IInventoryItemGameData headgear)
+	{
+		if (base.HasNoBoneAnimation || m_BoneAnimation.GetBoneTransform("Body") == null)
+		{
+			return;
+		}
+		var bodyBone = m_BoneAnimation.mBoneSource.FirstOrDefault(b => b.boneName == "Body");
+		if (bodyBone == null)
+		{
+			return;
+		}
+		var triggerFrame = m_BoneAnimation.triggerFrames.FirstOrDefault(f => f.GetTriggerFrameBone(bodyBone.boneNodeIndex) != null && !string.IsNullOrEmpty(f.GetTriggerFrameBone(bodyBone.boneNodeIndex).originalTextureGUID));
+		if (triggerFrame == null)
+		{
+			return;
+		}
+		var headgearName = headgear == null || string.IsNullOrEmpty(headgear.ItemAssetName) ? string.Empty : headgear.ItemAssetName;
+		var isPirate = headgearName.Contains("Pirate") || headgearName.Contains("RedBeard");
+		if (!isPirate || !SwapBoneToTexture("Body", triggerFrame.GetTriggerFrameBone(bodyBone.boneNodeIndex).originalTextureGUID, "BodyPirate"))
+		{
+			if (m_EquipmentSetOnce)
+			{
+				m_BoneAnimation.RestoreBoneTexture("Body");
+			}
+		}
 	}
 
 	private readonly List<GameObject> m_CarriedHandItems = new List<GameObject>();
@@ -401,7 +445,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 	// Shows or hides the main/off hand item (cutscenes; the world map hides hand items). itemOwner's item is
 	// shown instead of our own when given. If this rig's atlases lack that texture (world map low-res rigs),
 	// the item is carried as a quad built from the owner's atlas and pinned to the hand bone.
-	public void ShowHandItem(InventoryItemType slot, bool show, CharacterAssetController itemOwner = null)
+	public void ShowHandItem(InventoryItemType slot, bool show, CharacterAssetController itemOwner = null, float depthBehind = -1f, float turn = 0f)
 	{
 		var boneName = slot == InventoryItemType.MainHandEquipment ? "MainHand" : "OffHand";
 		if (base.HasNoBoneAnimation || m_BoneAnimation == null || m_BoneAnimation.GetBoneTransform(boneName) == null)
@@ -434,8 +478,9 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		var visual = hand.Find(boneName + "_Sprite") ?? hand;
 		var carried = new GameObject("Carried_" + boneName + "_" + textureName);
 		carried.transform.SetParent(visual, false);
-		// Slightly towards the camera so the item draws over the carrier's body.
-		carried.transform.position = visual.position + Vector3.back;
+		// Slightly towards the camera by default, so the item draws over the carrier's body.
+		carried.transform.position = visual.position + new Vector3(0f, 0f, depthBehind);
+		carried.transform.localRotation = Quaternion.Euler(0f, 0f, turn);
 		var sprite = carried.AddComponent<CHMeshSprite>();
 		sprite.m_AtlasType = AtlasTypes.SmoothMoves;
 		sprite.m_SmoothMovesAtlas = atlas;
@@ -462,7 +507,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 	}
 
 	// SmoothMoves' clip indexer logs an error for unknown names; the rig's legacy Animation lookup is silent.
-	private bool HasClipSilently(string animationName)
+	public bool HasClipSilently(string animationName)
 	{
 		if (base.HasNoBoneAnimation || m_BoneAnimation == null)
 		{

@@ -277,7 +277,7 @@ namespace ABH.GameDatas.Battle
 		{
 			if (Balancing.NameId == "battle_000")
 			{
-				return 60;
+				return 1;
 			}
 			if (m_hotSpotBalancing == null)
 			{

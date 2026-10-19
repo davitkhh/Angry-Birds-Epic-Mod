@@ -30598,6 +30598,9 @@ public sealed class ABHModelSerializer : TypeModel
         case PerkType.Brilliance:
           ProtoWriter.WriteInt32(24, _param1);
           break;
+        case PerkType.Dynamite:
+          ProtoWriter.WriteInt32(25, _param1);
+          break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -30714,6 +30717,9 @@ public sealed class ABHModelSerializer : TypeModel
               break;
             case 24:
               perkType = PerkType.Brilliance;
+              break;
+            case 25:
+              perkType = PerkType.Dynamite;
               break;
             default:
               _param1.ThrowEnumException(typeof (PerkType), num2);
@@ -41580,6 +41586,9 @@ public sealed class ABHModelSerializer : TypeModel
       case PerkType.Brilliance:
         ProtoWriter.WriteInt32(24, _param1);
         break;
+      case PerkType.Dynamite:
+        ProtoWriter.WriteInt32(25, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -41666,6 +41675,9 @@ public sealed class ABHModelSerializer : TypeModel
         break;
       case 24:
         perkType = PerkType.Brilliance;
+        break;
+      case 25:
+        perkType = PerkType.Dynamite;
         break;
       default:
         _param1.ThrowEnumException(typeof (PerkType), num);

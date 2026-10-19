@@ -146,6 +146,14 @@ public class CharacterOverlay : MonoBehaviour
 
 	private Vector3 initialHeaderPos;
 
+	private ICombatant m_ShownCombatant;
+
+	private float m_ShownHealth;
+
+	private float m_ShownMaxHealth;
+
+	private const float HealthFillSpeed = 2f;
+
 	private void Awake()
 	{
 		m_InterfaceCamera = DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera;
@@ -195,8 +203,9 @@ public class CharacterOverlay : MonoBehaviour
 			if (skin != null)
 				SetupSkinInfo(skin, combatant);
 		}
+		m_ShownCombatant = combatant;
 		m_HealthBar.fillAmount = combatant.CurrentHealth / combatant.ModifiedHealth;
-		m_HealthText.text = DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(combatant.CurrentHealth) + "/" + DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(combatant.ModifiedHealth);
+		SetHealthText(combatant);
 		m_LevelText.text = combatant.CharacterModel.Level.ToString("0");
 		IInventoryItemGameData data;
 		if (!combatant.IsBanner && combatant is BirdCombatant && DIContainerLogic.InventoryService.TryGetItemGameData(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, "unlock_mastery_badge", out data))
@@ -241,6 +250,30 @@ public class CharacterOverlay : MonoBehaviour
 			m_EffectsRoot.gameObject.SetActive(false);
 		}
 		GetComponent<Animation>().Play("InfoOverlay_Enter");
+	}
+
+	private void SetHealthText(ICombatant combatant)
+	{
+		m_ShownHealth = combatant.CurrentHealth;
+		m_ShownMaxHealth = combatant.ModifiedHealth;
+		m_HealthText.text = DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(m_ShownHealth) + "/" + DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(m_ShownMaxHealth);
+	}
+
+	private void Update()
+	{
+		if (m_ShownCombatant == null)
+		{
+			return;
+		}
+		if (m_ShownCombatant.CurrentHealth != m_ShownHealth || m_ShownCombatant.ModifiedHealth != m_ShownMaxHealth)
+		{
+			SetHealthText(m_ShownCombatant);
+		}
+		var target = (m_ShownMaxHealth > 0f) ? Mathf.Clamp01(m_ShownHealth / m_ShownMaxHealth) : 0f;
+		if (m_HealthBar.fillAmount != target)
+		{
+			m_HealthBar.fillAmount = Mathf.MoveTowards(m_HealthBar.fillAmount, target, HealthFillSpeed * Time.deltaTime);
+		}
 	}
 
 	private static float BackgroundShift(UIWidget.Pivot pivot, float offset)
@@ -289,6 +322,24 @@ public class CharacterOverlay : MonoBehaviour
 		m_skinHealthBonus.text = "+" + skin.BalancingData.BonusHp + "%";
 	}
 	
+	private static string GetAffiliatedFriendName(BirdGameData bird)
+	{
+		if (bird == null)
+		{
+			return null;
+		}
+		if (!string.IsNullOrEmpty(bird.FriendName))
+		{
+			return bird.FriendName;
+		}
+		var allyCamp = ShowcaseCamps.GetVisitedAllyCamp();
+		if (allyCamp != null && allyCamp.Ally.BirdNameId == bird.BalancingData.NameId && ClientInfo.InspectedFriend != null)
+		{
+			return ClientInfo.InspectedFriend.FriendName;
+		}
+		return null;
+	}
+
 	private void SetBirdOrPvpCombatant(ICombatant combatant)
 	{
 		if (combatant is PigCombatant)
@@ -297,7 +348,10 @@ public class CharacterOverlay : MonoBehaviour
 		}
 		else
 		{
-			m_Header.text = (combatant.CharacterModel as BirdGameData).GetClassName();
+			// Allies (a friend's lent bird, or the ally of a visited showcase camp) show whose they are instead.
+			var bird = combatant.CharacterModel as BirdGameData;
+			var friendName = GetAffiliatedFriendName(bird);
+			m_Header.text = string.IsNullOrEmpty(friendName) ? bird.GetClassName() : friendName;
 		}
 		if (combatant.CombatantNameId.Contains("_red"))
 		{
@@ -589,6 +643,7 @@ public class CharacterOverlay : MonoBehaviour
 
 	public void Hide()
 	{
+		m_ShownCombatant = null;
 		GetComponent<Animation>().Play("InfoOverlay_Leave");
 		Invoke("Disable", GetComponent<Animation>()["InfoOverlay_Leave"].length);
 	}

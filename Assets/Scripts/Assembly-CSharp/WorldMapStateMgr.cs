@@ -1206,29 +1206,24 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		switch (model.BalancingData.AssetId)
 		{
 		case "RedBird":
+		case "WhiteBird":
 		{
-			// Red has a real jump clip; fall back to his attack on rigs without it
-			var redAnim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
-			if (redAnim == null || redAnim["Jump"] != null)
+			// Red and Matilda have real jump clips; fall back to their attack on rigs without one
+			var anim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
+			if (anim == null || anim["Jump"] != null)
 			{
 				return "Jump";
 			}
-			goto case "WhiteBird";
-		}
-		case "WhiteBird":
-		{
 			var attack = model.MainHandItem == null ? "Action_Attack_1" : "Action_Attack_" + model.MainHandItem.BalancingData.AnimationIndex;
-			var anim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
-			return anim == null || anim[attack] != null ? attack : "Action_Attack_1";
+			return anim[attack] != null ? attack : "Action_Attack_1";
 		}
 		case "YellowBird":
+		case "BlackBird":
 		{
-			// Chuck has a real jump clip; fall back to his support clip on rigs without it
+			// Chuck and Bomb have real jump clips; fall back to their support clip on rigs without one
 			var anim = controller.m_AssetController != null ? controller.m_AssetController.GetComponent<Animation>() : null;
 			return anim == null || anim["Jump"] != null ? "Jump" : "Action_Support";
 		}
-		case "BlackBird":
-			return "Action_Support";
 		default:
 			return "Move_Loop";
 		}

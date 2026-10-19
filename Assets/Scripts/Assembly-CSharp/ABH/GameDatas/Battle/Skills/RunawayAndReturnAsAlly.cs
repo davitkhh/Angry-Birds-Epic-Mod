@@ -132,10 +132,12 @@ namespace ABH.GameDatas.Battle.Skills
 			var birds = battle.m_CombatantsPerFaction[Faction.Birds].Where(b => b.IsAlive && b.CombatantView != null).ToList();
 			// Every pig on the field turns around to look at him, not just the one he hits.
 			var startledPigs = new List<ICombatant>();
-			// The same bird the Corporal took his max HP and attack from, at his level (see PigGameData.AllyBird).
+			// The same bird the Corporal took his max HP from, at his level (see PigGameData.AllyBird).
 			var sourcePig = m_Source.CharacterModel as PigGameData;
 			var allyBird = sourcePig != null ? sourcePig.AllyBird : null;
 			var ally = new BirdCombatant(allyBird ?? new BirdGameData(m_CastleReunion ? CastleAllyBirdNameId : AllyBirdNameId, m_Source.CharacterModel.Level));
+			// Info overlays show him as Piggy McCool (the McCool friend's name), not his Merchant class.
+			((BirdGameData)ally.CharacterModel).FriendName = DIContainerInfrastructure.GetLocaService().Tr("npc_friend_merchant");
 
 			// Spawn offscreen to the right, level with the victim, facing left.
 			var view = Object.Instantiate(mgr.m_CharacterControllerBattlegroundPrefab, mgr.m_PigCenterPosition.position, Quaternion.identity) as CharacterControllerBattleGroundBase;

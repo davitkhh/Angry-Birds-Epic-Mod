@@ -124,7 +124,7 @@ public class RageMeterController : MonoBehaviour
 
 	public void OnRageMeterIncreased(float value, ICombatant source, bool isAttacking, SkillBattleDataBase skill, Vector3 targetOffset)
 	{
-		if (RageMeterProgress.fillAmount >= 1f) 
+		if (RageMeterProgress.fillAmount >= 1f || m_dragging)
 			return;
 		
 		StartCoroutine(SpawnFX(value, source, isAttacking, skill, targetOffset));
@@ -182,7 +182,7 @@ public class RageMeterController : MonoBehaviour
 
 	public IEnumerator UpdateRageMeter(float oldValue, float newValue)
 	{
-		if (!GetComponent<Animation>().IsPlaying("RageOMeter_Used"))
+		if (!GetComponent<Animation>().IsPlaying("RageOMeter_Used") && !m_dragging)
 		{
 			if (oldValue < newValue)
 			{
@@ -363,7 +363,7 @@ public class RageMeterController : MonoBehaviour
 
 	private bool UseRageIsPossible(ICombatant combatant)
 	{
-		if (combatant is PigCombatant || !combatant.StartedHisTurn || combatant.IsStunned || m_battleMgr.AnyCharacterIsActingOrInQueue() || m_battleMgr.m_BattleMainLoopDone || combatant.ActedThisTurn || m_battleMgr.WaveEnded || m_battleMgr.IsBattleEnded())
+		if (combatant is PigCombatant || !combatant.StartedHisTurn || combatant.IsStunned || m_battleMgr.actingCharacters.Contains(combatant.CombatantNameId) || m_battleMgr.m_BattleMainLoopDone || combatant.ActedThisTurn || m_battleMgr.WaveEnded || m_battleMgr.IsBattleEnded())
 		{
 			return false;
 		}

@@ -10217,16 +10217,16 @@ MonoBehaviour:
       upperRight: {x: 0, y: 0, z: 0}
       uv:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.7519531
+        y: 0.93359375
+        width: 0.109375
+        height: 0.041015625
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: 6ae5ffd30ec2f0b4585a7dd105f79e9e, type: 2}
+      atlas: {fileID: 11400000, guid: a00fbe0c95b5a454d918094887f5751c, type: 2}
       textureGUID: 484d07cb628121e49bb6a5d602048d17
-      materialIndex: 1
+      materialIndex: 2
       depth: 30
       collider:
         type: 0
@@ -10237,15 +10237,15 @@ MonoBehaviour:
         layer: 0
         isTrigger: 1
         tag: 
-      originalAtlas: {fileID: 11400000, guid: 6ae5ffd30ec2f0b4585a7dd105f79e9e, type: 2}
+      originalAtlas: {fileID: 11400000, guid: a00fbe0c95b5a454d918094887f5751c, type: 2}
       originalTextureGUID: 484d07cb628121e49bb6a5d602048d17
-      originalMaterialIndex: 1
+      originalMaterialIndex: 2
       originalUV:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.7519531
+        y: 0.93359375
+        width: 0.109375
+        height: 0.041015625
       originalPivotOffset: {x: 0, y: 0}
   - clipIndex: 5
     frame: 3
@@ -11478,16 +11478,16 @@ MonoBehaviour:
       upperRight: {x: 0, y: 0, z: 0}
       uv:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.7519531
+        y: 0.93359375
+        width: 0.109375
+        height: 0.041015625
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: 6ae5ffd30ec2f0b4585a7dd105f79e9e, type: 2}
+      atlas: {fileID: 11400000, guid: a00fbe0c95b5a454d918094887f5751c, type: 2}
       textureGUID: 484d07cb628121e49bb6a5d602048d17
-      materialIndex: 1
+      materialIndex: 2
       depth: 30
       collider:
         type: 0
@@ -11498,15 +11498,15 @@ MonoBehaviour:
         layer: 0
         isTrigger: 1
         tag: 
-      originalAtlas: {fileID: 11400000, guid: 6ae5ffd30ec2f0b4585a7dd105f79e9e, type: 2}
+      originalAtlas: {fileID: 11400000, guid: a00fbe0c95b5a454d918094887f5751c, type: 2}
       originalTextureGUID: 484d07cb628121e49bb6a5d602048d17
-      originalMaterialIndex: 1
+      originalMaterialIndex: 2
       originalUV:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.7519531
+        y: 0.93359375
+        width: 0.109375
+        height: 0.041015625
       originalPivotOffset: {x: 0, y: 0}
   - clipIndex: 6
     frame: 0
@@ -17537,16 +17537,16 @@ MonoBehaviour:
       upperRight: {x: 0, y: 0, z: 0}
       uv:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.7519531
+        y: 0.93359375
+        width: 0.109375
+        height: 0.041015625
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: 6ae5ffd30ec2f0b4585a7dd105f79e9e, type: 2}
+      atlas: {fileID: 11400000, guid: a00fbe0c95b5a454d918094887f5751c, type: 2}
       textureGUID: 484d07cb628121e49bb6a5d602048d17
-      materialIndex: 1
+      materialIndex: 2
       depth: 30
       collider:
         type: 0
@@ -17557,15 +17557,15 @@ MonoBehaviour:
         layer: 0
         isTrigger: 1
         tag: 
-      originalAtlas: {fileID: 11400000, guid: 6ae5ffd30ec2f0b4585a7dd105f79e9e, type: 2}
+      originalAtlas: {fileID: 11400000, guid: a00fbe0c95b5a454d918094887f5751c, type: 2}
       originalTextureGUID: 484d07cb628121e49bb6a5d602048d17
-      originalMaterialIndex: 1
+      originalMaterialIndex: 2
       originalUV:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.7519531
+        y: 0.93359375
+        width: 0.109375
+        height: 0.041015625
       originalPivotOffset: {x: 0, y: 0}
   - clipIndex: 8
     frame: 13

@@ -41,7 +41,9 @@ public class ExecuteBattleActionTree : MonoBehaviour
 		{
 			return id == m_BattleID && wave == m_WaveIndex && m_ExecuteWhenWon && before == m_ExecuteBeforeWave;
 		}
-		return id == m_BattleID && !m_ExecuteWhenWon;
+		// Lost trees run after the battle (before = false); the battle start lookup (before = true) must not pick them up,
+		// or it skips the scene's generic start tree.
+		return id == m_BattleID && !m_ExecuteWhenWon && before == m_ExecuteBeforeWave;
 	}
 
 	public void StartActionTree()

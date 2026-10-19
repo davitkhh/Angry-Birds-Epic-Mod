@@ -381,7 +381,8 @@ public class InventoryItemSlot : BaseItemSlot
 		if (m_StarRoots.Count > 0)
 		{
 			m_StarRoots[0].transform.parent.gameObject.SetActive(true);
-			if (equipmentGameData.IsSetItem)
+			// Gacha set items have their own star look; custom pairs (CustomEquipmentSets) keep quality stars.
+			if (equipmentGameData.IsGachaSetItem)
 			{
 				for (var i = 0; i < m_StarRoots.Count; i++)
 				{
@@ -583,7 +584,8 @@ public class InventoryItemSlot : BaseItemSlot
 		if (m_StarRoots.Count > 0)
 		{
 			m_StarRoots[0].transform.parent.gameObject.SetActive(true);
-			if (equipmentGameData.IsSetItem)
+			// Gacha set items have their own star look; custom pairs (CustomEquipmentSets) keep quality stars.
+			if (equipmentGameData.IsGachaSetItem)
 			{
 				for (var i = 0; i < m_StarRoots.Count; i++)
 				{
@@ -1095,8 +1097,16 @@ public class InventoryItemSlot : BaseItemSlot
 			assetBaseId = DIContainerBalancing.Service.GetBalancingData<ClassSkinBalancingData>(currentPlayer.Data.EquippedSkins[item.ItemBalancing.NameId]).AssetBaseId;
 		}
 		m_ItemSprite = DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(assetBaseId, m_ItemSpriteSpawnRoot, Vector3.zero, Quaternion.identity, false);
-		m_ItemSprite.transform.localScale = Vector3.one;
-		m_ItemSprite.transform.localPosition = Vector3.zero;
+		// A class without an icon in the class asset provider (e.g. an NPC ally's) shows an empty slot instead of throwing.
+		if (m_ItemSprite)
+		{
+			m_ItemSprite.transform.localScale = Vector3.one;
+			m_ItemSprite.transform.localPosition = Vector3.zero;
+		}
+		else
+		{
+			DebugLog.Error(GetType(), "No class icon for " + assetBaseId);
+		}
 		if (m_BadgeRoot)
 		{
 			m_BadgeRoot.SetActive(false);
@@ -1115,8 +1125,16 @@ public class InventoryItemSlot : BaseItemSlot
 			}
 		}
 		m_ItemSprite = DIContainerInfrastructure.GetClassAssetProvider().InstantiateObject(assetBaseId, m_ItemSpriteSpawnRoot, Vector3.zero, Quaternion.identity, false);
-		m_ItemSprite.transform.localScale = Vector3.one;
-		m_ItemSprite.transform.localPosition = Vector3.zero;
+		// A class without an icon in the class asset provider (e.g. an NPC ally's) shows an empty slot instead of throwing.
+		if (m_ItemSprite)
+		{
+			m_ItemSprite.transform.localScale = Vector3.one;
+			m_ItemSprite.transform.localPosition = Vector3.zero;
+		}
+		else
+		{
+			DebugLog.Error(GetType(), "No class icon for " + assetBaseId);
+		}
 		if (!m_BadgeRoot)
 		{
 			return;

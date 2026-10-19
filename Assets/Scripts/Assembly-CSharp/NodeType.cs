@@ -28,5 +28,12 @@ public enum NodeType
 	FinishCurrentChronicleCave = 25,
 	SetHandItem = 26,
 	ControlActionTree = 27,
-	FaceTarget = 28
+	FaceTarget = 28,
+	MoveArc = 29,
+	MoveByClip = 30,
+	MoveToObject = 31,
+	FaceDirection = 32,
+	ShowBubble = 33,
+	DropHandItems = 34,
+	MovePath = 35
 }

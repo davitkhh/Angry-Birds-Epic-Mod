@@ -12,6 +12,11 @@ using UnityEngine;
 
 public class ClassItemInfoBase : MonoBehaviour
 {
+	// Showcase ally (BirdWindowUI): the class is the ally's own, so no shop, no skin switching, and its default
+	// costume's passive is shown.
+	[NonSerialized]
+	public bool m_IsAlly;
+
 	private void Awake()
 	{
 		m_BuyClassButton.Clicked -= BuyClass;
@@ -204,9 +209,18 @@ public class ClassItemInfoBase : MonoBehaviour
 
 		GetComponent<Animator>().SetBool("Known", !m_unavailableClass);
 		
-		if (m_selectedSkin != null && m_selectedSkin.BalancingData.SortPriority > 0 && !buyable)
+		if (m_selectedSkin != null && (m_selectedSkin.BalancingData.SortPriority > 0 || (m_IsAlly && !string.IsNullOrEmpty(m_selectedSkin.BalancingData.PassiveSkillNameId))) && !buyable)
 		{
 			SetupSkinInfo();
+		}
+		if (m_IsAlly)
+		{
+			m_ClassName.text = m_selectedBird.GetClassName();
+			GetComponent<Animator>().SetBool("IsPurchasable", false);
+			SetupSkillInfo();
+			m_newSkinMarker.SetActive(false);
+			m_switchSkinButtonObject.SetActive(false);
+			return;
 		}
 		
 		if (m_skinSelectionOpen && !DIContainerLogic.InventoryService.CheckForItem(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_selectedSkin.BalancingData.NameId))
@@ -363,6 +377,18 @@ public class ClassItemInfoBase : MonoBehaviour
 		}
 		m_skinAttackBonus.text = "+" + m_selectedSkin.BalancingData.BonusDamage + "%";
 		m_skinHealthBonus.text = "+" + m_selectedSkin.BalancingData.BonusHp + "%";
+		// An ally's default costume has no stat boosts to show (Stats_Damage / Stats_Health rows).
+		SetStatRowActive(m_skinAttackBonus, !m_IsAlly || m_selectedSkin.BalancingData.BonusDamage != 0f);
+		SetStatRowActive(m_skinHealthBonus, !m_IsAlly || m_selectedSkin.BalancingData.BonusHp != 0f);
+	}
+
+	private static void SetStatRowActive(UILabel valueLabel, bool active)
+	{
+		var row = valueLabel == null ? null : valueLabel.transform.parent == null ? null : valueLabel.transform.parent.parent;
+		if (row != null)
+		{
+			row.gameObject.SetActive(active);
+		}
 	}
 	
 	private IEnumerator TimerRoutine()

@@ -86,6 +86,13 @@
                 NodeType.SetHandItem          => new SetHandItemNode(node),
                 NodeType.ControlActionTree    => new ControlActionTreeNode(node),
                 NodeType.FaceTarget           => new FaceTargetNode(node),
+                NodeType.MoveArc              => new MoveArcNode(node),
+                NodeType.MoveByClip           => new MoveByClipNode(node),
+                NodeType.MoveToObject         => new MoveToObjectNode(node),
+                NodeType.FaceDirection        => new FaceDirectionNode(node),
+                NodeType.ShowBubble           => new ShowBubbleNode(node),
+                NodeType.DropHandItems        => new DropHandItemsNode(node),
+                NodeType.MovePath             => new MovePathNode(node),
                 
                 _ => new UnImplementedNode(node)
             };

@@ -301,7 +301,7 @@ public class BaseCampStateMgr : MonoBehaviour
 		var allyCamp = ShowcaseCamps.GetVisitedAllyCamp();
 		if (allyCamp != null && bird != null)
 		{
-			return ShowcaseCamps.CreateAllyArmory(allyCamp, bird.Level);
+			return ShowcaseCamps.CreateAllyArmory(allyCamp, bird);
 		}
 		return DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData;
 	}

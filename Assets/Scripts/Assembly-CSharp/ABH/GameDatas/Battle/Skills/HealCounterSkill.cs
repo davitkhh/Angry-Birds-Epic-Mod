@@ -18,11 +18,14 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private bool m_EffectAll;
 
+		private float m_ChargeTurns;
+
 		public override void Init(SkillGameData model)
 		{
 			base.Init(model);
 			base.Model.SkillParameters.TryGetValue("health_in_percent", out m_Percent);
 			base.Model.SkillParameters.TryGetValue("chance", out m_Chance);
+			base.Model.SkillParameters.TryGetValue("charge", out m_ChargeTurns);
 			m_All = base.Model.SkillParameters.ContainsKey("all");
 			m_EffectAll = base.Model.SkillParameters.ContainsKey("effect_all");
 		}
@@ -41,6 +44,11 @@ namespace ABH.GameDatas.Battle.Skills
 				m_Targets = new List<ICombatant>();
 				var target2 = target;
 				m_Targets.AddRange(battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == target2.CombatantFaction).ToList());
+			}
+			if (EvaluateCharge(battle, source, m_Targets, target))
+			{
+				m_Source.CombatantView.targetSheltered = null;
+				yield break;
 			}
 			SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting);
 			yield return new WaitForSeconds(source.CombatantView.PlaySupportAnimation());
@@ -78,6 +86,7 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_3}", m_Percent.ToString("0"));
 			dictionary.Add("{value_2}", base.Model.Balancing.EffectDuration.ToString("0"));
 			dictionary.Add("{value_6}", m_Chance.ToString("0"));
+			dictionary.Add("{value_5}", m_ChargeTurns.ToString("0"));
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

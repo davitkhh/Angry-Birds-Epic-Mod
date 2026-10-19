@@ -233,7 +233,13 @@ public abstract class BattleMgrBase : MonoBehaviour
 	{
 		get
 		{
-			return m_IsConsumableUsePossible;
+			if (m_IsConsumableUsePossible)
+			{
+				return true;
+			}
+			// A bird playing its action blocks consumables, but the chili stays draggable: a drop on a waiting bird queues
+			// its rage skill behind the running action, like any other command.
+			return AnyCharacterIsActingOrInQueue() && !AutoBattle && !m_BattleMainLoopDone && !WaveEnded && !IsBattleEnded() && !DIContainerInfrastructure.TutorialMgr.IsCurrentlyLocked;
 		}
 	}
 
@@ -543,8 +549,10 @@ public abstract class BattleMgrBase : MonoBehaviour
 
 	public virtual IEnumerator PlaceCharacter(Transform centerTransform, Faction faction)
 	{
-		// Swap crystals never participate but still take a formation slot (and get an initiative from it).
+		// Swap crystals never participate but still take a formation slot (and get an initiative from it). Once placed they
+		// stay put: re-spacing still reserves a slot for them, and the pig given the spot nearest the crystal takes that slot.
 		var factionCombatants = m_Model.m_CombatantsPerFaction[faction].Where(c => c.IsParticipating || (c is PigCombatant && c.IsKnockedOut) || c is SwapCrystalCombatant).ToList();
+		var fixedCrystalSpots = factionCombatants.Where(c => c is SwapCrystalCombatant && c.CombatantView != null).ToDictionary(c => c, c => c.CombatantView.CachedUnfocusedPos);
 		for (var i = 0; i < factionCombatants.Count; i++)
 		{
 			var comb = factionCombatants[i];
@@ -775,6 +783,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 				character2.SetModel(character2.GetModel(), this);
 			}
 		}
+		KeepCrystalSpotsClear(factionCombatants, fixedCrystalSpots, centerTransform);
 		var repositioningDelay = 0f;
 		for (var l = 0; l < factionCombatants.Count; l++)
 		{
@@ -824,6 +833,46 @@ public abstract class BattleMgrBase : MonoBehaviour
 		var newOrder = factionCombatants.OrderByDescending(c => c.CombatantView.m_StartPositionY).ToList();
 		DIContainerLogic.GetBattleService().ReplaceInitiative(Model, newOrder, faction);
 		PlacedCharactersAtLeastOnce = true;
+	}
+
+	// A placed crystal was given a new slot by the layout but stays where it stands. Whichever pig got the slot nearest
+	// the crystal's spot swaps it for the crystal's new slot, so no pig ends up in front of or behind the crystal.
+	private static void KeepCrystalSpotsClear(List<ICombatant> combatants, Dictionary<ICombatant, Vector3> fixedSpots, Transform centerTransform)
+	{
+		foreach (var fixedSpot in fixedSpots)
+		{
+			var crystalView = fixedSpot.Key.CombatantView;
+			var freedSlot = crystalView.CachedUnfocusedPos;
+			var freedRow = crystalView.m_PlacedRow;
+			CharacterControllerBattleGroundBase nearest = null;
+			var nearestDistance = Vector3.Distance(freedSlot, fixedSpot.Value);
+			foreach (var combatant in combatants)
+			{
+				if (combatant is SwapCrystalCombatant || combatant.CombatantView == null)
+				{
+					continue;
+				}
+				var distance = Vector3.Distance(combatant.CombatantView.CachedUnfocusedPos, fixedSpot.Value);
+				if (distance < nearestDistance)
+				{
+					nearest = combatant.CombatantView;
+					nearestDistance = distance;
+				}
+			}
+			crystalView.CachedUnfocusedPos = fixedSpot.Value;
+			if (nearest == null)
+			{
+				continue;
+			}
+			crystalView.m_PlacedRow = nearest.m_PlacedRow;
+			nearest.m_PlacedRow = freedRow;
+			nearest.CachedUnfocusedPos = freedSlot;
+			if (!nearest.m_AlreadyPlaced)
+			{
+				// New pigs stand in their slot until PlaceCharacter moves them offscreen to walk in.
+				nearest.transform.position = centerTransform.position + freedSlot;
+			}
+		}
 	}
 
 	private static int CollectExtents(List<CharacterControllerBattleGroundBase> m_Characters, List<List<CharacterControllerBattleGroundBase>> m_CharactersPerRow, List<List<Rect>> m_Rows, float maxDistance, int row, float minOffset, List<Vector3> m_RowBounds)
@@ -965,7 +1014,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 		yield return new WaitForSeconds(duration);
 	}
 
-	public IEnumerator EnterPigs(bool useBoss = true, bool usePigs = true, float startDelay = 0f)
+	public IEnumerator EnterPigs(bool useBoss = true, bool usePigs = true, float startDelay = 0f, float speedMultiplier = 1f)
 	{
 		if (!useBoss && !usePigs)
 			yield break;
@@ -981,7 +1030,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			    !cc.Entered && 
 			    !cc.CombatantView.m_AlreadyPlaced)
 			{
-				cc.CombatantView.PlayGoToBasePositionFromStartPosition();
+				cc.CombatantView.PlayGoToBasePositionFromStartPosition(speedMultiplier);
 				yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().PerCombatantEnterDelay);
 				cc.Entered = true;
 			}
@@ -1007,7 +1056,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 		}
 	}
 
-	public IEnumerator SummonCombatants(List<float> values, Faction combatantFaction, int sourceInitiative, BossAssetController bossController)
+	public IEnumerator SummonCombatants(List<float> values, Faction combatantFaction, int sourceInitiative, BossAssetController bossController, float enterSpeedMultiplier = 1f)
 	{
 		var waveBalancing = DIContainerBalancing.Service.GetBalancingData<BattleParticipantTableBalancingData>("environmental_summon_table_" + values[3]);
 		var pigList = new List<PigGameData>();
@@ -1038,7 +1087,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			yield return new WaitForSeconds(bossController.m_PassiveAnimationSpawnDelay);
 			yield return StartCoroutine(PlaceCharacterBoss(bossController.transform, bossController.m_SpawnOffset, false));
 		}
-		yield return StartCoroutine(EnterPigs());
+		yield return StartCoroutine(EnterPigs(true, true, 0f, enterSpeedMultiplier));
 		foreach (PigCombatant pig in summonedList2)
 		{
 			if (pig.CombatantView != null && pig.PassiveSkill != null)

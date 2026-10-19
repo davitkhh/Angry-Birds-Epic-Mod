@@ -1622,5 +1622,19 @@
     "UseInPvPFallback": true,
     "PassiveSkillNameId": "bird_passive_orboflife",
     "PartOfSaleBundles": false
+  },
+  {
+    "NameId": "skin_merchant",
+    "OriginalClass": "headgear_bird_merchant",
+    "AssetBaseId": "Headgear_MerchantPig",
+    "LocaBaseId": "class_merchant",
+    "SortPriority": 0,
+    "BonusHp": 0.0,
+    "BonusDamage": 0.0,
+    "ItemType": "Skin",
+    "ShowPreview": false,
+    "UseInPvPFallback": false,
+    "PassiveSkillNameId": "bird_passive_merchant_pickpocket",
+    "PartOfSaleBundles": false
   }
 ]

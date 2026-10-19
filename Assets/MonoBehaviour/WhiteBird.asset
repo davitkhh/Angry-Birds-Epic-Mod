@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: -1545704558, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
   m_Name: WhiteBird
   m_EditorClassIdentifier: 
-  buildID: 202610112248345532
+  buildID: 202610121847210743
   needsRebuilt: 1
   boneDataList:
   - active: 1
@@ -276923,7 +276923,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -16.634146, y: 69.53658, z: 0}
+          val: {x: 0, y: 139.07317, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -277022,7 +277022,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -22.113596, y: 80.49548, z: 0}
+          val: {x: 0, y: 160.99097, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286227,7 +286227,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -78.07965, y: 337.2557, z: 0}
+          val: {x: -58.3179, y: 401.5589, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286326,7 +286326,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -76.422516, y: 315.32553, z: 0}
+          val: {x: -53.993927, y: 385.5689, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286425,7 +286425,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -41.751568, y: 286.62683, z: 0}
+          val: {x: -7.380493, y: 329.64215, z: 0}
           inTangentX: 43.182186
           outTangentX: 43.182186
           tangentModeX: 0
@@ -286524,7 +286524,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 26.399326, y: 172.87785, z: 0}
+          val: {x: 42.10709, y: 169.33171, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286623,7 +286623,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 16.54975, y: 144.02502, z: 0}
+          val: {x: 41.154976, y: 144.02502, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286722,7 +286722,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 23.791761, y: 191.92238, z: 0}
+          val: {x: 28.787245, y: 191.92238, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286821,7 +286821,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 22.096846, y: 174.12576, z: 0}
+          val: {x: 42.666428, y: 174.12576, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -286920,7 +286920,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 22.096846, y: 174.12576, z: 0}
+          val: {x: 43.14116, y: 174.12576, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -287943,7 +287943,7 @@ MonoBehaviour:
           outTangentX: 0
           tangentModeX: 1
           inTangentY: 0
-          outTangentY: 0
+          outTangentY: 52.387
           tangentModeY: 17
           inTangentZ: 0
           outTangentZ: 0
@@ -288037,7 +288037,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 28.490725, y: 122.38704, z: 0}
+          val: {x: 60, y: 174.774, z: 0}
           inTangentX: -19.996983
           outTangentX: -19.996983
           tangentModeX: 0
@@ -288136,7 +288136,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -30.604645, y: 165.87534, z: 0}
+          val: {x: 60, y: 265, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -288235,7 +288235,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 52.083553, y: 0, z: 0}
+          val: {x: 60, y: 0, z: 0}
           inTangentX: 27.583302
           outTangentX: 27.583302
           tangentModeX: 0
@@ -288334,7 +288334,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 86.57756, y: 74.33669, z: 0}
+          val: {x: 60, y: 78.67338, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -288433,7 +288433,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 70, y: 65, z: 0}
+          val: {x: 60, y: 65, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -288532,7 +288532,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 70, y: 65, z: 0}
+          val: {x: 60, y: 65, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -288631,7 +288631,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: 70, y: 65, z: 0}
+          val: {x: 60, y: 65, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -288848,7 +288848,7 @@ MonoBehaviour:
           outTangentX: 0
           tangentModeX: 17
           inTangentY: 0
-          outTangentY: 0
+          outTangentY: 70.833336
           tangentModeY: 17
           inTangentZ: 0
           outTangentZ: 0
@@ -288942,7 +288942,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -80.125, y: 151.25, z: 0}
+          val: {x: -77, y: 257.5, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -289041,7 +289041,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -73.875, y: 148.125, z: 0}
+          val: {x: -73.875, y: 251.25, z: 0}
           inTangentX: 0
           outTangentX: 0
           tangentModeX: 0
@@ -289140,7 +289140,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -49.16339, y: 57.3581, z: 0}
+          val: {x: -49.16339, y: 69.7162, z: 0}
           inTangentX: -0.17623918
           outTangentX: -0.17623918
           tangentModeX: 0
@@ -289239,7 +289239,7 @@ MonoBehaviour:
           useX: 0
           useY: 0
         localPosition3:
-          val: {x: -74.16339, y: 57.3581, z: 0}
+          val: {x: -74.16339, y: 69.7162, z: 0}
           inTangentX: -0.17623918
           outTangentX: -0.17623918
           tangentModeX: 0

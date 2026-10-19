@@ -67,6 +67,22 @@ public static class EquipmentPresetSceneBuilder
 
 	private const float LineupY = 30f;
 
+	// Battle preparation's layout, measured from the screen centre: its CharacterSelection sits 35 right of centre,
+	// the bird grid -75 and the friend bird 480 into it, and the add-ally button at 565 / -120 (70 above the lineup).
+	private const float LineupSceneryX = 0f;
+
+	private const float LineupBirdsX = -40f;
+
+	private const float AllyX = 515f;
+
+	// Raised by its own height (140, its collider) so an ally can stand under it: the button stays while more allies join.
+	private static readonly Vector3 AddAllyPosition = new Vector3(565f, 70f + 140f, 10f);
+
+	// The ally picker sits over the equipment strip (plain NGUI there, so nothing 3D draws through it).
+	private const float AllyPickerY = -250f;
+
+	private const float AllyPickerCell = 260f;
+
 	private const float NamePlankWidth = 476f;
 
 	// The bird manager keeps its item info box under the item strip; without it the panel slides down this far.
@@ -257,12 +273,83 @@ public static class EquipmentPresetSceneBuilder
 		// ---- Edit screen: bird lineup + ground from battle preparation, raised to the middle of the screen.
 		var lineup = NewChild(editScreen, "Lineup", new Vector3(0f, LineupY, 0f));
 		var scenery = CopyFrom(prep, "Window_BattlePreparation/3_CharacterSelection/Animation/Scenery", lineup, "Scenery");
+		scenery.localPosition = new Vector3(LineupSceneryX, scenery.localPosition.y, scenery.localPosition.z);
 		var characterRoot = CopyFrom(prep, "Window_BattlePreparation/3_CharacterSelection/Animation/CharacterRoot", lineup, "CharacterRoot");
-		characterRoot.localPosition = new Vector3(0f, characterRoot.localPosition.y, characterRoot.localPosition.z);
+		// Battle preparation's spacing between the birds and the ally slot on their right (lineup x 0 = screen centre).
+		characterRoot.localPosition = new Vector3(LineupBirdsX, characterRoot.localPosition.y, characterRoot.localPosition.z);
 		var lineupSorting = characterRoot.GetComponent<UiSortBehaviour>();
-		var sortData = new SerializedObject(lineupSorting);
-		sortData.FindProperty("m_orderWidget").objectReferenceValue = scenery.Find("Bottom").GetComponent<UIWidget>();
-		sortData.ApplyModifiedPropertiesWithoutUndo();
+		SetOrderWidget(lineupSorting, scenery.Find("Bottom").GetComponent<UIWidget>());
+
+		// ---- Edit screen: battle preparation's ally slot (with the friend's plate) and its add-ally button.
+		// AllyRoot is a template: the window copies it for every ally in the lineup.
+		var allyRoot = CopyFrom(prep, "Window_BattlePreparation/3_CharacterSelection/Animation/FriendBirdRoot", lineup, "AllyRoot");
+		allyRoot.localPosition = new Vector3(AllyX, allyRoot.localPosition.y, allyRoot.localPosition.z);
+		// The friend-list blind logic stays behind; the window drives the plate through FriendInfoElement.
+		UnityEngine.Object.DestroyImmediate(allyRoot.GetComponent<FriendGetBirdBlind>());
+		// Allies show no friend name plate in the lineup.
+		UnityEngine.Object.DestroyImmediate(allyRoot.GetComponent<FriendInfoElement>());
+		UnityEngine.Object.DestroyImmediate(allyRoot.Find("PlayerInfo").gameObject);
+		var allySlot = allyRoot.Find("FriendBirdSlot");
+		allySlot.name = "AllySlot";
+		foreach (Transform leftover in allySlot.Cast<Transform>().ToList())
+		{
+			UnityEngine.Object.DestroyImmediate(leftover.gameObject);
+		}
+		var allySorting = allySlot.GetComponent<UiSortBehaviour>();
+		SetOrderWidget(allySorting, scenery.Find("Bottom").GetComponent<UIWidget>());
+		var addAlly = CopyFrom(prep, "Window_BattlePreparation/4_Options/4_BirdFromFriend", lineup, "AddAlly");
+		addAlly.localPosition = AddAllyPosition;
+		var addAllyAnimation = addAlly.GetComponent<Animation>();
+		addAllyAnimation.playAutomatically = false;
+		var addAllyButton = addAlly.Find("Animation/Button_GetBird").GetComponent<UIInputTrigger>();
+		Log("ally root " + allyRoot.localPosition + ", add ally " + addAlly.localPosition + ", clips " + string.Join(", ", addAllyAnimation.Cast<AnimationState>().Select(s => s.name).ToArray()));
+
+		// ---- Edit screen: ally picker, when more than one ally could be added. Its own panel above everything else in the
+		// window; an invisible full-screen blocker cancels it.
+		var picker = NewChild(editScreen, "AllyPicker", new Vector3(0f, AllyPickerY, -60f));
+		var pickerPanel = picker.gameObject.AddComponent<UIPanel>();
+		pickerPanel.depth = root.GetComponentsInChildren<UIPanel>(true).Max(p => p.depth) + 5;
+		var blocker = NewChild(picker, "Blocker", new Vector3(0f, -AllyPickerY, 10f)).gameObject;
+		var blockerWidget = blocker.AddComponent<UIWidget>();
+		blockerWidget.width = 3000;
+		blockerWidget.height = 2000;
+		blockerWidget.depth = 0;
+		blocker.AddComponent<BoxCollider>().size = new Vector3(3000f, 2000f, 1f);
+		var pickerBlocker = blocker.AddComponent<UIInputTrigger>();
+		var pickerBoard = NewChild(picker, "Board", Vector3.zero).gameObject.AddComponent<UITexture>();
+		pickerBoard.mainTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(BarTexturePath);
+		pickerBoard.shader = Shader.Find("Unlit/Transparent Colored");
+		pickerBoard.border = new Vector4(32f, 32f, 32f, 32f);
+		pickerBoard.type = UIBasicSprite.Type.Sliced;
+		pickerBoard.width = (int)(AllyPickerCell * 2f + 60f);
+		pickerBoard.height = 180;
+		pickerBoard.depth = 10;
+		var pickerBoardCollider = pickerBoard.gameObject.AddComponent<BoxCollider>();
+		pickerBoardCollider.size = new Vector3(pickerBoard.width, pickerBoard.height, 1f);
+		pickerBoard.autoResizeBoxCollider = true;
+		var pickerTitle = CopyLabel(headerLabel, picker, "Title", "Choose an ally", new Vector3(0f, 56f, -2f));
+		pickerTitle.depth = 20;
+		pickerTitle.transform.localScale = Vector3.one * 0.7f;
+		var pickerGrid = NewChild(picker, "Grid", new Vector3(0f, -22f, -2f)).gameObject.AddComponent<UIGrid>();
+		pickerGrid.arrangement = UIGrid.Arrangement.Horizontal;
+		pickerGrid.cellWidth = AllyPickerCell;
+		pickerGrid.pivot = UIWidget.Pivot.Center;
+		pickerGrid.sorting = UIGrid.Sorting.Alphabetic;
+		// Entry: battle preparation's friend plate (avatar, level, name) as a button.
+		var pickerEntry = CopyFrom(prep, "Window_BattlePreparation/3_CharacterSelection/Animation/FriendBirdRoot", picker, "EntryTemplate");
+		pickerEntry.localPosition = new Vector3(0f, -22f, -4f);
+		UnityEngine.Object.DestroyImmediate(pickerEntry.GetComponent<FriendGetBirdBlind>());
+		UnityEngine.Object.DestroyImmediate(pickerEntry.Find("FriendBirdSlot").gameObject);
+		var entryPlate = pickerEntry.Find("PlayerInfo");
+		entryPlate.gameObject.SetActive(true);
+		entryPlate.localPosition = new Vector3(-100f, 0f, 0f);
+		foreach (var widget in pickerEntry.GetComponentsInChildren<UIWidget>(true))
+		{
+			widget.depth += 30;
+		}
+		pickerEntry.gameObject.AddComponent<BoxCollider>().size = new Vector3(AllyPickerCell - 20f, 110f, 1f);
+		pickerEntry.gameObject.AddComponent<UIInputTrigger>();
+		pickerEntry.gameObject.SetActive(false);
 		var focusMarker = AddSprite(lineup.gameObject, "FocusMarker", campAtlas, "Button_Arrow", 75, 102, 30, new Vector3(0f, 193f, -20f));
 		focusMarker.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
 
@@ -367,7 +454,7 @@ public static class EquipmentPresetSceneBuilder
 		var bar = BuildBar(listRoot, scrollView, prep, genericAtlas, campAtlas, pencil, AssetDatabase.LoadAssetAtPath<Texture2D>(BarTexturePath), headerLabel);
 
 		var createButton = CopyFrom(prep, "Window_BattlePreparation/4_Options/2_Back/Animation/Button_Back", listScreen, "Button_Create");
-		// Centered between the bottom of the list and the bottom of the screen (the interface camera shows +-360).
+		// Centered between the bottom of the list and the bottom of the screen (the interface camera shows +-360).
 		createButton.localPosition = new Vector3(0f, (ListBottom - 360f) * 0.5f, -10f);
 		var createBody = createButton.Find("Animation/Body").GetComponent<UISprite>();
 		SetSprite(createBody, additionalAtlas, "Button_Green", 380, 86);
@@ -416,6 +503,14 @@ public static class EquipmentPresetSceneBuilder
 		Set(data, "m_ItemSlotPrefab", itemSlotPrefab);
 		Set(data, "m_ClassSlotPrefab", classSlotPrefab);
 		Set(data, "m_EquipmentSlotPrefab", equipmentSlotPrefab);
+		Set(data, "m_AllyTemplate", allyRoot.gameObject);
+		Set(data, "m_AllyPicker", picker.gameObject);
+		Set(data, "m_AllyPickerBlocker", pickerBlocker);
+		Set(data, "m_AllyPickerBoard", pickerBoard);
+		Set(data, "m_AllyPickerGrid", pickerGrid);
+		Set(data, "m_AllyPickerEntry", pickerEntry.gameObject);
+		Set(data, "m_AddAllyButton", addAllyButton);
+		Set(data, "m_AddAllyAnimation", addAllyAnimation);
 		var tabsProperty = data.FindProperty("m_TabButtons");
 		tabsProperty.arraySize = tabs.Count;
 		for (var i = 0; i < tabs.Count; i++)
@@ -702,7 +797,36 @@ public static class EquipmentPresetSceneBuilder
 			slots.Add(slot);
 		}
 		itemGrid.Reposition();
+		// Show the ally slot and the swung-in add-ally button too (both hidden until runtime) to check their spacing.
+		var allyRoot = editScreen.transform.Find("Lineup/AllyRoot").gameObject;
+		var allyWasActive = allyRoot.activeSelf;
+		allyRoot.SetActive(true);
+		var addAllyMover = editScreen.transform.Find("Lineup/AddAlly/Animation");
+		var addAllyPos = addAllyMover.localPosition;
+		addAllyMover.localPosition = Vector3.zero;
 		RenderTo(camera, root, "Temp/EquipmentPresetPreview_Edit.png");
+		addAllyMover.localPosition = addAllyPos;
+		allyRoot.SetActive(allyWasActive);
+		// The picker as it opens with two allies to choose from.
+		var picker = editScreen.transform.Find("AllyPicker").gameObject;
+		var pickerGrid = picker.GetComponentInChildren<UIGrid>(true);
+		var entryTemplate = picker.transform.Find("EntryTemplate").gameObject;
+		var entries = new List<GameObject>();
+		for (var i = 0; i < 2; i++)
+		{
+			var entry = UnityEngine.Object.Instantiate(entryTemplate, pickerGrid.transform);
+			entry.name = "Sample_" + i;
+			entry.SetActive(true);
+			entries.Add(entry);
+		}
+		pickerGrid.Reposition();
+		picker.SetActive(true);
+		RenderTo(camera, root, "Temp/EquipmentPresetPreview_AllyPicker.png");
+		picker.SetActive(false);
+		foreach (var entry in entries)
+		{
+			UnityEngine.Object.DestroyImmediate(entry);
+		}
 		tabs.localPosition = tabsPos;
 		foreach (var slot in slots)
 		{
@@ -850,6 +974,13 @@ public static class EquipmentPresetSceneBuilder
 
 	// Copies an object from another open scene into parent, keeping its local transform. Layout drivers that point
 	// back into the source scene are removed.
+	private static void SetOrderWidget(UiSortBehaviour sorting, UIWidget widget)
+	{
+		var sortData = new SerializedObject(sorting);
+		sortData.FindProperty("m_orderWidget").objectReferenceValue = widget;
+		sortData.ApplyModifiedPropertiesWithoutUndo();
+	}
+
 	private static Transform CopyFrom(Scene source, string path, Transform parent, string name)
 	{
 		var original = FindPath(source, path);

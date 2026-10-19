@@ -19,8 +19,8 @@ namespace ABH.GameDatas
 
 		private int m_difficultyPercentage;
 
-		// Pigs that come back as a bird ally (Corporal McPig -> Piggy McCool) share that bird's max HP and attack
-		// (equipment included), built at the pig's level. Rebuilt if the level changes.
+		// Pigs that come back as a bird ally (Corporal McPig -> Piggy McCool) share that bird's max HP
+		// (equipment included; attack stays the pig's own), built at the pig's level. Rebuilt if the level changes.
 		private string m_AllyBirdNameId;
 
 		private BirdGameData m_AllyBird;
@@ -201,10 +201,6 @@ namespace ABH.GameDatas
 					}
 					return num2 + num3;
 				}
-				if (AllyBird != null)
-				{
-					return AllyBird.BaseAttack;
-				}
 				return Mathf.Round(ApplyDifficultyOnHealth(BalancingData.BaseAttack));
 			}
 		}
@@ -296,10 +292,7 @@ namespace ABH.GameDatas
 						var nameId = BalancingData.SkillNameIds[i];
 						m_Skills.Add(new SkillGameData(nameId));
 					}
-					if (PassiveSkill != null)
-					{
-						m_Skills.Add(PassiveSkill);
-					}
+					m_Skills.AddRange(PassiveSkills);
 				}
 				return m_Skills;
 			}
@@ -320,6 +313,7 @@ namespace ABH.GameDatas
 			}
 		}
 
+		// The first passive; checks for a specific passive type (IgnoreDamage, Undead) look only at this one.
 		public SkillGameData PassiveSkill
 		{
 			get
@@ -330,9 +324,39 @@ namespace ABH.GameDatas
 				}
 				else if (m_PassiveSkill == null && !string.IsNullOrEmpty(BalancingData.PassiveSkillNameId))
 				{
-					m_PassiveSkill = new SkillGameData(BalancingData.PassiveSkillNameId);
+					m_PassiveSkill = new SkillGameData(PassiveSkillNameIds[0]);
 				}
 				return m_PassiveSkill;
+			}
+		}
+
+		// A pig's PassiveSkillNameId may list several passives, comma-separated ("pig_passive_a,pig_passive_b").
+		// All of them go into Skills, which is what applies passives at battle start (AddPassiveEffectsToPigs).
+		private List<string> PassiveSkillNameIds
+		{
+			get
+			{
+				return BalancingData.PassiveSkillNameId.Split(',').Select(s => s.Trim()).Where(s => s.Length > 0).ToList();
+			}
+		}
+
+		private IEnumerable<SkillGameData> PassiveSkills
+		{
+			get
+			{
+				if (PassiveSkill == null)
+				{
+					yield break;
+				}
+				yield return PassiveSkill;
+				if (ClassSkin != null && !string.IsNullOrEmpty(ClassSkin.BalancingData.PassiveSkillNameId))
+				{
+					yield break;
+				}
+				foreach (var nameId in PassiveSkillNameIds.Skip(1))
+				{
+					yield return new SkillGameData(nameId);
+				}
 			}
 		}
 

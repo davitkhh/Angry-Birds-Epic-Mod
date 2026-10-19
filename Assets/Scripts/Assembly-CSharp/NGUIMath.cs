@@ -461,7 +461,7 @@ static public class NGUIMath
 		var p = isRoot ? null : content.GetComponent<UIPanel>();
 
 		// Ignore disabled panels as a disabled panel means invisible children
-		if (p != null && !p.enabled) return;
+		if (p != null && (!p.enabled || p.excludeFromParentBounds)) return;
 
 		// If there is a clipped panel present simply include its dimensions
 		if (p != null && p.clipping != UIDrawCall.Clipping.None)

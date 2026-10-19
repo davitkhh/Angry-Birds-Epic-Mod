@@ -107,27 +107,6 @@ public class InfoOverlayMgr : MonoBehaviour
 			m_BossOverlay.ShowCharacterOverlay(root, combatant, interfaceCamera, pvp, null);
 			return;
 		}
-		else if (combatant is PigCombatant)
-		{
-			var skin = (combatant.CharacterModel as PigGameData).ClassSkin;
-			if (skin != null && skin.BalancingData.SortPriority > 0)
-			{
-				m_CharacterWithSkinOverlay.gameObject.SetActive(true);
-				m_CharacterWithSkinOverlay.ShowCharacterOverlay(root, combatant, interfaceCamera, pvp, skin);
-				return;
-			}
-		}
-		else if (combatant is BirdCombatant)
-		{
-			var skin = (combatant.CharacterModel as BirdGameData).ClassSkin;
-			if (skin != null && skin.BalancingData.SortPriority > 0)
-			{
-				m_CharacterWithSkinOverlay.gameObject.SetActive(true);
-				m_CharacterWithSkinOverlay.ShowCharacterOverlay(root, combatant, interfaceCamera, pvp, skin);
-				return;
-			}
-		}
-		
 		m_CharacterOverlay.gameObject.SetActive(true);
 		m_CharacterOverlay.ShowCharacterOverlay(root, combatant, interfaceCamera, pvp, null);
 	}

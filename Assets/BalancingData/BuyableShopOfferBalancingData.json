@@ -104,7 +104,7 @@
       {
         "RequirementType": "PayItem",
         "NameId": "gold",
-        "Value": 200.0
+        "Value": 150.0
       }
     ],
     "ShowRequirements": [
@@ -125,7 +125,7 @@
     "ExclusiveOffer": false,
     "Level": 6,
     "OfferContents": {
-      "gold": 10,
+      "resource_cobalt_stone": 1,
       "merchant_stock_trade_cobalt": 1
     },
     "SortPriority": 1,
@@ -161,8 +161,8 @@
       },
       {
         "RequirementType": "PayItem",
-        "NameId": "resource_cobalt_stone",
-        "Value": 5
+        "NameId": "gold",
+        "Value": 10
       }
     ],
     "ShowRequirements": null,
@@ -177,7 +177,7 @@
     "ExclusiveOffer": false,
     "Level": 6,
     "OfferContents": {
-      "resource_wood": 1,
+      "gold": 3,
       "merchant_stock_trade_wood": 1
     },
     "SortPriority": 1,
@@ -213,8 +213,8 @@
       },
       {
         "RequirementType": "PayItem",
-        "NameId": "gold",
-        "Value": 3
+        "NameId": "resource_wood",
+        "Value": 2
       }
     ],
     "ShowRequirements": null,

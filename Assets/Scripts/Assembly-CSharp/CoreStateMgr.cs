@@ -693,6 +693,10 @@ public class CoreStateMgr : MonoBehaviourContainerBase
 		SceneLoadingMgr.LoadGameScene("Menu_Main");
 	}
 
+	// Set once the intro battle has been entered; a player who quits before finishing it goes back into it without the
+	// intro video again.
+	public const string IntroBattleEnteredKey = "intro_battle_entered";
+
 	public virtual void GotoWorldMap()
 	{
 		try
@@ -714,11 +718,13 @@ public class CoreStateMgr : MonoBehaviourContainerBase
 		catch
 		{
 		}
+		// Until the intro battle has been played through (BattleMgr sets the flag at its end), every way to the world map,
+		// including launching the game again after quitting mid-intro, starts it over.
 		if (!DIContainerInfrastructure.GetCurrentPlayer().Data.CinematricIntroStarted)
 		{
 			DIContainerLogic.WorldMapService.SetupCinematicBattle();
 			Instance.GotoBattle(ClientInfo.CurrentBattleStartGameData.m_BackgroundAssetId);
-			DIContainerInfrastructure.GetCurrentPlayer().Data.CinematricIntroStarted = true;
+			DIContainerInfrastructure.GetPlayerPrefsService().SetInt(IntroBattleEnteredKey, 1);
 		}
 		else
 		{

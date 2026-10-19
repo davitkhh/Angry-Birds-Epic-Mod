@@ -82,6 +82,14 @@ public class UIPanel : UIRect
 	public bool alwaysOnScreen = false;
 
 	/// <summary>
+	/// Leaves this panel's widgets out of the bounds calculated for a parent, e.g. so a short-lived effect
+	/// inside a scroll view doesn't change how far it scrolls.
+	/// </summary>
+
+	[System.NonSerialized]
+	public bool excludeFromParentBounds = false;
+
+	/// <summary>
 	/// By default, non-clipped panels use the camera's bounds, and the panel's position has no effect.
 	/// If you want the panel's position to actually be used with anchors, set this field to 'true'.
 	/// </summary>

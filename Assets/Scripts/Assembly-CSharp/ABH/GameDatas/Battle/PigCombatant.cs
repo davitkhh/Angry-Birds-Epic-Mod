@@ -170,6 +170,7 @@ namespace ABH.GameDatas.Battle
 			oldForm.Skills = new List<SkillBattleDataBase>(m_Skills);
 			oldForm.PassiveSkill = m_PassiveSkill;
 			EndPassiveEffects(oldForm, battle);
+			CancelCharge();
 
 			SwapFormState newForm;
 			var firstTime = !m_SwapForms.TryGetValue(newPigNameId, out newForm);
@@ -203,6 +204,24 @@ namespace ABH.GameDatas.Battle
 					skill.DoActionInstant(battle, this, this);
 				}
 			}
+		}
+
+		// A skill being charged belongs to the old form: it's dropped along with its turn counter bubble (the bubble is
+		// keyed by the charge effect and goes when the effect is removed).
+		private void CancelCharge()
+		{
+			foreach (var effect in new List<BattleEffectGameData>(CurrrentEffects.Values))
+			{
+				foreach (var battleEffect in effect.m_Effects)
+				{
+					if (battleEffect.EffectType == BattleEffectType.Charge)
+					{
+						effect.RemoveEffect();
+						break;
+					}
+				}
+			}
+			ChargeDone = false;
 		}
 
 		private void EndPassiveEffects(SwapFormState form, BattleGameData battle)

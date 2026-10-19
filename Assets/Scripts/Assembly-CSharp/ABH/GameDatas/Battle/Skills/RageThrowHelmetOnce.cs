@@ -32,7 +32,22 @@ namespace ABH.GameDatas.Battle.Skills
 		// on its dome or rim before lying still. Distances are in helmet widths so they follow the battle's unit scale.
 		private const float HelmetSpriteWidth = 148f;
 
-		private const float BounceSideSpeed = 0.4f;
+		// The helmet strikes the side of the target facing the thrower, not its middle: the share of the target mesh's
+		// half-width that counts as solid body (the mesh bounds include gear and transparent padding), plus the helmet's half-width.
+		private const float TargetBodyWidthShare = 0.6f;
+
+		private const float HelmetHalfWidth = 0.5f;
+
+		// Rebound off the target: share of the incoming horizontal speed that is reflected back toward the thrower, clamped
+		// so it always clears the target's body but never flies off-screen.
+		private const float ImpactRestitution = 0.3f;
+
+		private const float MinReboundSpeed = 0.8f;
+
+		private const float MaxReboundSpeed = 2.5f;
+
+		// Share of the incoming vertical speed it keeps, plus the small pop off the target.
+		private const float ImpactVerticalCarry = 0.3f;
 
 		private const float BounceUpSpeed = 0.4f;
 
@@ -63,8 +78,8 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private const float LieOnFloorSeconds = 1.2f;
 
-		// Extra depth (helmet widths) between McCool's body and the helmet held behind it.
-		private const float BehindHolderDepth = 0.05f;
+		// Extra depth (helmet widths) between the helmet and the rig it is layered behind (McCool) or in front of (the target).
+		private const float LayerDepthMargin = 0.05f;
 
 		private GameObject m_HandHelmet;
 
@@ -204,30 +219,45 @@ namespace ABH.GameDatas.Battle.Skills
 		// The hand bone's depth changes with the animation, so the helmet is pushed behind the rig's mesh every frame.
 		private static IEnumerator KeepBehindHolder(GameObject helmet, CharacterAssetController asset)
 		{
-			var rig = asset.m_BoneAnimation != null ? asset.m_BoneAnimation.GetComponent<Renderer>() : null;
-			if (rig == null)
-			{
-				rig = asset.GetComponentInChildren<Renderer>();
-			}
+			var rig = GetRigRenderer(asset);
 			var renderers = helmet.GetComponentsInChildren<Renderer>();
 			while (helmet != null && rig != null && renderers.Length > 0)
 			{
-				var front = float.MaxValue;
-				foreach (var renderer in renderers)
-				{
-					if (renderer != null)
-					{
-						front = Mathf.Min(front, renderer.bounds.min.z);
-					}
-				}
-				var margin = Mathf.Abs(helmet.transform.lossyScale.x) * HelmetSpriteWidth * BehindHolderDepth;
-				var shift = rig.bounds.max.z + margin - front;
-				if (front < float.MaxValue && Mathf.Abs(shift) > 0.0001f)
-				{
-					helmet.transform.position += new Vector3(0f, 0f, shift);
-				}
+				var margin = Mathf.Abs(helmet.transform.lossyScale.x) * HelmetSpriteWidth * LayerDepthMargin;
+				helmet.transform.position += new Vector3(0f, 0f, DepthShift(renderers, rig, margin, true));
 				yield return null;
 			}
+		}
+
+		private static Renderer GetRigRenderer(CharacterAssetController asset)
+		{
+			if (asset == null)
+			{
+				return null;
+			}
+			var rig = asset.m_BoneAnimation != null ? asset.m_BoneAnimation.GetComponent<Renderer>() : null;
+			return rig != null ? rig : asset.GetComponentInChildren<Renderer>();
+		}
+
+		// Z shift that puts all of the renderers behind (or in front of) the rig's mesh; smaller z draws in front.
+		private static float DepthShift(Renderer[] renderers, Renderer rig, float margin, bool behind)
+		{
+			var nearest = float.MaxValue;
+			var farthest = float.MinValue;
+			foreach (var renderer in renderers)
+			{
+				if (renderer != null)
+				{
+					nearest = Mathf.Min(nearest, renderer.bounds.min.z);
+					farthest = Mathf.Max(farthest, renderer.bounds.max.z);
+				}
+			}
+			if (rig == null || nearest == float.MaxValue)
+			{
+				return 0f;
+			}
+			var shift = behind ? rig.bounds.max.z + margin - nearest : rig.bounds.min.z - margin - farthest;
+			return Mathf.Abs(shift) > 0.0001f ? shift : 0f;
 		}
 
 		private static float NonZero(float value)
@@ -263,26 +293,41 @@ namespace ABH.GameDatas.Battle.Skills
 				UnityEngine.Object.Destroy(projectile);
 				return 0f;
 			}
-			tween.m_EndTransform = targets[0].CombatantView.m_AssetController.BodyCenter;
+			var targetAsset = targets[0].CombatantView.m_AssetController;
+			tween.m_EndTransform = targetAsset.BodyCenter;
 			if (tween.m_EndTransform.position.y < projectile.transform.position.y)
 			{
 				tween.InvertCurves(true);
 			}
-			var floorBone = targets[0].CombatantView.m_AssetController.BodyRoot;
+			var floorBone = targetAsset.BodyRoot;
 			var floorY = floorBone != null ? floorBone.position.y : tween.m_EndTransform.position.y;
 			var awayDirection = Mathf.Sign(hand.position.x - tween.m_EndTransform.position.x);
+			// Land on the target's near side so the helmet touches its body instead of covering it.
+			var targetRig = GetRigRenderer(targetAsset);
+			var unit = Mathf.Abs(projectile.transform.lossyScale.x) * HelmetSpriteWidth;
+			var bodyHalfWidth = targetRig != null ? targetRig.bounds.extents.x * TargetBodyWidthShare : unit * 0.5f;
+			tween.m_EndOffset = new Vector3(awayDirection * (bodyHalfWidth + unit * HelmetHalfWidth), 0f, 0f);
 			tween.Play();
-			DIContainerInfrastructure.GetCoreStateMgr().StartCoroutine(BounceOffTarget(projectile, tween, floorY, awayDirection));
+			DIContainerInfrastructure.GetCoreStateMgr().StartCoroutine(BounceOffTarget(projectile, tween, targetRig, floorY, awayDirection));
 			return tween.m_DurationInSeconds;
 		}
 
-		// After the hit the heavy helmet glances off with a small pop, drops hard, gives a short dull bounce, skids and
-		// rocks on the floor before lying still.
-		private static IEnumerator BounceOffTarget(GameObject root, CHMotionTween tween, float floorY, float awayDirection)
+		// After the hit the heavy helmet rebounds off the target's side (part of its incoming speed reflected back toward
+		// the thrower), drops hard, gives a short dull bounce, skids and rocks on the floor before lying still. It always
+		// moves away from the target and is drawn in front of it, so neither covers the other.
+		private static IEnumerator BounceOffTarget(GameObject root, CHMotionTween tween, Renderer targetRig, float floorY, float awayDirection)
 		{
+			var body = tween.transform;
+			var previous = body.position;
+			var incoming = Vector3.zero;
 			while (tween != null && tween.IsPlaying)
 			{
 				yield return null;
+				if (tween != null && Time.deltaTime > 0f)
+				{
+					incoming = (body.position - previous) / Time.deltaTime;
+					previous = body.position;
+				}
 			}
 			if (tween == null)
 			{
@@ -293,7 +338,6 @@ namespace ABH.GameDatas.Battle.Skills
 			{
 				animation.Stop();
 			}
-			var body = tween.transform;
 			// Fold the flight spin (animated on the Sprite child) into the body so one angle drives the tumble.
 			var sprite = body.Find("Sprite");
 			if (sprite != null)
@@ -304,7 +348,11 @@ namespace ABH.GameDatas.Battle.Skills
 			var angle = body.eulerAngles.z;
 			var unit = Mathf.Abs(root.transform.lossyScale.x) * HelmetSpriteWidth;
 			var ground = Mathf.Min(floorY, body.position.y - unit * RestHeightUpsideDown);
-			var velocity = new Vector3(awayDirection * BounceSideSpeed * unit, BounceUpSpeed * unit, 0f);
+			var rebound = Mathf.Clamp(Mathf.Abs(incoming.x) * ImpactRestitution, MinReboundSpeed * unit, MaxReboundSpeed * unit);
+			var lift = Mathf.Clamp(incoming.y * ImpactVerticalCarry, -2f * unit, unit) + BounceUpSpeed * unit;
+			var velocity = new Vector3(awayDirection * rebound, lift, 0f);
+			var renderers = root.GetComponentsInChildren<Renderer>();
+			var margin = unit * LayerDepthMargin;
 			var spin = awayDirection * SpinDegreesPerSecond;
 			var restAngle = NearestRestAngle(angle);
 			while (body != null)
@@ -327,7 +375,7 @@ namespace ABH.GameDatas.Battle.Skills
 						break;
 					}
 				}
-				body.position = position;
+				body.position = position + new Vector3(0f, 0f, DepthShift(renderers, targetRig, margin, false));
 				body.rotation = Quaternion.Euler(0f, 0f, angle);
 				yield return null;
 			}
@@ -348,7 +396,7 @@ namespace ABH.GameDatas.Battle.Skills
 				elapsed += Time.deltaTime;
 				var decay = Mathf.Exp(-RockDamping * elapsed);
 				body.rotation = Quaternion.Euler(0f, 0f, restAngle + tilt * decay * Mathf.Cos(elapsed * RockFrequency * 2f * Mathf.PI));
-				body.position += new Vector3(slide * decay * Time.deltaTime, 0f, 0f);
+				body.position += new Vector3(slide * decay * Time.deltaTime, 0f, DepthShift(renderers, targetRig, margin, false));
 				yield return null;
 			}
 			if (body == null)

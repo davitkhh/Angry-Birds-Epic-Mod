@@ -15,6 +15,8 @@ using ABH.Shared.Models.Generic;
 //   SkillParameters - "turns": swaps on every this-many of its own turns (default 2)
 //                     "start_color": 0 = red primary (default), 1 = blue primary
 //                     "scale": size multiplier (default 1)
+//                     "pig_saturation": saturation of the transforming pigs' fill (0 grey, 1 default, 2 full);
+//                                       defaults to the crystal prefab's m_PigTintSaturation
 public class SwapCrystalConfig
 {
 	public const string EntryPrefix = "crystal_";
@@ -30,6 +32,9 @@ public class SwapCrystalConfig
 	public bool StartBlue;
 
 	public float Scale = 1f;
+
+	// Negative: use the prefab's m_PigTintSaturation.
+	public float PigSaturation = -1f;
 
 	public static bool IsCrystalEntry(string nameId)
 	{
@@ -62,6 +67,10 @@ public class SwapCrystalConfig
 		if (parameters.TryGetValue("scale", out value) && value > 0f)
 		{
 			config.Scale = value;
+		}
+		if (parameters.TryGetValue("pig_saturation", out value))
+		{
+			config.PigSaturation = UnityEngine.Mathf.Max(0f, value);
 		}
 		foreach (var pigNameId in config.PigNameIds)
 		{

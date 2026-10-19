@@ -383,7 +383,14 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			}
 			else
 			{
-				offerListScrollView.RestrictWithinBounds(true);
+				// A tile that was hidden on purchase (e.g. a trade that just sold out) scales back up through its
+				// show animation. Measuring before it finishes sees a shorter list and jerks the scroll toward it.
+				var showTimeLeft = m_ShopOfferBlinds.Select(b => b.GetShowTimeLeft()).DefaultIfEmpty(0f).Max();				if (showTimeLeft > 0f)
+				{
+					yield return new WaitForSeconds(showTimeLeft);
+				}
+				offerListScrollView.InvalidateBounds();
+				offerListScrollView.RestrictWithinBounds(false);
 			}
 		}
 	}

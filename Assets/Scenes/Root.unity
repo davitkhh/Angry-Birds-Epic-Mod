@@ -44742,6 +44742,48 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
+  - NameId: CorporalMcPig
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/CorporalMcPig
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MinionGuardFork
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionGuardFork
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MinionRogueDynamite
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueDynamite
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MinionRogueShield
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueShield
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: PigBruteMic
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigBruteMic
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: PigCharents
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigCharents
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: PigKnightYellow
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigKnightYellow
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
   - NameId: MoustachePig
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/2_Pigs/MoustachePig_low
@@ -46680,6 +46722,12 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
+  - NameId: Headgear_MerchantPig
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/Headgear/9_McCool/Headgear_MerchantPig
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
   - NameId: Headgear_LightningBird
     AssetLoadingType: 0
     Path: Prefabs/0_Generic/1_Interface/BirdEquipment/Headgear/2_YellowBird/Headgear_LightningBird
@@ -48279,6 +48327,18 @@ MonoBehaviour:
   - NameId: MainHand_MerchantPigBlue
     AssetLoadingType: 0
     Path: Prefabs/0_Generic/1_Interface/BirdEquipment/MainHand/9_McCool/MainHand_MerchantPigBlue
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: MainHand_Pyrobolist
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/MainHand/9_McCool/MainHand_Pyrobolist
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: OffHand_Pyrobolist
+    AssetLoadingType: 0
+    Path: Prefabs/0_Generic/1_Interface/BirdEquipment/OffHand/9_McCool/OffHand_Pyrobolist
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab

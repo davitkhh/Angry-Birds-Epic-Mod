@@ -502,9 +502,11 @@ public static class UpgradeBlueprints
 	public static float GetBirdStatPercent(BirdGameData bird, bool attack)
 	{
 		var percent = 0f;
+		// Glass Cannon: upgrades on the equipment add no health (the class's still do)
+		var equipmentHealth = attack || !bird.HasGlassCannon;
 		foreach (var item in new IInventoryItemGameData[] { bird.ClassItem, bird.MainHandItem, bird.OffHandItem })
 		{
-			if (item == null)
+			if (item == null || (!equipmentHealth && item != bird.ClassItem))
 			{
 				continue;
 			}

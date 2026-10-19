@@ -55,20 +55,10 @@ Mesh:
     topology: 0
     baseVertex: 0
     firstVertex: 24
-    vertexCount: 64
+    vertexCount: 56
     localAABB:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 37, y: 39, z: 0}
-  - serializedVersion: 2
-    firstByte: 216
-    indexCount: 18
-    topology: 0
-    baseVertex: 0
-    firstVertex: 8
-    vertexCount: 76
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 6, y: 3, z: 0}
   m_Shapes:
     vertices: []
     shapes: []
@@ -877,7 +867,7 @@ Mesh:
   m_KeepVertices: 1
   m_KeepIndices: 1
   m_IndexFormat: 0
-  m_IndexBuffer: 3c003f003d003f003e003d0044004700450047004600450048004b0049004b004a00490038003b0039003b003a00390004000700050007000600050028002b0029002b002a0029004000430041004300420041000c000f000d000f000e000d001000130011001300120011002c002f002d002f002e002d0020002300210023002200210014001700150017001600150024002700250027002600250030003300310033003200310034003700350037003600350018001b0019001b001a0019004c004f004d004f004e004d005400570055005700560055001c001f001d001f001e001d0008000b0009000b000a000900500053005100530052005100
+  m_IndexBuffer: 3c003f003d003f003e003d0044004700450047004600450048004b0049004b004a00490038003b0039003b003a00390004000700050007000600050028002b0029002b002a0029000c000f000d000f000e000d001000130011001300120011002c002f002d002f002e002d0020002300210023002200210024002700250027002600250030003300310033003200310014001700150017001600150040004300410043004200410018001b0019001b001a0019003400370035003700360035004c004f004d004f004e004d001c001f001d001f001e001d00
   m_VertexData:
     serializedVersion: 3
     m_VertexCount: 88
@@ -993,8 +983,8 @@ Mesh:
       m_BitSize: 0
     m_UVInfo: 0
   m_LocalAABB:
-    m_Center: {x: 25.485, y: 17.05, z: 0}
-    m_Extent: {x: 85.485, y: 72.05, z: 0}
+    m_Center: {x: 25.485, y: 35.5, z: 0}
+    m_Extent: {x: 85.485, y: 74.5, z: 0}
   m_MeshUsageFlags: 1
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
@@ -1015,11 +1005,6 @@ Mesh:
       m_LodBias: 0
     m_NumLevels: 1
     m_SubMeshes:
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
     - serializedVersion: 2
       m_Levels:
       - serializedVersion: 1

@@ -15,8 +15,12 @@ namespace ABH.GameDatas.Battle.Skills
 	{
 		private const string ThrowAnimation = "Action_Attack_2";
 
-		// Action_Attack_2 (18 frames): wind-up 0-11, the arm comes over and releases at the Impact trigger on 12.
-		private const float ThrowFrameCount = 18f;
+		// Rigs without the overhand swing (Piggy McCool) throw with their jab instead.
+		private const string FallbackThrowAnimation = "Action_Attack_1";
+
+		// Both clips run at 24 fps and hit their Impact trigger on frame 12: Action_Attack_2 (18 frames) winds up on
+		// 0-11 and the arm comes over to release on 12; the jab (MerchantPig) thrusts forward to 12.
+		private const float ClipFps = 24f;
 
 		private const float ReleaseFrame = 12f;
 
@@ -26,6 +30,9 @@ namespace ABH.GameDatas.Battle.Skills
 
 		// Share of the laugh that delays returning to base; the rest plays out on the walk back.
 		private const float GloatShare = 0.6f;
+
+		// Frames (at ClipFps) between the item landing and the laugh / cheer, so the hit registers first.
+		private const float GloatDelayFrames = 6f;
 
 		private VisualEffectSetting m_LandingEffects;
 
@@ -48,6 +55,7 @@ namespace ABH.GameDatas.Battle.Skills
 			m_AttackAnimation = PlayWindUp;
 			ActionsOnImpact.Add((battle, source, targets, initialTarget) => Throw(source, targets));
 			ActionsOnImpact.Add((battle, source, targets, initialTarget) => Land(targets));
+			ActionsToDelayEnd.Add((battle, source, target) => CanGloat(source) ? GloatDelayFrames / ClipFps : 0f);
 			ActionsOnEnd.Add((battle, source, target) => Gloat(source));
 		}
 
@@ -72,14 +80,15 @@ namespace ABH.GameDatas.Battle.Skills
 		private float PlayWindUp(ICombatant source)
 		{
 			var asset = source.CombatantView.m_AssetController;
-			var length = asset.GetAnimationLength(ThrowAnimation);
+			var animation = asset.HasClipSilently(ThrowAnimation) ? ThrowAnimation : FallbackThrowAnimation;
+			var length = asset.HasClipSilently(animation) ? asset.GetAnimationLength(animation) : 0f;
 			if (length <= 0f)
 			{
 				return source.CombatantView.PlayAttackAnimation();
 			}
-			asset.PlayAnimation(ThrowAnimation);
+			asset.PlayAnimation(animation);
 			asset.PlayAnimationQueued("Idle");
-			return length * (ReleaseFrame / ThrowFrameCount);
+			return Mathf.Min(length, ReleaseFrame / ClipFps);
 		}
 
 		private float Throw(ICombatant source, List<ICombatant> targets)
@@ -194,12 +203,31 @@ namespace ABH.GameDatas.Battle.Skills
 		private float Gloat(ICombatant source)
 		{
 			RestoreHand();
-			var retaliated = source.CurrentHealth < m_HealthBeforeThrow;
-			if (retaliated || !source.IsParticipating || source.IsStunned)
+			if (!CanGloat(source))
 			{
 				return 0f;
 			}
+			var asset = source.CombatantView.m_AssetController;
+			if (asset != null && !asset.HasClipSilently("Action_Laugh"))
+			{
+				// No laugh on bird-side rigs like Piggy McCool's: cheer instead.
+				asset.PlayAnimation("Cheer");
+				asset.PlayAnimationQueued("Idle");
+				return asset.GetAnimationLength("Cheer") * GloatShare;
+			}
 			return source.CombatantView.PlayLaughAnimation() * GloatShare;
+		}
+
+		// Not after the thrower got hurt along the way (retaliation like Shock Shield hits health immediately) or stunned.
+		private bool CanGloat(ICombatant source)
+		{
+			var retaliated = source.CurrentHealth < m_HealthBeforeThrow;
+			return !retaliated && source.IsParticipating && !source.IsStunned;
+		}
+
+		public override string GetLocalizedDescription(ICombatant invoker)
+		{
+			return PickPocketPassive.AppendStealText(base.GetLocalizedDescription(invoker), invoker, base.Model.SkillParameters.ContainsKey("all"));
 		}
 
 		private void RestoreHand()

@@ -6,6 +6,10 @@ public class PathMovingService : MonoBehaviour
 {
 	public Camera m_Cam;
 
+	// Birds on a path all share the path's depth; with tied z, Unity interleaved overlapping birds' parts (Bomb's body,
+	// on its own shader, drew over Matilda). Each bird index gets this much extra depth so whole birds sort apart.
+	private const float BirdDepthSpacing = 0.1f;
+
 	// Jumps with a looping animation (the Blues) cover the arc this many times faster than walking it.
 	public float m_JumpSpeedMultiplier = 1f;
 
@@ -85,7 +89,7 @@ public class PathMovingService : MonoBehaviour
 			{
 				if (pathList[listIndex].m_jumpPath)
 				{
-					yield return StartCoroutine(JumpAlongPath(currentPath, reversePath, movingObject, anim, speed, mirror, jumpAnimation ?? moveAnimation, moveAnimation));
+					yield return StartCoroutine(JumpAlongPath(currentPath, reversePath, movingObject, anim, speed, mirror, jumpAnimation ?? moveAnimation, moveAnimation, index * BirdDepthSpacing));
 					if (movingObject == null)
 					{
 						yield break;
@@ -96,7 +100,7 @@ public class PathMovingService : MonoBehaviour
 				else
 				{
 					var lastPosition = movingObject.transform.position;
-					movingObject.transform.position = currentPath.GetPositionWorldSpace(splinePosition) + new Vector3(0f, 0f, -20f);
+					movingObject.transform.position = currentPath.GetPositionWorldSpace(splinePosition) + new Vector3(0f, 0f, -20f + index * BirdDepthSpacing);
 					FaceMovementDirection(movingObject, lastPosition.x, movingObject.transform.position.x, mirror);
 					splinePosition = !reversePath ? splinePosition + speed / currentPath.GetLength() * Time.deltaTime : splinePosition - speed / currentPath.GetLength() * Time.deltaTime;
 				}
@@ -159,7 +163,7 @@ public class PathMovingService : MonoBehaviour
 		}
 	}
 
-	private IEnumerator JumpAlongPath(RageSplineLite path, bool reversePath, GameObject movingObject, Animation anim, float speed, bool mirror, string jumpAnimation, string moveAnimation)
+	private IEnumerator JumpAlongPath(RageSplineLite path, bool reversePath, GameObject movingObject, Animation anim, float speed, bool mirror, string jumpAnimation, string moveAnimation, float depthOffset)
 	{
 		var arcDuration = path.GetLength() / Mathf.Max(speed * m_JumpSpeedMultiplier, 0.01f);
 		AnimationState jumpState = null;
@@ -186,14 +190,14 @@ public class PathMovingService : MonoBehaviour
 			while (t < 1f)
 			{
 				t = Mathf.Min(1f, t + Time.deltaTime / arcDuration);
-				SetJumpPosition(movingObject, path, reversePath, t, frontZ);
+				SetJumpPosition(movingObject, path, reversePath, t, depthOffset, frontZ);
 				yield return null;
 				if (movingObject == null)
 				{
 					yield break;
 				}
 			}
-			SetJumpPosition(movingObject, path, reversePath, 1f);
+			SetJumpPosition(movingObject, path, reversePath, 1f, depthOffset);
 			yield break;
 		}
 		// Travel takes exactly as long as the bird is off the ground in its animation; wind-up and recovery play in place.
@@ -205,7 +209,7 @@ public class PathMovingService : MonoBehaviour
 		anim.Play(jumpAnimation);
 		while (anim.IsPlaying(jumpAnimation) && jumpState.time < takeoffTime)
 		{
-			SetJumpPosition(movingObject, path, reversePath, 0f);
+			SetJumpPosition(movingObject, path, reversePath, 0f, depthOffset);
 			yield return null;
 			if (movingObject == null)
 			{
@@ -216,7 +220,7 @@ public class PathMovingService : MonoBehaviour
 		while (progress < 1f)
 		{
 			progress = anim.IsPlaying(jumpAnimation) && airClipTime > 0f ? Mathf.Clamp01((jumpState.time - takeoffTime) / airClipTime) : 1f;
-			SetJumpPosition(movingObject, path, reversePath, progress, frontZ);
+			SetJumpPosition(movingObject, path, reversePath, progress, depthOffset, frontZ);
 			if (progress < 1f)
 			{
 				yield return null;
@@ -227,7 +231,7 @@ public class PathMovingService : MonoBehaviour
 			}
 		}
 		// Landed: back to the normal depth.
-		SetJumpPosition(movingObject, path, reversePath, 1f);
+		SetJumpPosition(movingObject, path, reversePath, 1f, depthOffset);
 		while (anim.IsPlaying(jumpAnimation) && jumpState.time < jumpState.length)
 		{
 			yield return null;
@@ -240,10 +244,10 @@ public class PathMovingService : MonoBehaviour
 	}
 
 	// frontZ: while airborne, the bird is pulled in front of this depth (see GetJumpFrontZ).
-	private static void SetJumpPosition(GameObject movingObject, RageSplineLite path, bool reversePath, float t, float frontZ = float.PositiveInfinity)
+	private static void SetJumpPosition(GameObject movingObject, RageSplineLite path, bool reversePath, float t, float depthOffset, float frontZ = float.PositiveInfinity)
 	{
 		var position = path.GetPositionWorldSpace(!reversePath ? t : 1f - t) + new Vector3(0f, 0f, -20f);
-		position.z = Mathf.Min(position.z, frontZ);
+		position.z = Mathf.Min(position.z, frontZ) + depthOffset;
 		movingObject.transform.position = position;
 	}
 

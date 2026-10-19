@@ -1549,6 +1549,11 @@ namespace ABH.Services.Logic
 		public float ApplyBuffsOnHealth(float baseHealth, ICombatant owner, Dictionary<string, BattleEffectGameData> CurrrentBuffs, float addition)
 		{
 			baseHealth += addition;
+			// Glass Cannon: the wearer's equipment gives no health, Vitality included.
+			if (CustomEquipmentSets.GetGlassCannon(owner.CharacterModel as BirdGameData) != null)
+			{
+				return baseHealth;
+			}
 			foreach (var perk in UpgradeBlueprints.GetStatPerks(owner))
 			{
 				ApplyPerkOnHealth(perk, owner, owner, null, ref baseHealth);
@@ -1722,6 +1727,10 @@ namespace ABH.Services.Logic
 			if (target.CombatantFaction == Faction.Birds)
 			{
 				battle.m_BattleEndData.m_DamageTaken += num;
+				if (num > 0)
+				{
+					GlassCannon.OnDamageTaken(battle, target);
+				}
 			}
 			return num;
 		}
@@ -4178,7 +4187,20 @@ namespace ABH.Services.Logic
 				DIContainerLogic.GetBattleService().HealCurrentTurn(attacker, effectGameData.m_Battle);
 				return param;
 			});
-			
+
+			// HealOnAttackTarget after the hit: heals the attacker by a share of the damage it dealt (Zombie Farmer's Sow)
+			BattleEffectsByTriggerAndByType[EffectTriggerType.AfterReceiveDamage].Add(BattleEffectType.HealOnAttackTarget, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				if (param <= 0f || attacker == null || !attacker.IsAlive)
+				{
+					return param;
+				}
+				effectGameData.EvaluateEffect();
+				attacker.HealDamage(param * effect.Values[0] / 100f, effectGameData.m_Source);
+				DIContainerLogic.GetBattleService().HealCurrentTurn(attacker, effectGameData.m_Battle);
+				return param;
+			});
+
 			// StunAttacker
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.StunAttacker, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -5947,6 +5969,8 @@ namespace ABH.Services.Logic
 		// Pigs whose support skill has "heal_chance_at_no_health" skip combos: each turn they heal with that chance (%)
 		// scaled by missing health (full chance at 0 hp, none at full hp), otherwise they attack. The scaling is
 		// linear unless "heal_chance_at_half_health" bends it (chance = max * missing^k through that point).
+		// "heal_chance_at_no_health_below_half" replaces the curve below half health with a linear ramp from the
+		// half-health chance up to that value at 0 hp ("heal_chance_at_no_health" then only shapes the upper half).
 		private SkillBattleDataBase GetHealthBasedSkill(ICombatant combatant)
 		{
 			var support = combatant.GetSkill(1);
@@ -5963,7 +5987,14 @@ namespace ABH.Services.Logic
 			{
 				exponent = Mathf.Log(chanceAtHalfHealth / chanceAtNoHealth) / Mathf.Log(0.5f);
 			}
-			if (UnityEngine.Random.value < chanceAtNoHealth / 100f * Mathf.Pow(missingHealth, exponent))
+			var chance = chanceAtNoHealth * Mathf.Pow(missingHealth, exponent);
+			float chanceAtNoHealthBelowHalf;
+			if (missingHealth > 0.5f && support.Model.SkillParameters.TryGetValue("heal_chance_at_no_health_below_half", out chanceAtNoHealthBelowHalf))
+			{
+				var chanceAtHalf = chanceAtNoHealth * Mathf.Pow(0.5f, exponent);
+				chance = Mathf.Lerp(chanceAtHalf, chanceAtNoHealthBelowHalf, (missingHealth - 0.5f) * 2f);
+			}
+			if (UnityEngine.Random.value < chance / 100f)
 			{
 				return support;
 			}
@@ -6186,6 +6217,10 @@ namespace ABH.Services.Logic
 
 		private ICombatant GetNextTargetForAttackSkill(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction faction)
 		{
+			if (skill.SkillParameters.ContainsKey("target_most_curses"))
+			{
+				return GetMostCursesCharacterForAttackSkillTarget(battle, combatant, skill, faction);
+			}
 			switch (skill.Balancing.TargetingBehavior)
 			{
 			case PigTargetingBehavior.Blessed:
@@ -6317,7 +6352,18 @@ namespace ABH.Services.Logic
 					return bigBoss;
 				}
 			}
-			return GetWeakestCharacterForSkillTarget(battle, combatant, skill, faction).FirstOrDefault();
+			if (!skill.SkillParameters.ContainsKey("weakest_by_percent"))
+			{
+				return GetWeakestCharacterForSkillTarget(battle, combatant, skill, faction).FirstOrDefault();
+			}
+			// Lowest health fraction instead of raw points; "heal_self_below_percent" makes the healer pick itself over
+			// any other non-big-boss target while its own health is below that percentage.
+			var weakest = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == faction && (skill.Balancing.TargetSelfPossible || c != combatant)).OrderBy(c => c.CurrentHealth / c.ModifiedHealth).FirstOrDefault();
+			if (weakest != null && weakest != combatant && !weakest.CombatantNameId.Contains("big_boss") && skill.SkillParameters.TryGetValue("heal_self_below_percent", out var selfThreshold) && combatant.IsAlive && combatant.CurrentHealth < combatant.ModifiedHealth * selfThreshold / 100f)
+			{
+				return combatant;
+			}
+			return weakest;
 		}
 
 		private ICombatant GetWeakestCharacterForAttackSkillTarget(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction faction)
@@ -6558,6 +6604,19 @@ namespace ABH.Services.Logic
 		private List<ICombatant> GetRandomCharacterForSkillTarget(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction faction)
 		{
 			return battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == faction && (skill.Balancing.TargetSelfPossible || c != combatant)).ToList();
+		}
+
+		// Strictly the most curses (unlike Cursed, which also weighs missing health); ties are picked at random.
+		private ICombatant GetMostCursesCharacterForAttackSkillTarget(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction faction)
+		{
+			var list = RemoveForAttackSkill(combatant, GetRandomCharacterForSkillTarget(battle, combatant, skill, faction), skill);
+			if (list.Count == 0)
+			{
+				return null;
+			}
+			var most = list.Max(c => AttackWithBonusPerCurseSkill.CountCurses(c));
+			var candidates = list.Where(c => AttackWithBonusPerCurseSkill.CountCurses(c) == most).ToList();
+			return candidates[UnityEngine.Random.Range(0, candidates.Count)];
 		}
 
 		private ICombatant GetMostCursedCharacterForSupportSkillTarget(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction faction)

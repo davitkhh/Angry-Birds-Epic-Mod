@@ -22,7 +22,6 @@ public static class LocationThemeOverrides
 
 	private static readonly List<Override> DefaultOverrides = new List<Override>
 	{
-		new Override { CueNameId = "music_camp", ThemeAssetId = "CampSwag" },
 	};
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

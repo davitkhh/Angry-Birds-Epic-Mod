@@ -7334,22 +7334,22 @@ MonoBehaviour:
       boneNodeIndex: 19
       triggerEventTypes: 02000000040000000300000006000000
       pivotOffset: {x: 0, y: 0}
-      upperLeft: {x: 0, y: 0, z: 0}
-      bottomLeft: {x: 0, y: 0, z: 0}
-      bottomRight: {x: 0, y: 0, z: 0}
-      upperRight: {x: 0, y: 0, z: 0}
+      upperLeft: {x: -147, y: 55, z: 0}
+      bottomLeft: {x: -147, y: -55, z: 0}
+      bottomRight: {x: 147, y: -55, z: 0}
+      upperRight: {x: 147, y: 55, z: 0}
       uv:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.6035156
+        y: 0.37890625
+        width: 0.28710938
+        height: 0.107421875
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: 46f24daea45c27c4e8ec48d712dda69b, type: 2}
+      atlas: {fileID: 11400000, guid: f73614a6fc242784f8536dee15c3f4e0, type: 2}
       textureGUID: b4f2745b49c7efd45a60ac4b363a77b1
-      materialIndex: 0
+      materialIndex: 1
       depth: 30
       collider:
         type: 0
@@ -7360,15 +7360,15 @@ MonoBehaviour:
         layer: 0
         isTrigger: 1
         tag: 
-      originalAtlas: {fileID: 11400000, guid: 46f24daea45c27c4e8ec48d712dda69b, type: 2}
+      originalAtlas: {fileID: 11400000, guid: f73614a6fc242784f8536dee15c3f4e0, type: 2}
       originalTextureGUID: b4f2745b49c7efd45a60ac4b363a77b1
-      originalMaterialIndex: 0
+      originalMaterialIndex: 1
       originalUV:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.6035156
+        y: 0.37890625
+        width: 0.28710938
+        height: 0.107421875
       originalPivotOffset: {x: 0, y: 0}
     - userTriggerTag: 
       boneNodeIndex: 20
@@ -8220,22 +8220,22 @@ MonoBehaviour:
       boneNodeIndex: 19
       triggerEventTypes: 02000000040000000300000006000000
       pivotOffset: {x: 0, y: 0}
-      upperLeft: {x: 0, y: 0, z: 0}
-      bottomLeft: {x: 0, y: 0, z: 0}
-      bottomRight: {x: 0, y: 0, z: 0}
-      upperRight: {x: 0, y: 0, z: 0}
+      upperLeft: {x: -147, y: 55, z: 0}
+      bottomLeft: {x: -147, y: -55, z: 0}
+      bottomRight: {x: 147, y: -55, z: 0}
+      upperRight: {x: 147, y: 55, z: 0}
       uv:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.6035156
+        y: 0.37890625
+        width: 0.28710938
+        height: 0.107421875
       localPosition: {x: 0, y: 0, z: 0}
       localRotation: 0
       localScale: {x: 0, y: 0}
-      atlas: {fileID: 11400000, guid: 46f24daea45c27c4e8ec48d712dda69b, type: 2}
+      atlas: {fileID: 11400000, guid: f73614a6fc242784f8536dee15c3f4e0, type: 2}
       textureGUID: b4f2745b49c7efd45a60ac4b363a77b1
-      materialIndex: 0
+      materialIndex: 1
       depth: 30
       collider:
         type: 0
@@ -8246,15 +8246,15 @@ MonoBehaviour:
         layer: 0
         isTrigger: 1
         tag: 
-      originalAtlas: {fileID: 11400000, guid: 46f24daea45c27c4e8ec48d712dda69b, type: 2}
+      originalAtlas: {fileID: 11400000, guid: f73614a6fc242784f8536dee15c3f4e0, type: 2}
       originalTextureGUID: b4f2745b49c7efd45a60ac4b363a77b1
-      originalMaterialIndex: 0
+      originalMaterialIndex: 1
       originalUV:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
+        x: 0.6035156
+        y: 0.37890625
+        width: 0.28710938
+        height: 0.107421875
       originalPivotOffset: {x: 0, y: 0}
     - userTriggerTag: 
       boneNodeIndex: 20
@@ -29660,6 +29660,7 @@ MonoBehaviour:
   textureAtlases:
   - {fileID: 11400000, guid: 46f24daea45c27c4e8ec48d712dda69b, type: 2}
   - {fileID: 11400000, guid: f73614a6fc242784f8536dee15c3f4e0, type: 2}
+  - {fileID: 11400000, guid: d208157086b35d31bb501d9ccfedc7d8, type: 2}
   mAnimationClips:
   - animationName: Idle
     fps: 24

@@ -28,6 +28,7 @@ namespace ABH.Shared.Generic
 		PhatLoot,
 		CashStrike,
 		Amplify,
-		Brilliance
+		Brilliance,
+		Dynamite
 	}
 }

@@ -70,6 +70,14 @@ public class ActionTree : MonoBehaviour
 
 	private BaseLocationStateManager m_WorldMapStatMgr;
 
+	// MoveByClip: where each moved object ends up (its position before the first MoveByClip), and the hidden object the
+	// clips are sampled on.
+	private readonly Dictionary<GameObject, Vector3> m_clipAnchors = new Dictionary<GameObject, Vector3>();
+
+	private GameObject m_clipSampler;
+
+	private Vector3 m_clipSampledScale = Vector3.one;
+
 	// When set, a KillBattlePigs node calls this (once) instead of killing the pigs.
 	[NonSerialized]
 	public Action KillBattlePigsOverride;
@@ -116,6 +124,14 @@ public class ActionTree : MonoBehaviour
 		if (!locals.ContainsKey("counter"))
 		{
 			locals["counter"] = 0;
+		}
+	}
+
+	private void OnDestroy()
+	{
+		if (m_clipSampler != null)
+		{
+			DestroyImmediate(m_clipSampler);
 		}
 	}
 
@@ -367,6 +383,16 @@ public class ActionTree : MonoBehaviour
 				{
 					gameObject.transform.position = node.customVec1;
 				}
+				else if (node.customInt3 == 1)
+				{
+					// Placed in the parent's own space (e.g. a prop held by a rig, which flips and scales with it):
+					// customVec2 is its local position, customFloat its local scale (0: 1).
+					gameObject.transform.parent = value.transform;
+					gameObject.transform.localPosition = node.customVec2;
+					gameObject.transform.localRotation = Quaternion.identity;
+					var localScale = node.customFloat > 0f ? node.customFloat : 1f;
+					gameObject.transform.localScale = new Vector3(localScale, localScale, 1f);
+				}
 				else
 				{
 					gameObject.transform.parent = value.transform;
@@ -536,6 +562,16 @@ public class ActionTree : MonoBehaviour
 			case NodeType.SetScale:
 			{
 				var gameObjectFromNode5 = GetGameObjectFromNode(node);
+				if (node.customInt3 == 1)
+				{
+					// The base scale of the character's ScaleController (its depth scaling rewrites the scale itself).
+					var scaleController = gameObjectFromNode5 != null ? gameObjectFromNode5.GetComponentInChildren<ScaleController>() : null;
+					if (scaleController != null)
+					{
+						scaleController.m_BaseScale = node.customVec1;
+					}
+					break;
+				}
 				gameObjectFromNode5.transform.localScale = node.customVec1;
 				break;
 			}
@@ -636,6 +672,11 @@ public class ActionTree : MonoBehaviour
 				}
 
 				componentInChildren5.Play(node.text, PlayMode.StopSameLayer);
+				// customBool2: start the clip at a random point (e.g. a crowd's walk cycles out of step).
+				if (node.customBool2 && componentInChildren5[node.text] != null)
+				{
+					componentInChildren5[node.text].normalizedTime = UnityEngine.Random.value;
+				}
 				if (node.QueueIdle)
 				{
 					componentInChildren5.PlayQueued(node.secondaryText);
@@ -881,7 +922,9 @@ public class ActionTree : MonoBehaviour
 						DebugLog.Warn("SetHandItem: could not find " + node.secondaryText + " in instantiated objectList");
 					}
 				}
-				asset.ShowHandItem(node.customInt == 1 ? InventoryItemType.MainHandEquipment : InventoryItemType.OffHandEquipment, node.customBool, itemOwner);
+				// customFloat2: how far behind the hand an item from another rig is drawn (0: just in front of the carrier);
+				// customVec1.z: its turn (degrees).
+				asset.ShowHandItem(node.customInt == 1 ? InventoryItemType.MainHandEquipment : InventoryItemType.OffHandEquipment, node.customBool, itemOwner, node.customFloat2 != 0f ? node.customFloat2 : -1f, node.customVec1.z);
 				break;
 			}
 			// Keeps the object turned towards the runtime object named in secondaryText (empty: stop). customBool: the object
@@ -913,6 +956,363 @@ public class ActionTree : MonoBehaviour
 					tracker = subject.AddComponent<FaceTargetTracker>();
 				}
 				tracker.Track(faceTarget.transform, node.customBool);
+				break;
+			}
+			// Flies a saved object along a curve that dips customFloat2 units at the x of the saved object named in
+			// secondaryText (the lowest point) and ends customVec1.x past it, over customFloat seconds, looping the bone
+			// clip in text (e.g. Wiz Pig swooping offscreen over a knocked out bird). customInt 1 waits for the end.
+			case NodeType.MoveArc:
+			{
+				var mover = GetGameObjectFromNode(node);
+				GameObject dipAt = null;
+				if (mover == null || !m_runtimeInstantiateDictionary.TryGetValue(node.secondaryText, out dipAt))
+				{
+					DebugLog.Warn("MoveArc: no object for " + node.objectName + " or " + node.secondaryText);
+					break;
+				}
+				if (!string.IsNullOrEmpty(node.text))
+				{
+					var bones = mover.GetComponentInChildren<BoneAnimation>();
+					if (bones != null && bones[node.text] != null)
+					{
+						bones.Play(node.text, PlayMode.StopSameLayer);
+					}
+				}
+				var arc = StartCoroutine(MoveArc(mover.transform, dipAt.transform.position.x, node.customFloat2, node.customVec1.x, node.customFloat));
+				if (node.customInt == 1)
+				{
+					StartCoroutine(WaitForCoroutineThenNextNode(arc));
+					return true;
+				}
+				break;
+			}
+			// Plays the position (and scale) motion of a legacy clip (refObject; the curves on path text, positions in
+			// refObject1's space) on a saved object. customInt2 0: as an offset that ends where the object stood when a
+			// MoveByClip node first moved it (a combatant makes a cutscene prop's entrance and lands on its battle slot).
+			// customInt2 1: starts where the object is and blends onto the clip's own path, ending where the clip ends (a
+			// prop's exit). Scale curves scale the object's current scale. customBool: only put it at the clip's start pose
+			// (mode 0). customInt 1 waits for the end.
+			case NodeType.MoveByClip:
+			{
+				var mover = GetGameObjectFromNode(node);
+				var clip = node.refObject as AnimationClip;
+				var space = node.refObject1 as Transform;
+				if (mover == null || clip == null || space == null)
+				{
+					DebugLog.Warn("MoveByClip: missing object, clip or space for " + node.objectName);
+					break;
+				}
+				Vector3 clipAnchor;
+				if (!m_clipAnchors.TryGetValue(mover, out clipAnchor))
+				{
+					clipAnchor = mover.transform.position;
+					m_clipAnchors[mover] = clipAnchor;
+				}
+				if (node.customBool)
+				{
+					mover.transform.position = clipAnchor + ClipOffset(clip, node.text, space, 0f);
+					break;
+				}
+				var motion = StartCoroutine(MoveByClip(mover.transform, clip, node.text, space, clipAnchor, node.customInt2 == 1));
+				if (node.customInt == 1)
+				{
+					StartCoroutine(WaitForCoroutineThenNextNode(motion));
+					return true;
+				}
+				break;
+			}
+			// Moves a saved object (or refObject) at customFloat units a second to a point: the saved object named in
+			// secondaryText (or refObject1; neither: the mover itself) plus customVec1 (world). customBool: only along x, to
+			// that point's x. text: bone clip looped on the way (customBool2: from a random point), then Idle. customInt2:
+			// face the way it moves, 1 = pig rig (faces left at +1, the rig flips), 2 = bird (faces right at +1, the object
+			// flips). customInt 1 waits until it arrives.
+			case NodeType.MoveToObject:
+			{
+				var mover = GetGameObjectFromNode(node);
+				if (mover == null)
+				{
+					DebugLog.Warn("MoveToObject: no object for " + node.objectName);
+					break;
+				}
+				Transform reference = mover.transform;
+				GameObject named;
+				// "Name:Bone": the target's x is that bone's (e.g. where a knocked out bird's body lies), its y and z the object's.
+				var referenceName = node.secondaryText ?? string.Empty;
+				var boneName = string.Empty;
+				if (referenceName.IndexOf(':') >= 0)
+				{
+					boneName = referenceName.Substring(referenceName.IndexOf(':') + 1);
+					referenceName = referenceName.Substring(0, referenceName.IndexOf(':'));
+				}
+				// "A+B": the point between saved objects A and B (e.g. two dropped items).
+				Vector3? between = null;
+				if (referenceName.IndexOf('+') >= 0)
+				{
+					var parts = referenceName.Split('+');
+					var sum = Vector3.zero;
+					var found = 0;
+					foreach (var part in parts)
+					{
+						GameObject partObject;
+						if (m_runtimeInstantiateDictionary.TryGetValue(part, out partObject) && partObject != null)
+						{
+							sum += partObject.transform.position;
+							found++;
+						}
+					}
+					if (found > 0)
+					{
+						between = sum / found;
+					}
+				}
+				else if (!string.IsNullOrEmpty(referenceName) && m_runtimeInstantiateDictionary.TryGetValue(referenceName, out named))
+				{
+					reference = named.transform;
+				}
+				else if (node.refObject1 is Transform)
+				{
+					reference = (Transform)node.refObject1;
+				}
+				else if (node.refObject1 is GameObject)
+				{
+					reference = ((GameObject)node.refObject1).transform;
+				}
+				var from = mover.transform.position;
+				var to = (between ?? reference.position) + node.customVec1;
+				Transform referenceBone = null;
+				if (!string.IsNullOrEmpty(boneName))
+				{
+					var referenceRig = reference.GetComponentInChildren<BoneAnimation>();
+					referenceBone = referenceRig != null ? referenceRig.GetBoneTransform(boneName) : null;
+					referenceBone = referenceBone ?? FindTransformRecursively(reference, boneName);
+				}
+				if (referenceBone != null)
+				{
+					to.x = referenceBone.position.x + node.customVec1.x;
+				}
+				if (node.customBool)
+				{
+					to = new Vector3(to.x, from.y, from.z);
+				}
+				var rig = mover.GetComponentInChildren<BoneAnimation>();
+				if (node.customInt2 != 0 && Mathf.Abs(to.x - from.x) > 1f)
+				{
+					var pig = node.customInt2 == 1;
+					FacingLock.Set(pig ? (rig != null ? rig.transform : null) : mover.transform, to.x > from.x, !pig);
+				}
+				if (!string.IsNullOrEmpty(node.text) && rig != null && rig[node.text] != null)
+				{
+					rig.Play(node.text, PlayMode.StopSameLayer);
+					if (node.customBool2)
+					{
+						rig[node.text].normalizedTime = UnityEngine.Random.value;
+					}
+				}
+				// customFloat2 > 0: the move takes that long (e.g. to land on a timed beat) instead of going at customFloat.
+				var speed = node.customFloat2 > 0f ? Vector3.Distance(from, to) / node.customFloat2 : node.customFloat;
+				// param: on arrival, [0] a bone clip to play (then Idle), [1] "left" or "right" to face (as customInt2).
+				var arrivalClip = node.param != null && node.param.Length > 0 ? node.param[0] : null;
+				var arrivalFacing = node.param != null && node.param.Length > 1 ? node.param[1] : null;
+				var faceMode = node.customInt2;
+				Action arrive = () =>
+				{
+					if (!string.IsNullOrEmpty(arrivalFacing) && faceMode != 0)
+					{
+						FacingLock.Set(faceMode == 1 ? (rig != null ? rig.transform : null) : mover.transform, arrivalFacing == "right", faceMode != 1);
+					}
+					if (!string.IsNullOrEmpty(arrivalClip) && rig != null && rig[arrivalClip] != null)
+					{
+						rig.Play(arrivalClip, PlayMode.StopSameLayer);
+						if (rig["Idle"] != null)
+						{
+							rig.PlayQueued("Idle", QueueMode.CompleteOthers);
+						}
+					}
+				};
+				// customInt3 1: drags then stops like Move_Carry (moves in the first 7/12 of each loop of the clip, or of 0.5 s
+				// without one, at the same average speed), so a carried object keeps in step with its carriers.
+				var stepPeriod = 0f;
+				if (node.customInt3 == 1)
+				{
+					stepPeriod = !string.IsNullOrEmpty(node.text) && rig != null && rig[node.text] != null ? rig[node.text].length : 0.5f;
+				}
+				var walk = StartCoroutine(MoveToPoint(mover.transform, from, to, speed, string.IsNullOrEmpty(node.text) ? null : rig, node.text, arrive, stepPeriod));
+				if (node.customInt == 1)
+				{
+					StartCoroutine(WaitForCoroutineThenNextNode(walk));
+					return true;
+				}
+				break;
+			}
+			// Turns a saved object (or refObject) to face right (customInt 1) or left (0) and keeps it that way.
+			// customBool: it faces right at scale +1 (birds). customInt2 1: flip its rig (pig rigs) instead of the object.
+			case NodeType.FaceDirection:
+			{
+				var subject = GetGameObjectFromNode(node);
+				if (subject == null)
+				{
+					DebugLog.Warn("FaceDirection: no object for " + node.objectName);
+					break;
+				}
+				var rig = subject.GetComponentInChildren<BoneAnimation>();
+				FacingLock.Set(node.customInt2 == 1 && rig != null ? rig.transform : subject.transform, node.customInt == 1, node.customBool);
+				break;
+			}
+			// Shows the bubble prefab in refObject over a saved battle character, where its speech bubbles appear, scaled by
+			// customFloat (0: 1); removed after customFloat2 seconds (0: kept).
+			case NodeType.ShowBubble:
+			{
+				var speaker = GetGameObjectFromNode(node);
+				var prefab = node.refObject as GameObject;
+				if (speaker == null || prefab == null)
+				{
+					DebugLog.Warn("ShowBubble: no character or bubble for " + node.objectName);
+					break;
+				}
+				var bubble = UnityEngine.Object.Instantiate(prefab);
+				var view = speaker.GetComponentInParent<CharacterControllerBattleGroundBase>();
+				if (view != null)
+				{
+					view.PositionBubble(view, bubble);
+				}
+				else
+				{
+					bubble.transform.SetParent(speaker.transform, false);
+				}
+				if (node.customFloat > 0f)
+				{
+					bubble.transform.localScale *= node.customFloat;
+				}
+				if (node.customFloat2 > 0f)
+				{
+					UnityEngine.Object.Destroy(bubble, node.customFloat2);
+				}
+				break;
+			}
+			// A saved battle bird drops its hand items (text: bones, e.g. "MainHand,OffHand"): each becomes a separate quad
+			// where it is, saved as secondaryText + bone name, and the rig's own sprite is collapsed. customBool also
+			// moves its shadow onto the ground under it (CarriedShadow, e.g. while it is lifted and carried off).
+			case NodeType.DropHandItems:
+			{
+				var owner = GetGameObjectFromNode(node);
+				var view = owner != null ? owner.GetComponentInParent<CharacterControllerBattleGroundBase>() : null;
+				if (view == null || view.m_AssetController == null)
+				{
+					DebugLog.Warn("DropHandItems: no battle character for " + node.objectName);
+					break;
+				}
+				var bones = view.m_AssetController.m_BoneAnimation;
+				var character = view.GetModel().CharacterModel;
+				foreach (var boneName in node.text.Split(','))
+				{
+					var bone = bones.GetBoneTransform(boneName.Trim());
+					var item = boneName.Trim() == "MainHand" ? character.MainHandItem : boneName.Trim() == "OffHand" ? character.OffHandItem : null;
+					if (bone == null || item == null || string.IsNullOrEmpty(item.ItemAssetName))
+					{
+						continue;
+					}
+					var textureName = item.ItemAssetName.Replace("_Ancient", string.Empty);
+					var atlas = bones.textureAtlases.FirstOrDefault(a => a != null && a.textureNames.Contains(textureName));
+					if (atlas == null)
+					{
+						continue;
+					}
+					var sprite = bone.Find(boneName.Trim() + "_Sprite") ?? bone;
+					var dropped = new GameObject(node.secondaryText + boneName.Trim());
+					dropped.transform.SetParent(view.transform.parent, false);
+					dropped.transform.position = sprite.position;
+					dropped.transform.rotation = sprite.rotation;
+					var quad = new GameObject("Quad");
+					quad.transform.SetParent(dropped.transform, false);
+					quad.transform.localScale = sprite.lossyScale;
+					var mesh = quad.AddComponent<CHMeshSprite>();
+					mesh.m_AtlasType = AtlasTypes.SmoothMoves;
+					mesh.m_SmoothMovesAtlas = atlas;
+					mesh.m_SpriteName = textureName;
+					mesh.UpdateSprite(true, true);
+					UnityHelper.SetLayerRecusively(dropped, view.m_AssetController.gameObject.layer);
+					// param "Bone=z": that item lies at world depth z (e.g. between the waves and the wet sand).
+					var depthEntry = node.param == null ? null : node.param.FirstOrDefault(p => p.StartsWith(boneName.Trim() + "="));
+					float depth;
+					if (depthEntry != null && float.TryParse(depthEntry.Substring(depthEntry.IndexOf('=') + 1), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out depth))
+					{
+						dropped.transform.position = new Vector3(dropped.transform.position.x, dropped.transform.position.y, depth);
+					}
+					BoneCollapse.Add(sprite);
+					AddItemShadow(dropped, bones);
+					m_runtimeInstantiateDictionary[dropped.name] = dropped;
+				}
+				if (node.customBool)
+				{
+					CarriedShadow.Attach(owner.transform, bones);
+				}
+				break;
+			}
+			// Moves a saved object (or refObject) through world points, smoothed into a curve: param holds one "x,y,z" per
+			// point, optionally followed by ";x,y,z", the point on the ground under it. customFloat: speed, or customFloat2:
+			// duration. text: bone clip looped on the way (customBool2: from a random point), then Idle. customInt2: face
+			// the way it goes overall (1 = pig rig, 2 = bird). refObject2: a shadow object moved along the ground points in
+			// step (the mover's own shadow is collapsed and its GroundShadow turned off); customBool hides it at the end.
+			// customInt 1 waits until it arrives.
+			case NodeType.MovePath:
+			{
+				var mover = GetGameObjectFromNode(node);
+				if (mover == null || node.param == null || node.param.Length < 2)
+				{
+					DebugLog.Warn("MovePath: no object or fewer than two points for " + node.objectName);
+					break;
+				}
+				var points = new List<Vector3>();
+				var groundPoints = new List<Vector3>();
+				foreach (var entry in node.param)
+				{
+					var parts = entry.Split(';');
+					points.Add(ParsePathPoint(parts[0]));
+					if (parts.Length > 1)
+					{
+						groundPoints.Add(ParsePathPoint(parts[1]));
+					}
+				}
+				var shadow = groundPoints.Count == points.Count ? node.refObject2 as GameObject : null;
+				var rig = mover.GetComponentInChildren<BoneAnimation>();
+				var first = points[0];
+				var last = points[points.Count - 1];
+				if (node.customInt2 != 0 && Mathf.Abs(last.x - first.x) > 1f)
+				{
+					var pig = node.customInt2 == 1;
+					FacingLock.Set(pig ? (rig != null ? rig.transform : null) : mover.transform, last.x > first.x, !pig);
+				}
+				if (shadow != null)
+				{
+					GroundShadow.Suppress(mover.transform);
+					var ownShadow = rig != null ? rig.GetBoneTransform("Shadow") : null;
+					BoneCollapse.Add(ownShadow != null ? ownShadow.Find("Shadow_Sprite") ?? ownShadow : null);
+					shadow.SetActive(true);
+				}
+				if (!string.IsNullOrEmpty(node.text) && rig != null && rig[node.text] != null)
+				{
+					rig.Play(node.text, PlayMode.StopSameLayer);
+					if (node.customBool2)
+					{
+						rig[node.text].normalizedTime = UnityEngine.Random.value;
+					}
+				}
+				var path = new SmoothPath(points);
+				// secondaryText: a bone kept on the path instead of the root (BonePinnedPath), after holding customFloat s.
+				var pinnedBone = !string.IsNullOrEmpty(node.secondaryText) && rig != null ? rig.GetBoneTransform(node.secondaryText) : null;
+				if (pinnedBone != null)
+				{
+					BonePinnedPath.Begin(mover.transform, pinnedBone, path, node.customFloat, node.customFloat2);
+					break;
+				}
+				var groundPath = shadow != null ? new SmoothPath(groundPoints) : null;
+				var duration = node.customFloat2 > 0f ? node.customFloat2 : node.customFloat > 0f ? path.Length / node.customFloat : 0f;
+				var flight = StartCoroutine(FollowPath(mover.transform, path, shadow != null ? shadow.transform : null, groundPath, duration, node.customBool, string.IsNullOrEmpty(node.text) ? null : rig, node.text));
+				if (node.customInt == 1)
+				{
+					StartCoroutine(WaitForCoroutineThenNextNode(flight));
+					return true;
+				}
 				break;
 			}
 			// Stops another tree (customBool off), e.g. a story state's idle loop during a cutscene, or resumes it
@@ -1072,6 +1472,239 @@ public class ActionTree : MonoBehaviour
 		}
 		while (tween.IsPlaying);
 		NextNode();
+	}
+
+	private IEnumerator MoveByClip(Transform mover, AnimationClip clip, string path, Transform space, Vector3 clipAnchor, bool exit)
+	{
+		var baseScale = mover.localScale;
+		var start = mover.position;
+		var startGap = start - space.TransformPoint(SampleClipPosition(clip, path, 0f));
+		for (var t = 0f; mover != null; t += Time.deltaTime)
+		{
+			var time = Mathf.Min(t, clip.length);
+			if (exit)
+			{
+				mover.position = space.TransformPoint(SampleClipPosition(clip, path, time)) + startGap * (1f - time / clip.length);
+			}
+			else
+			{
+				mover.position = clipAnchor + ClipOffset(clip, path, space, time);
+			}
+			mover.localScale = Vector3.Scale(baseScale, m_clipSampledScale);
+			if (time >= clip.length)
+			{
+				break;
+			}
+			yield return null;
+		}
+	}
+
+	// The clip's position at time minus its end position, in world space.
+	private Vector3 ClipOffset(AnimationClip clip, string path, Transform space, float time)
+	{
+		// The end first, so the sampled scale is the one at time.
+		var end = SampleClipPosition(clip, path, clip.length);
+		return space.TransformVector(SampleClipPosition(clip, path, time) - end);
+	}
+
+	private Vector3 SampleClipPosition(AnimationClip clip, string path, float time)
+	{
+		if (m_clipSampler == null)
+		{
+			m_clipSampler = new GameObject("ClipSampler");
+			m_clipSampler.hideFlags = HideFlags.HideAndDontSave;
+		}
+		var target = m_clipSampler.transform;
+		if (!string.IsNullOrEmpty(path))
+		{
+			foreach (var part in path.Split('/'))
+			{
+				var child = target.Find(part);
+				if (child == null)
+				{
+					child = new GameObject(part).transform;
+					child.SetParent(target, false);
+				}
+				target = child;
+			}
+		}
+		// Curves the clip doesn't have keep these values.
+		for (var reset = target; reset != null; reset = reset == m_clipSampler.transform ? null : reset.parent)
+		{
+			reset.localPosition = Vector3.zero;
+			reset.localScale = Vector3.one;
+		}
+		clip.SampleAnimation(m_clipSampler, time);
+		m_clipSampledScale = target.localScale;
+		return target.localPosition;
+	}
+
+	private IEnumerator MoveToPoint(Transform mover, Vector3 from, Vector3 to, float speed, BoneAnimation idleAfter, string walkClip = null, Action arrive = null, float stepPeriod = 0f)
+	{
+		var duration = speed > 0f ? Vector3.Distance(from, to) / speed : 0f;
+		for (var t = 0f; t < duration && mover != null; t += Time.deltaTime)
+		{
+			mover.position = Vector3.Lerp(from, to, stepPeriod > 0f ? SteppedProgress(t, stepPeriod) * stepPeriod / duration : t / duration);
+			yield return null;
+		}
+		if (mover != null)
+		{
+			mover.position = to;
+		}
+		// Idle unless something else (e.g. a clip played on a timed beat) took over from the walk.
+		if (idleAfter != null && idleAfter["Idle"] != null && (string.IsNullOrEmpty(walkClip) || idleAfter.IsPlaying(walkClip)))
+		{
+			idleAfter.Play("Idle", PlayMode.StopSameLayer);
+		}
+		if (arrive != null && mover != null)
+		{
+			arrive();
+		}
+	}
+
+	// A ground shadow (the rig's Shadow texture) under a dropped item, about as wide as it, just behind it.
+	private static void AddItemShadow(GameObject item, BoneAnimation bones)
+	{
+		var atlas = bones.textureAtlases.FirstOrDefault(a => a != null && a.textureNames.Contains("Shadow"));
+		var itemRenderer = item.GetComponentInChildren<Renderer>();
+		if (atlas == null || itemRenderer == null)
+		{
+			return;
+		}
+		var itemBounds = itemRenderer.bounds;
+		var shadow = new GameObject(item.name + "_Shadow");
+		shadow.transform.SetParent(item.transform.parent, false);
+		var mesh = shadow.AddComponent<CHMeshSprite>();
+		mesh.m_AtlasType = AtlasTypes.SmoothMoves;
+		mesh.m_SmoothMovesAtlas = atlas;
+		mesh.m_SpriteName = "Shadow";
+		mesh.UpdateSprite(true, true);
+		var shadowRenderer = shadow.GetComponent<Renderer>();
+		var shadowWidth = shadowRenderer != null ? Mathf.Max(shadowRenderer.bounds.size.x, 1f) : 1f;
+		var width = itemBounds.size.x * 0.9f / shadowWidth;
+		shadow.transform.localScale = new Vector3(width, width * 0.8f, 1f);
+		shadow.transform.position = new Vector3(itemBounds.center.x, itemBounds.min.y + itemBounds.size.y * 0.2f, item.transform.position.z + 0.3f);
+		UnityHelper.SetLayerRecusively(shadow, item.layer);
+		ItemGroundShadow.Attach(item.transform, shadow);
+	}
+
+	private static Vector3 ParsePathPoint(string text)
+	{
+		var values = text.Split(',');
+		return new Vector3(float.Parse(values[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse(values[1], System.Globalization.CultureInfo.InvariantCulture), float.Parse(values[2], System.Globalization.CultureInfo.InvariantCulture));
+	}
+
+	private IEnumerator FollowPath(Transform mover, SmoothPath path, Transform shadow, SmoothPath groundPath, float duration, bool hideShadowAtEnd, BoneAnimation idleAfter, string walkClip)
+	{
+		for (var t = 0f; t < duration && mover != null; t += Time.deltaTime)
+		{
+			mover.position = path.At(t / duration);
+			if (shadow != null)
+			{
+				shadow.position = groundPath.At(t / duration);
+			}
+			yield return null;
+		}
+		if (mover != null)
+		{
+			mover.position = path.At(1f);
+		}
+		if (shadow != null)
+		{
+			shadow.position = groundPath.At(1f);
+			if (hideShadowAtEnd)
+			{
+				shadow.gameObject.SetActive(false);
+			}
+		}
+		if (idleAfter != null && idleAfter["Idle"] != null && (string.IsNullOrEmpty(walkClip) || idleAfter.IsPlaying(walkClip)))
+		{
+			idleAfter.Play("Idle", PlayMode.StopSameLayer);
+		}
+	}
+
+	// A Catmull-Rom curve through points, walked by distance along it.
+	public class SmoothPath
+	{
+		private const int SamplesPerSegment = 16;
+
+		private readonly List<Vector3> m_Samples = new List<Vector3>();
+
+		private readonly List<float> m_Distances = new List<float>();
+
+		public float Length
+		{
+			get { return m_Distances[m_Distances.Count - 1]; }
+		}
+
+		public SmoothPath(List<Vector3> points)
+		{
+			for (var i = 0; i < points.Count - 1; i++)
+			{
+				var p0 = points[Mathf.Max(i - 1, 0)];
+				var p1 = points[i];
+				var p2 = points[i + 1];
+				var p3 = points[Mathf.Min(i + 2, points.Count - 1)];
+				for (var k = i == 0 ? 0 : 1; k <= SamplesPerSegment; k++)
+				{
+					var u = (float)k / SamplesPerSegment;
+					m_Samples.Add(0.5f * (2f * p1 + (p2 - p0) * u + (2f * p0 - 5f * p1 + 4f * p2 - p3) * u * u + (3f * p1 - p0 - 3f * p2 + p3) * u * u * u));
+				}
+			}
+			m_Distances.Add(0f);
+			for (var i = 1; i < m_Samples.Count; i++)
+			{
+				m_Distances.Add(m_Distances[i - 1] + Vector3.Distance(m_Samples[i - 1], m_Samples[i]));
+			}
+		}
+
+		public Vector3 At(float fraction)
+		{
+			var distance = Mathf.Clamp01(fraction) * Length;
+			for (var i = 1; i < m_Samples.Count; i++)
+			{
+				if (m_Distances[i] >= distance)
+				{
+					var span = m_Distances[i] - m_Distances[i - 1];
+					return Vector3.Lerp(m_Samples[i - 1], m_Samples[i], span > 0f ? (distance - m_Distances[i - 1]) / span : 1f);
+				}
+			}
+			return m_Samples[m_Samples.Count - 1];
+		}
+	}
+
+	// Loops covered by time t when each loop moves only from 1/12 to 7/12 of the way through (eased), as in Move_Carry.
+	private static float SteppedProgress(float t, float period)
+	{
+		var loops = Mathf.Floor(t / period);
+		var u = Mathf.InverseLerp(1f / 12f, 7f / 12f, t / period - loops);
+		return loops + u * u * (3f - 2f * u);
+	}
+
+	private IEnumerator WaitForCoroutineThenNextNode(Coroutine routine)
+	{
+		yield return routine;
+		NextNode();
+	}
+
+	// x moves at a constant speed from the start to dipX + endOffsetX; y dips by dip at dipX and rises back to the start
+	// height at the end (a parabola on each side of the lowest point). z is kept.
+	private IEnumerator MoveArc(Transform mover, float dipX, float dip, float endOffsetX, float duration)
+	{
+		var start = mover.position;
+		var endX = dipX + endOffsetX;
+		for (var t = 0f; t <= duration && mover != null; t += Time.deltaTime)
+		{
+			var x = Mathf.Lerp(start.x, endX, Mathf.Clamp01(t / duration));
+			var span = (x - dipX) * (start.x - dipX) >= 0f ? start.x - dipX : endX - dipX;
+			var k = Mathf.Abs(span) > 1f ? (x - dipX) / span : 0f;
+			mover.position = new Vector3(x, start.y - dip + dip * k * k, start.z);
+			yield return null;
+		}
+		if (mover != null)
+		{
+			mover.position = new Vector3(endX, start.y, start.z);
+		}
 	}
 
 	private IEnumerator ZoomCamera(Camera cam, float delta, float time, InterpolationType type, NodeWaitCondition waitCondition)

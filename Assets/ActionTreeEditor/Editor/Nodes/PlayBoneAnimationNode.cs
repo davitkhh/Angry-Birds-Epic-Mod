@@ -44,6 +44,11 @@ namespace ActionTreeEditor.Nodes
             {
                 Node.secondaryText = EditorGUILayout.TextField("Queued animation name", Node.secondaryText);
             }
+
+            Node.customBool2 = EditorGUILayout.Toggle(
+                new GUIContent("Random start point", "Starts the clip at a random point, e.g. to put a crowd's walk cycles out of step."),
+                Node.customBool2
+            );
         }
 
         protected override Rect GetDefaultNodeSize()
