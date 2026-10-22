@@ -117,7 +117,7 @@ namespace ABH.GameDatas.Battle.Skills
 					orderTarget = m_InitialTarget;
 				}
 				var skill = skillTarget.GetSkills().FirstOrDefault(s => s.Model.Balancing.TargetType == SkillTargetTypes.Attack);
-				if (skill == null)
+				if (skill == null || !Ammo.CanAfford(skillTarget, skill))
 				{
 					continue;
 				}
@@ -186,6 +186,7 @@ namespace ABH.GameDatas.Battle.Skills
 				{
 					DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(battle.m_CurrentTurn, EffectTriggerType.OnCharge, pig, null);
 				}
+				Ammo.OnSkillStarted(skillTarget, skill);
 				yield return skillTarget.CombatantView.StartCoroutine(skill.DoAction(battle, skillTarget, orderTarget));
 				skillTarget.CombatantView.targetSheltered = null;
 				skillTarget.IsAttacking = false;

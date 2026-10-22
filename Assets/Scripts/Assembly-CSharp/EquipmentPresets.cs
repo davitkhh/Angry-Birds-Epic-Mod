@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ABH.GameDatas;
 using ABH.GameDatas.Interfaces;
+using ABH.Shared.BalancingData;
 using ABH.Shared.Generic;
 
 public class EquipmentPresetBird
@@ -64,6 +65,90 @@ public static class EquipmentPresets
 	public static readonly InventoryItemType[] Slots = { InventoryItemType.Class, InventoryItemType.MainHandEquipment, InventoryItemType.OffHandEquipment };
 
 	private const string KeyPrefix = "preset:";
+
+	// Set once the player owns gear beyond their birds' starting kit; the preset buttons only show after that.
+	// Not a "preset:" key, so Save never clears it.
+	private const string UnlockedKey = "presets:unlocked";
+
+	// Locked checks scan the inventory, so a negative answer is reused for this long.
+	private const float LockedRecheckSeconds = 1f;
+
+	private static HashSet<string> s_StarterGear;
+
+	private static float s_NextLockedCheck;
+
+	private static PlayerGameData s_CheckedPlayer;
+
+	// Equipment presets unlock with the first Main Hand / Off Hand piece that isn't starting gear (owned or worn).
+	// Players who already saved presets count as unlocked.
+	public static bool IsUnlocked
+	{
+		get
+		{
+			var player = DIContainerInfrastructure.GetCurrentPlayer();
+			var store = GetStore();
+			if (player == null || store == null)
+			{
+				return false;
+			}
+			if (store.ContainsKey(UnlockedKey))
+			{
+				return true;
+			}
+			if (player == s_CheckedPlayer && UnityEngine.Time.unscaledTime < s_NextLockedCheck)
+			{
+				return false;
+			}
+			s_CheckedPlayer = player;
+			s_NextLockedCheck = UnityEngine.Time.unscaledTime + LockedRecheckSeconds;
+			if (!store.ContainsKey(KeyPrefix + 0) && !OwnsNonStarterGear(player))
+			{
+				return false;
+			}
+			store[UnlockedKey] = "1";
+			player.SavePlayerData();
+			return true;
+		}
+	}
+
+	private static bool OwnsNonStarterGear(PlayerGameData player)
+	{
+		var owned = new List<IInventoryItemGameData>();
+		foreach (var type in AllySlots)
+		{
+			List<IInventoryItemGameData> items;
+			if (player.InventoryGameData.Items.TryGetValue(type, out items))
+			{
+				owned.AddRange(items);
+			}
+		}
+		foreach (var bird in player.Birds)
+		{
+			owned.Add(bird.MainHandItem);
+			owned.Add(bird.OffHandItem);
+		}
+		var starter = GetStarterGear();
+		return owned.Any(i => i != null && !starter.Contains(i.ItemBalancing.NameId));
+	}
+
+	// Everything the birds start out with: the contents of each bird's default inventory.
+	private static HashSet<string> GetStarterGear()
+	{
+		if (s_StarterGear != null)
+		{
+			return s_StarterGear;
+		}
+		s_StarterGear = new HashSet<string>();
+		foreach (var bird in DIContainerBalancing.Service.GetBalancingDataList<BirdBalancingData>())
+		{
+			InventoryBalancingData inventory;
+			if (!string.IsNullOrEmpty(bird.DefaultInventoryNameId) && DIContainerBalancing.Service.TryGetBalancingData<InventoryBalancingData>(bird.DefaultInventoryNameId, out inventory) && inventory.DefaultInventoryContent != null)
+			{
+				s_StarterGear.UnionWith(inventory.DefaultInventoryContent.Keys);
+			}
+		}
+		return s_StarterGear;
+	}
 
 	public static List<EquipmentPreset> Load()
 	{

@@ -677,6 +677,14 @@ public class ActionTree : MonoBehaviour
 				{
 					componentInChildren5[node.text].normalizedTime = UnityEngine.Random.value;
 				}
+				// customFloat2: start that many seconds into the clip (e.g. skip a wind-up), fast-forwarded rather than
+				// jumped, so swapped bone textures (a rogue's hood) survive.
+				var skipSeconds = 0f;
+				if (node.customFloat2 > 0f && componentInChildren5[node.text] != null)
+				{
+					skipSeconds = Mathf.Min(node.customFloat2, componentInChildren5[node.text].length);
+					StartCoroutine(SkipClipAhead(componentInChildren5, node.text, skipSeconds));
+				}
 				if (node.QueueIdle)
 				{
 					componentInChildren5.PlayQueued(node.secondaryText);
@@ -689,7 +697,7 @@ public class ActionTree : MonoBehaviour
 
 				if (node.customInt == 1)
 				{
-					StartCoroutine(WaitTillNextNode(componentInChildren5[node.text].length));
+					StartCoroutine(WaitTillNextNode(componentInChildren5[node.text].length - skipSeconds));
 					return true;
 				}
 
@@ -1586,6 +1594,22 @@ public class ActionTree : MonoBehaviour
 		shadow.transform.position = new Vector3(itemBounds.center.x, itemBounds.min.y + itemBounds.size.y * 0.2f, item.transform.position.z + 0.3f);
 		UnityHelper.SetLayerRecusively(shadow, item.layer);
 		ItemGroundShadow.Attach(item.transform, shadow);
+	}
+
+	// Runs a playing bone clip fast for a frame or two until it reaches the given time, then at normal speed. Setting
+	// the time directly would re-apply the clip's own bone textures over any swaps.
+	private IEnumerator SkipClipAhead(BoneAnimation rig, string clip, float seconds)
+	{
+		var state = rig[clip];
+		for (var frames = 0; frames < 5 && rig != null && rig.IsPlaying(clip) && state.time < seconds - 0.005f; frames++)
+		{
+			state.speed = (seconds - state.time) / Mathf.Max(Time.deltaTime, 0.001f);
+			yield return null;
+		}
+		if (rig != null && rig[clip] != null)
+		{
+			rig[clip].speed = 1f;
+		}
 	}
 
 	private static Vector3 ParsePathPoint(string text)

@@ -70,5 +70,13 @@ namespace ABH.Shared.BalancingData
 
 		[ProtoMember(19)]
 		public float HealthPercent { get; set; }
+
+		// Added to this SkillParameters key of the rage skill (PvE and PvP) of the bird using the upgraded class or
+		// item, e.g. "attack_count". Not scaled by stars: rage parameters are whole counts.
+		[ProtoMember(20)]
+		public string RageSkillParameter { get; set; }
+
+		[ProtoMember(21)]
+		public float RageSkillParameterBonus { get; set; }
 	}
 }

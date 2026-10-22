@@ -573,7 +573,7 @@
       "bpart_002"
     ],
     "LootTableWheel": {
-      "battle_southbeach_02": 1
+      "battle_southbeach_02_noshield": 1
     },
     "LootTableAdditional": null,
     "StrengthPoints": 15,
@@ -1189,7 +1189,7 @@
     "BaseLevel": 1,
     "BattleParticipantsIds": [
       "bpart_005_2",
-      "bpart_005_2",
+      "bpart_005_4",
       "bpart_005_3"
     ],
     "LootTableWheel": {

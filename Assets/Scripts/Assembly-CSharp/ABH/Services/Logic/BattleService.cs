@@ -1645,6 +1645,7 @@ namespace ABH.Services.Logic
 			battle.m_AllPigDamageInCurrentTurn = 0f;
 			battle.m_CurrentTurn++;
 			battle.m_CurrentWaveTurn++;
+			Ammo.OnTurnEnded(battle);
 		}
 
 		public void ApplyPendingDamageDealtHeals(float finalDamage)
@@ -5903,7 +5904,13 @@ namespace ABH.Services.Logic
 			return false;
 		}
 
+		// Skills the combatant lacks the ammo for are swapped for one it can afford (see Ammo).
 		public SkillBattleDataBase GetNextSkill(BattleGameData battle, ICombatant combatant)
+		{
+			return Ammo.GetAffordableSkill(combatant, GetNextSkillIgnoringAmmo(battle, combatant));
+		}
+
+		private SkillBattleDataBase GetNextSkillIgnoringAmmo(BattleGameData battle, ICombatant combatant)
 		{
 			if (combatant == null)
 			{
@@ -6100,7 +6107,7 @@ namespace ABH.Services.Logic
 		public SkillBattleDataBase GetFallbackSkill(ICombatant combatHand)
 		{
 			combatHand.ComboInfo = null;
-			return combatHand.GetSkill(0);
+			return Ammo.GetAffordableSkill(combatHand, combatHand.GetSkill(0));
 		}
 
 		public SkillBattleDataBase GetSupportSkill(ICombatant combatHand)

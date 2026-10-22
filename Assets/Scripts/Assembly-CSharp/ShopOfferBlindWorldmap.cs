@@ -138,6 +138,10 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 
 	public void ShowTooltip()
 	{
+		if (DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.TryShowShopItemOverlay(m_IconRoot, m_RecipeItem != null ? (IInventoryItemGameData)m_RecipeItem : m_Item, true))
+		{
+			return;
+		}
 		if (m_RecipeItem != null)
 		{
 			if (m_failedLevelRequirement)
@@ -188,6 +192,8 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		m_SlotRoot.SetActive(false);
 		m_MasteryBarCurrent.transform.parent.gameObject.SetActive(false);
 		m_MasteryBadgeRoot.SetActive(false);
+		// Tiles are reused across shops: drop an upgrade blueprint's stat rows whatever this offer is
+		UpgradeStatChangeView.Clear(m_ConsumableEffectInfo.transform);
 		if (string.IsNullOrEmpty(m_Model.AssetId))
 		{
 			m_AdditionalSprite.gameObject.SetActive(true);

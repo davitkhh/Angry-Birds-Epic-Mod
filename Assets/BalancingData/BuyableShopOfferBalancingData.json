@@ -162,7 +162,7 @@
       {
         "RequirementType": "PayItem",
         "NameId": "gold",
-        "Value": 10
+        "Value": 15
       }
     ],
     "ShowRequirements": null,
@@ -266,7 +266,7 @@
       {
         "RequirementType": "PayItem",
         "NameId": "gold",
-        "Value": 10
+        "Value": 15
       }
     ],
     "ShowRequirements": null,
@@ -25128,6 +25128,63 @@
     "StartDate": 0,
     "EndDate": 0,
     "BuyRequirements": null,
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "upgrade_class_lightningbird": 1,
+      "story_workshop_lightningbird_upgrade_bought": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 3,
+    "Category": "shop_01_upgrade_yellow",
+    "NameId": "offer_upgrade_class_lightningbird",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "HaveBird",
+        "NameId": "bird_yellow",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_workshop_lightningbird_upgrade_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 60.0
+      }
+    ],
     "ShowRequirements": null,
     "SpecialOfferPrio": 0,
     "SpeechBubbleLoca": null,

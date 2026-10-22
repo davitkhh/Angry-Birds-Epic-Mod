@@ -75,7 +75,8 @@ namespace ABH.GameDatas.Battle.Skills
 				{
 					break;
 				}
-				m_possibleAttackingCharacters = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == target.CombatantFaction && !c.IsStunned && c.IsParticipating && !c.IsBanner).ToList();
+				// Birds out of ammo for their attack sit this out
+				m_possibleAttackingCharacters = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == target.CombatantFaction && !c.IsStunned && c.IsParticipating && !c.IsBanner && Ammo.CanAfford(c, c.GetSkills().FirstOrDefault(s => s.Model.Balancing.TargetType == SkillTargetTypes.Attack))).ToList();
 				if (m_possibleAttackingCharacters.Count <= 0)
 				{
 					break;
@@ -134,6 +135,7 @@ namespace ABH.GameDatas.Battle.Skills
 					yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForPigToChooseTargetAndDoSkillInSec);
 				}
 				DebugLog.Log("Character: " + skillTarget.CombatantNameId + " starts his attack!");
+				Ammo.OnSkillStarted(skillTarget, skill);
 				yield return skillTarget.CombatantView.StartCoroutine(skill.DoAction(battle, skillTarget, orderTarget));
 				skillTarget.IsAttacking = false;
 				skillTarget.AttackTarget = cachedTarget;

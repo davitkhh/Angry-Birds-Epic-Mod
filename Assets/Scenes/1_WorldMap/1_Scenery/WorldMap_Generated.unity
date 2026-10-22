@@ -828274,7 +828274,7 @@ Transform:
   m_GameObject: {fileID: 1374582581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1025, y: -1492, z: -37}
+  m_LocalPosition: {x: -1028, y: -1458, z: -37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -859921,38 +859921,6 @@ MonoBehaviour:
     secondaryText: Idle
   - editorRect:
       serializedVersion: 2
-      x: 1860
-      y: 940
-      width: 230
-      height: 230
-    nodeID: 30
-    nodesIn: 42000000
-    nodesOut: 43000000
-    nodesOutIndex: 00000000
-    target: 0
-    text: 
-    param: []
-    enabled: 1
-    pass: 0
-    type: 4
-    refObject: {fileID: 0}
-    refObject1: {fileID: 514658534}
-    refObject2: {fileID: 1062283995}
-    customInt: 0
-    customInt2: 1
-    customInt3: 0
-    customFloat: 0.25
-    customFloat2: 0
-    customBool: 0
-    customBool2: 0
-    objectType: 1
-    objectName: Rogue
-    customVec1: {x: 0, y: 0, z: 0}
-    customVec2: {x: 0, y: 0, z: 0}
-    QueueIdle: 0
-    secondaryText: 
-  - editorRect:
-      serializedVersion: 2
       x: 40
       y: 1240
       width: 230
@@ -859991,7 +859959,7 @@ MonoBehaviour:
       height: 230
     nodeID: 32
     nodesIn: 1f000000
-    nodesOut: 21000000
+    nodesOut: 66000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -860022,7 +859990,7 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 33
-    nodesIn: 20000000
+    nodesIn: 68000000
     nodesOut: 22000000
     nodesOutIndex: 00000000
     target: 0
@@ -861080,10 +861048,10 @@ MonoBehaviour:
       height: 230
     nodeID: 66
     nodesIn: 61000000
-    nodesOut: 1e000000
+    nodesOut: 65000000
     nodesOutIndex: 00000000
     target: 0
-    text: Action_RageJump
+    text: Action_Attack_2
     param: []
     enabled: 1
     pass: 0
@@ -861095,45 +861063,13 @@ MonoBehaviour:
     customInt2: 0
     customInt3: 0
     customFloat: 0
-    customFloat2: 0
+    customFloat2: 0.33333334
     customBool: 0
     customBool2: 0
     objectType: 1
     objectName: Rogue
     customVec1: {x: 0, y: 0, z: 0}
     customVec2: {x: 0, y: 0, z: 0}
-    QueueIdle: 0
-    secondaryText: 
-  - editorRect:
-      serializedVersion: 2
-      x: 2120
-      y: 1200
-      width: 230
-      height: 230
-    nodeID: 67
-    nodesIn: 1e000000
-    nodesOut: 62000000
-    nodesOutIndex: 00000000
-    target: 0
-    text: 
-    param: []
-    enabled: 1
-    pass: 0
-    type: 4
-    refObject: {fileID: 0}
-    refObject1: {fileID: 1062283995}
-    refObject2: {fileID: 1374582582}
-    customInt: 0
-    customInt2: 1
-    customInt3: 0
-    customFloat: 0.25
-    customFloat2: 0
-    customBool: 0
-    customBool2: 0
-    objectType: 1
-    objectName: Rogue
-    customVec1: {x: 0, y: 0, z: 0}
-    customVec2: {x: 5, y: 15, z: -5}
     QueueIdle: 0
     secondaryText: 
   - editorRect:
@@ -862104,7 +862040,7 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 98
-    nodesIn: 43000000
+    nodesIn: 65000000
     nodesOut: 1f000000
     nodesOutIndex: 00000000
     target: 0
@@ -862157,6 +862093,139 @@ MonoBehaviour:
     customBool2: 0
     objectType: 1
     objectName: RogueJumpTrail
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 2120
+      y: 1200
+      width: 230
+      height: 230
+    nodeID: 101
+    nodesIn: 42000000
+    nodesOut: 62000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param:
+    - -1096,-1492,-40
+    - -1082.4,-1448.8,-39.4
+    - -1058.6,-1438,-38.4
+    - -1038.2,-1448,-37.5
+    - -1028,-1458,-37
+    enabled: 1
+    pass: 0
+    type: 35
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 1
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0.16666667
+    customBool: 0
+    customBool2: 0
+    objectType: 1
+    objectName: Rogue
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 560
+      y: 1500
+      width: 230
+      height: 230
+    nodeID: 102
+    nodesIn: 20000000
+    nodesOut: 67000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 6
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0.25
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 0
+    objectName: 
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 820
+      y: 1500
+      width: 230
+      height: 230
+    nodeID: 103
+    nodesIn: 66000000
+    nodesOut: 68000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: Move_Loop
+    param: []
+    enabled: 1
+    pass: 0
+    type: 13
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 1
+    objectName: Rogue
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 820
+      y: 1500
+      width: 230
+      height: 230
+    nodeID: 104
+    nodesIn: 67000000
+    nodesOut: 21000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 4
+    refObject: {fileID: 0}
+    refObject1: {fileID: 1374582582}
+    refObject2: {fileID: 4383}
+    customInt: 1
+    customInt2: 1
+    customInt3: 0
+    customFloat: 500
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 1
+    objectName: Rogue
     customVec1: {x: 0, y: 0, z: 0}
     customVec2: {x: 0, y: 0, z: 0}
     QueueIdle: 0

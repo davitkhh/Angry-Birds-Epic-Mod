@@ -49,8 +49,21 @@ public class SkillBlind : MonoBehaviour
 	[SerializeField]
 	private List<GameObject> m_ChargeProgressDivider = new List<GameObject>();
 
+	// The skill charge bar, cloned for the ammo regen bar in the character overlay
+	public GameObject ChargeProgressTemplate
+	{
+		get
+		{
+			return m_ChargeProgressRoot;
+		}
+	}
+
 	public void ShowSkillOverlay(SkillBattleDataBase skill, ICombatant invoker, bool isPassive)
 	{
+		if (m_Background)
+		{
+			AmmoUI.ClearSkillPlate(m_Background.cachedTransform.parent);
+		}
 		if (skill == null)
 		{
 			if (isPassive)
@@ -147,6 +160,10 @@ public class SkillBlind : MonoBehaviour
 		if (m_SkillTargetIcon != null)
 		{
 			m_SkillTargetIcon.spriteName = text;
+		}
+		if (m_Background)
+		{
+			AmmoUI.ShowOnSkillPlate(m_Background, m_SkillName, skill, invoker);
 		}
 	}
 

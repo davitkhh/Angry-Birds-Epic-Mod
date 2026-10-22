@@ -33,6 +33,9 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 
 	private bool m_CachedTargetInvalid;
 
+	// The hovered target is valid but the skill for it lacks ammo
+	private bool m_CachedTargetNoAmmo;
+
 	private bool m_rageUsed;
 
 	private bool m_autoBattleTurn;
@@ -579,6 +582,19 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 					m_SkillToDo = aiTurn.m_UsedSkill;
 				}
 			}
+			if (!Ammo.CanAfford(m_Model, m_SkillToDo))
+			{
+				// AI picks avoid skills without ammo; this catches the rest (PvP AI, cached skills)
+				var affordable = Ammo.GetAffordableSkill(m_Model, m_SkillToDo);
+				if (affordable != m_SkillToDo)
+				{
+					m_SkillToDo = affordable;
+					if (!DIContainerLogic.GetBattleService().GetNextTarget(m_BattleMgr.Model, m_Model, m_SkillToDo.Model, m_Model.CombatantFaction))
+					{
+						DIContainerLogic.GetBattleService().GetRandomTarget(m_BattleMgr.Model, m_Model, m_SkillToDo.Model, m_Model.CombatantFaction);
+					}
+				}
+			}
 			if (m_AssetController)
 			{
 				m_AssetController.m_BoneAnimation.UnregisterUserTriggerDelegate(m_SkillToDo.BoneAnimationUserTrigger);
@@ -599,6 +615,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			{
 				DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(0f, EffectTriggerType.BeforeAttack, m_Model, m_Model.AttackTarget);
 			}
+			Ammo.OnSkillStarted(m_Model, m_SkillToDo);
 			if (m_BattleMgr.m_IllusionistCombatant != null && m_BattleMgr.m_IllusionistCombatant == m_Model && m_SkillToDo == m_Model.GetSkill(0))
 			{
 				var attack = m_Model.GetSkill(0) as AttackSkillTemplate;
@@ -629,6 +646,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				}
 				yield return StartCoroutine(m_SkillToDo.DoAction(m_BattleMgr.Model, m_Model, m_Model.AttackTarget));
 			}
+			Ammo.OnSkillFinished(m_Model, m_SkillToDo);
 			if (m_SkillToDo.m_IsRageSkill)
 			{
 				foreach (var enemy in m_BattleMgr.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction != m_Model.CombatantFaction))
@@ -849,6 +867,11 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 
 	protected override void OnCombatantClicked(ICombatant sender)
 	{
+		if (!Ammo.CanAfford(m_Model, sender.CombatantFaction == m_Model.CombatantFaction ? m_Model.GetSkill(1) : m_Model.GetSkill(0)))
+		{
+			DebugLog.Log("Not enough ammo for that skill");
+			return;
+		}
 		m_ClickedThisTurn = true;
 		m_CommandGiven = true;
 		m_Model.AttackTarget = sender;
@@ -935,6 +958,12 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				m_BattleMgr.m_CharacterInteractionBlockedItems[j].SetActive(true);
 				m_BattleMgr.m_CharacterInteractionBlockedItems[j].transform.position = combatant2.CombatantView.m_AssetController.BodyCenter.position + new Vector3(0f, 0f, -5f);
 			}
+			else if (combatant2 != m_Model && combatant2.IsParticipating && !Ammo.CanAfford(m_Model, skill))
+			{
+				m_BattleMgr.m_CharacterInteractionBlockedItems[j].SetActive(true);
+				m_BattleMgr.m_CharacterInteractionBlockedItems[j].transform.position = combatant2.CombatantView.m_AssetController.BodyCenter.position + new Vector3(0f, 0f, -5f);
+				AmmoUI.ShowNoAmmo(m_BattleMgr.m_CharacterInteractionBlockedItems[j], m_Model);
+			}
 		}
 		m_BattleMgr.LockDragVisualizationByCode = true;
 		m_BattleMgr.m_DraggedCharacter = this;
@@ -972,6 +1001,12 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 					{
 						var skill = m_cachedOverCharacter.GetModel().CombatantFaction != m_Model.CombatantFaction ? m_Model.GetSkills()[0] : m_Model.GetSkills()[1];
 						m_CachedTargetInvalid = m_cachedOverCharacter != null && !DIContainerLogic.GetBattleService().isTargetAllowedForSkill(m_cachedOverCharacter.GetModel(), skill);
+						m_CachedTargetNoAmmo = !m_CachedTargetInvalid && m_cachedOverCharacter != this && !Ammo.CanAfford(m_Model, skill);
+						m_CachedTargetInvalid |= m_CachedTargetNoAmmo;
+					}
+					else
+					{
+						m_CachedTargetNoAmmo = false;
 					}
 					if (m_cachedOverCharacter == null || m_cachedOverCharacter == this || (m_tauntedTarget != null && m_cachedOverCharacter.GetModel() != m_tauntedTarget && m_tauntedTarget.CombatantFaction == m_cachedOverCharacter.GetModel().CombatantFaction) || m_CachedTargetInvalid)
 					{
@@ -1010,7 +1045,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			}
 			if (m_CachedTargetInvalid || (m_tauntedTarget != null && m_cachedOverCharacter != null && m_cachedOverCharacter.GetModel() != m_tauntedTarget && m_tauntedTarget.CombatantFaction == m_cachedOverCharacter.GetModel().CombatantFaction))
 			{
-				m_CurrentControlHUD.SetState(base.transform, m_cachedOverCharacter, hitInfo.point, m_BattleMgr, true);
+				m_CurrentControlHUD.SetState(base.transform, m_cachedOverCharacter, hitInfo.point, m_BattleMgr, true, m_CachedTargetNoAmmo && m_cachedOverCharacter != null);
 			}
 			else
 			{
@@ -1155,7 +1190,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		if (component != null)
 		{
 			var skill = component.GetModel().CombatantFaction != m_Model.CombatantFaction ? m_Model.GetSkills()[0] : m_Model.GetSkills()[1];
-			if ((m_tauntedTarget != null && component != null && m_tauntedTarget != component.GetModel() && m_tauntedTarget.CombatantFaction == component.GetModel().CombatantFaction) || !DIContainerLogic.GetBattleService().isTargetAllowedForSkill(component.GetModel(), skill))
+			if ((m_tauntedTarget != null && component != null && m_tauntedTarget != component.GetModel() && m_tauntedTarget.CombatantFaction == component.GetModel().CombatantFaction) || !DIContainerLogic.GetBattleService().isTargetAllowedForSkill(component.GetModel(), skill) || (component != this && !Ammo.CanAfford(m_Model, skill)))
 			{
 				return;
 			}

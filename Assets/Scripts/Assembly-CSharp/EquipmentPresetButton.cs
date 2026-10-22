@@ -54,6 +54,11 @@ public class EquipmentPresetButton : MonoBehaviour
 			m_Animation.Sample();
 			m_Animation.Stop();
 		}
+		else if (m_Trigger != null && m_Trigger.gameObject != base.gameObject)
+		{
+			// No swing clips: start hidden, so a locked button never shows.
+			m_Trigger.gameObject.SetActive(false);
+		}
 	}
 
 	private void OnEnable()
@@ -91,7 +96,7 @@ public class EquipmentPresetButton : MonoBehaviour
 
 	public void OpenMenu()
 	{
-		if (!m_Shown && m_Trigger != null && m_HideWhenWindowOpen)
+		if ((!m_Shown && m_Trigger != null && m_HideWhenWindowOpen) || !EquipmentPresets.IsUnlocked)
 		{
 			return;
 		}
@@ -138,7 +143,8 @@ public class EquipmentPresetButton : MonoBehaviour
 		}
 		var windowOpen = windowRoot != null && windowRoot.gameObject.activeInHierarchy;
 		var loading = coreStateMgr != null && coreStateMgr.SceneLoadingMgr != null && coreStateMgr.SceneLoadingMgr.IsLoading();
-		var show = DIContainerInfrastructure.GetCurrentPlayer() != null && (!m_HideWhenWindowOpen || (!loading && !EquipmentPresetWindowUI.IsOpen && !windowOpen));
+		// Hidden until presets unlock (first non-starter gear, EquipmentPresets.IsUnlocked).
+		var show = DIContainerInfrastructure.GetCurrentPlayer() != null && EquipmentPresets.IsUnlocked && (!m_HideWhenWindowOpen || (!loading && !EquipmentPresetWindowUI.IsOpen && !windowOpen));
 		if (show != m_Shown)
 		{
 			SetShown(show);

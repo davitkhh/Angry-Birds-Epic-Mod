@@ -1212,6 +1212,12 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		return timeToJumpInFrontOfAlly;
 	}
 
+	// A bird standing where it steps forward to at the start of its turn (its attacking position)
+	public bool IsAtBirdFocusPosition()
+	{
+		return m_BattleMgr != null && m_BattleMgr.m_BirdCenterPosition != null && Vector3.Magnitude(base.transform.position - (m_BattleMgr.m_BirdCenterPosition.position + m_CachedFocusPos)) < 1f;
+	}
+
 	public float PlayGoToFocusPosition()
 	{
 		if (m_Model.IsBanner)
@@ -2203,7 +2209,8 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 			m_CounterSkillToDo = victim.GetSkill(0);
 			m_CounterModelTarget = target;
 			m_RetargetDeadCounterModel = retargetVictim;
-			if (m_CounterModel == null || m_CounterModel.IsStunned || !m_CounterModel.IsParticipating)
+			// No counter without the ammo for the attack
+			if (m_CounterModel == null || m_CounterModel.IsStunned || !m_CounterModel.IsParticipating || !Ammo.CanAfford(m_CounterModel, m_CounterSkillToDo))
 			{
 				DebugLog.Log("Init Counter invalid!");
 				m_CounterModel = null;
@@ -2260,6 +2267,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 			m_AssetController.m_BoneAnimation.UnregisterUserTriggerDelegate(m_CounterSkillToDo.BoneAnimationUserTrigger);
 			m_AssetController.m_BoneAnimation.RegisterUserTriggerDelegate(m_CounterSkillToDo.BoneAnimationUserTrigger);
 		}
+		Ammo.OnSkillStarted(m_Model, m_CounterSkillToDo);
 		yield return StartCoroutine(m_CounterSkillToDo.DoAction(m_BattleMgr.Model, m_Model, m_CounterModel.AttackTarget));
 		BattleEffectGameData chargeEffect = null;
 		if (m_CounterModel.CurrrentEffects != null && m_CounterModel.CurrrentEffects.TryGetValue("Charge_" + m_CounterSkillToDo.Model.Balancing.AssetId, out chargeEffect) && chargeEffect.GetTurnsLeft() == m_CounterSkillToDo.GetChargeDuration())

@@ -415,7 +415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4660007351953182160
 Transform:
   m_ObjectHideFlags: 0
@@ -1135,7 +1135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2673595822164224842
 Transform:
   m_ObjectHideFlags: 0
@@ -1384,7 +1384,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8173127141287688393
 Transform:
   m_ObjectHideFlags: 0
@@ -32433,6 +32433,7 @@ MonoBehaviour:
       originalPivotOffset: {x: 0, y: 0}
   textureAtlases:
   - {fileID: 11400000, guid: 4142b4c44d580c74cbc982365e4eb077, type: 2}
+  - {fileID: 11400000, guid: 4bedd67285f143e5b3b9869de9a0023f, type: 2}
   mAnimationClips:
   - animationName: Idle
     fps: 24

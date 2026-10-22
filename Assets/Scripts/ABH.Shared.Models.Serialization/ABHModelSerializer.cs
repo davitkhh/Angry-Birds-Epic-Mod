@@ -18505,6 +18505,18 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteFieldHeader(19, WireType.Fixed32, _param1);
       ProtoWriter.WriteSingle(vHealthPercent, _param1);
     }
+    var vRageSkillParameter = _param0.RageSkillParameter;
+    if (vRageSkillParameter != null)
+    {
+      ProtoWriter.WriteFieldHeader(20, WireType.String, _param1);
+      ProtoWriter.WriteString(vRageSkillParameter, _param1);
+    }
+    var vRageSkillParameterBonus = _param0.RageSkillParameterBonus;
+    if (vRageSkillParameterBonus != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(21, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vRageSkillParameterBonus, _param1);
+    }
   }
 
   private static UpgradeBlueprintBalancingData Read(UpgradeBlueprintBalancingData _param0, ProtoReader _param1)
@@ -18587,6 +18599,12 @@ public sealed class ABHModelSerializer : TypeModel
           continue;
         case 19:
           _param0.HealthPercent = _param1.ReadSingle();
+          continue;
+        case 20:
+          _param0.RageSkillParameter = _param1.ReadString();
+          continue;
+        case 21:
+          _param0.RageSkillParameterBonus = _param1.ReadSingle();
           continue;
         default:
           _param1.SkipField();

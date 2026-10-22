@@ -2662,5 +2662,13 @@
     "LocaBaseId": "",
     "SortPriority": 0,
     "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_workshop_lightningbird_upgrade_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
   }
 ]

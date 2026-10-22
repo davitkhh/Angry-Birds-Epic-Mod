@@ -71,6 +71,17 @@ public class TouchInputHandler : MonoBehaviour
 		return Physics.Raycast(ray, out hit, 10000f, m_usedlayers);
 	}
 
+	// RaycastHit.transform is the Rigidbody's object. NGUI adds a kinematic Rigidbody to every root UIPanel, which
+	// would send every touch inside a window (e.g. the world shop's tap-and-hold tiles) to the window root instead.
+	private static Transform GetTarget(RaycastHit hit)
+	{
+		if (hit.rigidbody != null && hit.rigidbody.GetComponent<UIPanel>() != null)
+		{
+			return hit.collider.transform;
+		}
+		return hit.transform;
+	}
+
 	public void EvaluateMouse()
 	{
 		if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonUp(0) && !Input.GetMouseButton(0))
@@ -90,7 +101,7 @@ public class TouchInputHandler : MonoBehaviour
 			if (m_SecondaryInputHandlers[num].GetRayCastHit(Input.mousePosition, out hit))
 			{
 				var raycastHit = hit;
-				transform = raycastHit.transform;
+				transform = GetTarget(raycastHit);
 				flag = true;
 			}
 		}
@@ -160,7 +171,7 @@ public class TouchInputHandler : MonoBehaviour
 				if (m_SecondaryInputHandlers[num].GetRayCastHit(touch.position, out hit))
 				{
 					var raycastHit = hit;
-					transform = raycastHit.transform;
+					transform = GetTarget(raycastHit);
 					flag = true;
 				}
 			}

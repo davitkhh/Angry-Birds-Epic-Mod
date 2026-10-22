@@ -154,6 +154,8 @@ public class CharacterOverlay : MonoBehaviour
 
 	private const float HealthFillSpeed = 2f;
 
+	private Vector3? m_PowerLevelHome;
+
 	private void Awake()
 	{
 		m_InterfaceCamera = DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera;
@@ -225,6 +227,7 @@ public class CharacterOverlay : MonoBehaviour
 			m_MasteryRoot.gameObject.SetActive(false);
 		}
 		var num = SetSkillInfos(combatant);
+		ShowAmmoRegen(combatant);
 		var totalOffset = SkillOverlayOffset(num) + skinExtraOffset;
 		totalOffset += CompactSkillBlinds(num, totalOffset);
 		for (var i = 0; i < m_BackGroundCenterSprites.Count; i++)
@@ -274,6 +277,14 @@ public class CharacterOverlay : MonoBehaviour
 		{
 			m_HealthBar.fillAmount = Mathf.MoveTowards(m_HealthBar.fillAmount, target, HealthFillSpeed * Time.deltaTime);
 		}
+	}
+
+	private void ShowAmmoRegen(ICombatant combatant)
+	{
+		var row = m_HealthBarTransform != null ? m_HealthBarTransform : (m_HealthBar.cachedTransform.parent != null ? m_HealthBar.cachedTransform.parent.parent : null);
+		var template = m_SkillBlinds.Count > 0 ? m_SkillBlinds[0].ChargeProgressTemplate : null;
+		var style = m_PowerLevelText != null ? m_PowerLevelText : m_LevelText;
+		AmmoUI.ShowRegenBar(row, m_HealthBar, m_PowerLevelText, style, template, combatant, ref m_PowerLevelHome);
 	}
 
 	private static float BackgroundShift(UIWidget.Pivot pivot, float offset)

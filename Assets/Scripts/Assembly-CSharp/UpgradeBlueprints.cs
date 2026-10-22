@@ -518,6 +518,35 @@ public static class UpgradeBlueprints
 		return percent;
 	}
 
+	// Amounts added to the bird's rage skill parameters (by SkillParameters key) by the upgrades on its class and
+	// equipped items. Not scaled by stars.
+	public static Dictionary<string, float> GetRageSkillBonuses(BirdGameData bird)
+	{
+		var bonuses = new Dictionary<string, float>();
+		foreach (var item in new IInventoryItemGameData[] { bird.ClassItem, bird.MainHandItem, bird.OffHandItem })
+		{
+			if (item != null)
+			{
+				AddRageSkillBonuses(bonuses, GetUpgradeList(item.ItemData));
+			}
+		}
+		return bonuses;
+	}
+
+	private static void AddRageSkillBonuses(Dictionary<string, float> bonuses, List<string> upgrades)
+	{
+		foreach (var effect in Effects(upgrades))
+		{
+			if (string.IsNullOrEmpty(effect.Key.RageSkillParameter) || effect.Key.RageSkillParameterBonus == 0f)
+			{
+				continue;
+			}
+			float value;
+			bonuses.TryGetValue(effect.Key.RageSkillParameter, out value);
+			bonuses[effect.Key.RageSkillParameter] = value + effect.Key.RageSkillParameterBonus;
+		}
+	}
+
 	// ----- Effects -----
 
 	private static IEnumerable<KeyValuePair<UpgradeBlueprintBalancingData, Application>> Effects(EquipmentData data)
@@ -782,6 +811,11 @@ public static class UpgradeBlueprints
 		public string NewIcon;
 
 		public string NewValue;
+
+		// Icon atlases; null means GenericElements
+		public string OldAtlas;
+
+		public string NewAtlas;
 	}
 
 	// What one use (at 0 stars) changes on the item it would go on: the player's best matching item, or the first
@@ -802,6 +836,7 @@ public static class UpgradeBlueprints
 		// Bird-wide attack / health percent, shown as the bonus before and after this use
 		AddPercentChange(changes, "Character_Damage_Large", oldUpgrades, newUpgrades, true);
 		AddPercentChange(changes, "Character_Health_Large", oldUpgrades, newUpgrades, false);
+		AddRageSkillChanges(changes, supported, oldUpgrades, newUpgrades);
 
 		if (!(supported is EquipmentBalancingData))
 		{
@@ -840,6 +875,51 @@ public static class UpgradeBlueprints
 		if (!Mathf.Approximately(oldPercent, newPercent))
 		{
 			changes.Add(new StatChange { OldIcon = icon, OldValue = "+" + FormatValue(oldPercent) + "%", NewIcon = icon, NewValue = "+" + FormatValue(newPercent) + "%" });
+		}
+	}
+
+	// Rage skill parameters (e.g. Speed of Light's attack count) of the item's bird, with the skill's own icon
+	private static void AddRageSkillChanges(List<StatChange> changes, IInventoryItemBalancingData supported, List<string> oldUpgrades, List<string> newUpgrades)
+	{
+		var oldBonuses = new Dictionary<string, float>();
+		var newBonuses = new Dictionary<string, float>();
+		AddRageSkillBonuses(oldBonuses, oldUpgrades);
+		AddRageSkillBonuses(newBonuses, newUpgrades);
+		if (newBonuses.Count == 0)
+		{
+			return;
+		}
+		var equipment = supported as EquipmentBalancingData;
+		var classItem = supported as ClassItemBalancingData;
+		var birdId = equipment != null ? equipment.RestrictedBirdId : (classItem != null ? classItem.RestrictedBirdId : null);
+		BirdBalancingData bird;
+		SkillBalancingData rage;
+		if (string.IsNullOrEmpty(birdId) || !DIContainerBalancing.Service.TryGetBalancingData(birdId, out bird) || string.IsNullOrEmpty(bird.RageSkillIdent) || !DIContainerBalancing.Service.TryGetBalancingData(bird.RageSkillIdent, out rage))
+		{
+			return;
+		}
+		foreach (var pair in newBonuses)
+		{
+			float baseValue;
+			float oldBonus;
+			if (rage.SkillParameters == null || !rage.SkillParameters.TryGetValue(pair.Key, out baseValue))
+			{
+				continue;
+			}
+			oldBonuses.TryGetValue(pair.Key, out oldBonus);
+			if (Mathf.Approximately(oldBonus, pair.Value))
+			{
+				continue;
+			}
+			changes.Add(new StatChange
+			{
+				OldIcon = rage.IconAssetId,
+				OldAtlas = rage.IconAtlasId,
+				OldValue = FormatValue(baseValue + oldBonus),
+				NewIcon = rage.IconAssetId,
+				NewAtlas = rage.IconAtlasId,
+				NewValue = FormatValue(baseValue + pair.Value)
+			});
 		}
 	}
 

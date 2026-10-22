@@ -130,7 +130,7 @@ namespace ABH.Services.Logic
 			friendData.FirstName = "npc_friend_merchant";
 			friendData.Id = "NPC_Low";
 			friendData.IsSilhouettePicture = false;
-			friendData.Level = Math.Max(level - 2, 1);
+			friendData.Level = Math.Max(level - 1, 1);
 			friendData.PictureUrl = string.Empty;
 			return friendData;
 		}

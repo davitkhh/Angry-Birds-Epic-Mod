@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ABH.GameDatas.Interfaces;
 using ABH.Shared.Generic;
 using SmoothMoves;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ABH.GameDatas.Battle.Skills
 {
@@ -22,6 +25,15 @@ namespace ABH.GameDatas.Battle.Skills
 
 		// Extra height (on top of the attack animation's own hop) added at the middle of the return jump.
 		private const float ExtraJumpArcHeight = 20f;
+
+		// Action_Attack_1 (24 fps): the wind-up before the "Movement" tag on frame 7 would play offscreen, so it is
+		// fast-forwarded and he jumps in right as the pigs' turn starts. It stops half a frame early so the tag still
+		// fires normally. Fast-forwarded with speed, not by setting the state's time: a time jump re-applies the
+		// clip's original textures without the equipment swaps, which showed the rig's default off hand (the guard's
+		// shield) until the clip's last frame.
+		private const float AttackFps = 24f;
+
+		private const float AttackMovementFrame = 7f;
 
 		private float m_ReturnTurns = 3f;
 
@@ -58,6 +70,8 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private bool m_RunawayRegistered;
 
+		private CharacterControllerBattleGroundBase m_RunOffView;
+
 		private int m_LeftOnTurn;
 
 		private BattleMgrBase m_BattleMgr;
@@ -91,14 +105,49 @@ namespace ABH.GameDatas.Battle.Skills
 			{
 				m_RunawayRegistered = true;
 				m_BattleMgr = source.CombatantView.m_BattleMgr;
+				// His view's own run-off goes a fixed m_StartPosOffset to the right and destroys him on arrival, which can
+				// still be on screen when he stands on the left of the formation. Run him off past the screen edge instead.
+				TakeOverRunOff(source.CombatantView);
 				source.Runaway += OnSourceRunaway;
 			}
 			yield return source.CombatantView.StartCoroutine(base.DoAction(battle, source, target, shared, illusion));
 		}
 
+		private void TakeOverRunOff(CharacterControllerBattleGroundBase view)
+		{
+			var handler = typeof(CharacterControllerBattleGroundBase).GetMethod("m_Model_Runaway", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (view == null || handler == null)
+			{
+				return;
+			}
+			m_Source.Runaway -= (Action)Delegate.CreateDelegate(typeof(Action), view, handler);
+			m_RunOffView = view;
+		}
+
+		// Same pace as the regular run-off (m_StartPosOffset per BaseBattleEnterDelay), but until his whole rig is past
+		// the right edge of the screen.
+		private IEnumerator RunOffScreen(CharacterControllerBattleGroundBase view)
+		{
+			var pacing = DIContainerLogic.GetPacingBalancing();
+			var start = view.transform.position;
+			var halfWidth = view.GetComponentsInChildren<Renderer>().Select(r => r.bounds.extents.x).DefaultIfEmpty(m_BattleMgr.m_StartPosOffset * 0.5f).Max();
+			var offscreenX = Mathf.Max(start.x + m_BattleMgr.m_StartPosOffset, ScreenRightEdgeX(start, start.x + m_BattleMgr.m_StartPosOffset) + halfWidth * 1.2f);
+			var speed = m_BattleMgr.m_StartPosOffset / pacing.BaseBattleEnterDelay;
+			var distance = offscreenX - start.x;
+			yield return new WaitForSeconds(view.PlayGoToPosition(new Vector3(distance, 0f, 0f), distance / speed, true));
+			if (view != null)
+			{
+				view.DestroyCharacterAfter(0f);
+			}
+		}
+
 		private void OnSourceRunaway()
 		{
 			m_Source.Runaway -= OnSourceRunaway;
+			if (m_RunOffView != null)
+			{
+				m_RunOffView.StartCoroutine(RunOffScreen(m_RunOffView));
+			}
 			m_LeftOnTurn = m_Battle.m_CurrentTurn;
 			m_Battle.PigsTurnStarted += OnPigsTurnStarted;
 		}
@@ -192,11 +241,19 @@ namespace ABH.GameDatas.Battle.Skills
 				// Slow the attack animation by the same factor as the jump so its hit and sounds still land on arrival.
 				var attackState = boneAnimation[AttackAnimationName(ally)];
 				var originalAttackSpeed = attackState != null ? attackState.speed : 1f;
+				var elapsed = 0f;
 				if (attackState != null)
 				{
+					var skipped = (AttackMovementFrame - 0.5f) / AttackFps;
+					// Cover what is left of the wind-up in about one frame (at the last frame's length), a few frames at most.
+					for (var step = 0; step < 4 && attackState.time < skipped - 0.001f; step++)
+					{
+						attackState.speed = Mathf.Max(originalAttackSpeed / JumpSlowdown, (skipped - attackState.time) / Mathf.Max(Time.deltaTime, 1f / 60f));
+						yield return null;
+					}
 					attackState.speed = originalAttackSpeed / JumpSlowdown;
+					attackDuration = Mathf.Max(attackDuration - skipped * JumpSlowdown, 0f);
 				}
-				var elapsed = 0f;
 				while (!impacted && elapsed < pacing.FallBackTimeWaitForSkillImpact * JumpSlowdown)
 				{
 					elapsed += Time.deltaTime;
@@ -214,10 +271,13 @@ namespace ABH.GameDatas.Battle.Skills
 					DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(victim, battle, ally, true);
 				}
 				SpawnEffects(mgr, ally, attackEffects, VisualEffectSpawnTiming.Impact, victimList);
-				// His attack skill's steal (2 snoutlings, dropped from the victim).
+				// His class attack's steal: the snoutlings come from his costume's pickpocket passive (skin_merchant), which
+				// regular attacks apply per hit in AttackSkillTemplate. Dropped from the victim.
 				attackSkill.ShareableActionPart(battle, ally, victim, false);
+				PickPocketPassive.StealOnHit(battle, attackSkill, ally, victim);
 
-				// 2. Victim flinches; every pig turns around and is surprised; the birds are surprised (cheer at the castle); the ally cheers.
+				// 2. Victim flinches; every pig turns around and is surprised; the birds are surprised (cheer at the castle); the
+				// ally taunts the pigs the first time he turns on them, and cheers at the castle reunion.
 				var hitDuration = victimView.PlayHitAnimation();
 				yield return new WaitForSeconds(Mathf.Max(hitDuration, attackDuration - elapsed));
 				if (attackState != null)
@@ -236,8 +296,18 @@ namespace ABH.GameDatas.Battle.Skills
 					surprisedDuration = Mathf.Max(surprisedDuration, m_CastleReunion ? bird.CombatantView.PlayCheerCharacter() : bird.CombatantView.PlaySurprisedAnimation());
 				}
 				yield return new WaitForSeconds(surprisedDuration);
-				var allyCheerDuration = view.PlayCheerCharacter();
-				PlayRigSound(view, "PlaySound_Attack_1");
+				float allyCheerDuration;
+				if (!m_CastleReunion && view.m_AssetController.GetPlayTauntAnimationLength() > 0f)
+				{
+					// The Taunt clip plays its own PlaySound_Taunt.
+					view.m_AssetController.PlayTauntAnim();
+					allyCheerDuration = view.m_AssetController.GetPlayTauntAnimationLength();
+				}
+				else
+				{
+					allyCheerDuration = view.PlayCheerCharacter();
+					PlayRigSound(view, "PlaySound_Attack_1");
+				}
 				yield return new WaitForSeconds(allyCheerDuration);
 			}
 

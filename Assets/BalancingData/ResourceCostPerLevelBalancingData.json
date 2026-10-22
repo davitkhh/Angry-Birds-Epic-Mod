@@ -7369,5 +7369,18 @@
     "ThirdMaterialAmount": 0,
     "FallbackItemName": "gold",
     "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_class_lightningbird_01",
+    "Level": 1,
+    "AppliedItemNameId": "upgrade_class_lightningbird",
+    "FirstMaterialNameId": "resource_wood",
+    "FirstMaterialAmount": 8,
+    "SecondMaterialNameId": "resource_stone",
+    "SecondMaterialAmount": 6,
+    "ThirdMaterialNameId": "resource_flotsam",
+    "ThirdMaterialAmount": 4,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
   }
 ]

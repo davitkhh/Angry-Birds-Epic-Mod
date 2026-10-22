@@ -58,6 +58,9 @@ public class BattlePreperationUI : MonoBehaviour
 	[SerializeField]
 	private Animation m_PresetButtonAnimation;
 
+	// Whether the presets button swung in on this visit (it stays tucked away until presets unlock).
+	private bool m_PresetButtonShown;
+
 	[SerializeField]
 	private GameObject m_SponsoredBuffRootLarge;
 
@@ -411,6 +414,10 @@ public class BattlePreperationUI : MonoBehaviour
 	// Same hand-off as the class manager: hide this screen (keeping the window backdrop), come back with fresh birds.
 	private void OpenEquipmentPresets()
 	{
+		if (!m_PresetButtonShown)
+		{
+			return;
+		}
 		Leave(true);
 		EquipmentPresetWindowUI.Open(delegate
 		{
@@ -1435,7 +1442,8 @@ public class BattlePreperationUI : MonoBehaviour
 			StartCoroutine(CreatePreviewPigs());
 		}
 		m_classChangeButtonAnimation.Play("BackButton_Enter");
-		if (m_PresetButtonAnimation)
+		m_PresetButtonShown = m_PresetButtonAnimation && EquipmentPresets.IsUnlocked;
+		if (m_PresetButtonShown)
 		{
 			m_PresetButtonAnimation.Play("BackButton_Enter");
 		}
@@ -1905,8 +1913,9 @@ public class BattlePreperationUI : MonoBehaviour
 			ShowAddFriendBirdButton(false);
 		}
 		m_classChangeButtonAnimation.Play("BackButton_Leave");
-		if (m_PresetButtonAnimation)
+		if (m_PresetButtonShown)
 		{
+			m_PresetButtonShown = false;
 			m_PresetButtonAnimation.Play("BackButton_Leave");
 		}
 		if (!forClassMgr)

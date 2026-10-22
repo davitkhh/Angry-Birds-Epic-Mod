@@ -78,7 +78,7 @@ namespace ABH.GameDatas.Battle.Skills
 				}
 				var orderTarget = possibleEnemies[Random.Range(0, possibleEnemies.Count)];
 				var skill = skillTarget.GetSkills().FirstOrDefault(s => s.Model.Balancing.TargetType == SkillTargetTypes.Attack);
-				if (skill != null)
+				if (skill != null && Ammo.CanAfford(skillTarget, skill))
 				{
 					m_copy = null;
 					if (m_SpawnImage)
@@ -120,6 +120,7 @@ namespace ABH.GameDatas.Battle.Skills
 					{
 						yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForPigToChooseTargetAndDoSkillInSec);
 					}
+					Ammo.OnSkillStarted(skillTarget, skill);
 					yield return skillTarget.CombatantView.StartCoroutine(skill.DoAction(battle, skillTarget, orderTarget));
 					skillTarget.IsAttacking = false;
 					if (skillTarget.CombatantView.m_AssetController)

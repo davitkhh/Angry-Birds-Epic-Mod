@@ -452,7 +452,7 @@
     "AssetId": "MerchantPig",
     "LocaId": "bird_merchant",
     "DefaultInventoryNameId": "bird_merchant",
-    "BaseHealth": 65,
+    "BaseHealth": 78,
     "BaseAttack": 14,
     "PerLevelHealth": 20,
     "PerLevelAttack": 20,

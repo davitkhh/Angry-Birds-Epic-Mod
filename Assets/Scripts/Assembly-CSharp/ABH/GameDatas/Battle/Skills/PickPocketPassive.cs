@@ -62,8 +62,19 @@ namespace ABH.GameDatas.Battle.Skills
 				return 0;
 			}
 			var phatLoot = UpgradeBlueprints.FindEquippedPerk(thief, PerkType.PhatLoot);
-			return (int)(coins * (phatLoot == null ? 1f : phatLoot.PerkValue2));
+			var stolen = (int)(coins * (phatLoot == null ? 1f : phatLoot.PerkValue2));
+			var bird = thief.CharacterModel as BirdGameData;
+			if (bird != null && bird.BalancingData.NameId == FirstBetrayalNameId)
+			{
+				stolen = Mathf.Min(stolen, FirstBetrayalMaxCoins);
+			}
+			return stolen;
 		}
+
+		// Piggy McCool after his first betrayal (the Corporal's return, Phat Loot included) steals at most this many per hit.
+		private const string FirstBetrayalNameId = "bird_merchant_mcpig";
+
+		private const int FirstBetrayalMaxCoins = 3;
 
 		// Snoutlings that actually drop per hit, after every perk.
 		public static int GetPocketedCoins(ICombatant thief, float extraCoins = 0f)

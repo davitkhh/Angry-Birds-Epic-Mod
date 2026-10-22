@@ -1681,5 +1681,16 @@
       "ingredient_green_truffle": 1
     },
     "RecipeCategoryType": "Ingredients"
+  },
+  {
+    "NameId": "upgrade_class_lightningbird",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_class_lightningbird",
+    "LocaBaseId": "upgrade_class_lightningbird",
+    "SortPriority": 1,
+    "ResultLoot": {
+      "class_lightningbird": 1
+    },
+    "RecipeCategoryType": "MainHandEquipment"
   }
 ]

@@ -60,12 +60,12 @@ public static class UpgradeStatChangeView
 			row.transform.localRotation = Quaternion.identity;
 			row.transform.localScale = Vector3.one;
 			var x = 0f;
-			x = AddIcon(row.transform, atlas, change.OldIcon, x, depth);
+			x = AddIcon(row.transform, GetAtlas(change.OldAtlas), change.OldIcon, x, depth);
 			x = AddValue(row.transform, style, change.OldValue, style.color, x, depth);
 			x += Gap;
 			x = AddArrow(row.transform, atlas, x, depth);
 			x += Gap;
-			x = AddIcon(row.transform, atlas, change.NewIcon, x, depth);
+			x = AddIcon(row.transform, GetAtlas(change.NewAtlas), change.NewIcon, x, depth);
 			x = AddValue(row.transform, style, change.NewValue, NewValueColor, x, depth);
 			var rowX = centered ? -x * 0.5f : 0f;
 			row.transform.localPosition = new Vector3(rowX, -RowHeight * (i + 0.5f), 0f);
@@ -221,8 +221,11 @@ public static class UpgradeStatChangeView
 		sprite.atlas = atlas;
 		sprite.spriteName = spriteName;
 		sprite.depth = depth;
-		sprite.width = (int)IconSize;
-		sprite.height = (int)IconSize;
+		// Fit inside IconSize keeping the sprite's aspect (skill icons from other atlases need not be square)
+		var data = atlas.GetSprite(spriteName);
+		var aspect = data.height > 0 ? (float)data.width / data.height : 1f;
+		sprite.width = Mathf.RoundToInt(aspect >= 1f ? IconSize : IconSize * aspect);
+		sprite.height = Mathf.RoundToInt(aspect >= 1f ? IconSize / aspect : IconSize);
 		return x + IconSize + Gap * 0.5f;
 	}
 
@@ -287,5 +290,18 @@ public static class UpgradeStatChangeView
 			s_Atlas = Resources.FindObjectsOfTypeAll<UIAtlas>().FirstOrDefault(a => a.name == "GenericElements" && a.GetSprite("UpgradeArrow") != null);
 		}
 		return s_Atlas;
+	}
+
+	// Another icon atlas (e.g. a skill's IconAtlasId); null or unknown falls back to GenericElements
+	private static UIAtlas GetAtlas(string atlasName)
+	{
+		if (string.IsNullOrEmpty(atlasName) || atlasName == "GenericElements")
+		{
+			return GetAtlas();
+		}
+		var provider = DIContainerInfrastructure.GetGenericIconAtlasAssetProvider();
+		var atlasObject = provider.ContainsAsset(atlasName) ? provider.GetObject(atlasName) as GameObject : null;
+		var atlas = atlasObject != null ? atlasObject.GetComponent<UIAtlas>() : null;
+		return atlas != null ? atlas : GetAtlas();
 	}
 }

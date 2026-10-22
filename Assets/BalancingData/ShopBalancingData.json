@@ -27,10 +27,11 @@
   },
   {
     "NameId": "workshop_001",
-    "Slots": 2,
+    "Slots": 3,
     "Categories": [
       "shop_01_offhand_red",
-      "shop_01_offhand_yellow"
+      "shop_01_offhand_yellow",
+      "shop_01_upgrade_yellow"
     ],
     "AssetId": "",
     "LocaId": "",

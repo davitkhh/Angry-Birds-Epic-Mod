@@ -171,7 +171,7 @@ public class ShopOfferBlindBase : MonoBehaviour
 		{
 			DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.ShowItemOverlay(base.transform, m_Items, m_Model, true);
 		}
-		else if (m_Item != null)
+		else if (m_Item != null && !DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.TryShowShopItemOverlay(base.transform, m_Item, true))
 		{
 			DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.ShowItemOverlay(base.transform, m_Item, true, false);
 		}

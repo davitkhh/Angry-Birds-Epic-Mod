@@ -4407,7 +4407,7 @@
     "NameId": "pig_knight_guard_yellow",
     "AssetId": "PigKnightYellow",
     "LocaId": "pig_knight_guard_captain",
-    "DefaultInventoryNameId": "",
+    "DefaultInventoryNameId": "pig_knight_guard_yellow_01",
     "BaseHealth": 240,
     "BaseAttack": 9,
     "PerLevelHealth": 0,
@@ -5248,7 +5248,7 @@
         "ComboChain": [
           "pig_attack_merchant_corporal",
           "pig_attack_merchant_corporal",
-          "pig_support_merchant_corporal",
+          "pig_attack_merchant_corporal",
           "pig_support_merchant_corporal"
         ]
       }
@@ -5282,7 +5282,7 @@
       {
         "Percentage": 100.0,
         "ComboChain": [
-          "pig_support_merchant_corporal_castle",
+          "pig_attack_merchant_corporal",
           "pig_support_merchant_corporal_castle"
         ]
       }

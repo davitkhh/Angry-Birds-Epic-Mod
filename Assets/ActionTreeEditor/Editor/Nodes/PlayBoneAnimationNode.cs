@@ -49,6 +49,11 @@ namespace ActionTreeEditor.Nodes
                 new GUIContent("Random start point", "Starts the clip at a random point, e.g. to put a crowd's walk cycles out of step."),
                 Node.customBool2
             );
+
+            Node.customFloat2 = EditorGUILayout.FloatField(
+                new GUIContent("Start at (s)", "Starts the clip this many seconds in, e.g. to skip a wind-up. 0 plays it from the start."),
+                Node.customFloat2
+            );
         }
 
         protected override Rect GetDefaultNodeSize()

@@ -85,6 +85,9 @@ public class InfoOverlayMgr : MonoBehaviour
 	[SerializeField]
 	private float m_DisableBlockerDelay = 0.25f;
 
+	// Created from m_EquipmentOverlay on first use
+	private ShopItemInfoOverlay m_ShopItemOverlay;
+
 	private void Awake()
 	{
 		base.transform.parent = DIContainerInfrastructure.GetCoreStateMgr().m_GenericInterfaceRoot;
@@ -435,6 +438,28 @@ public class InfoOverlayMgr : MonoBehaviour
 		}
 	}
 
+	// Shop tiles: gear and (upgrade) blueprints show name, stats per star, perks and recipe. False for other items.
+	internal bool TryShowShopItemOverlay(Transform root, IInventoryItemGameData item, bool interfaceCam)
+	{
+		if (item == null || m_EquipmentOverlay == null)
+		{
+			return false;
+		}
+		var info = ShopItemInfo.Create(item);
+		if (info == null)
+		{
+			return false;
+		}
+		if (m_ShopItemOverlay == null)
+		{
+			m_ShopItemOverlay = ShopItemInfoOverlay.Create(m_EquipmentOverlay, DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera);
+		}
+		var camera = AdjustToCamera(interfaceCam);
+		m_ShopItemOverlay.gameObject.SetActive(true);
+		m_ShopItemOverlay.Show(root, camera, info);
+		return true;
+	}
+
 	internal void ShowItemOverlay(Transform root, List<IInventoryItemGameData> items, BasicShopOfferBalancingData balancingData, bool interfaceCam, int levelreq = 0)
 	{
 		var orientatedCamera = AdjustToCamera(interfaceCam);
@@ -646,7 +671,37 @@ public class InfoOverlayMgr : MonoBehaviour
 		}
 		SetDragControllerActive(false);
 		m_InputBlocker.SetActive(true);
+		RaiseAboveOtherPanels();
 		return m_ReferencedCamera;
+	}
+
+	// NGUI draws panels by depth across the whole UI, and some windows (e.g. the world shop's offer list) have panels
+	// deeper than this one, which drew them over the tooltips. Raise this panel above every panel outside it.
+	private void RaiseAboveOtherPanels()
+	{
+		var panel = NGUITools.FindInParents<UIPanel>(m_EquipmentOverlay != null ? m_EquipmentOverlay.gameObject : gameObject);
+		if (panel == null)
+		{
+			return;
+		}
+		var top = int.MinValue;
+		foreach (var other in UIPanel.list)
+		{
+			if (other != panel && other.gameObject.layer == panel.gameObject.layer && !other.transform.IsChildOf(panel.transform))
+			{
+				top = Mathf.Max(top, other.depth);
+			}
+		}
+		if (top == int.MinValue || panel.depth > top)
+		{
+			return;
+		}
+		// Panels inside the overlays (depth is global, not relative to the parent panel) move up with it
+		var shift = top + 1 - panel.depth;
+		foreach (var child in panel.GetComponentsInChildren<UIPanel>(true))
+		{
+			child.depth += shift;
+		}
 	}
 
 	public void HideAllTooltips()
@@ -684,6 +739,10 @@ public class InfoOverlayMgr : MonoBehaviour
 		m_DailyObjectiveOverlay.Hide();
 		m_TrophyOverlay.Hide();
 		m_ChestOverlay.Hide();
+		if (m_ShopItemOverlay != null)
+		{
+			m_ShopItemOverlay.Hide();
+		}
 		var camera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
 		if (camera)
 		{
@@ -720,6 +779,10 @@ public class InfoOverlayMgr : MonoBehaviour
 		m_EmblemSetItemOverlay.gameObject.SetActive(false);
 		m_DailyObjectiveOverlay.gameObject.SetActive(false);
 		m_TrophyOverlay.gameObject.SetActive(false);
+		if (m_ShopItemOverlay != null)
+		{
+			m_ShopItemOverlay.gameObject.SetActive(false);
+		}
 		var camera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
 		if (camera)
 		{

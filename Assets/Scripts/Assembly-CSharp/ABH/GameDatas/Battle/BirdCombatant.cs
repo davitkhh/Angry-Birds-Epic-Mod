@@ -245,7 +245,7 @@ namespace ABH.GameDatas.Battle
 			{
 				AddBattleSkillImpl(ApplySetChargeReduction(ApplyDynamitePerk(!m_pvpBird ? Model.ClassItem.PrimarySkill : Model.ClassItem.PrimaryPvPSkill)));
 				AddBattleSkillImpl(ApplySetChargeReduction(ApplySupportPerk(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill)));
-				AddBattleSkillImpl(ApplySetChargeReduction(!m_pvpBird ? Model.RageSkill : Model.PvPRageSkill));
+				AddBattleSkillImpl(ApplySetChargeReduction(ApplyRageUpgrades(!m_pvpBird ? Model.RageSkill : Model.PvPRageSkill)));
 				if (Model.PassiveSkill != null)
 					AddBattleSkillImpl(Model.PassiveSkill);
 			}
@@ -279,6 +279,35 @@ namespace ABH.GameDatas.Battle
 			var balancing = CloneSkillBalancing(support.Balancing);
 			balancing.EffectDuration = Mathf.RoundToInt(balancing.EffectDuration * factor);
 			return new SkillGameData(support.SkillNameId, parameters).OverrideBalancing(balancing);
+		}
+
+		// Upgrade blueprints on the class or equipped items can raise rage skill parameters (e.g. +1 Speed of Light
+		// attack_count). Per-bird copy, like ApplySupportPerk: the bird's SkillGameData is cached and reused.
+		private SkillGameData ApplyRageUpgrades(SkillGameData rage)
+		{
+			if (rage == null)
+			{
+				return null;
+			}
+			var bonuses = UpgradeBlueprints.GetRageSkillBonuses(Model);
+			var parameters = new Dictionary<string, float>(rage.SkillParameters);
+			var changed = false;
+			foreach (var pair in bonuses)
+			{
+				float value;
+				if (parameters.TryGetValue(pair.Key, out value))
+				{
+					parameters[pair.Key] = value + pair.Value;
+					changed = true;
+				}
+			}
+			if (!changed)
+			{
+				return rage;
+			}
+			var balancing = CloneSkillBalancing(rage.Balancing);
+			balancing.SkillParameters = parameters;
+			return new SkillGameData(rage.Balancing.NameId, parameters).OverrideBalancing(balancing);
 		}
 
 		// Dynamite main hands turn the class attack into DynamiteThrowSkillId (a ThrowMainHandAttack like the Dynamite

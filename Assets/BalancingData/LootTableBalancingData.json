@@ -10542,6 +10542,86 @@
     "LocaId": ""
   },
   {
+    "NameId": "battle_southbeach_02_noshield",
+    "LootTableEntries": [
+      {
+        "NameId": "resource_flotsam",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_hot_tomato",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "resource_flotsam",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_vial",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "resource_flotsam",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_hot_tomato",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "resource_flotsam",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_vial",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      }
+    ],
+    "Type": "WheelForced",
+    "PrefabId": "",
+    "LocaId": ""
+  },
+  {
     "NameId": "battle_seashell",
     "LootTableEntries": [
       {

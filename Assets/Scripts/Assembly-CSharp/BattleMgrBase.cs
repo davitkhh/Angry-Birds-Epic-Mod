@@ -715,7 +715,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			m_CharactersPerRow[1].Add(ccontr9);
 			m_Rows[1].Add(position7);
 		}
-		else
+		else if (!CollectForcedRows(m_Characters, m_CharactersPerRow, m_Rows, m_RowBounds))
 		{
 			CollectExtents(m_Characters, m_CharactersPerRow, m_Rows, maxDistance, row, minOffset, m_RowBounds);
 		}
@@ -873,6 +873,65 @@ public abstract class BattleMgrBase : MonoBehaviour
 				nearest.transform.position = centerTransform.position + freedSlot;
 			}
 		}
+	}
+
+	// Hand-picked formations: when a faction contains a trigger pig, the listed pigs go to the given row and everyone else
+	// (including pigs summoned mid-battle) stays in the front row. Rows are not height-limited here.
+	private static readonly Dictionary<string, Dictionary<string, int>> ForcedPigRows = new Dictionary<string, Dictionary<string, int>>
+	{
+		// First Prince Porky encounter (bpart_011): guards in front, rogue leader with Porky and the bird catcher behind.
+		{
+			"pig_prince_porky_firstencounter",
+			new Dictionary<string, int>
+			{
+				{ "pig_minion_rogue_leader", 1 },
+				{ "pig_prince_porky_firstencounter", 1 },
+				{ "pig_minion_bird_catcher", 1 }
+			}
+		}
+	};
+
+	private static bool CollectForcedRows(List<CharacterControllerBattleGroundBase> m_Characters, List<List<CharacterControllerBattleGroundBase>> m_CharactersPerRow, List<List<Rect>> m_Rows, List<Vector3> m_RowBounds)
+	{
+		var nameIds = m_Characters.Select(c => c.GetModel().CombatantNameId).ToList();
+		var trigger = ForcedPigRows.Keys.FirstOrDefault(nameIds.Contains);
+		if (trigger == null)
+		{
+			return false;
+		}
+		var forcedRows = ForcedPigRows[trigger];
+		var rowCount = forcedRows.Values.Max() + 1;
+		for (var r = 0; r < rowCount; r++)
+		{
+			m_Rows.Add(new List<Rect>());
+			m_RowBounds.Add(Vector3.zero);
+			m_CharactersPerRow.Add(new List<CharacterControllerBattleGroundBase>());
+		}
+		for (var i = 0; i < m_Characters.Count; i++)
+		{
+			var character = m_Characters[i];
+			int row;
+			if (!forcedRows.TryGetValue(nameIds[i], out row))
+			{
+				row = 0;
+			}
+			m_RowBounds[row] += new Vector3(0f, character.Size.y, 0f);
+			m_RowBounds[row] = new Vector3(Mathf.Max(m_RowBounds[row].x, character.Size.x), m_RowBounds[row].y, 0f);
+			var item = new Rect(0f - character.Extents.x, 0f - (m_RowBounds[row].y - character.Extents.y + character.Center.y), character.Size.x, character.Size.y);
+			m_CharactersPerRow[row].Add(character);
+			m_Rows[row].Add(item);
+		}
+		// Drop rows left empty (e.g. every front-row pig defeated) so the remaining rows close up.
+		for (var r = m_CharactersPerRow.Count - 1; r >= 0; r--)
+		{
+			if (m_CharactersPerRow[r].Count == 0)
+			{
+				m_CharactersPerRow.RemoveAt(r);
+				m_Rows.RemoveAt(r);
+				m_RowBounds.RemoveAt(r);
+			}
+		}
+		return true;
 	}
 
 	private static int CollectExtents(List<CharacterControllerBattleGroundBase> m_Characters, List<List<CharacterControllerBattleGroundBase>> m_CharactersPerRow, List<List<Rect>> m_Rows, float maxDistance, int row, float minOffset, List<Vector3> m_RowBounds)

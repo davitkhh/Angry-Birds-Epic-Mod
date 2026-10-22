@@ -263,6 +263,9 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 
 	private InventoryItemSlot m_SelectedSlot;
 
+	// An item is flying from the strip to the bird; the lineup, saving and leaving wait for it.
+	private bool m_EquipFlying;
+
 	// The allies in the edited lineup, left to right.
 	private readonly List<LineupAlly> m_Allies = new List<LineupAlly>();
 
@@ -1066,7 +1069,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	// Tap an excluded bird to add it; tap an included bird to show its gear; tap the bird already shown to drop it.
 	private void OnLineupTapped(BattlePrepCharacterButton button)
 	{
-		if (IsAllyPickerOpen)
+		if (IsAllyPickerOpen || m_EquipFlying)
 		{
 			return;
 		}
@@ -1116,7 +1119,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	// One candidate joins straight away; with several the player picks one.
 	private void OnAddAllyClicked()
 	{
-		if (m_Transitioning || m_Leaving || IsAllyPickerOpen)
+		if (m_Transitioning || m_Leaving || IsAllyPickerOpen || m_EquipFlying)
 		{
 			return;
 		}
@@ -1251,7 +1254,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	private void OnAllyTapped(BattlePrepCharacterButton button)
 	{
 		var ally = FindAlly(button.GetBirdGameData());
-		if (ally == null || IsAllyPickerOpen)
+		if (ally == null || IsAllyPickerOpen || m_EquipFlying)
 		{
 			return;
 		}
@@ -1452,11 +1455,41 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 	private void OnSlotUsed(InventoryItemSlot slot)
 	{
 		var item = slot.GetModel();
-		if (m_FocusedBird == null || item == null || EquipmentPresets.IsEquipped(m_FocusedBird, m_CurrentType, EquipmentPresets.ItemRef(item)))
+		if (m_EquipFlying || m_FocusedBird == null || item == null || EquipmentPresets.IsEquipped(m_FocusedBird, m_CurrentType, EquipmentPresets.ItemRef(item)))
 		{
 			return;
 		}
-		EquipmentPresets.EquipPreview(m_FocusedBird, m_CurrentType, item);
+		slot.SetUsed(true);
+		StartCoroutine(EquipBySwipe(slot, item));
+	}
+
+	// Like the bird manager's SelectSlotBySwipe: the item flies from the strip onto the bird (hand or head), gets put on,
+	// and the bird looks at it (or cheers for a new class). Switching birds waits for the flight.
+	private IEnumerator EquipBySwipe(InventoryItemSlot slot, IInventoryItemGameData item)
+	{
+		var bird = m_FocusedBird;
+		var type = m_CurrentType;
+		var button = FindLineupButton(bird);
+		var assets = button != null && button.Controller != null ? button.Controller.m_AssetController : null;
+		Transform bone = null;
+		if (assets != null)
+		{
+			bone = type == InventoryItemType.MainHandEquipment ? assets.MainHandBone : (type == InventoryItemType.OffHandEquipment ? assets.OffHandBone : assets.HeadGearBone);
+		}
+		if (bone != null)
+		{
+			m_EquipFlying = true;
+			yield return new WaitForSeconds(slot.FlyToTransform(bone, Vector3.zero));
+		}
+		yield return new WaitForEndOfFrame();
+		m_EquipFlying = false;
+		// The bird manager drops the swipe the same way when the strip changed under it (another tab picked mid-flight).
+		if (!slot || slot.GetModel() != item || m_CurrentType != type || m_FocusedBird != bird)
+		{
+			yield break;
+		}
+		slot.ResetFromFly();
+		EquipmentPresets.EquipPreview(bird, type, item);
 		if (m_SelectedSlot != null)
 		{
 			m_SelectedSlot.Deselect();
@@ -1467,11 +1500,36 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 		{
 			other.RefreshStat();
 		}
+		// A new class rebuilds the bird's rig, so react on whatever asset controller it has a frame later.
+		yield return new WaitForEndOfFrame();
+		assets = button != null && button.Controller != null ? button.Controller.m_AssetController : null;
+		if (assets == null)
+		{
+			yield break;
+		}
+		switch (type)
+		{
+		case InventoryItemType.Class:
+			assets.PlayCheerAnim();
+			break;
+		case InventoryItemType.MainHandEquipment:
+			assets.PlayFocusWeaponAnimation();
+			break;
+		case InventoryItemType.OffHandEquipment:
+			assets.PlayFocusOffHandAnimation();
+			break;
+		}
+	}
+
+	private BattlePrepCharacterButton FindLineupButton(BirdGameData bird)
+	{
+		var ally = FindAlly(bird);
+		return ally != null ? ally.Button : m_Lineup.FirstOrDefault(b => b.GetBirdGameData() == bird);
 	}
 
 	private void OnBackClicked()
 	{
-		if (m_Transitioning || m_Leaving)
+		if (m_Transitioning || m_Leaving || m_EquipFlying)
 		{
 			return;
 		}
@@ -1516,7 +1574,7 @@ public class EquipmentPresetWindowUI : MonoBehaviour
 
 	private void OnSaveClicked()
 	{
-		if (m_Transitioning || m_Leaving)
+		if (m_Transitioning || m_Leaving || m_EquipFlying)
 		{
 			return;
 		}

@@ -1206,6 +1206,15 @@
     "InitializingLevel": 0
   },
   {
+    "NameId": "pig_knight_guard_yellow_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_knight_guardcaptain_mace_01": 1,
+      "pig_offhand_knight_guardcaptain_shield_01": 1,
+      "headgear_guardcaptain_yellow": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
     "NameId": "pig_knight_roseknight_01",
     "DefaultInventoryContent": {
       "pig_weapon_knight_roseknight_01": 1,

@@ -34,6 +34,10 @@ public class CharacterControlHUD : MonoBehaviour
 	[SerializeField]
 	private Color m_neutraColor;
 
+	// Marker colour over a target the skill lacks the ammo for
+	[SerializeField]
+	private Color m_noAmmoColor = new Color(0.9019608f, 0f, 0f, 1f);
+
 	private Material m_groupSharedMaterial;
 
 	private Quaternion m_BaseRotation;
@@ -86,7 +90,7 @@ public class CharacterControlHUD : MonoBehaviour
 		}
 	}
 
-	public void SetState(Transform sourceTransform, CharacterControllerBattleGroundBase target, Vector3 targetP, BattleMgrBase battleMgr, bool isInvalidTarget = false)
+	public void SetState(Transform sourceTransform, CharacterControllerBattleGroundBase target, Vector3 targetP, BattleMgrBase battleMgr, bool isInvalidTarget = false, bool noAmmo = false)
 	{
 		var flag = target != null;
 		if (m_CachedTargetCharacter && m_CachedTargetCharacter != target && m_CachedTargetCharacter.GetControlHUD() && !battleMgr.CharacterIsActing(m_CachedTargetCharacter.GetModel().CombatantNameId))
@@ -101,7 +105,11 @@ public class CharacterControlHUD : MonoBehaviour
 		{
 			targetPos = new Vector3(targetPos.x, Mathf.Min(targetPos.y, battleMgr.m_UpperBorder.position.y), Mathf.Min(targetPos.z, battleMgr.m_UpperBorder.position.z));
 		}
-		if (faction == Faction.Birds && !isInvalidTarget)
+		if (noAmmo && flag)
+		{
+			m_groupSharedMaterial.color = m_noAmmoColor;
+		}
+		else if (faction == Faction.Birds && !isInvalidTarget)
 		{
 			m_groupSharedMaterial.color = m_supportColor;
 		}

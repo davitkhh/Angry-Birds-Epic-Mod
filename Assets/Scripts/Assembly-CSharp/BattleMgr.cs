@@ -419,6 +419,14 @@ public class BattleMgr : BattleMgrBase
 		}
 	}
 
+	// Per-turn effects worth pausing for at turn start (DoTs, heals...). Summon timers (e.g. the guards'
+	// Bird Catcher call) tick every turn without showing anything - the summon itself runs later with its
+	// own pacing - so they don't add the TimeForFocusInituativeAndDOTS wait.
+	private static bool IsVisiblePerTurnEffect(ABH.Shared.Models.Generic.BattleEffect effect)
+	{
+		return effect.EffectTrigger == EffectTriggerType.OnDealDamagePerTurn && effect.EffectType != BattleEffectType.SummonCombatant && effect.EffectType != BattleEffectType.SummonCombatantHealthGated;
+	}
+
 	// Walk-in speed for summons when several are queued on the same turn, so the queue doesn't drag on.
 	private const float QueuedSummonEnterSpeedMultiplier = 2f;
 
@@ -1094,7 +1102,7 @@ public class BattleMgr : BattleMgrBase
 			}
 			for (var l = 0; l < birdsCopy.Count; l++)
 			{
-				if (birdsCopy[l].CurrrentEffects.Values.Any(e => e.m_Effects.Any(ef => ef.EffectTrigger == EffectTriggerType.OnDealDamagePerTurn)))
+				if (birdsCopy[l].CurrrentEffects.Values.Any(e => e.m_Effects.Any(IsVisiblePerTurnEffect)))
 				{
 					waitTimeBirds = DIContainerLogic.GetPacingBalancing().TimeForFocusInituativeAndDOTS;
 					break;
@@ -1209,7 +1217,7 @@ public class BattleMgr : BattleMgrBase
 			}
 			foreach (var combatant in base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Pigs))
 			{
-				if (combatant is PigCombatant && combatant.CurrrentEffects.Values.Any(e => e.m_Effects.Any(ef => ef.EffectTrigger == EffectTriggerType.OnDealDamagePerTurn)))
+				if (combatant is PigCombatant && combatant.CurrrentEffects.Values.Any(e => e.m_Effects.Any(IsVisiblePerTurnEffect)))
 				{
 					waitTime = DIContainerLogic.GetPacingBalancing().TimeForFocusInituativeAndDOTS;
 					break;
