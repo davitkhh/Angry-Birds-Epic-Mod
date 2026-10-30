@@ -237,7 +237,7 @@
     "UseProgressIndicator": false,
     "AutoSpawnBirds": true,
     "CountForStars": true,
-    "MaxLevel": 1
+    "MaxLevel": 0
   },
   {
     "NameId": "hotspot_006_01_battleground",

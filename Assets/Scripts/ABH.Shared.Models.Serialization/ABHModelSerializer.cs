@@ -21446,10 +21446,22 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteBoolean(num5 != 0, _param1);
     }
     var pvpSetItemSkill = _param0.PvpSetItemSkill;
-    if (pvpSetItemSkill == null)
-      return;
-    ProtoWriter.WriteFieldHeader(25, WireType.String, _param1);
-    ProtoWriter.WriteString(pvpSetItemSkill, _param1);
+    if (pvpSetItemSkill != null)
+    {
+      ProtoWriter.WriteFieldHeader(25, WireType.String, _param1);
+      ProtoWriter.WriteString(pvpSetItemSkill, _param1);
+    }
+    var weaponAttributes = _param0.WeaponAttributes;
+    if (weaponAttributes != null)
+    {
+      foreach (var keyValuePair in weaponAttributes)
+      {
+        ProtoWriter.WriteFieldHeader(26, WireType.String, _param1);
+        var token = ProtoWriter.StartSubItem((object) null, _param1);
+        ABHModelSerializer.Write(keyValuePair, _param1);
+        ProtoWriter.EndSubItem(token, _param1);
+      }
+    }
   }
 
   private static EquipmentBalancingData Read(EquipmentBalancingData _param0, ProtoReader _param1)
@@ -21884,6 +21896,25 @@ public sealed class ABHModelSerializer : TypeModel
             _param0.PvpSetItemSkill = str9;
             continue;
           }
+          continue;
+        case 26:
+          if (_param0 == null)
+          {
+            var equipmentBalancingData = new EquipmentBalancingData();
+            ProtoReader.NoteObject((object) equipmentBalancingData, _param1);
+            _param0 = equipmentBalancingData;
+          }
+          var weaponAttributes = _param0.WeaponAttributes ?? new Dictionary<string, float>();
+          var attributeField = _param1.FieldNumber;
+          do
+          {
+            var token = ProtoReader.StartSubItem(_param1);
+            var attribute = ABHModelSerializer.Read(new KeyValuePair<string, float>(), _param1);
+            ProtoReader.EndSubItem(token, _param1);
+            weaponAttributes[attribute.Key] = attribute.Value;
+          }
+          while (_param1.TryReadFieldHeader(attributeField));
+          _param0.WeaponAttributes = weaponAttributes;
           continue;
         default:
           if (_param0 == null)
@@ -30619,6 +30650,12 @@ public sealed class ABHModelSerializer : TypeModel
         case PerkType.Dynamite:
           ProtoWriter.WriteInt32(25, _param1);
           break;
+        case PerkType.GroundZero:
+          ProtoWriter.WriteInt32(26, _param1);
+          break;
+        case PerkType.Rally:
+          ProtoWriter.WriteInt32(27, _param1);
+          break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -30738,6 +30775,12 @@ public sealed class ABHModelSerializer : TypeModel
               break;
             case 25:
               perkType = PerkType.Dynamite;
+              break;
+            case 26:
+              perkType = PerkType.GroundZero;
+              break;
+            case 27:
+              perkType = PerkType.Rally;
               break;
             default:
               _param1.ThrowEnumException(typeof (PerkType), num2);
@@ -41607,6 +41650,12 @@ public sealed class ABHModelSerializer : TypeModel
       case PerkType.Dynamite:
         ProtoWriter.WriteInt32(25, _param1);
         break;
+      case PerkType.GroundZero:
+        ProtoWriter.WriteInt32(26, _param1);
+        break;
+      case PerkType.Rally:
+        ProtoWriter.WriteInt32(27, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -41696,6 +41745,12 @@ public sealed class ABHModelSerializer : TypeModel
         break;
       case 25:
         perkType = PerkType.Dynamite;
+        break;
+      case 26:
+        perkType = PerkType.GroundZero;
+        break;
+      case 27:
+        perkType = PerkType.Rally;
         break;
       default:
         _param1.ThrowEnumException(typeof (PerkType), num);

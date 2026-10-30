@@ -231,6 +231,17 @@
     "RecipeCategoryType": "MainHandEquipment"
   },
   {
+    "NameId": "recipe_weapon_red_sword_workshop",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "recipe_weapon_red_sword_02",
+    "LocaBaseId": "recipe_weapon_red_sword_02",
+    "SortPriority": 3,
+    "ResultLoot": {
+      "bird_weapon_red_sword_workshop": 1
+    },
+    "RecipeCategoryType": "MainHandEquipment"
+  },
+  {
     "NameId": "recipe_weapon_red_sword_03",
     "ItemType": "CraftingRecipes",
     "AssetBaseId": "recipe_weapon_red_sword_03",
@@ -304,6 +315,17 @@
     "SortPriority": 8,
     "ResultLoot": {
       "bird_weapon_red_lance_01": 1
+    },
+    "RecipeCategoryType": "MainHandEquipment"
+  },
+  {
+    "NameId": "recipe_weapon_red_lance_workshop",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "recipe_lance_01",
+    "LocaBaseId": "recipe_lance_01",
+    "SortPriority": 8,
+    "ResultLoot": {
+      "bird_weapon_red_lance_workshop": 1
     },
     "RecipeCategoryType": "MainHandEquipment"
   },

@@ -243,12 +243,15 @@ public class ShopItemInfoOverlay : MonoBehaviour
 		// Star counts only mean something when there is more than one row
 		var showStars = rows.Count > 1;
 		var width = 0f;
+		Transform baseRow = null;
+		var baseWidth = 0f;
 		for (var i = 0; i < rows.Count; i++)
 		{
 			var row = NewChild(parent, "Row_" + i);
 			row.localPosition = new Vector3(0f, -StatRowHeight * (i + 0.5f), 0f);
 			var x = 0f;
-			if (showStars)
+			// The base (0 star) row has no stars and is centred in the column below
+			if (showStars && i > 0)
 			{
 				for (var star = 0; star < 3; star++)
 				{
@@ -262,6 +265,15 @@ public class ShopItemInfoOverlay : MonoBehaviour
 			}
 			x = AddCells(row, rows[i], x, StatIconSize, m_TextStyle);
 			width = Mathf.Max(width, x);
+			if (i == 0)
+			{
+				baseRow = row;
+				baseWidth = x;
+			}
+		}
+		if (baseRow != null)
+		{
+			baseRow.localPosition += new Vector3((width - baseWidth) * 0.5f, 0f, 0f);
 		}
 		return new Vector2(width, StatRowHeight * rows.Count);
 	}

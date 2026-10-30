@@ -22,11 +22,20 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private bool m_Spawn;
 
+		private float m_ChargeMin;
+
+		private bool m_UseAmount;
+
+		private bool m_TableByQueuedCharge;
+
 		public override void Init(SkillGameData model)
 		{
 			base.Init(model);
 			base.Model.SkillParameters.TryGetValue("charge", out m_ChargeTurns);
+			base.Model.SkillParameters.TryGetValue("charge_min", out m_ChargeMin);
 			m_Spawn = base.Model.SkillParameters.ContainsKey("spawn");
+			m_UseAmount = base.Model.SkillParameters.ContainsKey("use_amount");
+			m_TableByQueuedCharge = base.Model.SkillParameters.TryGetValue("table_by_queued_charge", out var byQueued) && byQueued > 0f;
 			m_TableKey = base.Model.SkillParameters.Keys.FirstOrDefault();
 			base.Model.SkillParameters.TryGetValue(m_TableKey, out m_SummonedAmount);
 		}
@@ -43,6 +52,14 @@ namespace ABH.GameDatas.Battle.Skills
 			SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting);
 			yield return new WaitForSeconds(source.CombatantView.PlaySupportAnimation());
 			var waveBalancing = DIContainerBalancing.Service.GetBalancingData<BattleParticipantTableBalancingData>(m_TableKey);
+			// Random-length charges (charge_min) summon from "<table>_charge<turns>" when that table exists. Turns are the
+			// charge as rolled when table_by_queued_charge is 1, otherwise what it took after being shortened/delayed.
+			var chargeTurns = m_TableByQueuedCharge ? QueuedChargeDuration : FiredChargeDuration;
+			BattleParticipantTableBalancingData chargeTable;
+			if (m_ChargeMin > 0f && DIContainerBalancing.Service.TryGetBalancingData<BattleParticipantTableBalancingData>(m_TableKey + "_charge" + chargeTurns, out chargeTable))
+			{
+				waveBalancing = chargeTable;
+			}
 			var pigList = new List<PigGameData>();
 			foreach (var entry in waveBalancing.BattleParticipants)
 			{
@@ -57,7 +74,7 @@ namespace ABH.GameDatas.Battle.Skills
 			
 			piggies.AddRange(battle.m_CombatantsPerFaction[Faction.Pigs].Where(p => p.IsKnockedOut));
 			
-			var summonedList = DIContainerLogic.GetBattleService().GenerateSummonsWeighted(piggies, waveBalancing, battle, (int)m_SummonedAmount, maxPigsInBattle);
+			var summonedList = DIContainerLogic.GetBattleService().GenerateSummonsWeighted(piggies, waveBalancing, battle, (int)m_SummonedAmount, maxPigsInBattle, m_UseAmount);
 			foreach (var summon in summonedList)
 			{
 				if (!battle.m_CombatantsPerFaction.ContainsKey(summon.CombatantFaction))
@@ -101,6 +118,7 @@ namespace ABH.GameDatas.Battle.Skills
 			var dictionary = new Dictionary<string, string>();
 			dictionary.Add("{value_1}", string.Empty + m_SummonedAmount);
 			dictionary.Add("{value_2}", string.Empty + m_ChargeTurns);
+			dictionary.Add("{value_3}", string.Empty + m_ChargeMin);
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

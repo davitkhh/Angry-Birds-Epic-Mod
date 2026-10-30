@@ -214,7 +214,7 @@
       {
         "RequirementType": "PayItem",
         "NameId": "resource_wood",
-        "Value": 2
+        "Value": 1
       }
     ],
     "ShowRequirements": null,
@@ -452,7 +452,7 @@
     "ExclusiveOffer": false,
     "Level": 4,
     "OfferContents": {
-      "recipe_weapon_red_lance_01": 1,
+      "recipe_weapon_red_lance_workshop": 1,
       "story_workshop_fork_lance_bought": 1
     },
     "SortPriority": 1,
@@ -509,7 +509,7 @@
     "ExclusiveOffer": false,
     "Level": 4,
     "OfferContents": {
-      "recipe_weapon_red_sword_02": 1,
+      "recipe_weapon_red_sword_workshop": 1,
       "story_workshop_stick_sword_bought": 1
     },
     "SortPriority": 1,

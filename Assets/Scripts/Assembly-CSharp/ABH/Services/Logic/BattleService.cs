@@ -433,8 +433,10 @@ namespace ABH.Services.Logic
 			return Faction.None;
 		}
 
-		public List<ICombatant> GenerateSummonsWeighted(List<ICombatant> combatants, BattleParticipantTableBalancingData waveBalancing, BattleGameData battle, int count, int participantLimit)
+		// useAmount: count is the number of rolls, each adding its entry's Amount pigs (still capped by participantLimit)
+		public List<ICombatant> GenerateSummonsWeighted(List<ICombatant> combatants, BattleParticipantTableBalancingData waveBalancing, BattleGameData battle, int count, int participantLimit, bool useAmount = false)
 		{
+			var rolls = 0;
 			var list = new List<ICombatant>();
 			var list2 = GenerateWeightedPigGameDataList(waveBalancing.BattleParticipants, battle);
 			var maxRoll = GetMaxRoll(waveBalancing);
@@ -450,7 +452,7 @@ namespace ABH.Services.Logic
 			}
 			var strengthPoints = battle.Balancing.StrengthPoints;
 			var num2 = 0;
-			while (list.Count < count && list.Count + combatants.Count < participantLimit && num2 < 1000)
+			while ((useAmount ? rolls : list.Count) < count && list.Count + combatants.Count < participantLimit && num2 < 1000)
 			{
 				num2++;
 				var num3 = UnityEngine.Random.Range(0f, maxRoll);
@@ -464,9 +466,14 @@ namespace ABH.Services.Logic
 					num3 -= waveBalancing.BattleParticipants[j].Probability;
 					if (num3 <= 0f)
 					{
-						var piggd = new PigGameData(waveBalancing.BattleParticipants[j].NameId).SetDifficulties(battle.GetPlayerLevelForHotSpot(), battle.Balancing);
-						num += list2[j].BalancingData.PigStrength;
-						AddPigCombatant(list, piggd);
+						rolls++;
+						var amount = useAmount ? Mathf.Max(1, (int)waveBalancing.BattleParticipants[j].Amount) : 1;
+						for (var k = 0; k < amount && list.Count + combatants.Count < participantLimit; k++)
+						{
+							var piggd = new PigGameData(waveBalancing.BattleParticipants[j].NameId).SetDifficulties(battle.GetPlayerLevelForHotSpot(), battle.Balancing);
+							num += list2[j].BalancingData.PigStrength;
+							AddPigCombatant(list, piggd);
+						}
 						break;
 					}
 				}
@@ -1699,6 +1706,10 @@ namespace ABH.Services.Logic
 				{
 					ApplyEffectsOnTriggerType(num, EffectTriggerType.OnAllyDeath, item, source);
 				}
+				if (target.CurrentHealth > 0f)
+				{
+					Stinkeye.RegisterPirateDeath(battle, target);
+				}
 				ApplyEffectsOnTriggerType(num, EffectTriggerType.OnEnemyKnockedOut, target.m_LastDamageSource, target);
 			}
 			if (target.CombatantFaction == Faction.Pigs)
@@ -1710,7 +1721,13 @@ namespace ABH.Services.Logic
 				battle.m_AllPigDamageInCurrentTurn += num;
 			}
 			var flag = target.CurrentHealth > 0f;
+			var healthBefore = target.CurrentHealth;
 			target.CurrentHealth -= (float)num;
+			if (target.CurrentHealth <= 0f && flag)
+			{
+				Ammo.OnKill(source ?? target.m_LastDamageSource, target);
+			}
+			FullPockets.OnDamageTaken(battle, target, source, num, healthBefore);
 			if (target.CurrentHealth <= 0f && flag && battle.IsPvP)
 			{
 				var combatant = source;
@@ -1924,6 +1941,8 @@ namespace ABH.Services.Logic
 						EffectAtlasId = effectGameData.m_IconAtlasId
 					}
 				}, (int)num107, effectGameData.m_Battle, "Overpower", SkillEffectTypes.Curse, effectGameData.m_LocalizedName, effectGameData.m_SkillIdent);
+				// The curse comes from the blessing's caster (Stoneguard Red), not the blessed bird
+				battleEffectGameData17.m_AppliedBy = effectGameData.AppliedBy;
 				battleEffectGameData17.AddEffect();
 				effectGameData.EvaluateEffect();
 				return param;
@@ -4079,6 +4098,8 @@ namespace ABH.Services.Logic
 						EffectAtlasId = effectGameData.m_IconAtlasId
 					}
 				}, (int)num60, effectGameData.m_Battle, "Overpower", SkillEffectTypes.Curse, effectGameData.m_LocalizedName, effectGameData.m_SkillIdent);
+				// The curse comes from the blessing's caster (Stoneguard Red), not the blessed bird
+				battleEffectGameData5.m_AppliedBy = effectGameData.AppliedBy;
 				battleEffectGameData5.AddEffect();
 				effectGameData.EvaluateEffect();
 				return param;
@@ -4094,12 +4115,9 @@ namespace ABH.Services.Logic
 			});
 			
 			// DropGold
+			// Full Pockets: coins follow the health actually lost, so they drop in DealDamageFromCurrentTurn (FullPockets.OnDamageTaken)
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.DropGold, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
-				var num59 = 0;
-				num59 = !(effect.Values[0] >= effect.Values[1]) ? UnityEngine.Random.Range((int)effect.Values[0], (int)effect.Values[1] + 1) : (int)effect.Values[0];
-				effectGameData.EvaluateEffect();
-				DropStolenGold(effectGameData.m_Battle, effectGameData.m_Target, attacker, effectGameData.m_Target, num59, true);
 				return param;
 			});
 			
@@ -4376,7 +4394,18 @@ namespace ABH.Services.Logic
 				effectGameData.EvaluateEffect();
 				return param + effect.Values[0] / 100f;
 			});
-			
+
+			// Stinkeye: pirates deal bonus damage to the marked target; only blessed pirates until the mark is empowered
+			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.Stinkeye, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				if (!Stinkeye.IsPirate(attacker) || (!Stinkeye.IsEmpowered(effectGameData, effect) && !attacker.CurrrentEffects.Values.Any(e => e.m_EffectType == SkillEffectTypes.Blessing)))
+				{
+					return param;
+				}
+				effectGameData.EvaluateEffect();
+				return param + Stinkeye.GetBonusPercent(effectGameData, effect) / 100f;
+			});
+
 			// ReduceDamageReceived
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.ReduceDamageReceived, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -5339,7 +5368,7 @@ namespace ABH.Services.Logic
 					Func<float, BattleEffectGameData, BattleEffect, ICombatant, float> value = null;
 					if (battleEffect.EffectTrigger == triggerType && BattleEffectsByTriggerAndByType.ContainsKey(triggerType) && BattleEffectsByTriggerAndByType[triggerType].TryGetValue(battleEffect.EffectType, out value) && effectTypes.Contains(battleEffect.EffectType))
 					{
-						num = value(num, battleEffectGameData, battleEffect, target);
+						num = InvokeEffect(value, num, battleEffectGameData, battleEffect, target);
 						if (num != -1f)
 						{
 							battleEffectGameData.EvaluateEffect();
@@ -5348,6 +5377,55 @@ namespace ABH.Services.Logic
 				}
 			}
 			return num;
+		}
+
+		// Rally (Red's banner): effects with their strength in Values[0] (a percentage) that the wearer applied get PerkValue
+		// percentage points (25% -> 35%) when they involve him: on him (his own block), or on a hit between him and the
+		// effect's owner (his damage-taken curse on a pig he attacks, his damage-dealt curse on a pig that attacks him).
+		private static readonly HashSet<BattleEffectType> RallyEffectTypes = new HashSet<BattleEffectType>
+		{
+			BattleEffectType.IncreaseDamageReceived,
+			BattleEffectType.ReduceDamageReceived,
+			BattleEffectType.ReduceDamageReceivedIfSheltering,
+			BattleEffectType.ReduceDamageDealt,
+			BattleEffectType.ReduceDamageDealtAgainstSource
+		};
+
+		private float InvokeEffect(Func<float, BattleEffectGameData, BattleEffect, ICombatant, float> handler, float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant target)
+		{
+			var bonus = GetRallyBonus(effectGameData, effect, target);
+			if (bonus == 0f)
+			{
+				return handler(param, effectGameData, effect, target);
+			}
+			// Values can be shared with copies of the effect, so swap in a boosted list for this call only
+			var values = effect.Values;
+			var boosted = new List<float>(values);
+			boosted[0] += bonus;
+			effect.Values = boosted;
+			try
+			{
+				return handler(param, effectGameData, effect, target);
+			}
+			finally
+			{
+				effect.Values = values;
+			}
+		}
+
+		private static float GetRallyBonus(BattleEffectGameData effectGameData, BattleEffect effect, ICombatant target)
+		{
+			var source = effectGameData.AppliedBy;
+			if (source == null || !RallyEffectTypes.Contains(effect.EffectType) || effect.Values == null || effect.Values.Count == 0)
+			{
+				return 0f;
+			}
+			if (effectGameData.m_Target != source && target != source)
+			{
+				return 0f;
+			}
+			var perk = UpgradeBlueprints.FindEquippedPerk(source, PerkType.Rally);
+			return perk == null ? 0f : perk.PerkValue;
 		}
 
 		// Effects a defender uses to punish whoever hits it (Shock Shield, thorns, stun/debuff the attacker...).
@@ -5393,7 +5471,7 @@ namespace ABH.Services.Logic
 					}
 					if (battleEffect.EffectTrigger == triggerType && BattleEffectsByTriggerAndByType.ContainsKey(triggerType) && BattleEffectsByTriggerAndByType[triggerType].TryGetValue(battleEffect.EffectType, out value))
 					{
-						effectedParam = value(effectedParam, battleEffectGameData, battleEffect, target);
+						effectedParam = InvokeEffect(value, effectedParam, battleEffectGameData, battleEffect, target);
 					}
 				}
 			}
@@ -5810,6 +5888,24 @@ namespace ABH.Services.Logic
 			return true;
 		}
 
+		// GroundZero: the wearer's first hit on each enemy deals PerkValue% damage. Rage attacks neither get it nor use it up.
+		public bool ApplyFirstStrikePerk(ICombatant source, ICombatant target, ref float effectedParam)
+		{
+			var bird = source as BirdCombatant;
+			if (bird == null || target == null || target.CombatantFaction == source.CombatantFaction)
+			{
+				return false;
+			}
+			var perk = UpgradeBlueprints.FindEquippedPerk(source, PerkType.GroundZero);
+			if (perk == null || !bird.FirstStrikeTargets.Add(target))
+			{
+				return false;
+			}
+			effectedParam *= perk.PerkValue / 100f;
+			source.RaisePerkUsed(PerkType.GroundZero, target);
+			return true;
+		}
+
 		public Faction GetOppositeFaction(Faction faction)
 		{
 			switch (faction)
@@ -6054,7 +6150,7 @@ namespace ABH.Services.Logic
 				flag = IsSkillAttackPossible(combatHand, skill, battle);
 				break;
 			case SkillTargetTypes.Support:
-				flag = IsSkillSupportPossible(combatHand, skill, battle);
+				flag = IsSkillSupportPossible(combatHand, skill, battle) && (!GoadAllyIntoAttack.IsGoadSkill(skill.Model) || GoadAllyIntoAttack.PickAlly(battle, combatHand, skill.Model) != null);
 				break;
 			}
 			if (!flag)
@@ -6177,7 +6273,7 @@ namespace ABH.Services.Logic
 				}
 				else
 				{
-					combatant.AttackTarget = GetNextTargetForAttackSkill(battle, combatant, skill, Faction.Birds);
+					combatant.AttackTarget = Stinkeye.GetEmpoweredMarkTarget(battle, combatant) ?? GetNextTargetForAttackSkill(battle, combatant, skill, Faction.Birds);
 				}
 				break;
 			case SkillTargetTypes.Support:
@@ -6187,7 +6283,8 @@ namespace ABH.Services.Logic
 				}
 				else
 				{
-					combatant.AttackTarget = GetNextTargetForSupportSkill(battle, combatant, skill, Faction.Pigs);
+					// Porky's goad has no target (falls back to another skill) unless an ally survives his hit
+					combatant.AttackTarget = GoadAllyIntoAttack.IsGoadSkill(skill) ? GoadAllyIntoAttack.PickAlly(battle, combatant, skill) : GetNextTargetForSupportSkill(battle, combatant, skill, Faction.Pigs);
 				}
 				break;
 			}

@@ -28,26 +28,136 @@ MonoBehaviour:
     y: 0.61328125
     width: 0.244140625
     height: 0.099609375
+  - serializedVersion: 2
+    x: 0.001953125
+    y: 0.306640625
+    width: 0.32421875
+    height: 0.294921875
+  - serializedVersion: 2
+    x: 0.3359375
+    y: 0.51953125
+    width: 0.1484375
+    height: 0.08203125
+  - serializedVersion: 2
+    x: 0.490234375
+    y: 0.509765625
+    width: 0.169921875
+    height: 0.091796875
+  - serializedVersion: 2
+    x: 0.666015625
+    y: 0.486328125
+    width: 0.14453125
+    height: 0.115234375
+  - serializedVersion: 2
+    x: 0.3359375
+    y: 0.37890625
+    width: 0.234375
+    height: 0.1015625
+  - serializedVersion: 2
+    x: 0.576171875
+    y: 0.390625
+    width: 0.1708984375
+    height: 0.08984375
+  - serializedVersion: 2
+    x: 0.75390625
+    y: 0.392578125
+    width: 0.162109375
+    height: 0.087890625
+  - serializedVersion: 2
+    x: 0.3359375
+    y: 0.3203125
+    width: 0.037109375
+    height: 0.05078125
+  - serializedVersion: 2
+    x: 0.376953125
+    y: 0.3203125
+    width: 0.037109375
+    height: 0.05078125
+  - serializedVersion: 2
+    x: 0.41796875
+    y: 0.314453125
+    width: 0.052734375
+    height: 0.056640625
+  - serializedVersion: 2
+    x: 0.474609375
+    y: 0.314453125
+    width: 0.052734375
+    height: 0.056640625
   textureGUIDs:
   - 7e6a06c4303c546ebf0c852b07d2a435
   - 641e7f1f6cb55414b83791c72ed4ff1f
   - 8c6c9255e92f56738ac94a163464b683
+  - 896157d7813345a09cf248d139b3664c
+  - 33c8d73a99384e4cbd537e106e375ff5
+  - 6eb0fa42281d48a8a079f9e6a4ae4a76
+  - 17c9572bde4e494080586483ccad0204
+  - 5bcd1bdd05584ca88e928ec0631607b3
+  - 0cc96d4dafc74f0c966137bfb20aa54d
+  - 001fb027f10c4d04bd8633a312106a1e
+  - 3dca645bfee74bdd9866143ed7f86128
+  - 4966f6f56b6048a8ad7919b66da90209
+  - ca16070d697d41b3a3bbe42e5fc1ff94
+  - 48a2be4c69264d15b2f5d9d8fe13974c
   textureSizes:
   - {x: 396, y: 236}
   - {x: 400, y: 291}
   - {x: 250, y: 102}
+  - {x: 332, y: 302}
+  - {x: 152, y: 84}
+  - {x: 174, y: 94}
+  - {x: 148, y: 118}
+  - {x: 240, y: 104}
+  - {x: 175, y: 92}
+  - {x: 166, y: 90}
+  - {x: 38, y: 52}
+  - {x: 38, y: 52}
+  - {x: 54, y: 58}
+  - {x: 54, y: 58}
   defaultPivotOffsets:
   - {x: -0.3434343, y: 0.190678}
   - {x: -0.0145, y: 0.0683849}
   - {x: -0.6452, y: -0.1882353}
+  - {x: 0, y: -0.5}
+  - {x: 0, y: -0.1}
+  - {x: 0.037499998, y: 0.19337006}
+  - {x: -0.010714286, y: 0.14782083}
+  - {x: -0.026785713, y: 0.08035714}
+  - {x: -0.05, y: 0.16}
+  - {x: 0.016071428, y: 0.17291667}
+  - {x: 0.07, y: 0.18}
+  - {x: 0.07, y: 0.18}
+  - {x: -0.05, y: 0.2}
+  - {x: -0.05, y: 0.2}
   textureNames:
   - Headgear_LassieBraids
   - Headgear_LassieBraids_Back
   - MainHand_LassieRooster
+  - BodyPirate
+  - MouthPirate
+  - Mouth_DamagedPirate
+  - Mouth_KOPirate
+  - Mouth_LaughingPirate
+  - Mouth_ScreamPirate
+  - Mouth_SurprisedPirate
+  - Eye_LeftPirate
+  - Eye_Left_RedPirate
+  - Eye_RightPirate
+  - Eye_Right_RedPirate
   texturePaths:
   - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Headgear_LassieBraids.png
   - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Headgear_LassieBraids_Back.png
   - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/MainHand_LassieRooster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/BodyPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/MouthPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_DamagedPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_KOPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_LaughingPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_ScreamPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_SurprisedPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Eye_LeftPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Eye_Left_RedPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Eye_RightPirate.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Eye_Right_RedPirate.png
   lastBuildID: 20160822150725688
   needsRebuilt: 0
   dataVersion: 4

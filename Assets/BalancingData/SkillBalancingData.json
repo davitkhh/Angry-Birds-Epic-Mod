@@ -1972,11 +1972,7 @@
     "LocaId": "bird_attack_blues_tricksters",
     "SkillParameters": {
       "damage_in_percent": 100.0,
-      "purge_chance": 100.0,
-      "ammo_cost": 1.0,
-      "ammo_start": 10.0,
-      "ammo_regen": 1.0,
-      "ammo_regen_turns": 3.0
+      "purge_chance": 100.0
     },
     "SkillTemplateType": "AttackWithPurgeSkill",
     "EffectDuration": 0,
@@ -1998,8 +1994,7 @@
     "SkillParameters": {
       "damage_increase": 15.0,
       "cleanse_chance": 100.0,
-      "all": 1.0,
-      "ammo_gain": 2.0
+      "all": 1.0
     },
     "SkillTemplateType": "IncreaseDamageAndCleanse",
     "EffectDuration": 3,
@@ -3515,7 +3510,7 @@
     "AssetId": "ChargeCommand",
     "LocaId": "pig_attack_moustache_big_boss_01",
     "SkillParameters": {
-      "damage_in_percent": 100.0,
+      "damage_in_percent": 120.0,
       "all": 1.0,
       "charge": 3.0
     },
@@ -3537,7 +3532,7 @@
     "AssetId": "Slap",
     "LocaId": "pig_attack_moustache_big_boss_02",
     "SkillParameters": {
-      "damage_in_percent": 100.0
+      "damage_in_percent": 70.0
     },
     "SkillTemplateType": "SimpleAttackSkill",
     "EffectDuration": 0,
@@ -3815,19 +3810,22 @@
     "LocaId": "pig_attack_moustache_pirate_captain_01",
     "SkillParameters": {
       "damage_in_percent": 100.0,
-      "attack_count": 2.0
+      "attack_count": 2.0,
+      "bonus_in_percent": 50.0,
+      "empowered_bonus_in_percent": 75.0,
+      "pirate_deaths": 5.0
     },
-    "SkillTemplateType": "SimpleAttackSkill",
-    "EffectDuration": 0,
+    "SkillTemplateType": "Stinkeye",
+    "EffectDuration": 3,
     "TargetType": "Attack",
     "EffectType": "Curse",
     "TargetingBehavior": "None",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": false,
-    "IconAssetId": "Attack",
+    "IconAssetId": "AttackCurse",
     "IconAtlasId": "Skills_Pigs_01",
-    "EffectIconAtlasId": "",
-    "EffectIconAssetId": "",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "AttackCurse",
     "TargetCulling": null
   },
   {
@@ -3858,7 +3856,10 @@
     "LocaId": "pig_support_moustache_pirate_captain",
     "SkillParameters": {
       "summon_pirate": 1.0,
-      "charge": 2.0
+      "charge": 2.0,
+      "charge_min": 1.0,
+      "use_amount": 1.0,
+      "table_by_queued_charge": 1.0
     },
     "SkillTemplateType": "SummonCombatant",
     "EffectDuration": 0,
@@ -4003,38 +4004,36 @@
   },
   {
     "NameId": "pig_attack_pirate_matey",
-    "AssetId": "Punch",
+    "AssetId": "PunchPlain",
     "LocaId": "pig_attack_pirate_matey",
     "SkillParameters": {
-      "damage_in_percent": 35.0,
-      "dot_chance": 100.0,
-      "dot_damage_in_percent": 100.0
+      "damage_in_percent": 90.0
     },
-    "SkillTemplateType": "AttackAndApplyDotSkill",
-    "EffectDuration": 2,
+    "SkillTemplateType": "SimpleAttackSkill",
+    "EffectDuration": 0,
     "TargetType": "Attack",
     "EffectType": "Curse",
     "TargetingBehavior": "None",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": false,
-    "IconAssetId": "AttackCurse",
+    "IconAssetId": "Attack",
     "IconAtlasId": "Skills_Pigs_01",
-    "EffectIconAtlasId": "Skills_Pigs_01",
-    "EffectIconAssetId": "AttackCurse",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
     "TargetCulling": null
   },
   {
     "NameId": "pig_attack_pirate_pirate",
-    "AssetId": "Pillage",
+    "AssetId": "PillagePoison",
     "LocaId": "pig_attack_pirate_pirate",
     "SkillParameters": {
-      "damage_in_percent": 100.0,
+      "damage_in_percent": 70.0,
       "attack_count": 2.0,
-      "reduction_in_percent": 20.0,
-      "chance": 100.0
+      "dot_chance": 100.0,
+      "dot_damage_in_percent": 100.0
     },
-    "SkillTemplateType": "AttackWithDamageDebuffSkill",
-    "EffectDuration": 1,
+    "SkillTemplateType": "AttackAndApplyDotSkill",
+    "EffectDuration": 2,
     "TargetType": "Attack",
     "EffectType": "Curse",
     "TargetingBehavior": "None",
@@ -7356,6 +7355,27 @@
     "TargetCulling": null
   },
   {
+    "NameId": "pig_support_prince_porky_goad",
+    "AssetId": "QuickStitch",
+    "LocaId": "pig_support_prince_porky_goad",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "ally_damage_in_percent": 200.0
+    },
+    "SkillTemplateType": "GoadAllyIntoAttack",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
     "NameId": "pig_attack_prince_porky_02",
     "AssetId": "ViciousBackstab_Roses",
     "LocaId": "pig_attack_minion_rogue_boss",
@@ -7765,8 +7785,27 @@
     "AssetId": "FullPockets",
     "LocaId": "pig_passive_fullpockets",
     "SkillParameters": {
-      "min_amount": 2.0,
-      "max_amount": 3.0
+      "total_amount": 15.0
+    },
+    "SkillTemplateType": "FullPockets",
+    "EffectDuration": -1,
+    "TargetType": "Passive",
+    "EffectType": "Passive",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": false,
+    "TargetSelfPossible": true,
+    "IconAssetId": "PassiveEffect",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_passive_fullpockets_golden",
+    "AssetId": "FullPockets",
+    "LocaId": "pig_passive_fullpockets",
+    "SkillParameters": {
+      "total_amount": 20.0
     },
     "SkillTemplateType": "FullPockets",
     "EffectDuration": -1,
@@ -17543,8 +17582,8 @@
     "EffectIconAtlasId": "",
     "EffectIconAssetId": "",
     "TargetCulling": [
-      "pig_minion_stickpig",
-      "pig_minion_rogue"
+      "pig_minion_stickpig_bird3",
+      "pig_minion_rogue_bird3"
     ]
   },
   {

@@ -397,7 +397,7 @@
     "NameId": "battle_001",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_001"
+      "bpart_001_story"
     ],
     "LootTableWheel": {
       "battle_southbeach_01": 1
@@ -2409,7 +2409,7 @@
     "NameId": "battle_012_bird2_resolved",
     "BaseLevel": 2,
     "BattleParticipantsIds": [
-      "bpart_014"
+      "bpart_014_1"
     ],
     "LootTableWheel": {
       "battle_wood": 1
@@ -2531,7 +2531,7 @@
     },
     "BackgroundAssetId": "Battleground_Castle_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Heartache",
+    "SoundAssetId": "Music_Combat_Special",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {
@@ -2590,7 +2590,7 @@
     },
     "BackgroundAssetId": "Battleground_Castle_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Heartache",
+    "SoundAssetId": "Music_Combat_Special",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": {

@@ -79,6 +79,7 @@ namespace ABH.GameDatas.Battle
 				DebugLog.Log("no asset ID");
 				return;
 			}
+			Ammo.OnProjectileFired(source, skillProjectileAssetId);
 			var transform = !useOffhand || !(source.CombatantView.m_AssetController.OffHandBone != null) ? source.CombatantView.m_AssetController.MainHandBone : source.CombatantView.m_AssetController.OffHandBone;
 			if (targets != null && targets.Count == 1)
 			{
@@ -154,6 +155,24 @@ namespace ABH.GameDatas.Battle
 				m_Model = new SkillGameData(m_Model);
 				Model.SkillParameters["charge"] = turns;
 			}
+		}
+
+		// Length of the current charge as first queued, before ReduceCharge or mid-charge shortening/delays
+		public int QueuedChargeDuration { get; private set; }
+
+		// Turns the last finished charge really took, after ReduceCharge and mid-charge shortening/delays
+		public int FiredChargeDuration { get; private set; }
+
+		// "charge_min" makes each new charge take a random number of turns from charge_min to charge
+		private int RollChargeDuration()
+		{
+			var charge = (int)Model.Balancing.SkillParameters["charge"];
+			var chargeMin = 0f;
+			if (Model.Balancing.SkillParameters.TryGetValue("charge_min", out chargeMin) && (int)chargeMin < charge)
+			{
+				return Random.Range((int)chargeMin, charge + 1);
+			}
+			return charge;
 		}
 
 		public bool TryGetChargeDurationLeft(out int duration, ICombatant source)
@@ -307,11 +326,17 @@ namespace ABH.GameDatas.Battle
 				}
 				if (flag)
 				{
-					SetChargeDuration((int)Model.SkillParameters["charge"] - (int)num);
+					QueuedChargeDuration = Model.Balancing.SkillParameters.ContainsKey("charge_min") ? RollChargeDuration() : (int)Model.SkillParameters["charge"];
+					SetChargeDuration(QueuedChargeDuration - (int)num);
 				}
 				else if (!battle.IsPvP)
 				{
-					SetChargeDuration((int)Model.Balancing.SkillParameters["charge"]);
+					QueuedChargeDuration = RollChargeDuration();
+					SetChargeDuration(QueuedChargeDuration);
+				}
+				else
+				{
+					QueuedChargeDuration = GetChargeDuration();
 				}
 			}
 			if (source.ChargeDone)
@@ -321,7 +346,12 @@ namespace ABH.GameDatas.Battle
 				m_InitialTargetSelection = null;
 				if (source.CurrrentEffects != null && source.CurrrentEffects.TryGetValue("Charge_" + Model.Balancing.AssetId, out value))
 				{
+					FiredChargeDuration = Mathf.Max(1, GetChargeDuration() + value.m_ChargeTurnsAdded);
 					value.IncrementCurrentTurnManual(true);
+				}
+				else
+				{
+					FiredChargeDuration = GetChargeDuration();
 				}
 				return false;
 			}

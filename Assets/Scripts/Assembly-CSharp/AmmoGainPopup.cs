@@ -5,7 +5,7 @@ using ABH.Shared.Generic;
 using UnityEngine;
 
 // "+X [blue arrow holding the ammo]" that appears beside a combatant gaining ammo (left of birds, right of pigs), floats
-// up and fades out. The arrow pops in with a squash and stretch. Birds' popups wait until the bird stands in its
+// up and fades out. The "+X" and the arrow pop in together with a squash and stretch. Birds' popups wait until the bird stands in its
 // attacking position (where it steps forward to on its turn), so regen gained as the turn flips shows up next to it.
 public class AmmoGainPopup : MonoBehaviour
 {
@@ -17,16 +17,19 @@ public class AmmoGainPopup : MonoBehaviour
 
 	public static float Rise = 90f;
 
-	public static float SideGap = 30f;
+	public static float SideGap = -20f;
 
-	public static int FontSize = 40;
+	public static int FontSize = 60;
 
 	public static float ArrowWidth = 104f;
+
+	// How far the "+X" sits below the arrow's middle
+	public static float LabelDrop = 16f;
 
 	// Longest wait for a bird to reach its attacking position
 	public static float MaxWait = 4f;
 
-	// Arrow scale keys (time in seconds, x, y): squash, stretch, settle
+	// Pop scale keys (time in seconds, x, y): squash, stretch, settle
 	private static readonly Vector3[] PopKeys =
 	{
 		new Vector3(0f, 1.35f, 0.55f),
@@ -45,7 +48,7 @@ public class AmmoGainPopup : MonoBehaviour
 
 	private UIPanel m_Panel;
 
-	private Transform m_ArrowRoot;
+	private Transform m_PopRoot;
 
 	private ICombatant m_Combatant;
 
@@ -118,30 +121,37 @@ public class AmmoGainPopup : MonoBehaviour
 		content.localRotation = Quaternion.identity;
 		content.localScale = Vector3.one;
 		var combatText = view.m_ScrollingCombatTextPrefab;
-		var width = BuildContent(content, combatText != null ? combatText.m_LabelHealthChange : null, m_Amount, AmmoUI.GetIconSource(m_Combatant), out m_ArrowRoot);
+		var width = BuildContent(content, combatText != null ? combatText.m_LabelHealthChange : null, m_Amount, AmmoUI.GetIconSource(m_Combatant), out m_PopRoot);
 		// Grow away from the character: birds' popups end at the anchor, pigs' start there
 		content.localPosition = new Vector3(side < 0f ? -width : 0f, 0f, 0f);
 		yield return StartCoroutine(Animate());
 	}
 
-	// ["+X"][blue arrow with the ammo in its shaft] laid out from x = 0 to the right; returns the width. arrowRoot is
-	// the arrow's scaling root, at its bottom centre.
-	public static float BuildContent(Transform content, UILabel style, int amount, AmmoUI.IconSource icon, out Transform arrowRoot)
+	// ["+X"][blue arrow with the ammo in its shaft] laid out from x = 0 to the right; returns the width. popRoot holds
+	// both and is their scaling root, at the bottom centre of the pair.
+	public static float BuildContent(Transform content, UILabel style, int amount, AmmoUI.IconSource icon, out Transform popRoot)
 	{
-		var label = AmmoUI.CreateLabel(content, style, "+" + amount, Color.white, UIWidget.Pivot.Left, FontSize, 3);
+		var arrowTexture = Resources.Load<Texture2D>(ArrowTexture);
+		var arrowHeight = arrowTexture != null ? ArrowWidth * arrowTexture.height / arrowTexture.width : ArrowWidth;
+		popRoot = new GameObject("PopRoot").transform;
+		popRoot.gameObject.layer = content.gameObject.layer;
+		popRoot.parent = content;
+		popRoot.localRotation = Quaternion.identity;
+		popRoot.localScale = Vector3.one;
+		var label = AmmoUI.CreateLabel(popRoot, style, "+" + amount, Color.white, UIWidget.Pivot.Left, FontSize, 3);
 		label.effectStyle = UILabel.Effect.Outline;
 		label.effectColor = new Color(0.07f, 0.27f, 0.63f, 1f);
 		label.effectDistance = new Vector2(2f, 2f);
-		label.cachedTransform.localPosition = Vector3.zero;
-		var x = label.printedSize.x + 6f;
-		var arrowTexture = Resources.Load<Texture2D>(ArrowTexture);
-		var arrowHeight = arrowTexture != null ? ArrowWidth * arrowTexture.height / arrowTexture.width : ArrowWidth;
-		arrowRoot = new GameObject("ArrowRoot").transform;
+		var x = label.printedSize.x - 4f;
+		var width = x + ArrowWidth;
+		popRoot.localPosition = new Vector3(width * 0.5f, -arrowHeight * 0.5f, 0f);
+		label.cachedTransform.localPosition = new Vector3(-width * 0.5f, arrowHeight * 0.5f - LabelDrop, 0f);
+		var arrowRoot = new GameObject("ArrowRoot").transform;
 		arrowRoot.gameObject.layer = content.gameObject.layer;
-		arrowRoot.parent = content;
+		arrowRoot.parent = popRoot;
 		arrowRoot.localRotation = Quaternion.identity;
 		arrowRoot.localScale = Vector3.one;
-		arrowRoot.localPosition = new Vector3(x + ArrowWidth * 0.5f, -arrowHeight * 0.5f, 0f);
+		arrowRoot.localPosition = new Vector3(x + ArrowWidth * 0.5f - width * 0.5f, 0f, 0f);
 		if (arrowTexture != null)
 		{
 			var arrowObject = new GameObject("Arrow");
@@ -162,7 +172,7 @@ public class AmmoGainPopup : MonoBehaviour
 		{
 			widget.cachedTransform.localPosition = new Vector3(0f, arrowHeight * (0.5f - ShaftCenter), 0f);
 		}
-		return x + ArrowWidth;
+		return width;
 	}
 
 	private IEnumerator Animate()
@@ -175,9 +185,9 @@ public class AmmoGainPopup : MonoBehaviour
 			var t = Mathf.Clamp01(time / Lifetime);
 			var eased = 1f - (1f - t) * (1f - t);
 			transform.position = start + new Vector3(0f, Rise * eased, 0f);
-			if (m_ArrowRoot != null)
+			if (m_PopRoot != null)
 			{
-				m_ArrowRoot.localScale = PopScale(time);
+				m_PopRoot.localScale = PopScale(time);
 			}
 			var alpha = 1f;
 			if (time < FadeIn)

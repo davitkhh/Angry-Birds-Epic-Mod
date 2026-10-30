@@ -1,0 +1,54 @@
+{
+  "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+  "suffix": "Pirate",
+  "sprites": [
+    {
+      "name": "Mouth",
+      "x": 30,
+      "y": 50,
+      "w": 152,
+      "h": 84,
+      "out": "MouthPirate.png"
+    },
+    {
+      "name": "Mouth_Damaged",
+      "x": 330,
+      "y": 50,
+      "w": 174,
+      "h": 94,
+      "out": "Mouth_DamagedPirate.png"
+    },
+    {
+      "name": "Mouth_KO",
+      "x": 630,
+      "y": 50,
+      "w": 148,
+      "h": 118,
+      "out": "Mouth_KOPirate.png"
+    },
+    {
+      "name": "Mouth_Laughing",
+      "x": 30,
+      "y": 230,
+      "w": 240,
+      "h": 104,
+      "out": "Mouth_LaughingPirate.png"
+    },
+    {
+      "name": "Mouth_Scream",
+      "x": 330,
+      "y": 230,
+      "w": 175,
+      "h": 92,
+      "out": "Mouth_ScreamPirate.png"
+    },
+    {
+      "name": "Mouth_Surprised",
+      "x": 630,
+      "y": 230,
+      "w": 166,
+      "h": 90,
+      "out": "Mouth_SurprisedPirate.png"
+    }
+  ]
+}

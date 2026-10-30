@@ -571,6 +571,38 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_brute_brute_bird3",
+    "AssetId": "PigBrute",
+    "LocaId": "pig_brute_brute",
+    "DefaultInventoryNameId": "pig_brute_brute_01",
+    "BaseHealth": 303,
+    "BaseAttack": 25,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_brute_brute"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_brute_brute"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig8_defeated_gold": 1,
+      "loot_pig8_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 0.8,
+    "PigStrength": 7,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_brute_brute_boss_tut",
     "AssetId": "PigBrute",
     "LocaId": "pig_brute_brute",
@@ -1794,6 +1826,46 @@
       {
         "Percentage": 100.0,
         "ComboChain": [
+          "pig_attack_caster_pyropig"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig6_defeated_gold": 1,
+      "loot_pig6_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_caster_pyropig_bird3",
+    "AssetId": "PigMage",
+    "LocaId": "pig_caster_pyropig",
+    "DefaultInventoryNameId": "pig_caster_pyropig_01",
+    "BaseHealth": 185,
+    "BaseAttack": 15,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_caster_pyropig",
+      "pig_support_caster_pyropig"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 60.0,
+        "ComboChain": [
+          "pig_attack_caster_pyropig"
+        ]
+      },
+      {
+        "Percentage": 40.0,
+        "ComboChain": [
+          "pig_support_caster_pyropig",
           "pig_attack_caster_pyropig"
         ]
       }
@@ -3067,7 +3139,7 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 5,
-    "PassiveSkillNameId": "pig_passive_fullpockets",
+    "PassiveSkillNameId": "pig_passive_fullpockets_golden",
     "IgnoreDifficulty": false
   },
   {
@@ -4368,6 +4440,48 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_knight_guard_captain_bird3",
+    "AssetId": "PigKnight",
+    "LocaId": "pig_knight_guard_captain",
+    "DefaultInventoryNameId": "pig_knight_guardcaptain_01",
+    "BaseHealth": 247,
+    "BaseAttack": 23,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_knight_guard_captain",
+      "pig_support_knight_guard_captain"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 20.0,
+        "ComboChain": [
+          "pig_attack_knight_guard_captain"
+        ]
+      },
+      {
+        "Percentage": 80.0,
+        "ComboChain": [
+          "pig_support_knight_guard_captain",
+          "pig_attack_knight_guard_captain",
+          "pig_attack_knight_guard_captain",
+          "pig_attack_knight_guard_captain"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig6_defeated_gold": 1,
+      "loot_pig6_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "pig_passive_ironclad",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_knight_guard_captain_bird1",
     "AssetId": "PigKnight",
     "LocaId": "pig_knight_guard_captain",
@@ -4410,6 +4524,49 @@
     "DefaultInventoryNameId": "pig_knight_guard_yellow_01",
     "BaseHealth": 240,
     "BaseAttack": 9,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_knight_guard_captain",
+      "pig_support_knight_guard_yellow"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 80.0,
+        "ComboChain": [
+          "pig_support_knight_guard_yellow",
+          "pig_attack_knight_guard_captain",
+          "pig_attack_knight_guard_captain",
+          "pig_attack_knight_guard_captain"
+        ]
+      },
+      {
+        "Percentage": 20.0,
+        "ComboChain": [
+          "pig_support_knight_guard_yellow",
+          "pig_attack_knight_guard_captain"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig6_defeated_gold": 1,
+      "loot_pig6_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "pig_passive_ironclad_catcher",
+    "IgnoreDifficulty": true
+  },
+  {
+    "NameId": "pig_knight_guard_yellow_bird3",
+    "AssetId": "PigKnightYellow",
+    "LocaId": "pig_knight_guard_captain",
+    "DefaultInventoryNameId": "pig_knight_guard_yellow_01",
+    "BaseHealth": 198,
+    "BaseAttack": 7,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -5062,6 +5219,45 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_minion_apprentice_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_apprentice",
+    "DefaultInventoryNameId": "pig_minion_apprentice",
+    "BaseHealth": 58,
+    "BaseAttack": 10,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_stickpig_01",
+      "pig_support_minion_apprentice"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_stickpig_01"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_minion_apprentice"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig2_defeated_gold": 1,
+      "loot_pig2_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 0.9,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_minion_bird_catcher_intro",
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_bird_catcher",
@@ -5152,6 +5348,38 @@
     "PigStrength": 3,
     "PassiveSkillNameId": "",
     "IgnoreDifficulty": true
+  },
+  {
+    "NameId": "pig_minion_bird_catcher_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_bird_catcher",
+    "DefaultInventoryNameId": "pig_minion_bird_catcher_01",
+    "BaseHealth": 58,
+    "BaseAttack": 11,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_bird_catcher"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_minion_bird_catcher"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig2_defeated_gold": 1,
+      "loot_pig2_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
   },
   {
     "NameId": "pig_minion_bird_catcher_bird1",
@@ -5318,6 +5546,49 @@
         "ComboChain": [
           "pig_attack_minion_corporal",
           "pig_attack_minion_corporal",
+          "pig_support_minion_corporal"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig6_defeated_gold": 1,
+      "loot_pig6_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.2,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_corporal_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_corporal",
+    "DefaultInventoryNameId": "pig_minion_corporal_01",
+    "BaseHealth": 180,
+    "BaseAttack": 22,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_corporal",
+      "pig_support_minion_corporal"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 70.0,
+        "ComboChain": [
+          "pig_support_minion_corporal",
+          "pig_attack_minion_corporal",
+          "pig_support_minion_corporal"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_minion_corporal",
+          "pig_support_minion_corporal",
           "pig_support_minion_corporal"
         ]
       }
@@ -5617,6 +5888,38 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_minion_guard_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_guard",
+    "DefaultInventoryNameId": "pig_minion_guard_01",
+    "BaseHealth": 123,
+    "BaseAttack": 15,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_guard"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_minion_guard"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig4_defeated_gold": 1,
+      "loot_pig4_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 4,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_minion_guard_bird2_castle",
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
@@ -5655,6 +5958,38 @@
     "DefaultInventoryNameId": "",
     "BaseHealth": 75,
     "BaseAttack": 12,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_guard_fork_castle"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_minion_guard_fork_castle"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig4_defeated_gold": 1,
+      "loot_pig4_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 5,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_guard_fork_bird3",
+    "AssetId": "MinionGuardFork",
+    "LocaId": "pig_minion_guard",
+    "DefaultInventoryNameId": "",
+    "BaseHealth": 110,
+    "BaseAttack": 18,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -5884,6 +6219,37 @@
     "LocaId": "pig_minion_phat_loot",
     "DefaultInventoryNameId": "pig_minion_phat_loot_01",
     "BaseHealth": 60,
+    "BaseAttack": 1,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_phat_loot"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_minion_phat_loot"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "gold": 7,
+      "loot_pig3_defeated_exp": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 1,
+    "PassiveSkillNameId": "pig_passive_fullpockets",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_phat_loot_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_phat_loot",
+    "DefaultInventoryNameId": "pig_minion_phat_loot_01",
+    "BaseHealth": 88,
     "BaseAttack": 1,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -6189,12 +6555,83 @@
     "IgnoreDifficulty": true
   },
   {
+    "NameId": "pig_minion_rogue_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_rogue",
+    "DefaultInventoryNameId": "pig_minion_rogue_01",
+    "BaseHealth": 99,
+    "BaseAttack": 8,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_01_intro",
+      "pig_attack_minion_rogue_02"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 70.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01_intro"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 3,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_minion_rogue_dynamite_bird2",
     "AssetId": "MinionRogueDynamite",
     "LocaId": "pig_minion_rogue_dynamite",
     "DefaultInventoryNameId": "pig_minion_rogue_dynamite_01",
     "BaseHealth": 88,
     "BaseAttack": 14,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_dynamite"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_dynamite"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 4,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_rogue_dynamite_bird3",
+    "AssetId": "MinionRogueDynamite",
+    "LocaId": "pig_minion_rogue_dynamite",
+    "DefaultInventoryNameId": "pig_minion_rogue_dynamite_01",
+    "BaseHealth": 99,
+    "BaseAttack": 17,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -6454,6 +6891,41 @@
     "IgnoreDifficulty": true
   },
   {
+    "NameId": "pig_minion_rogue_leader_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_rogue_leader",
+    "DefaultInventoryNameId": "pig_minion_rogueboss_01",
+    "BaseHealth": 125,
+    "BaseAttack": 7,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_leader_01",
+      "pig_attack_minion_rogue_leader_02"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_leader_01",
+          "pig_attack_minion_rogue_leader_02",
+          "pig_attack_minion_rogue_leader_02"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.1,
+    "PigStrength": 3,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_minion_rogue_leader_cc",
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_rogue_leader",
@@ -6583,6 +7055,41 @@
     "LootTableDefeatBonus": {
       "loot_pig3_defeated_gold": 1,
       "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.33,
+    "PigStrength": 3,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_rogue_miniboss_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_rogue_miniboss",
+    "DefaultInventoryNameId": "pig_minion_rogue_miniboss",
+    "BaseHealth": 115,
+    "BaseAttack": 20,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_miniboss",
+      "pig_support_rogue_miniboss"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_support_rogue_miniboss",
+          "pig_attack_minion_rogue_miniboss",
+          "pig_attack_minion_rogue_miniboss"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig_boss_01_defeated_exp": 1,
       "loot_pigsmall_defeated_mastery": 1
     },
     "SizeScale": 1.33,
@@ -6898,6 +7405,45 @@
     "PigStrength": 3,
     "PassiveSkillNameId": "",
     "IgnoreDifficulty": true
+  },
+  {
+    "NameId": "pig_minion_stickpig_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_stickpig",
+    "DefaultInventoryNameId": "pig_minion_stickpig_01",
+    "BaseHealth": 59,
+    "BaseAttack": 10,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_stickpig_01",
+      "pig_attack_minion_stickpig_02"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 75.0,
+        "ComboChain": [
+          "pig_attack_minion_stickpig_01"
+        ]
+      },
+      {
+        "Percentage": 25.0,
+        "ComboChain": [
+          "pig_attack_minion_stickpig_02"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig2_defeated_gold": 1,
+      "loot_pig2_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
   },
   {
     "NameId": "pig_minion_stickpig_bird2_25",
@@ -7382,6 +7928,45 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_moustache_big_boss_bird3",
+    "AssetId": "MoustachePig",
+    "LocaId": "pig_moustache_big_boss",
+    "DefaultInventoryNameId": "pig_moustache_big_boss_01",
+    "BaseHealth": 190,
+    "BaseAttack": 21,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_moustache_big_boss_02",
+      "pig_attack_moustache_big_boss_01"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_moustache_big_boss_01"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_moustache_big_boss_02"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig5_defeated_gold": 1,
+      "loot_pig5_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 5,
+    "PassiveSkillNameId": "pig_passive_incompetentminions",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_moustache_big_boss_bird2_castle",
     "AssetId": "MoustachePig",
     "LocaId": "pig_moustache_big_boss",
@@ -7743,6 +8328,42 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_moustache_foreman_bird3",
+    "AssetId": "MoustachePig",
+    "LocaId": "pig_moustache_foreman",
+    "DefaultInventoryNameId": "pig_moustache_foreman_01",
+    "BaseHealth": 215,
+    "BaseAttack": 23,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_moustache_foreman",
+      "pig_support_moustache_foreman"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_support_moustache_foreman",
+          "pig_attack_moustache_foreman",
+          "pig_attack_moustache_foreman",
+          "pig_attack_moustache_foreman"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig5_defeated_gold": 1,
+      "loot_pig5_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 5,
+    "PassiveSkillNameId": "pig_passive_incompetentminions",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_moustache_mandarin",
     "AssetId": "MoustachePig",
     "LocaId": "pig_moustache_mandarin",
@@ -8041,6 +8662,46 @@
     "DefaultInventoryNameId": "pig_moustache_pirate_captain_01",
     "BaseHealth": 250,
     "BaseAttack": 15,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_moustache_pirate_captain_01",
+      "pig_support_moustache_pirate_captain_02"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_moustache_pirate_captain_01"
+        ]
+      },
+      {
+        "Percentage": 70.0,
+        "ComboChain": [
+          "pig_support_moustache_pirate_captain_02",
+          "pig_attack_moustache_pirate_captain_01"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig_boss_01_defeated_gold": 1,
+      "loot_pig_boss_01_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "pig_passive_dirtytricks,pig_passive_incompetentminions",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_moustache_pirate_captain_boss_bird3",
+    "AssetId": "MoustachePig",
+    "LocaId": "pig_moustache_pirate_captain_boss",
+    "DefaultInventoryNameId": "pig_moustache_pirate_captain_01",
+    "BaseHealth": 206,
+    "BaseAttack": 12,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -9553,6 +10214,38 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_pirate_pirate_bird3",
+    "AssetId": "PigPirate",
+    "LocaId": "pig_pirate_pirate",
+    "DefaultInventoryNameId": "pig_pirate_pirate_01",
+    "BaseHealth": 58,
+    "BaseAttack": 9,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_pirate_pirate"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_pirate_pirate"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 0.9,
+    "PigStrength": 3,
+    "PassiveSkillNameId": "pig_passive_dirtytricks",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_pirate_veteran",
     "AssetId": "PigPirate",
     "LocaId": "pig_pirate_veteran",
@@ -9711,13 +10404,21 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_prince_porky"
+      "pig_attack_prince_porky",
+      "pig_support_prince_porky"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 50.0,
         "ComboChain": [
           "pig_attack_prince_porky"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_prince_porky",
+          "pig_support_prince_porky"
         ]
       }
     ],
@@ -9739,7 +10440,7 @@
     "LocaId": "pig_prince_porky",
     "DefaultInventoryNameId": "pig_prince_porky_01",
     "BaseHealth": 650,
-    "BaseAttack": 10,
+    "BaseAttack": 12,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -9872,15 +10573,22 @@
     "PerLevelAttack": 0,
     "SkillNameIds": [
       "pig_attack_prince_porky",
-      "pig_support_prince_porky"
+      "pig_support_prince_porky",
+      "pig_support_prince_porky_goad"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 0.0,
         "ComboChain": [
           "pig_support_prince_porky",
           "pig_attack_prince_porky",
           "pig_attack_prince_porky"
+        ]
+      },
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_support_prince_porky_goad"
         ]
       }
     ],
@@ -9907,15 +10615,22 @@
     "PerLevelAttack": 0,
     "SkillNameIds": [
       "pig_attack_prince_porky",
-      "pig_support_prince_porky"
+      "pig_support_prince_porky",
+      "pig_support_prince_porky_goad"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 75.0,
         "ComboChain": [
           "pig_support_prince_porky",
           "pig_attack_prince_porky",
           "pig_attack_prince_porky"
+        ]
+      },
+      {
+        "Percentage": 25.0,
+        "ComboChain": [
+          "pig_support_prince_porky_goad"
         ]
       }
     ],

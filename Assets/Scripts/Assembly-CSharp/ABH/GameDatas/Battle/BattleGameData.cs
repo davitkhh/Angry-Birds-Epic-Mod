@@ -81,6 +81,12 @@ namespace ABH.GameDatas.Battle
 
 		public int m_DefeatedPvPBirds;
 
+		// Pirate pigs that died while each pig was alive (Stinkeye's empowered mark)
+		public Dictionary<ICombatant, int> m_PirateDeathsWitnessed = new Dictionary<ICombatant, int>();
+
+		// Snoutlings each Full Pockets pig has already spilled
+		public Dictionary<ICombatant, int> m_FullPocketsDropped = new Dictionary<ICombatant, int>();
+
 		public string m_CurrentOpponentId;
 
 		private int m_lastPigTurn;

@@ -26,6 +26,10 @@ namespace ABH.GameDatas.Battle
 		// pigs without an inventory).
 		protected bool m_ForceRanged;
 
+		// Set by whoever speeds up the source's animations for this attack (GoadAllyIntoAttack), so ranged attacks don't
+		// wait out the clip's natural length.
+		public float AttackAnimationSpeed = 1f;
+
 		protected bool m_UseCenterPosition;
 
 		protected bool m_UseFocusPosition;
@@ -308,7 +312,7 @@ namespace ABH.GameDatas.Battle
 			}
 			else
 			{
-				yield return new WaitForSeconds(m_AttackAnimation(source));
+				yield return new WaitForSeconds(m_AttackAnimation(source) / AttackAnimationSpeed);
 			}
 			foreach (var action7 in ActionsOnImpact)
 			{
@@ -426,7 +430,15 @@ namespace ABH.GameDatas.Battle
 							}
 						}
 					}
-					modificationdealt2 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(modificationdealt2, EffectTriggerType.OnDealDamage, m_Source, skillTarget);
+					if (!m_NoDamage && !m_IsRageSkill)
+					{
+						Ammo.ModifyDamage(source, ref perkDamagedealt);
+					}
+					if (!m_NoDamage && !m_IsRageSkill && DIContainerLogic.GetBattleService().ApplyFirstStrikePerk(source, skillTarget, ref perkDamagedealt))
+					{
+						skillTarget.CombatantView.m_CurrentPerkType = PerkType.GroundZero;
+					}
+					modificationdealt2 =DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(modificationdealt2, EffectTriggerType.OnDealDamage, m_Source, skillTarget);
 					if (modificationdealt2 != 1f)
 					{
 					}

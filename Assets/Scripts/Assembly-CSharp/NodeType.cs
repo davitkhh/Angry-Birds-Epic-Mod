@@ -35,5 +35,6 @@ public enum NodeType
 	FaceDirection = 32,
 	ShowBubble = 33,
 	DropHandItems = 34,
-	MovePath = 35
+	MovePath = 35,
+	Branch = 36
 }

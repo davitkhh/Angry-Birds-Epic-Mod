@@ -27,6 +27,9 @@ namespace ABH.GameDatas.Battle
 
 		public ICombatant m_Source;
 
+		// Who the effect counts as applied by when it differs from m_Source (a curse spawned by someone else's blessing)
+		public ICombatant m_AppliedBy;
+
 		public string m_SkillIdent;
 
 		public string m_LocalizedName;
@@ -42,6 +45,9 @@ namespace ABH.GameDatas.Battle
 		public bool m_TargetAll;
 
 		public int m_SummonTurnCounter;
+
+		// Net turns IncreaseChargeByTurns added to this charge (negative when shortened)
+		public int m_ChargeTurnsAdded;
 
 		private bool m_PersistIfDefeated = true;
 
@@ -95,6 +101,7 @@ namespace ABH.GameDatas.Battle
 			{
 				m_Source = original.m_Source;
 			}
+			m_AppliedBy = original.m_AppliedBy;
 			m_SkillIdent = original.m_SkillIdent;
 			m_LocalizedName = original.m_LocalizedName;
 			m_IconAssetId = original.m_IconAssetId;
@@ -107,6 +114,7 @@ namespace ABH.GameDatas.Battle
 			m_Duration = original.m_Duration;
 			m_EndTurn = original.m_EndTurn;
 			currentTurn = original.currentTurn;
+			m_ChargeTurnsAdded = original.m_ChargeTurnsAdded;
 			InitActions(m_Source, m_Battle);
 		}
 
@@ -154,6 +162,14 @@ namespace ABH.GameDatas.Battle
 			source.KnockedOut += OnInvokerDefeated;
 		}
 
+		public ICombatant AppliedBy
+		{
+			get
+			{
+				return m_AppliedBy ?? m_Source;
+			}
+		}
+
 		public BattleEffectGameData SetPersistanceAfterDefeat(bool persist)
 		{
 			m_PersistIfDefeated = persist;
@@ -164,6 +180,14 @@ namespace ABH.GameDatas.Battle
 		{
 			m_TargetAll = targetAll;
 			return this;
+		}
+
+		public int TotalDuration
+		{
+			get
+			{
+				return m_Duration;
+			}
 		}
 
 		public void IncrementDuration()
@@ -195,11 +219,13 @@ namespace ABH.GameDatas.Battle
 
 		public void IncreaseChargeByTurns(int turns)
 		{
+			var before = currentTurn;
 			currentTurn -= turns;
 			if (currentTurn < 0)
 			{
 				currentTurn = 0;
 			}
+			m_ChargeTurnsAdded += before - currentTurn;
 			UpdateEffect(GetTurnsLeft());
 		}
 

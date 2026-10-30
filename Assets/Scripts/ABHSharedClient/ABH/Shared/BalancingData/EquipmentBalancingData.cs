@@ -85,5 +85,9 @@ namespace ABH.Shared.BalancingData
 
 		[ProtoMember(25)]
 		public string PvpSetItemSkill { get; set; }
+
+		// Weapon stats outside the perk system, e.g. ammo (see ABH.GameDatas.Battle.Ammo for the keys)
+		[ProtoMember(26)]
+		public Dictionary<string, float> WeaponAttributes { get; set; }
 	}
 }

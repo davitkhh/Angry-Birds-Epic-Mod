@@ -76,9 +76,9 @@
     "StatPerQuality": 0,
     "StatPerQualityPercent": [
       0,
-      10,
-      20,
-      30
+      15,
+      35,
+      50
     ],
     "AnimationIndex": 1,
     "IsRanged": false,
@@ -92,6 +92,42 @@
     "DirectAssetAndLoca": false,
     "CorrespondingSetItemId": "",
     "AssetLevelOffset": 3,
+    "AssetCycleCount": 9,
+    "HitEffectSuffix": "_Melee_Strike",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_weapon_red_sword_workshop",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "MainHand_Sword_03",
+    "LocaBaseId": "bird_weapon_red_sword_03_crafting",
+    "SortPriority": 1,
+    "BaseStat": 16,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      15,
+      35,
+      50
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "Weaken",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 30.0
+    },
+    "RestrictedBirdId": "bird_red",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
     "AssetCycleCount": 9,
     "HitEffectSuffix": "_Melee_Strike",
     "SetItemSkill": "",
@@ -288,9 +324,9 @@
     "StatPerQuality": 0,
     "StatPerQualityPercent": [
       0,
-      10,
-      20,
-      30
+      15,
+      35,
+      50
     ],
     "AnimationIndex": 1,
     "IsRanged": false,
@@ -304,6 +340,42 @@
     "DirectAssetAndLoca": false,
     "CorrespondingSetItemId": "",
     "AssetLevelOffset": -10,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "_Melee_Smash",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_weapon_red_lance_workshop",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "MainHand_Lance_06",
+    "LocaBaseId": "bird_weapon_red_lance_06_crafting",
+    "SortPriority": 3,
+    "BaseStat": 16,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      15,
+      35,
+      50
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "ChainAttack",
+      "ProbablityInPercent": 30.0,
+      "PerkValue": 50.0
+    },
+    "RestrictedBirdId": "bird_red",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
     "AssetCycleCount": 8,
     "HitEffectSuffix": "_Melee_Smash",
     "SetItemSkill": "",
@@ -529,17 +601,17 @@
   {
     "NameId": "bird_offhand_red_shield_workshop",
     "ItemType": "OffHandEquipment",
-    "AssetBaseId": "OffHand_Shield",
-    "LocaBaseId": "bird_offhand_red_shield",
+    "AssetBaseId": "OffHand_Shield_03",
+    "LocaBaseId": "bird_offhand_red_shield_03_crafting",
     "SortPriority": 1,
     "BaseStat": 50,
     "StatPerLevel": 25,
     "StatPerQuality": 0,
     "StatPerQualityPercent": [
       0,
-      10,
-      20,
-      30
+      15,
+      35,
+      50
     ],
     "AnimationIndex": 1,
     "IsRanged": false,
@@ -550,9 +622,9 @@
       "PerkValue": 0.0
     },
     "RestrictedBirdId": "bird_red",
-    "DirectAssetAndLoca": false,
+    "DirectAssetAndLoca": true,
     "CorrespondingSetItemId": "",
-    "AssetLevelOffset": 2,
+    "AssetLevelOffset": 0,
     "AssetCycleCount": 8,
     "HitEffectSuffix": "",
     "SetItemSkill": "",
@@ -763,6 +835,42 @@
     },
     "RestrictedBirdId": "bird_red",
     "DirectAssetAndLoca": false,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "bird_offhand_red_banner_standalone",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "OffHand_Banner_01",
+    "LocaBaseId": "bird_offhand_red_banner_01_crafting",
+    "SortPriority": 2,
+    "BaseStat": 84,
+    "StatPerLevel": 25,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0,
+      15,
+      35,
+      50
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": {
+      "Type": "Rally",
+      "ProbablityInPercent": 100.0,
+      "PerkValue": 10.0
+    },
+    "RestrictedBirdId": "bird_red",
+    "DirectAssetAndLoca": true,
     "CorrespondingSetItemId": "",
     "AssetLevelOffset": 0,
     "AssetCycleCount": 8,
@@ -1807,9 +1915,9 @@
     "StatPerQuality": 0,
     "StatPerQualityPercent": [
       0,
-      10,
-      20,
-      30
+      15,
+      35,
+      50
     ],
     "AnimationIndex": 1,
     "IsRanged": false,
@@ -3251,9 +3359,9 @@
     "IsRanged": false,
     "ProjectileAssetId": "",
     "Perk": {
-      "Type": "Might",
+      "Type": "GroundZero",
       "ProbablityInPercent": 100.0,
-      "PerkValue": 5.0
+      "PerkValue": 150.0
     },
     "RestrictedBirdId": "bird_black",
     "DirectAssetAndLoca": true,
@@ -3387,11 +3495,7 @@
     "AnimationIndex": 1,
     "IsRanged": true,
     "ProjectileAssetId": "Projectile_BlueBirds_Bow",
-    "Perk": {
-      "Type": "CriticalStrike",
-      "ProbablityInPercent": 15.0,
-      "PerkValue": 50.0
-    },
+    "Perk": null,
     "RestrictedBirdId": "bird_blue",
     "DirectAssetAndLoca": true,
     "CorrespondingSetItemId": "",
@@ -3403,7 +3507,45 @@
     "Mainsource": "Crafting",
     "ShowAsNew": false,
     "HideInPreview": false,
-    "PvpSetItemSkill": ""
+    "PvpSetItemSkill": "",
+    "WeaponAttributes": {
+      "ammo_start": 8.0,
+      "ammo_on_kill": 2.0
+    }
+  },
+  {
+    "NameId": "bird_weapon_blue_bow_bone",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "MainHand_Bow_03",
+    "LocaBaseId": "bird_weapon_blue_bow_03_crafting",
+    "SortPriority": 13,
+    "BaseStat": 17,
+    "StatPerLevel": 20,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": true,
+    "ProjectileAssetId": "Projectile_BlueBirds_Bow_03",
+    "Perk": null,
+    "RestrictedBirdId": "bird_blue",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 8,
+    "HitEffectSuffix": "_Ranged_Projectile",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": true,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": "",
+    "WeaponAttributes": {
+      "ammo_start": 4.0,
+      "ammo_free_with_blessing": 1.0,
+      "damage_per_blessing_percent": 15.0
+    }
   },
   {
     "NameId": "bird_weapon_blue_bow_01",

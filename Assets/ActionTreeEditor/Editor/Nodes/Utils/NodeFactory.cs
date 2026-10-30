@@ -93,6 +93,7 @@
                 NodeType.ShowBubble           => new ShowBubbleNode(node),
                 NodeType.DropHandItems        => new DropHandItemsNode(node),
                 NodeType.MovePath             => new MovePathNode(node),
+                NodeType.Branch               => new BranchNode(node),
                 
                 _ => new UnImplementedNode(node)
             };

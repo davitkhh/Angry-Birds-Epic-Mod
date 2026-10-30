@@ -210,7 +210,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
 					SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
-					SetPigBody(Model.ClassItem);
+					SetPirateVariants(Model.ClassItem);
 					if (m_BoneAnimation.GetBoneTransform("MainHand") != null)
 					{
 						m_BoneAnimation.HideBone("MainHand", true);
@@ -268,13 +268,13 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					SetEquipmentItem((Model as PigGameData).ClassSkin, "Headgear", string.Empty);
 					SetEquipmentItem((Model as PigGameData).ClassSkin, "Headgear_Back", "_Back");
-					SetPigBody((Model as PigGameData).ClassSkin);
+					SetPirateVariants((Model as PigGameData).ClassSkin);
 				}
 				else
 				{
 					SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
 					SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
-					SetPigBody(Model.ClassItem);
+					SetPirateVariants(Model.ClassItem);
 				}
 				if (showItems)
 				{
@@ -411,31 +411,49 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		return true;
 	}
 
-	// Pirate-aligned pigs (wearing a pirate captain hat) swap their Body for the rig's "BodyPirate" texture,
-	// when the rig has one (MoustachePig).
-	private void SetPigBody(IInventoryItemGameData headgear)
+	private readonly List<string> m_PirateSwappedBones = new List<string>();
+
+	// Pirate-aligned pigs (wearing a pirate hat) swap every texture X their bones use for the rig's "XPirate"
+	// texture, when one of the rig's atlases has it: BodyPirate (MoustachePig, PigBrute), Mouth_KOPirate etc.
+	// (PigBrute). A bone like Mouth changes texture per animation, so each of its textures is swapped on its own.
+	private void SetPirateVariants(IInventoryItemGameData headgear)
 	{
-		if (base.HasNoBoneAnimation || m_BoneAnimation.GetBoneTransform("Body") == null)
+		if (base.HasNoBoneAnimation)
 		{
 			return;
 		}
-		var bodyBone = m_BoneAnimation.mBoneSource.FirstOrDefault(b => b.boneName == "Body");
-		if (bodyBone == null)
+		foreach (var swappedBone in m_PirateSwappedBones)
 		{
-			return;
+			m_BoneAnimation.RestoreBoneTexture(swappedBone);
 		}
-		var triggerFrame = m_BoneAnimation.triggerFrames.FirstOrDefault(f => f.GetTriggerFrameBone(bodyBone.boneNodeIndex) != null && !string.IsNullOrEmpty(f.GetTriggerFrameBone(bodyBone.boneNodeIndex).originalTextureGUID));
-		if (triggerFrame == null)
-		{
-			return;
-		}
+		m_PirateSwappedBones.Clear();
 		var headgearName = headgear == null || string.IsNullOrEmpty(headgear.ItemAssetName) ? string.Empty : headgear.ItemAssetName;
-		var isPirate = headgearName.Contains("Pirate") || headgearName.Contains("RedBeard");
-		if (!isPirate || !SwapBoneToTexture("Body", triggerFrame.GetTriggerFrameBone(bodyBone.boneNodeIndex).originalTextureGUID, "BodyPirate"))
+		if (!headgearName.Contains("Pirate") && !headgearName.Contains("RedBeard"))
 		{
-			if (m_EquipmentSetOnce)
+			return;
+		}
+		var atlases = m_BoneAnimation.textureAtlases.Where(a => a != null).ToList();
+		foreach (var bone in m_BoneAnimation.mBoneSource)
+		{
+			var originalGUIDs = m_BoneAnimation.triggerFrames.Select(f => f.GetTriggerFrameBone(bone.boneNodeIndex)).Where(b => b != null && !string.IsNullOrEmpty(b.originalTextureGUID)).Select(b => b.originalTextureGUID).Distinct();
+			foreach (var guid in originalGUIDs)
 			{
-				m_BoneAnimation.RestoreBoneTexture("Body");
+				var originalAtlas = atlases.FirstOrDefault(a => a.GetTextureIndex(guid) != -1);
+				if (originalAtlas == null)
+				{
+					continue;
+				}
+				var originalName = originalAtlas.textureNames[originalAtlas.GetTextureIndex(guid)];
+				var pirateAtlas = atlases.FirstOrDefault(a => a.textureNames.Contains(originalName + "Pirate"));
+				if (pirateAtlas == null)
+				{
+					continue;
+				}
+				m_BoneAnimation.SwapBoneTexture(bone.boneName, originalAtlas.name, originalName, pirateAtlas.name, originalName + "Pirate");
+				if (!m_PirateSwappedBones.Contains(bone.boneName))
+				{
+					m_PirateSwappedBones.Add(bone.boneName);
+				}
 			}
 		}
 	}

@@ -8,24 +8,37 @@ using UnityEngine;
 
 namespace ABH.GameDatas.Battle
 {
-	// Per-battle ammo for combatants whose skills carry ammo parameters (SkillParameters, any skill of the combatant):
-	//   ammo_cost         ammo the skill uses each time it is used; it can't be used without that much
-	//   ammo_start        ammo at the start of every battle (largest value over the combatant's skills)
-	//   ammo_regen        ammo gained every ammo_regen_turns turns (counted at the end of each turn after the first)
-	//   ammo_regen_turns
-	//   ammo_gain         ammo the skill gives its user after it was used (e.g. a support)
-	// Combatants are rebuilt for every battle, so the state lives as long as the combatant.
+	// Per-battle ammo, driven by the combatant's weapon (EquipmentBalancingData.WeaponAttributes of the main hand), so any
+	// class can use it. A weapon with ammo_start uses ammo; its attributes:
+	//   ammo_start                   ammo at the start of every battle
+	//   ammo_cost                    ammo each attack (the class's attack skills, not rage) uses; default 1. An attack
+	//                                can't be used without that much
+	//   ammo_regen                   ammo gained every ammo_regen_turns turns (counted at the end of each turn after the
+	//   ammo_regen_turns             battle's first)
+	//   ammo_on_support              ammo gained after using a support skill
+	//   ammo_on_kill                 ammo gained for every pig the combatant knocks out
+	//   ammo_free_with_blessing      1: attacks use no ammo while the attacker has a positive effect
+	//   damage_per_blessing_percent  attacks deal this much more damage (%) for every positive effect on the attacker
+	// Positive effects are the visible Blessings on the combatant. Later an ammo item will add attributes of its own
+	// (GetAttributes is where they get merged). Combatants are rebuilt for every battle, so the state lives as long as the
+	// combatant.
 	public static class Ammo
 	{
-		public const string CostKey = "ammo_cost";
-
 		public const string StartKey = "ammo_start";
+
+		public const string CostKey = "ammo_cost";
 
 		public const string RegenKey = "ammo_regen";
 
 		public const string RegenTurnsKey = "ammo_regen_turns";
 
-		public const string GainKey = "ammo_gain";
+		public const string SupportGainKey = "ammo_on_support";
+
+		public const string KillGainKey = "ammo_on_kill";
+
+		public const string FreeWithBlessingKey = "ammo_free_with_blessing";
+
+		public const string DamagePerBlessingKey = "damage_per_blessing_percent";
 
 		public class State
 		{
@@ -39,9 +52,15 @@ namespace ABH.GameDatas.Battle
 
 			// Turns counted towards the next regen
 			public int RegenProgress;
+
+			public Dictionary<string, float> Attributes;
+
+			public string FiredProjectile;
 		}
 
 		private static readonly ConditionalWeakTable<ICombatant, State> s_States = new ConditionalWeakTable<ICombatant, State>();
+
+		private static readonly Dictionary<string, float> NoAttributes = new Dictionary<string, float>();
 
 		// Raised whenever a combatant's ammo or regen progress changes.
 		public static event Action<ICombatant> Changed;
@@ -49,12 +68,20 @@ namespace ABH.GameDatas.Battle
 		// Raised when a combatant gains ammo (amount > 0), for the floating "+X" popup.
 		public static event Action<ICombatant, int> Gained;
 
+		// The combatant's weapon attributes (empty when it has none)
+		public static Dictionary<string, float> GetAttributes(ICombatant combatant)
+		{
+			var mainHand = combatant != null ? combatant.CombatantMainHandEquipment : null;
+			var attributes = mainHand != null && mainHand.BalancingData != null ? mainHand.BalancingData.WeaponAttributes : null;
+			return attributes ?? NoAttributes;
+		}
+
 		public static bool UsesAmmo(ICombatant combatant)
 		{
 			return GetState(combatant) != null;
 		}
 
-		// Null when the combatant has no ammo parameters on any skill.
+		// Null when the combatant's weapon doesn't use ammo.
 		public static State GetState(ICombatant combatant)
 		{
 			if (combatant == null)
@@ -66,16 +93,17 @@ namespace ABH.GameDatas.Battle
 			{
 				return state;
 			}
-			var skills = GetAllSkills(combatant);
-			if (!skills.Any(s => HasParameter(s, CostKey) || HasParameter(s, StartKey) || HasParameter(s, RegenKey) || HasParameter(s, GainKey)))
+			var attributes = GetAttributes(combatant);
+			if (!attributes.ContainsKey(StartKey))
 			{
 				return null;
 			}
 			state = new State
 			{
-				Start = skills.Max(s => GetInt(s, StartKey)),
-				Regen = skills.Max(s => GetInt(s, RegenKey)),
-				RegenTurns = skills.Max(s => GetInt(s, RegenTurnsKey))
+				Start = GetInt(attributes, StartKey),
+				Regen = GetInt(attributes, RegenKey),
+				RegenTurns = GetInt(attributes, RegenTurnsKey),
+				Attributes = attributes
 			};
 			state.Current = state.Start;
 			s_States.Add(combatant, state);
@@ -94,20 +122,87 @@ namespace ABH.GameDatas.Battle
 			return state != null && state.Regen > 0 && state.RegenTurns > 0;
 		}
 
-		public static int GetCost(SkillBattleDataBase skill)
+		// Skills that spend the weapon's ammo: the combatant's own attacks, never rage. m_IsRageSkill is only set once
+		// rage is triggered, so a bird's rage skill (slot 2) is also recognised by name.
+		public static bool IsAmmoSkill(ICombatant combatant, SkillBattleDataBase skill)
 		{
-			return GetInt(skill, CostKey);
+			if (skill == null || skill.Model == null || skill.m_IsRageSkill || skill.Model.Balancing.TargetType != SkillTargetTypes.Attack)
+			{
+				return false;
+			}
+			var rage = combatant is BirdCombatant ? combatant.GetSkill(2) : null;
+			return rage == null || rage.Model == null || rage.Model.Balancing.NameId != skill.Model.Balancing.NameId;
 		}
 
-		public static int GetGain(SkillBattleDataBase skill)
+		// Whether the skill shows and spends ammo for this combatant (ignores free shots)
+		public static bool UsesAmmo(ICombatant combatant, SkillBattleDataBase skill)
 		{
-			return GetInt(skill, GainKey);
+			return IsAmmoSkill(combatant, skill) && GetState(combatant) != null;
+		}
+
+		// The projectile the combatant's weapon last fired (null before its first shot)
+		public static string GetFiredProjectile(ICombatant combatant)
+		{
+			var state = GetState(combatant);
+			return state != null ? state.FiredProjectile : null;
+		}
+
+		// SkillBattleDataBase.SpawnProjectile reports every projectile it spawns
+		public static void OnProjectileFired(ICombatant combatant, string projectileAssetId)
+		{
+			var state = GetState(combatant);
+			if (state != null && !string.IsNullOrEmpty(projectileAssetId) && state.FiredProjectile != projectileAssetId)
+			{
+				state.FiredProjectile = projectileAssetId;
+				RaiseChanged(combatant);
+			}
+		}
+
+		// Ammo the skill would use right now (0 for skills that don't use ammo, or free shots)
+		public static int GetCost(ICombatant combatant, SkillBattleDataBase skill)
+		{
+			var state = GetState(combatant);
+			if (state == null || !IsAmmoSkill(combatant, skill))
+			{
+				return 0;
+			}
+			if (GetInt(state.Attributes, FreeWithBlessingKey) > 0 && CountBlessings(combatant) > 0)
+			{
+				return 0;
+			}
+			float cost;
+			return state.Attributes.TryGetValue(CostKey, out cost) ? Mathf.RoundToInt(cost) : 1;
 		}
 
 		public static bool CanAfford(ICombatant combatant, SkillBattleDataBase skill)
 		{
-			var cost = GetCost(skill);
+			var cost = GetCost(combatant, skill);
 			return cost <= 0 || GetAmmo(combatant) >= cost;
+		}
+
+		// Visible positive effects on the combatant
+		public static int CountBlessings(ICombatant combatant)
+		{
+			if (combatant == null || combatant.CurrrentEffects == null)
+			{
+				return 0;
+			}
+			return combatant.CurrrentEffects.Values.Count(e => e != null && e.m_EffectType == SkillEffectTypes.Blessing && !string.IsNullOrEmpty(e.m_IconAssetId));
+		}
+
+		// Weapon damage bonus for an attack (damage_per_blessing_percent per positive effect)
+		public static void ModifyDamage(ICombatant source, ref float damage)
+		{
+			var percent = GetAttributes(source).TryGetValue(DamagePerBlessingKey, out var value) ? value : 0f;
+			if (percent <= 0f)
+			{
+				return;
+			}
+			var blessings = CountBlessings(source);
+			if (blessings > 0)
+			{
+				damage *= 1f + percent * blessings / 100f;
+			}
 		}
 
 		// The skill the combatant would use, or the first other usable skill it can afford when it lacks the ammo
@@ -140,7 +235,7 @@ namespace ABH.GameDatas.Battle
 		// Called right before the skill runs: spends its ammo.
 		public static void OnSkillStarted(ICombatant combatant, SkillBattleDataBase skill)
 		{
-			var cost = GetCost(skill);
+			var cost = GetCost(combatant, skill);
 			var state = GetState(combatant);
 			if (cost <= 0 || state == null)
 			{
@@ -150,14 +245,26 @@ namespace ABH.GameDatas.Battle
 			RaiseChanged(combatant);
 		}
 
-		// Called after the skill ran: gives its ammo_gain to the user.
+		// Called after the skill ran: supports give the weapon's ammo_on_support to their user.
 		public static void OnSkillFinished(ICombatant combatant, SkillBattleDataBase skill)
 		{
-			var gain = GetGain(skill);
-			if (gain > 0 && combatant != null && combatant.IsParticipating)
+			var state = GetState(combatant);
+			if (state == null || skill == null || skill.m_IsRageSkill || skill.Model.Balancing.TargetType != SkillTargetTypes.Support || combatant == null || !combatant.IsParticipating)
 			{
-				Gain(combatant, gain);
+				return;
 			}
+			Gain(combatant, GetInt(state.Attributes, SupportGainKey));
+		}
+
+		// A pig was knocked out by killer
+		public static void OnKill(ICombatant killer, ICombatant victim)
+		{
+			var state = GetState(killer);
+			if (state == null || victim == null || victim.CombatantFaction != Faction.Pigs || killer.CombatantFaction == Faction.Pigs || !killer.IsParticipating)
+			{
+				return;
+			}
+			Gain(killer, GetInt(state.Attributes, KillGainKey));
 		}
 
 		public static void Gain(ICombatant combatant, int amount)
@@ -211,25 +318,10 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
-		private static List<SkillBattleDataBase> GetAllSkills(ICombatant combatant)
-		{
-			var skills = combatant.GetSkills();
-			return skills == null ? new List<SkillBattleDataBase>() : skills.Where(s => s != null && s.Model != null).ToList();
-		}
-
-		private static bool HasParameter(SkillBattleDataBase skill, string key)
-		{
-			return skill != null && skill.Model != null && skill.Model.SkillParameters != null && skill.Model.SkillParameters.ContainsKey(key);
-		}
-
-		private static int GetInt(SkillBattleDataBase skill, string key)
+		private static int GetInt(Dictionary<string, float> attributes, string key)
 		{
 			float value;
-			if (skill == null || skill.Model == null || skill.Model.SkillParameters == null || !skill.Model.SkillParameters.TryGetValue(key, out value))
-			{
-				return 0;
-			}
-			return Mathf.RoundToInt(value);
+			return attributes != null && attributes.TryGetValue(key, out value) ? Mathf.RoundToInt(value) : 0;
 		}
 	}
 }

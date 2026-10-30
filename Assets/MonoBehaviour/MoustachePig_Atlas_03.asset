@@ -18,16 +18,36 @@ MonoBehaviour:
     y: 0.2890625
     width: 0.8359375
     height: 0.7109375
+  - serializedVersion: 2
+    x: 0
+    y: 0.09375
+    width: 0.1484375
+    height: 0.1796875
+  - serializedVersion: 2
+    x: 0.1640625
+    y: 0.0859375
+    width: 0.1796875
+    height: 0.1875
   textureGUIDs:
   - 97622465c606908fca26e25d5581b548
+  - 0df23d0d1a674cc28fa048ab22d0aa95
+  - bbae8ee7c9b343b98afd3a22f694479d
   textureSizes:
   - {x: 214, y: 182}
+  - {x: 38, y: 46}
+  - {x: 46, y: 48}
   defaultPivotOffsets:
   - {x: 0, y: -0.5}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   textureNames:
   - BodyPirate
+  - Eye_LeftPirate
+  - Eye_RightPirate
   texturePaths:
   - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/BodyPirate.png
+  - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Eye_LeftPirate.png
+  - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Eye_RightPirate.png
   lastBuildID: 20160822143532908
   needsRebuilt: 0
   dataVersion: 4

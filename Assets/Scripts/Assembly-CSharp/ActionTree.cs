@@ -1323,6 +1323,20 @@ public class ActionTree : MonoBehaviour
 				}
 				break;
 			}
+			// Goes on to the next node while the code toggle named in secondaryText (StoryToggles) is on; otherwise jumps to
+			// node customInt, skipping a part of the cutscene (e.g. McCool's robbery).
+			case NodeType.Branch:
+			{
+				if (!StoryToggles.IsOn(node.secondaryText))
+				{
+					if (GetNodeByID(node.customInt) != null)
+					{
+						return Load(node.customInt);
+					}
+					DebugLog.Warn("Branch: toggle " + node.secondaryText + " is off but there is no node " + node.customInt + " to jump to");
+				}
+				break;
+			}
 			// Stops another tree (customBool off), e.g. a story state's idle loop during a cutscene, or resumes it
 			// at node customInt (customBool on).
 			case NodeType.ControlActionTree:

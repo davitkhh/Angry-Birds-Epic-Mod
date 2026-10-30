@@ -713,7 +713,7 @@ public class TutorialMgr : MonoBehaviour, ITutorialMgr
 				new TutorialStepTemplate
 				{
 					StepTemplate = TutorialStepType.AttackPig,
-					PossibleParameters = new List<string> { "bird_yellow", "pig_minion_rogue_bird1" }
+					PossibleParameters = new List<string> { "bird_yellow", "pig_minion_rogue_bird3" }
 				},
 				new TutorialStepTemplate
 				{

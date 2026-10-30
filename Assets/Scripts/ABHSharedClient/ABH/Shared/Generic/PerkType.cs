@@ -29,6 +29,8 @@ namespace ABH.Shared.Generic
 		CashStrike,
 		Amplify,
 		Brilliance,
-		Dynamite
+		Dynamite,
+		GroundZero,
+		Rally
 	}
 }

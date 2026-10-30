@@ -369,7 +369,8 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		}
 		FocusInitiaive();
 		DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(turn, EffectTriggerType.OnCharge, m_Model, null);
-		var chargeEffects = m_Model.CurrrentEffects.Values.Where(e => e.m_Effects.Any(ef => ef.EffectTrigger == EffectTriggerType.OnCharge)).ToList();
+		// 1-turn charges go off this same turn (like their missing bubble): no charging animation or pause for them
+		var chargeEffects = m_Model.CurrrentEffects.Values.Where(e => e.m_Effects.Any(ef => ef.EffectTrigger == EffectTriggerType.OnCharge) && !(e.TotalDuration == 1 && e.m_Effects.Any(ef => ef.EffectType == BattleEffectType.Charge))).ToList();
 		if (m_Model is PigCombatant && chargeEffects.Count > 0)
 		{
 			PlayAffectedAnimation();
@@ -504,6 +505,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 
 	private IEnumerator DoTurnAfterInput()
 	{
+		var skillUsed = m_SkillToDo;
 		if (m_Model.GetSkill(2) != m_SkillToDo)
 		{
 			m_rageUsed = false;
@@ -693,14 +695,24 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		}
 		m_rageUsed = false;
 		DebugLog.Log("Character finished his turn: " + m_Model.CombatantNameId);
-		yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForShowDamageAndReturnToBasePosInSec);
+		// Porky's goad already hopped him back to his spot (and gave the ally's damage its own wait), so there is nothing to wait for.
+		var goad = skillUsed as ABH.GameDatas.Battle.Skills.GoadAllyIntoAttack;
+		var alreadyHome = goad != null && goad.ReturnedToBasePosition;
+		if (!alreadyHome)
+		{
+			yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForShowDamageAndReturnToBasePosInSec);
+		}
 		if (!m_Model.IsParticipating)
 		{
 			m_ReadyToDestroy = true;
 			DIContainerLogic.GetBattleService().RemoveCombatantFromBattle(m_BattleMgr.Model, m_Model);
 			yield break;
 		}
-		if (m_Model is BirdCombatant && (m_BattleMgr.CanCharactersAct(1, m_Model.CombatantNameId) || base.m_CounterAttack))
+		if (alreadyHome)
+		{
+			// Walking there again would make him step in place.
+		}
+		else if (m_Model is BirdCombatant && (m_BattleMgr.CanCharactersAct(1, m_Model.CombatantNameId) || base.m_CounterAttack))
 		{
 			yield return new WaitForSeconds(PlayGoToFocusPosition());
 		}

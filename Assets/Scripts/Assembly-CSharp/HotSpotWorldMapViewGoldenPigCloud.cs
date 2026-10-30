@@ -1,3 +1,5 @@
+using System.Linq;
+using ABH.Shared.Generic;
 using SmoothMoves;
 using UnityEngine;
 
@@ -7,6 +9,8 @@ using UnityEngine;
 // While the level is unbeaten the pig laughs every few seconds as long as it is fully on screen; once beaten it holds the
 // first frame of its "New Clip" pose (built into the scene rigs with SmoothMovesClipBuilder). Tapping the unbeaten pig
 // startles it.
+// The cloud and the pig stay hidden until the hotspot is unlocked: its VisibleRequirements (castle 1 beaten) are met and
+// the hotspot graph has activated it.
 public class HotSpotWorldMapViewGoldenPigCloud : HotSpotWorldMapViewBattle
 {
 	private const string LaughAnimation = "Cheer";
@@ -45,10 +49,25 @@ public class HotSpotWorldMapViewGoldenPigCloud : HotSpotWorldMapViewBattle
 
 	private bool m_PigPosed;
 
+	// The cloud and its pig; hidden until the hotspot is unlocked. Empty: the "Cloud" and "Character" children.
+	[SerializeField]
+	private GameObject[] m_HiddenUntilUnlocked;
+
+	private bool? m_DecorationShown;
+
 	protected override void InitialSetupHotspot()
 	{
 		base.InitialSetupHotspot();
 		TrySetUpGoldenPig();
+		// Hide a locked cloud before its first frame; never let the decoration break the map setup.
+		try
+		{
+			UpdateDecoration();
+		}
+		catch (System.Exception e)
+		{
+			DebugLog.Error(GetType(), "golden pig cloud: could not update its visibility: " + e);
+		}
 	}
 
 	private void OnEnable()
@@ -58,6 +77,10 @@ public class HotSpotWorldMapViewGoldenPigCloud : HotSpotWorldMapViewBattle
 
 	public override void HandleMouseButtonUp(bool directMove = false)
 	{
+		if (!IsUnlocked())
+		{
+			return;
+		}
 		base.HandleMouseButtonUp(directMove);
 		if (base.Model == null || base.Model.IsCompleted() || !FindPig() || !IsPointerOnPig() || !HasClip(ClickedAnimation))
 		{
@@ -81,8 +104,44 @@ public class HotSpotWorldMapViewGoldenPigCloud : HotSpotWorldMapViewBattle
 		return point.x >= bounds.min.x && point.x <= bounds.max.x && point.y >= bounds.min.y && point.y <= bounds.max.y;
 	}
 
+	// Unlocked by the hotspot graph and past its visibility requirement (a save from before the requirement may already
+	// have it active).
+	private bool IsUnlocked()
+	{
+		return base.Model != null && base.Model.Data.UnlockState >= HotspotUnlockState.Active && DIContainerLogic.WorldMapService.IsHotspotVisible(DIContainerInfrastructure.GetCurrentPlayer(), base.Model);
+	}
+
+	private void UpdateDecoration()
+	{
+		var show = IsUnlocked();
+		if (m_DecorationShown == show)
+		{
+			return;
+		}
+		m_DecorationShown = show;
+		if (m_HiddenUntilUnlocked == null || m_HiddenUntilUnlocked.Length == 0)
+		{
+			m_HiddenUntilUnlocked = new[] { "Cloud", "Character" }.Select(n => transform.Find(n)).Where(t => t != null).Select(t => t.gameObject).ToArray();
+		}
+		foreach (var decoration in m_HiddenUntilUnlocked)
+		{
+			if (decoration != null)
+			{
+				decoration.SetActive(show);
+			}
+		}
+		if (show)
+		{
+			// The rig was inactive: look it up again and let it settle before laughing.
+			m_PigAnimation = null;
+			m_PigOnScreen = false;
+			m_PigPosed = false;
+		}
+	}
+
 	private void Update()
 	{
+		UpdateDecoration();
 		if (base.Model == null || !FindPig())
 		{
 			return;

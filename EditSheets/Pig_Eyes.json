@@ -1,0 +1,329 @@
+{
+  "suffix": "Pirate",
+  "sprites": [
+    {
+      "name": "Eye_Left",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 12,
+      "y": 52,
+      "w": 38,
+      "h": 46,
+      "out": "Eye_LeftPirate.png"
+    },
+    {
+      "name": "Eye_Right",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 162,
+      "y": 52,
+      "w": 46,
+      "h": 48,
+      "out": "Eye_RightPirate.png"
+    },
+    {
+      "name": "Lid_Left_Angry",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 312,
+      "y": 52,
+      "w": 30,
+      "h": 32,
+      "out": "Lid_Left_AngryPirate.png"
+    },
+    {
+      "name": "Lid_Left_Blue",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 462,
+      "y": 52,
+      "w": 30,
+      "h": 32,
+      "out": "Lid_Left_BluePirate.png"
+    },
+    {
+      "name": "Lid_Left_Closed",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 612,
+      "y": 52,
+      "w": 30,
+      "h": 32,
+      "out": "Lid_Left_ClosedPirate.png"
+    },
+    {
+      "name": "Lid_Left_CurvedClosed",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 762,
+      "y": 52,
+      "w": 30,
+      "h": 32,
+      "out": "Lid_Left_CurvedClosedPirate.png"
+    },
+    {
+      "name": "Lid_Left_Down",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 912,
+      "y": 52,
+      "w": 26,
+      "h": 20,
+      "out": "Lid_Left_DownPirate.png"
+    },
+    {
+      "name": "Lid_Left_HalfOpen",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 1062,
+      "y": 52,
+      "w": 30,
+      "h": 32,
+      "out": "Lid_Left_HalfOpenPirate.png"
+    },
+    {
+      "name": "Lid_Left_Hanging",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 12,
+      "y": 148,
+      "w": 22,
+      "h": 46,
+      "out": "Lid_Left_HangingPirate.png"
+    },
+    {
+      "name": "Lid_Left_Squint",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 162,
+      "y": 148,
+      "w": 30,
+      "h": 32,
+      "out": "Lid_Left_SquintPirate.png"
+    },
+    {
+      "name": "Lid_Left_Upper",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 312,
+      "y": 148,
+      "w": 28,
+      "h": 20,
+      "out": "Lid_Left_UpperPirate.png"
+    },
+    {
+      "name": "Lid_Right_Angry",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 462,
+      "y": 148,
+      "w": 32,
+      "h": 32,
+      "out": "Lid_Right_AngryPirate.png"
+    },
+    {
+      "name": "Lid_Right_Blue",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 612,
+      "y": 148,
+      "w": 32,
+      "h": 32,
+      "out": "Lid_Right_BluePirate.png"
+    },
+    {
+      "name": "Lid_Right_Closed",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 762,
+      "y": 148,
+      "w": 34,
+      "h": 32,
+      "out": "Lid_Right_ClosedPirate.png"
+    },
+    {
+      "name": "Lid_Right_CurvedClosed",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 912,
+      "y": 148,
+      "w": 34,
+      "h": 32,
+      "out": "Lid_Right_CurvedClosedPirate.png"
+    },
+    {
+      "name": "Lid_Right_Down",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 1062,
+      "y": 148,
+      "w": 30,
+      "h": 14,
+      "out": "Lid_Right_DownPirate.png"
+    },
+    {
+      "name": "Lid_Right_HalfOpen",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 12,
+      "y": 244,
+      "w": 34,
+      "h": 34,
+      "out": "Lid_Right_HalfOpenPirate.png"
+    },
+    {
+      "name": "Lid_Right_Hanging",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 162,
+      "y": 244,
+      "w": 42,
+      "h": 54,
+      "out": "Lid_Right_HangingPirate.png"
+    },
+    {
+      "name": "Lid_Right_Squint",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 312,
+      "y": 244,
+      "w": 34,
+      "h": 34,
+      "out": "Lid_Right_SquintPirate.png"
+    },
+    {
+      "name": "Lid_Right_Upper",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 462,
+      "y": 244,
+      "w": 30,
+      "h": 22,
+      "out": "Lid_Right_UpperPirate.png"
+    },
+    {
+      "name": "Pupil_Left",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 612,
+      "y": 244,
+      "w": 8,
+      "h": 8,
+      "out": "Pupil_LeftPirate.png"
+    },
+    {
+      "name": "Pupil_Right",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/",
+      "x": 762,
+      "y": 244,
+      "w": 10,
+      "h": 10,
+      "out": "Pupil_RightPirate.png"
+    },
+    {
+      "name": "Eye_Left",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 12,
+      "y": 374,
+      "w": 38,
+      "h": 52,
+      "out": "Eye_LeftPirate.png"
+    },
+    {
+      "name": "Eye_Left_Red",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 162,
+      "y": 374,
+      "w": 38,
+      "h": 52,
+      "out": "Eye_Left_RedPirate.png"
+    },
+    {
+      "name": "Eye_Right",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 312,
+      "y": 374,
+      "w": 54,
+      "h": 58,
+      "out": "Eye_RightPirate.png"
+    },
+    {
+      "name": "Eye_Right_Red",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 462,
+      "y": 374,
+      "w": 54,
+      "h": 58,
+      "out": "Eye_Right_RedPirate.png"
+    },
+    {
+      "name": "Lid_Left_Blue",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 612,
+      "y": 374,
+      "w": 32,
+      "h": 42,
+      "out": "Lid_Left_BluePirate.png"
+    },
+    {
+      "name": "Lid_Left_Closed",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 762,
+      "y": 374,
+      "w": 30,
+      "h": 35,
+      "out": "Lid_Left_ClosedPirate.png"
+    },
+    {
+      "name": "Lid_Left_Down",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 912,
+      "y": 374,
+      "w": 28,
+      "h": 20,
+      "out": "Lid_Left_DownPirate.png"
+    },
+    {
+      "name": "Lid_Left_Squint",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 1062,
+      "y": 374,
+      "w": 30,
+      "h": 36,
+      "out": "Lid_Left_SquintPirate.png"
+    },
+    {
+      "name": "Lid_Right_Blue",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 12,
+      "y": 470,
+      "w": 38,
+      "h": 48,
+      "out": "Lid_Right_BluePirate.png"
+    },
+    {
+      "name": "Lid_Right_Closed",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 162,
+      "y": 470,
+      "w": 36,
+      "h": 38,
+      "out": "Lid_Right_ClosedPirate.png"
+    },
+    {
+      "name": "Lid_Right_Down",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 312,
+      "y": 470,
+      "w": 32,
+      "h": 22,
+      "out": "Lid_Right_DownPirate.png"
+    },
+    {
+      "name": "Lid_Right_Squint",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 462,
+      "y": 470,
+      "w": 36,
+      "h": 36,
+      "out": "Lid_Right_SquintPirate.png"
+    },
+    {
+      "name": "Pupil_Left",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 612,
+      "y": 470,
+      "w": 10,
+      "h": 10,
+      "out": "Pupil_LeftPirate.png"
+    },
+    {
+      "name": "Pupil_Right",
+      "source_dir": "Assets/content/4_Characters/2_Pigs/3_PigBrute/BodyParts/",
+      "x": 762,
+      "y": 470,
+      "w": 12,
+      "h": 12,
+      "out": "Pupil_RightPirate.png"
+    }
+  ]
+}

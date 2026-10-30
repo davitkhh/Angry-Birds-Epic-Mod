@@ -328,6 +328,12 @@ public class ShopItemInfo
 		case PerkType.Dynamite:
 			AddTurns(values, null, value2, Blue);
 			break;
+		case PerkType.GroundZero:
+			AddValue(values, DamageIcon, value, string.Empty, "%", Red);
+			break;
+		case PerkType.Rally:
+			AddValue(values, "PassiveEffect_Vigor", value, "+", "%", Green);
+			break;
 		case PerkType.Dispel:
 		case PerkType.Guardian:
 			break;

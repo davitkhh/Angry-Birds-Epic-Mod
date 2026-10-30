@@ -280,6 +280,7 @@ namespace ABH.GameDatas
 				}
 				ResolveRestoredHotspot005();
 			}
+			GrantBlueAmmoBows();
 			if (this.Data.TutorialTracks != null && this.Data.TutorialTracks.ContainsKey("tutorial_equip_crafted_item"))
 			{
 				this.Data.TutorialTracks.Remove("tutorial_equip_crafted_item");
@@ -495,6 +496,41 @@ namespace ABH.GameDatas
 			{
 				hotspot005.Data.UnlockState = HotspotUnlockState.Resolved;
 			}
+		}
+
+		// One-time grant (2026-10-26) of the Blues' ammo bows: the Bone Bow, plus the starter bow if it was ever
+		// scrapped. Waits for loads where the Blues have been unlocked. Marked done in PlayerData.EquippedSkins.
+		private const string BlueAmmoBowsGrantKey = "grant:blue_ammo_bows";
+
+		private void GrantBlueAmmoBows()
+		{
+			if (Data.EquippedSkins == null || Data.EquippedSkins.ContainsKey(BlueAmmoBowsGrantKey) || m_Birds == null)
+			{
+				return;
+			}
+			var blues = m_Birds.FirstOrDefault(b => b != null && b.BalancingData != null && b.BalancingData.NameId == "bird_blue");
+			if (blues == null)
+			{
+				return;
+			}
+			var level = blues.MainHandItem != null ? blues.MainHandItem.ItemData.Level : Data.Level;
+			if (!OwnsItem("bird_weapon_blue_bow_start"))
+			{
+				DIContainerLogic.InventoryService.AddItem(InventoryGameData, level, 1, "bird_weapon_blue_bow_start", 1, "grant_blue_ammo_bows", EquipmentSource.Crafting);
+			}
+			DIContainerLogic.InventoryService.AddItem(InventoryGameData, level, 1, "bird_weapon_blue_bow_bone", 1, "grant_blue_ammo_bows", EquipmentSource.Crafting);
+			Data.EquippedSkins[BlueAmmoBowsGrantKey] = "1";
+		}
+
+		// In the player's inventory or equipped on any bird
+		private bool OwnsItem(string nameId)
+		{
+			IInventoryItemGameData item;
+			if (DIContainerLogic.InventoryService.TryGetItemGameData(InventoryGameData, nameId, out item))
+			{
+				return true;
+			}
+			return m_Birds.Any(b => b != null && b.InventoryGameData != null && DIContainerLogic.InventoryService.TryGetItemGameData(b.InventoryGameData, nameId, out item));
 		}
 
 		private void RecheckExperienceProgress()

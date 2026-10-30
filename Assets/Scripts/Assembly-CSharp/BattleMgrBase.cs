@@ -884,9 +884,9 @@ public abstract class BattleMgrBase : MonoBehaviour
 			"pig_prince_porky_firstencounter",
 			new Dictionary<string, int>
 			{
-				{ "pig_minion_rogue_leader", 1 },
+				{ "pig_minion_rogue_leader_bird3", 1 },
 				{ "pig_prince_porky_firstencounter", 1 },
-				{ "pig_minion_bird_catcher", 1 }
+				{ "pig_minion_bird_catcher_bird3", 1 }
 			}
 		}
 	};

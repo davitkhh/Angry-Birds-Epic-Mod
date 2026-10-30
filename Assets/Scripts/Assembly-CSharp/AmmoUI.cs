@@ -44,8 +44,8 @@ public static class AmmoUI
 
 	private static UIAtlas s_GenericAtlas;
 
-	// The ammo is what the combatant's ammo skill fires: the main hand projectile for ranged attacks, otherwise
-	// (melee, pigs without gear) the icon of that skill.
+	// The ammo is what the combatant's weapon fires: the main hand projectile for ranged weapons, otherwise the icon of
+	// the attack that uses it.
 	public static IconSource GetIconSource(ICombatant combatant)
 	{
 		if (combatant == null)
@@ -53,11 +53,12 @@ public static class AmmoUI
 			return null;
 		}
 		var skills = combatant.GetSkills() ?? new List<SkillBattleDataBase>();
-		var skill = skills.FirstOrDefault(s => s != null && Ammo.GetCost(s) > 0) ?? skills.FirstOrDefault(s => s != null && Ammo.GetGain(s) > 0);
+		var skill = skills.FirstOrDefault(s => Ammo.IsAmmoSkill(combatant, s));
 		var mainHand = combatant.CombatantMainHandEquipment;
-		if (skill is AttackSkillTemplate && mainHand != null && mainHand.BalancingData != null && mainHand.BalancingData.IsRanged)
+		if (mainHand != null && mainHand.BalancingData != null && mainHand.BalancingData.IsRanged)
 		{
-			var source = GetProjectileIcon(mainHand.ProjectileAssetName);
+			// What it actually shot, else what its weapon fires
+			var source = GetProjectileIcon(Ammo.GetFiredProjectile(combatant) ?? mainHand.ProjectileAssetName);
 			if (source != null)
 			{
 				return source;
@@ -249,15 +250,13 @@ public static class AmmoUI
 		}
 		var header = plate.cachedTransform.parent;
 		ClearSkillPlate(header);
-		var cost = skill != null ? Ammo.GetCost(skill) : 0;
-		var gain = skill != null ? Ammo.GetGain(skill) : 0;
 		var state = Ammo.GetState(invoker);
-		// Skills that only give ammo get no tag
-		if (cost <= 0 || state == null)
+		// Only the attacks that use the weapon's ammo get a tag
+		if (!Ammo.UsesAmmo(invoker, skill) || state == null)
 		{
 			return;
 		}
-		ShowOnSkillPlate(plate, style, cost, gain, state.Current, state.Start, GetIconSource(invoker), invoker);
+		ShowOnSkillPlate(plate, style, 1, 0, state.Current, state.Start, GetIconSource(invoker), invoker);
 	}
 
 	// user: whose ammo the bar follows live (null keeps it at current)
@@ -541,10 +540,14 @@ public class AmmoBlockedMark : MonoBehaviour
 
 	private ICombatant m_User;
 
+	private string m_Projectile;
+
 	public void Show(ICombatant user)
 	{
-		if (m_Icon == null || m_User != user)
+		var projectile = ABH.GameDatas.Battle.Ammo.GetFiredProjectile(user);
+		if (m_Icon == null || m_User != user || m_Projectile != projectile)
 		{
+			m_Projectile = projectile;
 			if (m_Icon != null)
 			{
 				Destroy(m_Icon.gameObject);

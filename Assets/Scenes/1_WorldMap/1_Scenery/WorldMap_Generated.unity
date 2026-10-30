@@ -37482,7 +37482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &2378
 GameObject:
   m_ObjectHideFlags: 0
@@ -788280,6 +788280,7 @@ GameObject:
   - component: {fileID: 261516842}
   - component: {fileID: 261516841}
   - component: {fileID: 261516840}
+  - component: {fileID: 261516846}
   m_Layer: 9
   m_Name: MerchantPig
   m_TagString: Untagged
@@ -822378,6 +822379,24 @@ MonoBehaviour:
   mMeshColor: {r: 1, g: 1, b: 1, a: 1}
   updateColors: 0
   updatePrefabs: 0
+--- !u!114 &261516846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261516838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8be8e53c503fd845bb8dedec263122c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StallHandItem
+  m_BoneAnimation: {fileID: 261516845}
+  m_BoneName: MainHand
+  m_TextureName: OffHand_PhatLootMcool
+  m_HiddenWhileToggleOn: PorkyStealsMcCoolBag
+  m_Offset: {x: 0, y: 0, z: -1}
+  m_Turn: 0
 --- !u!114 &261994509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825269,6 +825288,7 @@ MonoBehaviour:
   m_FirstLaughDelay: 1
   m_LaughIntervalMin: 4
   m_LaughIntervalMax: 7
+  m_HiddenUntilUnlocked: []
 --- !u!1 &941770752
 GameObject:
   m_ObjectHideFlags: 0
@@ -860183,7 +860203,7 @@ MonoBehaviour:
       height: 230
     nodeID: 39
     nodesIn: 26000000
-    nodesOut: 28000000
+    nodesOut: 4d000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -860214,8 +860234,8 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 40
-    nodesIn: 27000000
-    nodesOut: 4d000000
+    nodesIn: 4e000000
+    nodesOut: 29000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -860246,7 +860266,7 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 41
-    nodesIn: 4e000000
+    nodesIn: 28000000
     nodesOut: 2a000000
     nodesOutIndex: 00000000
     target: 0
@@ -860279,7 +860299,7 @@ MonoBehaviour:
       height: 230
     nodeID: 42
     nodesIn: 29000000
-    nodesOut: 2b000000
+    nodesOut: 6e000000
     nodesOutIndex: 00000000
     target: 0
     text: McCool
@@ -860311,7 +860331,7 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 43
-    nodesIn: 2a000000
+    nodesIn: 6e000000
     nodesOut: 2c000000
     nodesOutIndex: 00000000
     target: 0
@@ -860343,7 +860363,7 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 44
-    nodesIn: 2b000000
+    nodesIn: 2b0000006d000000
     nodesOut: 2d000000
     nodesOutIndex: 00000000
     target: 0
@@ -861363,70 +861383,6 @@ MonoBehaviour:
   - editorRect:
       serializedVersion: 2
       x: 300
-      y: 2100
-      width: 230
-      height: 230
-    nodeID: 77
-    nodesIn: 28000000
-    nodesOut: 4e000000
-    nodesOutIndex: 00000000
-    target: 0
-    text: 
-    param: []
-    enabled: 1
-    pass: 0
-    type: 28
-    refObject: {fileID: 0}
-    refObject1: {fileID: 0}
-    refObject2: {fileID: 0}
-    customInt: 0
-    customInt2: 0
-    customInt3: 0
-    customFloat: 0
-    customFloat2: 0
-    customBool: 1
-    customBool2: 0
-    objectType: 1
-    objectName: RedBird
-    customVec1: {x: 0, y: 0, z: 0}
-    customVec2: {x: 0, y: 0, z: 0}
-    QueueIdle: 0
-    secondaryText: McCool
-  - editorRect:
-      serializedVersion: 2
-      x: 300
-      y: 2100
-      width: 230
-      height: 230
-    nodeID: 78
-    nodesIn: 4d000000
-    nodesOut: 29000000
-    nodesOutIndex: 00000000
-    target: 0
-    text: 
-    param: []
-    enabled: 1
-    pass: 0
-    type: 28
-    refObject: {fileID: 0}
-    refObject1: {fileID: 0}
-    refObject2: {fileID: 0}
-    customInt: 0
-    customInt2: 0
-    customInt3: 0
-    customFloat: 0
-    customFloat2: 0
-    customBool: 1
-    customBool2: 0
-    objectType: 1
-    objectName: YellowBird
-    customVec1: {x: 0, y: 0, z: 0}
-    customVec2: {x: 0, y: 0, z: 0}
-    QueueIdle: 0
-    secondaryText: McCool
-  - editorRect:
-      serializedVersion: 2
-      x: 300
       y: 2400
       width: 230
       height: 230
@@ -861944,7 +861900,7 @@ MonoBehaviour:
       height: 230
     nodeID: 95
     nodesIn: 16000000
-    nodesOut: 60000000
+    nodesOut: 69000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -861975,7 +861931,7 @@ MonoBehaviour:
       width: 230
       height: 230
     nodeID: 96
-    nodesIn: 5f000000
+    nodesIn: 69000000
     nodesOut: 17000000
     nodesOutIndex: 00000000
     target: 0
@@ -862230,6 +862186,262 @@ MonoBehaviour:
     customVec2: {x: 0, y: 0, z: 0}
     QueueIdle: 0
     secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 300
+      y: 2100
+      width: 230
+      height: 230
+    nodeID: 77
+    nodesIn: 27000000
+    nodesOut: 4e000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 28
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 1
+    customBool2: 0
+    objectType: 1
+    objectName: RedBird
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: McCool
+  - editorRect:
+      serializedVersion: 2
+      x: 300
+      y: 2100
+      width: 230
+      height: 230
+    nodeID: 78
+    nodesIn: 4d000000
+    nodesOut: 28000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 28
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 1
+    customBool2: 0
+    objectType: 1
+    objectName: YellowBird
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: McCool
+  - editorRect:
+      serializedVersion: 2
+      x: 300
+      y: 940
+      width: 230
+      height: 230
+    nodeID: 105
+    nodesIn: 5f000000
+    nodesOut: 60000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 36
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 40
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 0
+    objectName: 
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: PorkyStealsMcCoolBag
+  - editorRect:
+      serializedVersion: 2
+      x: 820
+      y: 2360
+      width: 230
+      height: 230
+    nodeID: 106
+    nodesIn: 
+    nodesOut: 6b000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 6
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0.7
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 0
+    objectName: 
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 1080
+      y: 2360
+      width: 230
+      height: 230
+    nodeID: 107
+    nodesIn: 6a000000
+    nodesOut: 6c000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 28
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 1
+    customBool2: 0
+    objectType: 1
+    objectName: RedBird
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: McCool
+  - editorRect:
+      serializedVersion: 2
+      x: 1340
+      y: 2360
+      width: 230
+      height: 230
+    nodeID: 108
+    nodesIn: 6b000000
+    nodesOut: 6d000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 28
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 1
+    customBool2: 0
+    objectType: 1
+    objectName: YellowBird
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: McCool
+  - editorRect:
+      serializedVersion: 2
+      x: 1600
+      y: 2360
+      width: 230
+      height: 230
+    nodeID: 109
+    nodesIn: 6c000000
+    nodesOut: 2c000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 6
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0.90000004
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 0
+    objectName: 
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 820
+      y: 2100
+      width: 230
+      height: 230
+    nodeID: 110
+    nodesIn: 2a000000
+    nodesOut: 2b000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: 
+    param: []
+    enabled: 1
+    pass: 0
+    type: 36
+    refObject: {fileID: 0}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 106
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 0
+    objectName: 
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: PorkyStealsMcCoolBag
   startNode: 1
   currentNode: 1
   choice: 0

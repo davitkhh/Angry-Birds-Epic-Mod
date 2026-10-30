@@ -2125,7 +2125,7 @@ public class BattlePreperationUI : MonoBehaviour
 		}
 		DIContainerInfrastructure.GetCurrentPlayer().SelectedBirdIndices = m_SelectedBirds;
 		m_BirdCountText.color = m_SelectedBirds.Count == Mathf.Min(DIContainerInfrastructure.GetCurrentPlayer().Birds.Count, m_MaxSelectableBirdsCount) ? DIContainerLogic.GetVisualEffectsBalancing().ColorOffersBuyable : DIContainerLogic.GetVisualEffectsBalancing().ColorOffersNotBuyable;
-		m_OneBirdLeft = m_SelectedBirds.Count <= (DIContainerInfrastructure.GetCurrentPlayer().AllBirds.Count >= 4 ? 1 : Mathf.Min(DIContainerInfrastructure.GetCurrentPlayer().Birds.Count, m_MaxSelectableBirdsCount));
+		m_OneBirdLeft = m_SelectedBirds.Count <= 1;
 	}
 
 	public void CreateBirds()

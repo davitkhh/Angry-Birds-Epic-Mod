@@ -32,6 +32,8 @@ public static class MerchantStock
 	// Stored in the player's EquippedSkins map under a "stock:" key that no class id uses, so it saves with the profile.
 	private const string StateKeyPrefix = "stock:";
 
+	private const string FrozenLevelsKey = StateKeyPrefix + "frozen_levels";
+
 	private class State
 	{
 		// New-level count when the offer was first seen; restocks are counted from here.
@@ -90,6 +92,10 @@ public static class MerchantStock
 			return;
 		}
 		var levels = CountClearedLevels(player);
+		if (McCoolDeparture.HasLeft(player))
+		{
+			levels = FreezeLevels(player, levels);
+		}
 		var changed = false;
 		foreach (var offer in offers)
 		{
@@ -169,6 +175,25 @@ public static class MerchantStock
 	private static bool IsLimitRequirement(Requirement requirement)
 	{
 		return requirement.RequirementType == RequirementType.NotHaveItem && IsCounterItem(requirement.NameId);
+	}
+
+	// Once McCool has left his stall the level count stops where it was at the first check after he left (restocks earned
+	// up to his departure still arrive, nothing after). Stored under "stock:frozen_levels".
+	private static int FreezeLevels(PlayerGameData player, int levels)
+	{
+		if (player.Data.EquippedSkins == null)
+		{
+			player.Data.EquippedSkins = new Dictionary<string, string>();
+		}
+		string saved;
+		int frozen;
+		if (player.Data.EquippedSkins.TryGetValue(FrozenLevelsKey, out saved) && int.TryParse(saved, out frozen))
+		{
+			return System.Math.Min(levels, frozen);
+		}
+		player.Data.EquippedSkins[FrozenLevelsKey] = levels.ToString();
+		player.SavePlayerData();
+		return levels;
 	}
 
 	// Levels cleared for the first time: world map battle hotspots that have been beaten at least once.

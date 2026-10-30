@@ -134,6 +134,7 @@
 		SpreadDamageReceivedDebuff,
 		IncreaseDamageAndHealingOnAttack,
 		ReduceDamageDealtAgainstSource,
-		SummonCombatantHealthGated
+		SummonCombatantHealthGated,
+		Stinkeye
 	}
 }

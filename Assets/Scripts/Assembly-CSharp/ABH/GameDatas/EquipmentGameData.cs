@@ -446,9 +446,12 @@ namespace ABH.GameDatas
 				return "PassiveEffect_Might";
 			case PerkType.Dynamite:
 				return "PassiveEffect_ChainAttack";
+			case PerkType.GroundZero:
+				return "PassiveEffect_CriticalStrike";
 			case PerkType.Amplify:
 				return "PassiveEffect_Balance";
 			case PerkType.Vigor:
+			case PerkType.Rally:
 				return "PassiveEffect_Vigor";
 			case PerkType.Vitality:
 				return "PassiveEffect_Vitality";
@@ -585,12 +588,17 @@ namespace ABH.GameDatas
 			}
 			if (eqgd.ItemData.Level >= 0 && eqgd.ItemBalancing.ItemType == InventoryItemType.MainHandEquipment)
 			{
-				var num = eqgd.ItemData.Level + eqgd.BalancingData.AssetLevelOffset;
-				if (num <= 0)
+				// The projectile matches the weapon's model: a fixed-model weapon (MainHand_Bow_01) fires its own number,
+				// level-based ones follow the model's cycle
+				var assetBaseId = eqgd.ItemBalancing.AssetBaseId;
+				var suffix = assetBaseId != null ? assetBaseId.LastIndexOf('_') : -1;
+				int modelNumber;
+				if (eqgd.BalancingData.DirectAssetAndLoca && suffix >= 0 && int.TryParse(assetBaseId.Substring(suffix + 1), out modelNumber))
 				{
-					num = 27 + num;
+					return eqgd.BalancingData.ProjectileAssetId + "_" + modelNumber.ToString("00");
 				}
-				return eqgd.BalancingData.ProjectileAssetId + "_" + ((num - 1) / 3 % 9 + 1).ToString("00");
+				var num = GetAssetAndLocaBaseLevel(eqgd.BalancingData, eqgd.ItemData.Level);
+				return eqgd.BalancingData.ProjectileAssetId + "_" + ((num - 1) / 3 % eqgd.BalancingData.AssetCycleCount + 1).ToString("00");
 			}
 			if (eqgd.ItemData.Level >= 0 && eqgd.ItemBalancing.ItemType == InventoryItemType.OffHandEquipment)
 			{

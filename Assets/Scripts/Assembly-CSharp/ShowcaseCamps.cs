@@ -299,10 +299,12 @@ public static class ShowcaseCamps
 	}
 
 	// Every equipment item restricted to the ally bird, so new entries in EquipmentBalancingData show up automatically.
+	// McCool's bag is gone once Porky had it stolen (StoryToggles); a saved loadout or preset with it falls back.
 	private static List<EquipmentBalancingData> GetAllyEquipmentOptions(ShowcaseCampDefinition definition, InventoryItemType type)
 	{
 		return DIContainerBalancing.Service.GetBalancingDataList<EquipmentBalancingData>()
 			.Where(e => e.ItemType == type && e.RestrictedBirdId == definition.Ally.BirdNameId)
+			.Where(e => !(StoryToggles.IsMcCoolBagStolen && e.NameId == StoryToggles.McCoolBagNameId))
 			.ToList();
 	}
 

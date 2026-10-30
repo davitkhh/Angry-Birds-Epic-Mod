@@ -46,6 +46,19 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 		{
 			gameObject.SetActive(true);
 		}
+		// McCool has left his stall (McCoolDeparture): his stall pig stays hidden, the stall and shop stay.
+		if (HasMcCoolLeft())
+		{
+			foreach (var gameObject in activateObjects.Where(o => o != null && o.GetComponentInChildren<BoneAnimation>(true) != null))
+			{
+				gameObject.SetActive(false);
+			}
+		}
+	}
+
+	private bool HasMcCoolLeft()
+	{
+		return base.Model != null && IsMerchantShop() && McCoolDeparture.HasLeft();
 	}
 
 	public override bool IsCompleted()
@@ -55,7 +68,7 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 
 	private void Update()
 	{
-		if (!m_UpdateIndikator || !FindStallMerchant())
+		if (!m_UpdateIndikator || !FindStallMerchant() || !m_StallMerchant.gameObject.activeInHierarchy)
 		{
 			return;
 		}
@@ -160,8 +173,9 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 		}
 		if (onlyLimitedStock)
 		{
-			// Restocking offers are only ever sold out until their next restock, so the merchant never counts as finished.
-			flag |= list.Any(MerchantStock.IsRestockable);
+			// Restocking offers are only ever sold out until their next restock, so the merchant never counts as finished
+			// while McCool is still there to restock.
+			flag |= !McCoolDeparture.HasLeft() && list.Any(MerchantStock.IsRestockable);
 			showUpdate |= MerchantStock.HasRestockNotice(DIContainerInfrastructure.GetCurrentPlayer(), list);
 		}
 		if (m_UpdateIndikator)

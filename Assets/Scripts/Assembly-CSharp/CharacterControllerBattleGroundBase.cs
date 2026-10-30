@@ -634,6 +634,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		case PerkType.ChainAttack:
 			return "Chain";
 		case PerkType.CriticalStrike:
+		case PerkType.GroundZero:
 			return "Crit";
 		case PerkType.Dispel:
 			return "Purge";

@@ -200,7 +200,8 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		if (m_McCoolProp)
 		{
 			// Bobs via its PeekIdleBob (speed is editable on that component).
-			m_McCoolProp.SetActive(m_MenuType == ShopMenuType.Merchant);
+			// Gone once McCool has left his stall (McCoolDeparture).
+			m_McCoolProp.SetActive(m_MenuType == ShopMenuType.Merchant && !McCoolDeparture.HasLeft());
 		}
 		switch (m_MenuType)
 		{

@@ -201,6 +201,9 @@ namespace ActionTreeEditor.Loca
         public const string MovePathNodeTypeDesc =
             "Moves a character along a smooth curve through world points, optionally with a shadow following the ground under it.";
         
+        public const string BranchNodeTypeDesc =
+            "Goes on while a code toggle (StoryToggles) is on; otherwise jumps to another node, skipping part of the tree.";
+        
         public static string GetDescriptionForType(NodeType type)
         {
             return type switch
@@ -242,6 +245,7 @@ namespace ActionTreeEditor.Loca
                NodeType.ShowBubble           => ShowBubbleNodeTypeDesc,
                NodeType.DropHandItems        => DropHandItemsNodeTypeDesc,
                NodeType.MovePath             => MovePathNodeTypeDesc,
+               NodeType.Branch               => BranchNodeTypeDesc,
                _ => ""
             };
         }

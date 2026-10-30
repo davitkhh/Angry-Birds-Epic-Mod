@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: -1545704558, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
   m_Name: MoustachePig
   m_EditorClassIdentifier: 
-  buildID: 202610202301229907
+  buildID: 202610282113593478
   needsRebuilt: 1
   boneDataList:
   - active: 1
@@ -58365,7 +58365,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 9
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -59211,7 +59211,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 34
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -60606,7 +60606,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 55
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -61650,7 +61650,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 57
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -62694,7 +62694,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 63
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -65701,7 +65701,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 61
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -101304,7 +101304,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 9
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -102447,7 +102447,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 34
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -103941,7 +103941,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 55
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -105084,7 +105084,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 57
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -106227,7 +106227,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 63
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0
@@ -107947,7 +107947,7 @@ MonoBehaviour:
           tag: 
         textureIndex: 61
       mixTransform: 0
-      visible: 1
+      visible: 0
       colorRCurveSerialized:
         keyframes:
         - time: 0

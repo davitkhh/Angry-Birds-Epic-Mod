@@ -16,6 +16,9 @@ namespace ABH.GameDatas.Battle
 
 		private SkillBattleDataBase m_PassiveSkill;
 
+		// Enemies this bird has already hit this battle (GroundZero perk)
+		public readonly HashSet<ICombatant> FirstStrikeTargets = new HashSet<ICombatant>();
+
 		public override InterruptAction InterruptAction
 		{
 			get

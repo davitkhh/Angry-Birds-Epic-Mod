@@ -117,21 +117,23 @@ namespace ABH.GameDatas
 				var caveBattleBalancing = DIContainerBalancing.Service.GetBalancingData<ChronicleCaveBattleBalancingData>(DIContainerLogic.GetBattleService().GetFirstPossibleBattle(BalancingData.BattleId, DIContainerInfrastructure.GetCurrentPlayer(), true, isHardModeDungeon));
 				return caveBattleBalancing.BaseLevel;
 			}
+			var maxLevelForHotspot = BalancingData.MaxLevel;
+			var playerLevel = DIContainerInfrastructure.GetCurrentPlayer().Data.Level;
+			var cappedLevel = maxLevelForHotspot != 0 ? Math.Min(maxLevelForHotspot, playerLevel) : playerLevel;
+
 			if (Data.UnlockState > HotspotUnlockState.Active && !BalancingData.NameId.Contains("dungeon"))
 			{
+				// Completed hotspots scale up with the player (still respecting MaxLevel), never below their completion level
 				if (Data.CompletionPlayerLevel == 0)
 				{
 					var battleBalancing = DIContainerBalancing.Service.GetBalancingData<BattleBalancingData>(DIContainerLogic.GetBattleService().GetFirstPossibleBattle(BalancingData.BattleId, DIContainerInfrastructure.GetCurrentPlayer(), false, isHardModeDungeon));
-					return battleBalancing.BaseLevel;
+					return Math.Max(battleBalancing.BaseLevel, cappedLevel);
 				}
 
-				return Data.CompletionPlayerLevel;
+				return Math.Max(Data.CompletionPlayerLevel, cappedLevel);
 			}
-			
-			var maxLevelForHotspot = BalancingData.MaxLevel;
-			var playerLevel = DIContainerInfrastructure.GetCurrentPlayer().Data.Level;
-				
-			return maxLevelForHotspot != 0 ? Math.Min(maxLevelForHotspot, playerLevel) : playerLevel;
+
+			return cappedLevel;
 		}
 	}
 }
