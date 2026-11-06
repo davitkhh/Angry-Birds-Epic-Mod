@@ -65,13 +65,15 @@ public class ConditionalActionTree
 		}
 		var hotspotGameDatas = DIContainerInfrastructure.GetCurrentPlayer().WorldGameData.HotspotGameDatas;
 		HotspotGameData value = null;
+		// Pirate chain hotspots only count once their pirate battle is won (PirateChain).
 		if (hotspotGameDatas.TryGetValue(StartNodeId, out value))
 		{
-			hasBeatFirstHotspot = (TriggerInstant && value.Data.UnlockState == HotspotUnlockState.ResolvedNew) || value.Data.UnlockState >= HotspotUnlockState.Resolved;
+			var state = PirateChain.StoryState(value);
+			hasBeatFirstHotspot = (TriggerInstant && state == HotspotUnlockState.ResolvedNew) || state >= HotspotUnlockState.Resolved;
 		}
 		if (hotspotGameDatas.TryGetValue(EndNodeId, out value))
 		{
-			hasBeatSecondHotspot = value.Data.UnlockState >= HotspotUnlockState.ResolvedNew;
+			hasBeatSecondHotspot = PirateChain.StoryState(value) >= HotspotUnlockState.ResolvedNew;
 		}
 		return hasBeatFirstHotspot && !hasBeatSecondHotspot;
 	}

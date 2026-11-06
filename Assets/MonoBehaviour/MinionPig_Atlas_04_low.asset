@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: MinionPig_Atlas_04_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 666a0612309d4b97b0b99275aed97718, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.609375
+    width: 0.578125
+    height: 0.390625
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.234375
+    width: 0.578125
+    height: 0.3671875
+  textureGUIDs:
+  - 1da3638fc211b831794810abf29df7e7
+  - da88fc76251041e4894d60bdc1672167
+  textureSizes:
+  - {x: 148, y: 100}
+  - {x: 148, y: 93}
+  defaultPivotOffsets:
+  - {x: -0.145, y: -0.4}
+  - {x: -0.15, y: -0.15}
+  textureNames:
+  - Headgear_RogueRoyal
+  - Headgear_RogueRoyal_Back
+  texturePaths:
+  - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/Headgear_RogueRoyal.png
+  - Assets/Content/4_Characters/2_Pigs/1_MinionPig/BodyParts/Headgear_RogueRoyal_Back.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

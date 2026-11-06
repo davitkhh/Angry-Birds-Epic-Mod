@@ -600,6 +600,18 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
+  - NameId: SkillFX_Curse_StinkeyeAim
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_StinkeyeAim
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: SkillFX_Curse_StinkeyeAimEmpowered
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_StinkeyeAimEmpowered
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
   - NameId: SkillFX_Curse_Frozen
     AssetLoadingType: 0
     Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_Frozen

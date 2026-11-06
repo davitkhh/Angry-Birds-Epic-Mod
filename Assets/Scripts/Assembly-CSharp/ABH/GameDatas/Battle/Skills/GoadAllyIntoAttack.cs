@@ -220,8 +220,8 @@ namespace ABH.GameDatas.Battle.Skills
 			yield return view.StartCoroutine(Hop(view, view.m_BattleMgr.m_PigCenterPosition, view.CachedUnfocusedPos));
 		}
 
-		// Plays Jump and moves him while he is in the air.
-		private static IEnumerator Hop(CharacterControllerBattleGroundBase view, Transform endTransform, Vector3 endOffset)
+		// Plays Jump and moves him while he is in the air (also Porky's hop before his Duel charge).
+		internal static IEnumerator Hop(CharacterControllerBattleGroundBase view, Transform endTransform, Vector3 endOffset)
 		{
 			var assetController = view.m_AssetController;
 			var state = assetController.m_BoneAnimation != null ? assetController.m_BoneAnimation[HopAnimation] : null;

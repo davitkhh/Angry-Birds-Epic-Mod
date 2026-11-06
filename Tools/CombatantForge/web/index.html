@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Combatant Forge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="topbar">
+  <strong class="brand">Combatant Forge</strong>
+  <label>Combatant <select id="projectSelect"></select></label>
+  <button id="newBtn">New</button>
+  <button id="importBtn" title="Open a .forge file">Import</button>
+  <button id="exportBtn" title="Save this combatant and its art as a .forge file">Export</button>
+  <input id="importInput" type="file" accept=".forge,application/zip" hidden>
+  <label class="grow">Name <input id="nameInput" placeholder="Shown in battle" maxlength="40"></label>
+  <label>Id <input id="idInput" class="mono" placeholder="id" maxlength="40"></label>
+  <span id="saveState" class="dim"></span>
+  <span id="jobChips"></span>
+  <span id="unityState" class="pill"></span>
+  <button id="uploadBtn" class="primary">Upload to game</button>
+</header>
+
+<main>
+  <section id="library" class="panel">
+    <div class="tabs" id="sideTabs">
+      <button data-side="pig" class="on">Pigs</button>
+      <button data-side="bird">Birds</button>
+    </div>
+    <div class="chips" id="catChips"></div>
+    <div class="row">
+      <input id="searchInput" class="grow" type="search" placeholder="Search sprites">
+      <select id="rigFilter" title="Only sprites from this character"></select>
+    </div>
+    <div class="row between">
+      <label class="check" title="Show Front and Back as separate sprites you can drag on their own"><input type="checkbox" id="splitAll"> Separate front and back</label>
+      <span id="libCount" class="dim"></span>
+    </div>
+    <div id="grid"></div>
+    <div id="dropZone" tabindex="0" role="button">
+      <strong>Add art to the game</strong>
+      <span>Drop PNGs here or click. Name a back layer <code>x_Back.png</code>.</span>
+      <div class="row">
+        <select id="uploadSide"><option value="pig">Pigs</option><option value="bird">Birds</option></select>
+        <select id="uploadCat"><option>Headgear</option><option>MainHand</option><option>OffHand</option><option value="Feature">Feature</option></select>
+      </div>
+      <input id="fileInput" type="file" accept="image/png" multiple hidden>
+    </div>
+  </section>
+
+  <div class="resizer" id="resizeLeft" role="separator" aria-orientation="vertical" aria-label="Resize the library"></div>
+  <section id="stageWrap">
+    <div class="toolbar">
+      <button id="baseBtn" title="Choose the base character"><img id="baseIcon" alt=""><span id="baseName"></span></button>
+      <span class="sep"></span>
+      <label>Animation <select id="clipSelect"></select></label>
+      <button id="playBtn" title="Play or pause (Space)">Pause</button>
+      <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Animation position">
+      <span id="frameLabel" class="mono dim"></span>
+    </div>
+    <div class="toolbar sub">
+      <label>Speed <select id="speedSelect"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+      <label class="check"><input type="checkbox" id="loopCheck" checked> Loop</label>
+      <label class="check"><input type="checkbox" id="showGear" checked> Show equipment</label>
+      <label class="check"><input type="checkbox" id="showFeatures" checked> Show swapped features</label>
+      <label class="check"><input type="checkbox" id="showSlots"> Slot labels</label>
+      <span class="grow"></span>
+      <button id="fitBtn">Fit</button>
+    </div>
+    <div id="canvasBox"><canvas id="stage"></canvas><div id="emptyHint"></div></div>
+  </section>
+
+  <div class="resizer" id="resizeRight" role="separator" aria-orientation="vertical" aria-label="Resize the slots and abilities panel"></div>
+  <section id="side" class="panel">
+    <div class="tabs" id="sideNav">
+      <button data-tab="slots" class="on">Slots</button>
+      <button data-tab="abilities">Abilities</button>
+      <button data-tab="stats">Stats</button>
+    </div>
+    <div class="tab" id="tab-slots">
+      <div id="inspector"></div>
+      <div id="slotList"></div>
+    </div>
+    <div class="tab" id="tab-abilities" hidden>
+      <div class="row between">
+        <h3>Tap-and-hold preview</h3>
+        <span class="dim" id="levelStats"></span>
+      </div>
+      <div id="tooltipOuter"><div id="tooltip"></div></div>
+      <div class="row between abilityHead">
+        <h3>Abilities</h3>
+        <div class="row">
+          <button id="generateAll" title="Run Claude on every ability that has a description and isn't written yet">Generate all</button>
+          <button id="addExisting">Add from game</button>
+          <button id="addNew">New ability</button>
+        </div>
+      </div>
+      <div id="abilityList"></div>
+    </div>
+    <div class="tab" id="tab-stats" hidden>
+      <div id="statsForm"></div>
+    </div>
+  </section>
+</main>
+
+<div id="dragGhost" hidden></div>
+<div id="toast" role="status"></div>
+<dialog id="modal"></dialog>
+<dialog id="logDialog">
+  <div class="row between"><h3 id="logTitle">Uploading</h3><div class="row"><button id="logStop" class="danger" hidden>Stop generating</button><button id="logClose">Minimize</button></div></div>
+  <pre id="logBody"></pre>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>

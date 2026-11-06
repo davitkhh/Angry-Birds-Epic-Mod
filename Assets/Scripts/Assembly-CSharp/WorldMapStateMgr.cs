@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using ABH.GameDatas;
 using ABH.Shared.BalancingData;
 using ABH.Shared.Events.BalancingData;
@@ -327,12 +328,20 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		var hotspots = transform.GetComponentsInChildren<HotSpotWorldMapViewBase>(true);
 		foreach (var hotspot in hotspots)
 		{
-			if (!caveUnlocked && hotspot.Model != null && hotspot.Model.Data.UnlockState == HotspotUnlockState.Active && hotspot.Model.BalancingData.ProgressId > 0)
+			// The marker shows the next story level, so not a pirate chain hotspot's early side level (PirateChain).
+			var earlyPirateLevel = hotspot.Model != null && PirateChain.IsChainHotspot(hotspot.Model.BalancingData.NameId) && !PirateChain.IsPirateActive(DIContainerInfrastructure.GetCurrentPlayer(), hotspot.Model.BalancingData.NameId);
+			if (!caveUnlocked && hotspot.Model != null && hotspot.Model.Data.UnlockState == HotspotUnlockState.Active && hotspot.Model.BalancingData.ProgressId > 0 && !earlyPirateLevel)
 			{
 				var progressionMarker = Instantiate(m_ProgressionMarker);
 				progressionMarker.transform.parent = hotspot.transform;
 				progressionMarker.transform.localPosition = Vector3.zero;
 				progressionMarker.transform.localScale = Vector3.one;
+				// Its stars draw over the zone clouding and foreground props but under characters and nodes.
+				if (GetComponent<WorldMapOverlayMasks>() == null)
+				{
+					gameObject.AddComponent<WorldMapOverlayMasks>();
+				}
+				WorldMapOverlayMasks.MakeOverlay(progressionMarker);
 
 				if (hotspot.Model.BalancingData.NameId.Contains("_castle"))
 				{
@@ -522,7 +531,28 @@ public class WorldMapStateMgr : BaseLocationStateManager
 	{
 		var player = DIContainerInfrastructure.GetCurrentPlayer();
 		HotspotGameData hotspot;
-		return player != null && player.WorldGameData.HotspotGameDatas.TryGetValue(hotspotId, out hotspot) && hotspot.Data.UnlockState >= HotspotUnlockState.ResolvedNew;
+		return player != null && player.WorldGameData.HotspotGameDatas.TryGetValue(hotspotId, out hotspot) && PirateChain.StoryState(player, hotspot) >= HotspotUnlockState.ResolvedNew;
+	}
+
+	// Fades out whatever music is still playing (e.g. battle music) and stops it. The title theme may play on.
+	private IEnumerator FadeOutMusic(float seconds)
+	{
+		var source = DIContainerInfrastructure.PrimaryMusicSource;
+		if (source == null || !source.isPlaying || (source.clip != null && source.clip.name == "TitleTheme"))
+		{
+			yield break;
+		}
+		var volume = source.volume;
+		for (var t = 0f; t < seconds && source != null && source.isPlaying; t += Time.deltaTime)
+		{
+			source.volume = Mathf.Lerp(volume, 0f, t / seconds);
+			yield return null;
+		}
+		if (source != null)
+		{
+			source.Stop();
+			source.volume = volume;
+		}
 	}
 
 	// Points the music_worldmap cue at the track for the current story chapter. The scene's action
@@ -548,16 +578,24 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		}
 	}
 
+	// The world map stays silent until Chuck (bird_yellow) has joined the player.
+	public static bool IsWorldMapMusicUnlocked()
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		return player == null || player.Birds == null || player.Birds.Any(b => b.Name == "bird_yellow");
+	}
+
 	private IEnumerator TryPlayWorldMapMusic()
 	{
 		yield return StartCoroutine(SelectWorldMapMusic());
-		var waitForMainThemeEnd = !DIContainerInfrastructure.GetCoreStateMgr().m_EnterOnce;
 		DIContainerInfrastructure.GetCoreStateMgr().m_EnterOnce = true;
-		while (waitForMainThemeEnd && DIContainerInfrastructure.PrimaryMusicSource.isPlaying && DIContainerInfrastructure.PrimaryMusicSource.clip.name == "TitleTheme")
+		// Area themes play on their own sources (WorldMapAreaMusic), cross-faded by where the camera is; the game's music
+		// source is cleared of e.g. battle music (the title theme plays on, the area music waits for it).
+		yield return StartCoroutine(FadeOutMusic(1f));
+		if (GetComponent<WorldMapAreaMusic>() == null)
 		{
-			yield return new WaitForEndOfFrame();
+			gameObject.AddComponent<WorldMapAreaMusic>();
 		}
-		DIContainerInfrastructure.AudioManager.PlayMusic("music_worldmap");
 	}
 
 	private void InventoryOfTypeChanged(InventoryItemType itemType, IInventoryItemGameData inventoryItemGameData)

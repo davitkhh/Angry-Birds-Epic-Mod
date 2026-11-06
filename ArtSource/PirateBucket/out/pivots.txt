@@ -1,0 +1,4 @@
+Headgear_PirateBucket_1 163 166 -0.4325153 -0.126506 1
+Headgear_PirateBucket_2 148 149 -0.1959459 -0.352349 1
+Headgear_PirateBucket_3 149 158 0.02348993 -0.3101266 1
+Headgear_PirateBucket_4 147 145 -0.3027211 -0.7551724 0

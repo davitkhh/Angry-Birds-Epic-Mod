@@ -29,7 +29,10 @@ public class RageMeterFXMovement : MonoBehaviour
 		m_RageFxTween.m_StartTransform = m_Source;
 		m_RageFxTween.m_StartOffset = Vector3.zero;
 		m_RageFxTween.m_EndTransform = m_RageMeter.transform;
-		m_RageFxTween.m_EndOffset = m_Offset;
+		// The meter sits on the UI, the dots fly in the battleground: follow the camera off the main battleground
+		// (Porky's duel area) so they still land on the meter on screen.
+		var duel = DuelDirector.Find(m_RageMeter.BattleMgr);
+		m_RageFxTween.m_EndOffset = m_Offset + (duel != null ? duel.CameraShift : Vector3.zero);
 		m_RageFxTween.Play();
 		StartCoroutine(RageOnItsWay());
 	}

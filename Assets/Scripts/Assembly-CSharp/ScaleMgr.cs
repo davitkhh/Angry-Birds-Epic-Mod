@@ -58,7 +58,7 @@ public class ScaleMgr : MonoBehaviour
 			var value = toScale.Value;
 			if (value.m_Last_z_Position != value.transform.position.z)
 			{
-				var scaleFactor = GetScaleFactor(value.transform.position.z);
+				var scaleFactor = GetScaleFactor(value.m_UseFixedDepth ? value.m_FixedDepth : value.transform.position.z);
 				var baseScale = value.m_BaseScale;
 				baseScale.x *= scaleFactor;
 				baseScale.y *= scaleFactor;

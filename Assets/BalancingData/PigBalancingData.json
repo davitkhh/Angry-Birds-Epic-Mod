@@ -5754,28 +5754,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_farmer",
-      "pig_attack_minion_stickpig_02",
-      "pig_support_minion_farmer_fertilize"
+      "pig_attack_minion_farmer_heal",
+      "pig_attack_minion_stickpig_02"
     ],
     "SkillCombos": [
       {
-        "Percentage": 50.0,
+        "Percentage": 80.0,
         "ComboChain": [
-          "pig_attack_minion_farmer"
+          "pig_attack_minion_farmer_heal"
         ]
       },
       {
         "Percentage": 20.0,
         "ComboChain": [
           "pig_attack_minion_stickpig_02"
-        ]
-      },
-      {
-        "Percentage": 30.0,
-        "ComboChain": [
-          "pig_support_minion_farmer_fertilize",
-          "pig_attack_minion_farmer"
         ]
       }
     ],
@@ -5893,7 +5885,7 @@
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_01",
     "BaseHealth": 123,
-    "BaseAttack": 15,
+    "BaseAttack": 10,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -10395,6 +10387,73 @@
     "IgnoreDifficulty": true
   },
   {
+    "NameId": "pig_rogue_porky",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_rogue_porky",
+    "DefaultInventoryNameId": "pig_rogue_porky_01",
+    "BaseHealth": 325,
+    "BaseAttack": 7,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_prince_porky",
+      "pig_attack_prince_porky_quad",
+      "pig_attack_prince_porky_duel",
+      "pig_support_prince_porky_bombs",
+      "pig_support_prince_porky",
+      "pig_support_prince_porky_goad"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 0,
+        "ComboChain": [
+          "pig_attack_prince_porky"
+        ]
+      },
+      {
+        "Percentage": 10,
+        "ComboChain": [
+          "pig_attack_prince_porky_quad"
+        ]
+      },
+      {
+        "Percentage": 90,
+        "ComboChain": [
+          "pig_attack_prince_porky_duel"
+        ]
+      },
+      {
+        "Percentage": 0,
+        "ComboChain": [
+          "pig_support_prince_porky_bombs"
+        ]
+      },
+      {
+        "Percentage": 0,
+        "ComboChain": [
+          "pig_support_prince_porky"
+        ]
+      },
+      {
+        "Percentage": 0,
+        "ComboChain": [
+          "pig_support_prince_porky_goad"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig_porky_defeated_gold": 1,
+      "loot_pig_boss_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": true
+  },
+  {
     "NameId": "pig_prince_porky_firstencounter",
     "AssetId": "PrincePorky",
     "LocaId": "pig_prince_porky",
@@ -10572,23 +10631,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_prince_porky",
-      "pig_support_prince_porky",
-      "pig_support_prince_porky_goad"
+      "pig_attack_prince_porky_quad",
+      "pig_attack_prince_porky_duel"
     ],
     "SkillCombos": [
       {
-        "Percentage": 0.0,
+        "Percentage": 50.0,
         "ComboChain": [
-          "pig_support_prince_porky",
-          "pig_attack_prince_porky",
-          "pig_attack_prince_porky"
+          "pig_attack_prince_porky_quad"
         ]
       },
       {
-        "Percentage": 100.0,
+        "Percentage": 50.0,
         "ComboChain": [
-          "pig_support_prince_porky_goad"
+          "pig_attack_prince_porky_duel"
         ]
       }
     ],
@@ -10616,7 +10672,8 @@
     "SkillNameIds": [
       "pig_attack_prince_porky",
       "pig_support_prince_porky",
-      "pig_support_prince_porky_goad"
+      "pig_attack_prince_porky_quad",
+      "pig_attack_prince_porky_duel"
     ],
     "SkillCombos": [
       {
@@ -10628,9 +10685,15 @@
         ]
       },
       {
-        "Percentage": 25.0,
+        "Percentage": 12.5,
         "ComboChain": [
-          "pig_support_prince_porky_goad"
+          "pig_attack_prince_porky_quad"
+        ]
+      },
+      {
+        "Percentage": 12.5,
+        "ComboChain": [
+          "pig_attack_prince_porky_duel"
         ]
       }
     ],
@@ -19110,28 +19173,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_farmer",
-      "pig_attack_minion_stickpig_02",
-      "pig_support_minion_farmer_cultivate"
+      "pig_attack_minion_farmer_heal",
+      "pig_attack_minion_stickpig_02"
     ],
     "SkillCombos": [
       {
-        "Percentage": 50.0,
+        "Percentage": 80.0,
         "ComboChain": [
-          "pig_attack_minion_farmer"
+          "pig_attack_minion_farmer_heal"
         ]
       },
       {
         "Percentage": 20.0,
         "ComboChain": [
           "pig_attack_minion_stickpig_02"
-        ]
-      },
-      {
-        "Percentage": 30.0,
-        "ComboChain": [
-          "pig_support_minion_farmer_cultivate",
-          "pig_attack_minion_farmer"
         ]
       }
     ],
@@ -19144,6 +19199,48 @@
     },
     "SizeScale": 0.9,
     "PigStrength": 2,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_forge_gonchacho",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_forge_gonchacho",
+    "DefaultInventoryNameId": "pig_forge_gonchacho_01",
+    "BaseHealth": 460,
+    "BaseAttack": 16,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_forge_gonchacho_new_ability",
+      "pig_attack_forge_gonchacho_new_ability_2",
+      "pig_support_forge_gonchacho_new_ability"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_gonchacho_new_ability",
+          "pig_attack_forge_gonchacho_new_ability"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_gonchacho_new_ability",
+          "pig_attack_forge_gonchacho_new_ability_2"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "lucky_coin": 1,
+      "loot_pig5_defeated_exp": 1,
+      "loot_pigboss_defeated_mastery": 1
+    },
+    "SizeScale": 1.5,
+    "PigStrength": 5,
     "PassiveSkillNameId": "",
     "IgnoreDifficulty": false
   }

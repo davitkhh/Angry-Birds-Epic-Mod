@@ -242,6 +242,16 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 		m_state = state;
 	}
 
+	// The hotspot's story cutscene, or null while a pirate chain hotspot has only had its early level beaten (PirateChain).
+	protected ExecuteActionTree GetStoryActionTree()
+	{
+		if (Model != null && PirateChain.StoryState(Model) < HotspotUnlockState.ResolvedNew)
+		{
+			return null;
+		}
+		return GetComponent<ExecuteActionTree>();
+	}
+
 	public IEnumerator PlayActionTree(ExecuteActionTree execute)
 	{
 		execute.StartActionTree(this);
@@ -260,6 +270,11 @@ public class HotSpotWorldMapViewBase : MonoBehaviour
 			return;
 		}
 		var component = GetComponent<ExecuteActionTree>();
+		// A pirate chain hotspot's cutscene belongs to its pirate battle, not its early level (PirateChain).
+		if (component != null && Model != null && PirateChain.StoryState(Model) < HotspotUnlockState.ResolvedNew)
+		{
+			component = null;
+		}
 		if (component != null)
 		{
 			component.SetStateMgr(DIContainerInfrastructure.LocationStateMgr as WorldMapStateMgr);

@@ -261,8 +261,15 @@ namespace ABH.Services.Logic
 					{
 						DIContainerInfrastructure.GetCurrentPlayer().Data.DungeonsAlreadyPlayedToday.Add(hotspot.BalancingData.NameId);
 					}
+					// An early level on a pirate chain hotspot beats the level, not the story (PirateChain).
+					var battleId = ClientInfo.CurrentBattleGameData != null && ClientInfo.CurrentBattleGameData.Balancing != null ? ClientInfo.CurrentBattleGameData.Balancing.NameId : ClientInfo.CurrentBattleStartGameData != null ? ClientInfo.CurrentBattleStartGameData.m_BattleBalancingNameId : null;
+					var countsForStory = PirateChain.OnBattleWon(playerGameData, hotspot, battleId);
 					CompleteHotSpot(playerGameData, hotspot, Mathf.Max(battleResult.m_BattlePerformanceStars, 1), battleResult.m_Score);
-					SetWorldMapHotspotProgress(playerGameData, hotspot);
+					if (countsForStory)
+					{
+						SetWorldMapHotspotProgress(playerGameData, hotspot);
+					}
+					PirateChain.Sync(playerGameData);
 				});
 			}
 			else if (battleResult.m_WinnerFaction == Faction.Pigs)

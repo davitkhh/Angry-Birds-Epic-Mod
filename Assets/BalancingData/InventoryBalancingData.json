@@ -852,7 +852,8 @@
   {
     "NameId": "pig_pirate_matey_01",
     "DefaultInventoryContent": {
-      "pig_weapon_pirate_matey_01": 1
+      "pig_weapon_pirate_matey_01": 1,
+      "headgear_pirate_bucket": 1
     },
     "InitializingLevel": 0
   },
@@ -962,6 +963,14 @@
     "DefaultInventoryContent": {
       "pig_weapon_prince_porky_01": 1,
       "headgear_prince_porky": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_rogue_porky_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_rogue_smallclub_01": 1,
+      "headgear_rogue_royal": 1
     },
     "InitializingLevel": 0
   },
@@ -2202,6 +2211,15 @@
       "pig_weapon_minion_cupid_dark_01": 1,
       "pig_offhand_minion_bird_catcher_01": 1,
       "headgear_minion_eggpainter": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_gonchacho_01",
+    "DefaultInventoryContent": {
+      "pig_forge_gonchacho_mainhand": 1,
+      "pig_forge_gonchacho_offhand": 1,
+      "pig_forge_gonchacho_headgear": 1
     },
     "InitializingLevel": 0
   }

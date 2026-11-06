@@ -1129,6 +1129,7 @@ GameObject:
   - component: {fileID: 3465263977589054647}
   - component: {fileID: 9186176582908392474}
   - component: {fileID: 892360816950323952}
+  - component: {fileID: 5170032904417336021}
   m_Layer: 9
   m_Name: PigCharents
   m_TagString: Untagged
@@ -40614,3 +40615,17 @@ Transform:
   - {fileID: 4030772881387479757}
   m_Father: {fileID: 8869285870382098361}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &5170032904417336021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5113455778513350913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0531eedde23b1a350f9abb33dd0ea6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BoneAnimation: {fileID: 4433547091474899159}
+  BoneNameToDisable: Snout

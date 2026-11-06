@@ -151,6 +151,11 @@ namespace ABH.Services.Logic
 					}
 					continue;
 				}
+				// The pirate chain's fights only open while the pirates are at their hotspot (PirateChain).
+				if (!PirateChain.IsBattleAllowed(DIContainerInfrastructure.GetCurrentPlayer(), text))
+				{
+					continue;
+				}
 				BattleBalancingData balancing3 = null;
 				if (DIContainerBalancing.Service.TryGetBalancingData<BattleBalancingData>(text, out balancing3))
 				{
@@ -1705,10 +1710,6 @@ namespace ABH.Services.Logic
 				foreach (var item in battle.m_CombatantsPerFaction[target.CombatantFaction].Where(c => c.IsAlive && c != target))
 				{
 					ApplyEffectsOnTriggerType(num, EffectTriggerType.OnAllyDeath, item, source);
-				}
-				if (target.CurrentHealth > 0f)
-				{
-					Stinkeye.RegisterPirateDeath(battle, target);
 				}
 				ApplyEffectsOnTriggerType(num, EffectTriggerType.OnEnemyKnockedOut, target.m_LastDamageSource, target);
 			}
@@ -4398,12 +4399,12 @@ namespace ABH.Services.Logic
 			// Stinkeye: pirates deal bonus damage to the marked target; only blessed pirates until the mark is empowered
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.Stinkeye, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
-				if (!Stinkeye.IsPirate(attacker) || (!Stinkeye.IsEmpowered(effectGameData, effect) && !attacker.CurrrentEffects.Values.Any(e => e.m_EffectType == SkillEffectTypes.Blessing)))
+				if (!Stinkeye.IsPirate(attacker) || (!Stinkeye.IsEmpowered(effect) && !Stinkeye.IsBlessed(attacker)))
 				{
 					return param;
 				}
 				effectGameData.EvaluateEffect();
-				return param + Stinkeye.GetBonusPercent(effectGameData, effect) / 100f;
+				return param + Stinkeye.GetBonusPercent(effect) / 100f;
 			});
 
 			// ReduceDamageReceived
@@ -4884,7 +4885,8 @@ namespace ABH.Services.Logic
 				if (effect.Values[0] / 100f > UnityEngine.Random.value)
 				{
 					effectGameData.EvaluateEffect();
-					num34 += effect.Values[1] / 100f;
+					LastHitCrit = true;
+					num34 += effect.Values[1] / 100f * CritBonusMultiplier;
 					VisualEffectSetting setting2 = null;
 					if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting("Crit", out setting2))
 					{
@@ -5444,6 +5446,13 @@ namespace ABH.Services.Logic
 		// effects are skipped without being consumed; damage reductions (dodge, ironclad...) still apply.
 		public readonly HashSet<ICombatant> RetaliationImmuneAttackers = new HashSet<ICombatant>();
 
+		// Set when a damage roll crits (CriticalStrike perk or Crit effect). A skill that reacts to crits clears it before
+		// each hit and reads it after the damage (e.g. ThrowMainHandCritPurgeAttack).
+		public bool LastHitCrit;
+
+		// Scales the bonus damage of a crit that rolls during an attack. Set by a skill for its own hit only (e.g. CritEmpoweredAttack).
+		public float CritBonusMultiplier = 1f;
+
 		public float ApplyEffectsOnTriggerType(float effectedParam, EffectTriggerType triggerType, ICombatant effectOwner, ICombatant target)
 		{
 			if (effectOwner.CurrrentEffects == null)
@@ -5529,6 +5538,7 @@ namespace ABH.Services.Logic
 			// CriticalStrike
 			EquipmentPerksByType.Add(PerkType.CriticalStrike, delegate(KeyValuePair<float, float> paramModifierPair, ICombatant invoker, ICombatant target, BattleGameData battle)
 			{
+				LastHitCrit = true;
 				var num11 = ApplyEffectsOfTypeOnTriggerType(paramModifierPair.Value, new List<BattleEffectType> { BattleEffectType.ModifyCriticalStrike }, EffectTriggerType.OnApplyPerk, invoker, target);
 				// Brilliance off hands add PerkValue2% on top of the crit's bonus damage
 				var brilliance = UpgradeBlueprints.FindEquippedPerk(invoker, PerkType.Brilliance);
@@ -5536,7 +5546,7 @@ namespace ABH.Services.Logic
 				{
 					num11 += brilliance.PerkValue2;
 				}
-				var num12 = paramModifierPair.Key + num11 / 100f;
+				var num12 = paramModifierPair.Key + num11 / 100f * CritBonusMultiplier;
 				return num12;
 			});
 			
@@ -6147,10 +6157,10 @@ namespace ABH.Services.Logic
 			switch (skill.Model.Balancing.TargetType)
 			{
 			case SkillTargetTypes.Attack:
-				flag = IsSkillAttackPossible(combatHand, skill, battle);
+				flag = IsSkillAttackPossible(combatHand, skill, battle) && (!DuelKnockback.IsDuelSkill(skill.Model) || DuelKnockback.CanStart(combatHand));
 				break;
 			case SkillTargetTypes.Support:
-				flag = IsSkillSupportPossible(combatHand, skill, battle) && (!GoadAllyIntoAttack.IsGoadSkill(skill.Model) || GoadAllyIntoAttack.PickAlly(battle, combatHand, skill.Model) != null);
+				flag = IsSkillSupportPossible(combatHand, skill, battle) && (!GoadAllyIntoAttack.IsGoadSkill(skill.Model) || GoadAllyIntoAttack.PickAlly(battle, combatHand, skill.Model) != null) && (!RemoveAllyEffectForCrit.IsRemoveAllyEffectSkill(skill.Model) || RemoveAllyEffectForCrit.PickAlly(battle, combatHand) != null);
 				break;
 			}
 			if (!flag)
@@ -6271,9 +6281,14 @@ namespace ABH.Services.Logic
 				{
 					combatant.AttackTarget = GetNextTargetForAttackSkill(battle, combatant, skill, Faction.Pigs);
 				}
+				else if (DuelKnockback.IsDuelSkill(skill))
+				{
+					// Porky's Duel only goes for a bird he can knock back (no target: falls back to another skill)
+					combatant.AttackTarget = DuelKnockback.PickTarget(combatant);
+				}
 				else
 				{
-					combatant.AttackTarget = Stinkeye.GetEmpoweredMarkTarget(battle, combatant) ?? GetNextTargetForAttackSkill(battle, combatant, skill, Faction.Birds);
+					combatant.AttackTarget = Stinkeye.GetForcedMarkTarget(battle, combatant) ?? GetNextTargetForAttackSkill(battle, combatant, skill, Faction.Birds);
 				}
 				break;
 			case SkillTargetTypes.Support:
@@ -6284,7 +6299,8 @@ namespace ABH.Services.Logic
 				else
 				{
 					// Porky's goad has no target (falls back to another skill) unless an ally survives his hit
-					combatant.AttackTarget = GoadAllyIntoAttack.IsGoadSkill(skill) ? GoadAllyIntoAttack.PickAlly(battle, combatant, skill) : GetNextTargetForSupportSkill(battle, combatant, skill, Faction.Pigs);
+					// RemoveAllyEffectForCrit likewise needs an ally with a status effect it can remove
+					combatant.AttackTarget = GoadAllyIntoAttack.IsGoadSkill(skill) ? GoadAllyIntoAttack.PickAlly(battle, combatant, skill) : RemoveAllyEffectForCrit.IsRemoveAllyEffectSkill(skill) ? RemoveAllyEffectForCrit.PickAlly(battle, combatant) : GetNextTargetForSupportSkill(battle, combatant, skill, Faction.Pigs);
 				}
 				break;
 			}
@@ -6993,6 +7009,54 @@ namespace ABH.Services.Logic
 				num++;
 			}
 			return num;
+		}
+
+		// The blessing or curse most recently put on the target, or null if it has none or it can't be purged.
+		private BattleEffectGameData GetMostRecentRemovableEffect(ICombatant target)
+		{
+			if (target.CurrrentEffects == null)
+			{
+				return null;
+			}
+			var latest = target.CurrrentEffects.Values.Where(e => e.m_EffectType == SkillEffectTypes.Blessing || e.m_EffectType == SkillEffectTypes.Curse).OrderByDescending(e => e.m_AddedOrder).FirstOrDefault();
+			if (latest == null)
+			{
+				return null;
+			}
+			if (latest.m_EffectType != SkillEffectTypes.Curse && target.CurrrentEffects.Values.Any(e => e.m_Effects.Any(effect => effect.EffectType == BattleEffectType.ImmunityToPurge)))
+			{
+				return null;
+			}
+			return latest;
+		}
+
+		public bool HasRemovableStatusEffect(ICombatant target)
+		{
+			return GetMostRecentRemovableEffect(target) != null;
+		}
+
+		// Removes the blessing or curse most recently put on the target, blocked by the same effects as RemoveBattleEffects.
+		public bool RemoveMostRecentBattleEffect(ICombatant target)
+		{
+			var latest = GetMostRecentRemovableEffect(target);
+			if (latest == null)
+			{
+				return false;
+			}
+			var isCurse = latest.m_EffectType == SkillEffectTypes.Curse;
+			if (ApplyEffectsOnTriggerType(1f, isCurse ? EffectTriggerType.OnRemoveCurse : EffectTriggerType.OnRemoveBlessing, target, target) == -1f)
+			{
+				return false;
+			}
+			latest.RemoveEffect();
+			if (isCurse)
+			{
+				foreach (var effect in latest.m_Effects)
+				{
+					target.CleansedCurse(effect);
+				}
+			}
+			return true;
 		}
 
 		public bool isTargetAllowedForSkill(ICombatant target, SkillBattleDataBase skill)

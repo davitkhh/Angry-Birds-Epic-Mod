@@ -13,6 +13,14 @@ public class RageMeterController : MonoBehaviour
 
 	private BattleMgrBase m_battleMgr;
 
+	public BattleMgrBase BattleMgr
+	{
+		get
+		{
+			return m_battleMgr;
+		}
+	}
+
 	public Transform m_RageEffectTransform;
 
 	public UIDragTrigger m_DragTrigger;

@@ -18185,7 +18185,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1278
 GameObject:
   m_ObjectHideFlags: 0
@@ -57047,7 +57047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &3490
 GameObject:
   m_ObjectHideFlags: 0
@@ -75429,7 +75429,7 @@ Transform:
   m_GameObject: {fileID: 1079}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.30070582, w: 0.953717}
-  m_LocalPosition: {x: -1326, y: 722, z: 0}
+  m_LocalPosition: {x: -774, y: 3112, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -282503,6 +282503,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282923,7 +282924,7 @@ MonoBehaviour:
     nodesOut: 10000000
     nodesOutIndex: 00000000
     target: 0
-    text: pig_minion_rogue
+    text: pig_minion_bird_catcher
     param: []
     enabled: 1
     pass: 0
@@ -287154,6 +287155,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287196,6 +287198,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114727170992593203, guid: b0af76a91353dbf4a942c01f5df605f3,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &10876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287365,6 +287368,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287547,6 +287551,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287632,6 +287637,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287717,6 +287723,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 1
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287825,6 +287832,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287924,6 +287932,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288033,6 +288042,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288234,6 +288244,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &10920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288759,6 +288770,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &10947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288832,6 +288844,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 1
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288942,6 +288955,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290896,6 +290910,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &10962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294002,6 +294017,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294301,6 +294317,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294393,6 +294410,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294764,6 +294782,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295801,6 +295820,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295915,6 +295935,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296013,6 +296034,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296054,6 +296076,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296110,6 +296133,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296292,6 +296316,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296435,6 +296460,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296892,6 +296918,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296978,6 +297005,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297016,6 +297044,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 0}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297374,6 +297403,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297463,6 +297493,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297503,6 +297534,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297858,6 +297890,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298035,6 +298068,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298671,6 +298705,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301296,6 +301331,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301375,6 +301411,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302379,6 +302416,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302719,6 +302757,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307009,6 +307048,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307504,6 +307544,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307544,6 +307585,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307619,6 +307661,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310582,6 +310625,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310643,6 +310687,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310736,6 +310781,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349273,6 +349319,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349323,6 +349370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 0}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349453,7 +349501,7 @@ MonoBehaviour:
     nodesOut: 05000000
     nodesOutIndex: 00000000
     target: 0
-    text: pig_minion_rogue
+    text: pig_minion_bird_catcher
     param: []
     enabled: 1
     pass: 0
@@ -352947,6 +352995,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114727170992593203, guid: b0af76a91353dbf4a942c01f5df605f3,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353075,6 +353124,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114727170992593203, guid: b0af76a91353dbf4a942c01f5df605f3,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353164,6 +353214,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359928,6 +359979,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359955,6 +360007,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365753,6 +365806,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365938,6 +365992,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &11348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372780,6 +372835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374836,6 +374892,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375198,6 +375255,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375278,6 +375336,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375400,6 +375459,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375440,6 +375500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12406}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387764,6 +387825,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388043,6 +388105,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388122,6 +388185,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388184,6 +388248,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396780,6 +396845,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396867,7 +396933,7 @@ MonoBehaviour:
     nodesOut: 06000000
     nodesOutIndex: 00000000
     target: 0
-    text: pig_minion_rogue
+    text: pig_minion_bird_catcher
     param: []
     enabled: 1
     pass: 0
@@ -432479,6 +432545,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474659,6 +474726,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474791,6 +474859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12948}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474941,6 +475010,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 1
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475496,6 +475566,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475557,6 +475628,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114727170992593203, guid: b0af76a91353dbf4a942c01f5df605f3,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475698,6 +475770,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475788,6 +475861,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476139,6 +476213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12948}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476676,6 +476751,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477324,6 +477400,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477384,6 +477461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482400,6 +482478,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114727170992593203, guid: b0af76a91353dbf4a942c01f5df605f3,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482543,6 +482622,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482605,6 +482685,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482688,6 +482769,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488585,6 +488667,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &11628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488678,6 +488761,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488802,6 +488886,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488842,6 +488927,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488914,6 +489000,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489944,6 +490031,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490202,6 +490290,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490701,6 +490790,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495214,6 +495304,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496100,6 +496191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12948}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500518,6 +500610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11303}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500616,6 +500709,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 1
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500930,6 +501024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507583,6 +507678,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507674,6 +507770,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507976,6 +508073,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -513202,6 +513300,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562347,6 +562446,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562435,6 +562535,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562592,6 +562693,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 1
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -563485,6 +563587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -563663,6 +563766,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564663,6 +564767,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564801,6 +564906,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565049,6 +565155,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565089,6 +565196,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565215,6 +565323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12948}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566870,6 +566979,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566910,6 +567020,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12406}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567103,6 +567214,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567208,6 +567320,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567270,6 +567383,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567691,6 +567805,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &11910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567782,6 +567897,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567913,6 +568029,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567976,6 +568093,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571602,6 +571720,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571756,6 +571875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571852,6 +571972,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &11947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573254,6 +573375,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573345,6 +573467,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575273,6 +575396,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576145,6 +576269,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &11991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603086,6 +603211,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603164,6 +603290,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603387,6 +603514,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603449,6 +603577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12406}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603660,6 +603789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12406}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607446,6 +607576,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607976,6 +608107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11550}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615091,6 +615223,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615356,6 +615489,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619376,6 +619510,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619485,6 +619620,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -622697,6 +622833,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623577,6 +623714,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623632,6 +623770,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624006,6 +624145,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624545,6 +624685,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625063,6 +625204,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630805,6 +630947,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630990,6 +631133,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645500,6 +645644,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645716,6 +645861,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645943,6 +646089,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646057,6 +646204,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114554640237767829, guid: 49165923826fd374a974f148955651b8,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650046,6 +650194,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652109,6 +652258,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652922,6 +653072,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654686,6 +654837,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654726,6 +654878,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654797,6 +654950,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654857,6 +655011,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654930,6 +655085,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655341,6 +655497,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658028,6 +658185,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658565,6 +658723,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658660,6 +658819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658853,6 +659013,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658943,6 +659104,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 1
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658985,6 +659147,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663824,6 +663987,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664009,6 +664173,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664169,6 +664334,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666442,6 +666608,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666485,6 +666652,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666561,6 +666729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11550}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666803,6 +666972,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700379,6 +700549,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700538,6 +700709,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700600,6 +700772,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700689,6 +700862,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706621,6 +706795,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114727170992593203, guid: b0af76a91353dbf4a942c01f5df605f3,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706796,6 +706971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 11907}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708470,6 +708646,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708616,6 +708793,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708922,6 +709100,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740603,6 +740782,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747546,6 +747726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 0}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747673,6 +747854,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747781,6 +747963,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114702136323495710, guid: 8416b30dcb8e13e44b17104bc320a02a,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749280,6 +749463,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750168,6 +750352,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750327,6 +750512,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750803,6 +750989,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750866,6 +751053,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750969,6 +751157,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751103,6 +751292,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751359,6 +751549,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757539,6 +757730,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757659,6 +757851,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757932,6 +758125,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -758122,6 +758316,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -758177,6 +758372,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759123,6 +759319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 12948}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759194,6 +759391,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759280,6 +759478,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759341,6 +759540,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759433,6 +759633,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759602,6 +759803,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759723,6 +759925,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759762,6 +759965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 0}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759898,6 +760102,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759954,6 +760159,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760046,6 +760252,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760148,6 +760355,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760569,6 +760777,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760979,6 +761188,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &12806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761006,6 +761216,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114554640237767829, guid: 49165923826fd374a974f148955651b8,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761111,6 +761322,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761277,6 +761489,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114448927168436142, guid: 5221092084b2a2644b9c389b525b51e5,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761618,6 +761831,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761854,7 +762068,7 @@ MonoBehaviour:
     nodesOut: 05000000
     nodesOutIndex: 00000000
     target: 0
-    text: pig_minion_rogue
+    text: pig_minion_bird_catcher
     param: []
     enabled: 1
     pass: 0
@@ -762797,6 +763011,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762850,6 +763065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 0}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762900,6 +763116,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &12855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763548,6 +763765,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763586,6 +763804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ParticleSystemsAssetProvider: {fileID: 0}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &12859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763637,6 +763856,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763745,6 +763965,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763905,6 +764126,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763943,6 +764165,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &12875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764075,19 +764298,19 @@ MonoBehaviour:
       value: 0
       inSlope: 1
       outSlope: 1
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 1
       outSlope: 1
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -764274,6 +764497,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766450,6 +766674,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766582,6 +766807,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766771,6 +766997,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766809,6 +767036,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 1
+  m_SparkleDepth: -150
 --- !u!114 &12908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766886,6 +767114,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770891,6 +771120,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773181,6 +773411,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773296,6 +773527,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773351,6 +773583,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780145,6 +780378,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!114 &12947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822692,6 +822926,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &311165003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825057,6 +825292,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
 --- !u!1 &924221494
 GameObject:
   m_ObjectHideFlags: 0
@@ -825284,6 +825520,7 @@ MonoBehaviour:
   HasGoldenPig: 0
   ShowTooltipIfNotActive: 0
   m_IsDungeonHotspot: 0
+  m_SparkleDepth: -150
   m_CloudGoldenPig: {fileID: 0}
   m_FirstLaughDelay: 1
   m_LaughIntervalMin: 4
@@ -827412,6 +827649,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114927843076730345, guid: bd5dacb5655d3d14db16851eff260168,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1303673798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -827441,7 +827679,7 @@ MonoBehaviour:
   m_UseHeader: 0
   m_HeaderLocaIdent: 
   m_HeaderDefaultText: 
-  m_LocaIdent: hotspot_tt_workshop
+  m_LocaIdent: hotspot_tt_merchant
   m_DefaultText: 
   m_Root: {fileID: 1303673794}
   m_IsTapping: 0
@@ -827972,6 +828210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InstantiateAndTriggerParticleSystemByAnimation
   m_ParticleSystemsAssetProvider: {fileID: 11207}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1341661781
 GameObject:
   m_ObjectHideFlags: 0
@@ -828066,6 +828305,7 @@ MonoBehaviour:
   m_ParticleSystemsAssetProvider: {fileID: 114554640237767829, guid: 49165923826fd374a974f148955651b8,
     type: 3}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1341661786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863957,6 +864197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InstantiateAndTriggerParticleSystemByAnimation
   m_ParticleSystemsAssetProvider: {fileID: 11207}
   m_OverrideRunningAnimation: 0
+  m_SpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1862081430
 GameObject:
   m_ObjectHideFlags: 0

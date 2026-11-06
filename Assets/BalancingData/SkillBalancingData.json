@@ -3812,8 +3812,8 @@
       "damage_in_percent": 100.0,
       "attack_count": 2.0,
       "bonus_in_percent": 50.0,
-      "empowered_bonus_in_percent": 75.0,
-      "pirate_deaths": 5.0
+      "empowered_bonus_in_percent": 100.0,
+      "empowered_duration": 3.0
     },
     "SkillTemplateType": "Stinkeye",
     "EffectDuration": 3,
@@ -7366,6 +7366,47 @@
     "EffectDuration": 0,
     "TargetType": "Support",
     "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_prince_porky_quad",
+    "AssetId": "QuickStitch",
+    "LocaId": "pig_attack_prince_porky_quad",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "swing_count": 4.0
+    },
+    "SkillTemplateType": "RepeatedSwingsAttack",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_prince_porky_duel",
+    "AssetId": "QuickStitch",
+    "LocaId": "pig_attack_prince_porky_duel",
+    "SkillParameters": {
+      "duel_turns": 3.0
+    },
+    "SkillTemplateType": "DuelKnockback",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
     "TargetingBehavior": "None",
     "TargetAlreadyAffectedTargets": true,
     "TargetSelfPossible": false,
@@ -17694,6 +17735,91 @@
     "IconAtlasId": "Skills_Pigs_01",
     "EffectIconAtlasId": "Skills_Pigs_01",
     "EffectIconAssetId": "Heal",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_gonchacho_new_ability",
+    "AssetId": "Poke",
+    "LocaId": "pig_attack_forge_gonchacho_new_ability",
+    "SkillParameters": {
+      "damage_in_percent": 90.0,
+      "all": 1.0
+    },
+    "SkillTemplateType": "ThrowMainHandCritPurgeAttack",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_gonchacho_new_ability_2",
+    "AssetId": "Poke",
+    "LocaId": "pig_attack_forge_gonchacho_new_ability_2",
+    "SkillParameters": {
+      "damage_in_percent": 150.0,
+      "crit_effectiveness_in_percent": 100.0
+    },
+    "SkillTemplateType": "CritEmpoweredAttack",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_support_forge_gonchacho_new_ability",
+    "AssetId": "WayOfThePig",
+    "LocaId": "pig_support_forge_gonchacho_new_ability",
+    "SkillParameters": {
+      "critchance_in_percent": 50.0,
+      "extra_damage": 20.0
+    },
+    "SkillTemplateType": "RemoveAllyEffectForCrit",
+    "EffectDuration": 2,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Blessing",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_minion_farmer_heal",
+    "AssetId": "Poke",
+    "LocaId": "pig_attack_minion_farmer_heal",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "heal_ally": 30.0,
+      "intensity": 1.0
+    },
+    "SkillTemplateType": "AttackWithHealWeakerAlly",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
     "TargetCulling": null
   }
 ]

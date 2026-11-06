@@ -6,6 +6,12 @@ public class ScaleController : MonoBehaviour
 
 	public Vector3 m_BaseScale = new Vector3(1f, 1f, 1f);
 
+	// Sized as if at m_FixedDepth whatever its z: lets a scene character be layered by z without changing size (the
+	// intro raid's corporal runs behind Red).
+	public bool m_UseFixedDepth;
+
+	public float m_FixedDepth;
+
 	private UnityEngine.AI.NavMeshAgent m_agent;
 
 	private float m_baseSpeed;

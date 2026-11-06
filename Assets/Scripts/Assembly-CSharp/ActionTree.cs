@@ -711,6 +711,18 @@ public class ActionTree : MonoBehaviour
 			}
 			case NodeType.PlaySound:
 			{
+				// No world map music before Chuck joins (WorldMapStateMgr.IsWorldMapMusicUnlocked).
+				// The world map's music is WorldMapAreaMusic's (none before Chuck joins).
+				if (node.text == "music_worldmap" && (!WorldMapStateMgr.IsWorldMapMusicUnlocked() || WorldMapAreaMusic.Instance != null))
+				{
+					// A cutscene going back to map music: clear its own music (not the title theme) so the area mix returns.
+					var primaryMusic = DIContainerInfrastructure.PrimaryMusicSource;
+					if (WorldMapAreaMusic.Instance != null && primaryMusic != null && primaryMusic.isPlaying && (primaryMusic.clip == null || primaryMusic.clip.name != "TitleTheme"))
+					{
+						primaryMusic.Stop();
+					}
+					return NextNode();
+				}
 				var sound = node.refObject != null
 					? DIContainerInfrastructure.AudioManager.GetSound(node.text, node.refObject as GameObject)
 					: DIContainerInfrastructure.AudioManager.GetSound(node.text);
@@ -1306,11 +1318,12 @@ public class ActionTree : MonoBehaviour
 					}
 				}
 				var path = new SmoothPath(points);
-				// secondaryText: a bone kept on the path instead of the root (BonePinnedPath), after holding customFloat s.
+				// secondaryText: a bone kept on the path instead of the root (BonePinnedPath), after holding customFloat s;
+				// customVec2.x > 1 eases it out with that power (fast at first: a hard knock).
 				var pinnedBone = !string.IsNullOrEmpty(node.secondaryText) && rig != null ? rig.GetBoneTransform(node.secondaryText) : null;
 				if (pinnedBone != null)
 				{
-					BonePinnedPath.Begin(mover.transform, pinnedBone, path, node.customFloat, node.customFloat2);
+					BonePinnedPath.Begin(mover.transform, pinnedBone, path, node.customFloat, node.customFloat2, node.customVec2.x);
 					break;
 				}
 				var groundPath = shadow != null ? new SmoothPath(groundPoints) : null;

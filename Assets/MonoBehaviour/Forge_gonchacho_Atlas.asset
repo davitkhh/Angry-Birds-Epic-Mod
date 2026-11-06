@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_gonchacho_Atlas
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: d72b768a0da94c58afec6770b9e341b1, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.671875
+    width: 0.298828125
+    height: 0.328125
+  - serializedVersion: 2
+    x: 0.3046875
+    y: 0.708984375
+    width: 0.24609375
+    height: 0.291015625
+  - serializedVersion: 2
+    x: 0.5546875
+    y: 0.775390625
+    width: 0.23828125
+    height: 0.224609375
+  - serializedVersion: 2
+    x: 0.796875
+    y: 0.833984375
+    width: 0.16796875
+    height: 0.166015625
+  textureGUIDs:
+  - 00642883d1014fd885df7abfdd5263b3
+  - 0ca60addf3e34bad82220a3468571f67
+  - 07ac2f965cd2446ead6373f04b74af51
+  - cde1c57d305c47299dd05c7f78c8913b
+  textureSizes:
+  - {x: 153, y: 168}
+  - {x: 126, y: 149}
+  - {x: 122, y: 115}
+  - {x: 86, y: 85}
+  defaultPivotOffsets:
+  - {x: -0.3233162, y: -0.2073621}
+  - {x: -0.0628041, y: -0.2713147}
+  - {x: -0.1941474, y: -0.1787321}
+  - {x: -0.2084993, y: -0.01422822}
+  textureNames:
+  - Forge_gonchacho
+  - Forge_gonchacho_Back
+  - Forge_gonchacho_MainHand
+  - Forge_gonchacho_OffHand
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/gonchacho/Forge_gonchacho.png
+  - Assets/content/4_Characters/_Forge/Baked/gonchacho/Forge_gonchacho_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/gonchacho/Forge_gonchacho_MainHand.png
+  - Assets/content/4_Characters/_Forge/Baked/gonchacho/Forge_gonchacho_OffHand.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

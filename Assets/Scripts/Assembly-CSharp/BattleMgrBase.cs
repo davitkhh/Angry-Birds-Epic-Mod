@@ -551,7 +551,10 @@ public abstract class BattleMgrBase : MonoBehaviour
 	{
 		// Swap crystals never participate but still take a formation slot (and get an initiative from it). Once placed they
 		// stay put: re-spacing still reserves a slot for them, and the pig given the spot nearest the crystal takes that slot.
-		var factionCombatants = m_Model.m_CombatantsPerFaction[faction].Where(c => c.IsParticipating || (c is PigCombatant && c.IsKnockedOut) || c is SwapCrystalCombatant).ToList();
+		// During Porky's Duel this lays out the rest of the cast only; the two duelists keep their slots.
+		var duel = DuelDirector.Find(this);
+		var members = duel != null && duel.IsActive ? duel.FormationMembers(faction) : m_Model.m_CombatantsPerFaction[faction];
+		var factionCombatants = members.Where(c => c.IsParticipating || (c is PigCombatant && c.IsKnockedOut) || c is SwapCrystalCombatant).ToList();
 		var fixedCrystalSpots = factionCombatants.Where(c => c is SwapCrystalCombatant && c.CombatantView != null).ToDictionary(c => c, c => c.CombatantView.CachedUnfocusedPos);
 		for (var i = 0; i < factionCombatants.Count; i++)
 		{

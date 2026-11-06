@@ -203,7 +203,7 @@
     ],
     "HotspotContents": null,
     "ZoneLocaIdent": "zone_south_beach",
-    "ZoneStageIndex": 4,
+    "ZoneStageIndex": 3,
     "EnterRequirements": null,
     "CooldownInSeconds": 0,
     "VisibleRequirements": null,
@@ -245,20 +245,16 @@
     "BattleId": [
       "battle_005_1",
       "battle_005_1_retry",
-      "battle_005_1_resolved"
+      "battle_005_1_resolved",
+      "battle_006_01_early",
+      "battle_006_01_early_resolved"
     ],
     "HotspotContents": null,
     "ZoneLocaIdent": "zone_cobalt_plateaus_south",
     "ZoneStageIndex": 0,
     "EnterRequirements": null,
     "CooldownInSeconds": 0,
-    "VisibleRequirements": [
-      {
-        "RequirementType": "HaveUnlockedHotpsot",
-        "NameId": "hotspot_028_battleground",
-        "Value": 1.0
-      }
-    ],
+    "VisibleRequirements": null,
     "IsSpawnEventPossible": false,
     "ProgressId": 26,
     "OrderId": 36,
@@ -633,7 +629,8 @@
     "Type": "Battle",
     "BattleId": [
       "battle_014_1",
-      "battle_014_1_resolved"
+      "battle_014_1_resolved",
+      "battle_017_01_early"
     ],
     "HotspotContents": {
       "loot_treasurechest_017_01": 1
@@ -642,13 +639,7 @@
     "ZoneStageIndex": 1,
     "EnterRequirements": null,
     "CooldownInSeconds": 0,
-    "VisibleRequirements": [
-      {
-        "RequirementType": "HaveUnlockedHotpsot",
-        "NameId": "hotspot_020_01_battleground",
-        "Value": 1.0
-      }
-    ],
+    "VisibleRequirements": null,
     "IsSpawnEventPossible": false,
     "ProgressId": 28,
     "OrderId": 38,
@@ -663,7 +654,8 @@
     "Type": "Battle",
     "BattleId": [
       "battle_014_2",
-      "battle_014_2_resolved"
+      "battle_014_2_resolved",
+      "battle_017_02_early"
     ],
     "HotspotContents": null,
     "ZoneLocaIdent": "zone_eastern_cobalt_plateaus",
@@ -998,20 +990,15 @@
     "Type": "Battle",
     "BattleId": [
       "battle_017_1",
-      "battle_017_1_resolved"
+      "battle_017_1_resolved",
+      "battle_020_01_early"
     ],
     "HotspotContents": null,
     "ZoneLocaIdent": "zone_western_cobalt_plateaus",
     "ZoneStageIndex": 0,
     "EnterRequirements": null,
     "CooldownInSeconds": 0,
-    "VisibleRequirements": [
-      {
-        "RequirementType": "HaveUnlockedHotpsot",
-        "NameId": "hotspot_006_01_battleground",
-        "Value": 1.0
-      }
-    ],
+    "VisibleRequirements": null,
     "IsSpawnEventPossible": false,
     "ProgressId": 27,
     "OrderId": 37,
@@ -1325,20 +1312,16 @@
     "Type": "Battle",
     "BattleId": [
       "battle_024",
-      "battle_024_resolved"
+      "battle_024_resolved",
+      "battle_028_early",
+      "battle_028_early_resolved"
     ],
     "HotspotContents": null,
     "ZoneLocaIdent": "zone_cornucopia_woods",
     "ZoneStageIndex": 0,
     "EnterRequirements": null,
     "CooldownInSeconds": 0,
-    "VisibleRequirements": [
-      {
-        "RequirementType": "HaveUnlockedHotpsot",
-        "NameId": "hotspot_027_battleground",
-        "Value": 1.0
-      }
-    ],
+    "VisibleRequirements": null,
     "IsSpawnEventPossible": false,
     "ProgressId": 25,
     "OrderId": 35,

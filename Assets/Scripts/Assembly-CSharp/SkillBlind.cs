@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ABH.GameDatas;
 using ABH.GameDatas.Battle;
+using ABH.GameDatas.Battle.Skills;
 using ABH.GameDatas.Interfaces;
 using ABH.Shared.Generic;
 using UnityEngine;
@@ -131,7 +132,8 @@ public class SkillBlind : MonoBehaviour
 			m_SkillIcon.MakePixelPerfect();
 		}
 		var flag = skill.Model.SkillParameters != null && skill.Model.SkillParameters.ContainsKey("all");
-		var flag2 = skill.Model.Balancing.TargetType == SkillTargetTypes.Passive || skill.Model.Balancing.TargetType == SkillTargetTypes.Support;
+		var displayType = GetDisplayTargetType(skill);
+		var flag2 = displayType == SkillTargetTypes.Passive || displayType == SkillTargetTypes.Support;
 		var flag3 = (flag2 && invoker is PigCombatant) || (!flag2 && invoker is BirdCombatant);
 		if (m_SkillTargetRoot)
 		{
@@ -144,7 +146,7 @@ public class SkillBlind : MonoBehaviour
 		}
 		if (m_Background)
 		{
-			switch (skill.Model.Balancing.TargetType)
+			switch (displayType)
 			{
 			case SkillTargetTypes.Attack:
 				m_Background.color = m_OffensiveColor;
@@ -156,6 +158,13 @@ public class SkillBlind : MonoBehaviour
 				m_Background.color = m_SupportColor;
 				break;
 			}
+			// Combatant Forge: a custom strip colour, stored as a 0xRRGGBB number.
+			float customColor;
+			if (skill.Model.SkillParameters != null && skill.Model.SkillParameters.TryGetValue("ui_color_rgb", out customColor))
+			{
+				var rgb = (int)customColor;
+				m_Background.color = new Color32((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb, 255);
+			}
 		}
 		if (m_SkillTargetIcon != null)
 		{
@@ -165,6 +174,16 @@ public class SkillBlind : MonoBehaviour
 		{
 			AmmoUI.ShowOnSkillPlate(m_Background, m_SkillName, skill, invoker);
 		}
+	}
+
+	// Support-typed skills that read as attacks to the player (they target an ally or bomb, but hurt birds).
+	private static SkillTargetTypes GetDisplayTargetType(SkillBattleDataBase skill)
+	{
+		if (skill is ShortenChargesAndThrowBombs || skill is GoadAllyIntoAttack)
+		{
+			return SkillTargetTypes.Attack;
+		}
+		return skill.Model.Balancing.TargetType;
 	}
 
 	public float GetBottomSlack(float spacing, float padding)

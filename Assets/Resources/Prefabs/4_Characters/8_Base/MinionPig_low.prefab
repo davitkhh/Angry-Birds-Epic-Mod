@@ -33521,6 +33521,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3238e81aa1b942640bdc543335cae458, type: 2}
   - {fileID: 11400000, guid: b98344080114c6740826783d86aa98a0, type: 2}
   - {fileID: 11400000, guid: c57c8b6ed4c1f034f8947764acf25ec6, type: 2}
+  - {fileID: 11400000, guid: 5b47578f716a40cc9f7d146c67a8a1e5, type: 2}
+  - {fileID: 11400000, guid: 66bff4e736954712b131018a203327ee, type: 2}
   mAnimationClips:
   - animationName: Idle
     fps: 24

@@ -8,6 +8,9 @@ public class InstantiateAndTriggerParticleSystemByAnimation : MonoBehaviour
 
 	public bool m_OverrideRunningAnimation;
 
+	// Local offset for spawned effects, e.g. a hotspot's sparkles moved towards the camera (HotSpotWorldMapViewBattle).
+	public Vector3 m_SpawnOffset;
+
 	private Dictionary<string, GameObject> m_instantiatedParticleSystems = new Dictionary<string, GameObject>();
 
 	private void Start()
@@ -31,7 +34,13 @@ public class InstantiateAndTriggerParticleSystemByAnimation : MonoBehaviour
 		}
 		if (!m_instantiatedParticleSystems.ContainsKey(nameOfParticleSystem))
 		{
-			m_instantiatedParticleSystems.Add(nameOfParticleSystem, m_ParticleSystemsAssetProvider.InstantiateObject(nameOfParticleSystem, base.transform, Vector3.zero, Quaternion.identity));
+			var spawned = m_ParticleSystemsAssetProvider.InstantiateObject(nameOfParticleSystem, base.transform, m_SpawnOffset, Quaternion.identity);
+			// A fresh (uncached) copy is placed at the parent's position whatever position was asked for.
+			if (spawned != null)
+			{
+				spawned.transform.localPosition = m_SpawnOffset;
+			}
+			m_instantiatedParticleSystems.Add(nameOfParticleSystem, spawned);
 		}
 		var componentsInChildren = m_instantiatedParticleSystems[nameOfParticleSystem].GetComponentsInChildren<ParticleSystem>();
 		var array = componentsInChildren;

@@ -279,6 +279,7 @@ namespace ABH.GameDatas
 					this.WorldGameData.Data.HotSpotInstances.RemoveAll(hs => hs.NameId == "hotspot_003_battleground");
 				}
 				ResolveRestoredHotspot005();
+				PirateChain.Sync(this);
 			}
 			GrantBlueAmmoBows();
 			if (this.Data.TutorialTracks != null && this.Data.TutorialTracks.ContainsKey("tutorial_equip_crafted_item"))

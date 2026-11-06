@@ -16,7 +16,9 @@ public class BonePinnedPath : MonoBehaviour
 
 	private float m_Duration;
 
-	public static void Begin(Transform mover, Transform bone, ActionTree.SmoothPath path, float hold, float duration)
+	private float m_EaseOut;
+
+	public static void Begin(Transform mover, Transform bone, ActionTree.SmoothPath path, float hold, float duration, float easeOut = 0f)
 	{
 		var existing = mover.GetComponent<BonePinnedPath>();
 		if (existing != null)
@@ -29,6 +31,7 @@ public class BonePinnedPath : MonoBehaviour
 		pinned.m_Start = Time.time;
 		pinned.m_Hold = hold;
 		pinned.m_Duration = Mathf.Max(duration, 0.01f);
+		pinned.m_EaseOut = easeOut;
 	}
 
 	private void LateUpdate()
@@ -39,7 +42,12 @@ public class BonePinnedPath : MonoBehaviour
 			return;
 		}
 		var t = Time.time - m_Start;
-		var target = m_Path.At(Mathf.Clamp01((t - m_Hold) / m_Duration));
+		var fraction = Mathf.Clamp01((t - m_Hold) / m_Duration);
+		if (m_EaseOut > 1f)
+		{
+			fraction = 1f - Mathf.Pow(1f - fraction, m_EaseOut);
+		}
+		var target = m_Path.At(fraction);
 		var boneOffset = m_Bone.position.x - transform.position.x;
 		transform.position = new Vector3(target.x - boneOffset, target.y, target.z);
 		// Done once the path is (he has landed): from here his own animations move his body as usual, his root stays.

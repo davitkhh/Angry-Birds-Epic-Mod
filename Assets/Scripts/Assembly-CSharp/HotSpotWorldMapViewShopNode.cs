@@ -39,6 +39,9 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 
 	private bool m_StallMerchantReacted;
 
+	// McCool reacts (Action_Support) only once per world map load, not every time the indicator comes back on screen.
+	private bool m_StallMerchantCheered;
+
 	public override void ActivateAsset(bool activate)
 	{
 		var activateObjects = m_activateObjects;
@@ -73,8 +76,9 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 			return;
 		}
 		var react = m_UpdateIndikator.activeInHierarchy && IsFullyOnScreen(m_StallMerchantRenderer);
-		if (react && !m_StallMerchantReacted)
+		if (react && !m_StallMerchantReacted && !m_StallMerchantCheered)
 		{
+			m_StallMerchantCheered = true;
 			var legacy = m_StallMerchant.GetComponent<Animation>();
 			if (legacy != null && legacy.GetClip(MerchantUpdateAnimation) != null)
 			{

@@ -49842,6 +49842,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 895}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1609
@@ -103699,6 +103701,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1018}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1633
@@ -153239,6 +153243,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1022}
   m_BaseScale: {x: 0.9, y: 0.9, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1638
@@ -247681,6 +247687,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1339}
   m_BaseScale: {x: 0.9, y: 0.9, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1695
@@ -297597,6 +297605,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 201712403}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &201712412
@@ -348826,6 +348836,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 558693327}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &558693335
@@ -398811,6 +398823,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 845658694}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &845658703
@@ -448510,6 +448524,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 984061487}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 1
+  m_FixedDepth: 230
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &984061496
@@ -449304,10 +449320,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneRigGear
   m_Swaps:
   - BoneName: Headgear
-    TextureName: 
+    TextureName: Headgear_PigGuard
     Replaces: {fileID: 0}
   - BoneName: Headgear_Back
-    TextureName: 
+    TextureName: Headgear_PigGuard_Back
     Replaces: {fileID: 0}
   - BoneName: MainHand
     TextureName: 
@@ -497913,6 +497929,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1086374803}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1086374812
@@ -546630,6 +546648,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1100308896}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1100308904
@@ -549167,7 +549187,7 @@ MonoBehaviour:
     nodesOut: 2d000000
     nodesOutIndex: 00000000
     target: 0
-    text: Action_Attack_1
+    text: Swing
     param: []
     enabled: 1
     pass: 0
@@ -549875,7 +549895,7 @@ MonoBehaviour:
     nodesOut: 43000000
     nodesOutIndex: 00000000
     target: 0
-    text: Action_Attack_1
+    text: Swing
     param: []
     enabled: 1
     pass: 0
@@ -550677,7 +550697,7 @@ MonoBehaviour:
     nodesOut: 5c000000
     nodesOutIndex: 00000000
     target: 0
-    text: Action_Attack_1
+    text: Swing
     param: []
     enabled: 1
     pass: 0
@@ -552317,9 +552337,12 @@ MonoBehaviour:
     target: 0
     text: Move_Loop
     param:
-    - 1113.1,-38.4,230.0
-    - 113.1,-83.4,230.0
-    - -986.9,-133.4,230.0
+    - 1113.1,-38.4,315.0
+    - 113.1,-83.4,315.0
+    - -166.9,-96.1,315.0
+    - -366.9,-105.2,238.0
+    - -586.9,-115.2,238.0
+    - -986.9,-133.4,238.0
     enabled: 1
     pass: 0
     type: 35
@@ -552330,7 +552353,7 @@ MonoBehaviour:
     customInt2: 1
     customInt3: 0
     customFloat: 0
-    customFloat2: 6.1287107
+    customFloat2: 6.1703925
     customBool: 0
     customBool2: 1
     objectType: 0
@@ -552917,6 +552940,38 @@ MonoBehaviour:
     nodesOut: a0000000
     nodesOutIndex: 00000000
     target: 0
+    text: Camera_Shake_Medium
+    param: []
+    enabled: 1
+    pass: 0
+    type: 1
+    refObject: {fileID: 38}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 0
+    objectName: 
+    customVec1: {x: 0, y: 0, z: 0}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 2090
+      y: 3320
+      width: 200
+      height: 180
+    nodeID: 160
+    nodesIn: 9f000000
+    nodesOut: a1000000
+    nodesOutIndex: 00000000
+    target: 0
     text: Hit
     param: []
     enabled: 1
@@ -552940,19 +552995,52 @@ MonoBehaviour:
     secondaryText: Idle
   - editorRect:
       serializedVersion: 2
-      x: 2090
-      y: 3320
+      x: 20
+      y: 3540
       width: 200
       height: 180
-    nodeID: 160
-    nodesIn: 9f000000
-    nodesOut: a1000000
+    nodeID: 161
+    nodesIn: a0000000
+    nodesOut: a2000000
+    nodesOutIndex: 00000000
+    target: 0
+    text: RedBird
+    param: []
+    enabled: 1
+    pass: 0
+    type: 2
+    refObject: {fileID: 1603636997599578, guid: d4da8c055fda60b4fbeda9f85c532ba8,
+      type: 3}
+    refObject1: {fileID: 0}
+    refObject2: {fileID: 0}
+    customInt: 0
+    customInt2: 0
+    customInt3: 0
+    customFloat: 0
+    customFloat2: 0
+    customBool: 0
+    customBool2: 0
+    objectType: 1
+    objectName: HitBump
+    customVec1: {x: 0, y: 0, z: -2}
+    customVec2: {x: 0, y: 0, z: 0}
+    QueueIdle: 0
+    secondaryText: 
+  - editorRect:
+      serializedVersion: 2
+      x: 250
+      y: 3540
+      width: 200
+      height: 180
+    nodeID: 162
+    nodesIn: a1000000
+    nodesOut: a3000000
     nodesOutIndex: 00000000
     target: 0
     text: 
     param:
     - 113.1,-83.4,300.6
-    - 314.1,-139.2,244.8
+    - -57.7,-153.2,230.8
     enabled: 1
     pass: 0
     type: 35
@@ -552969,18 +553057,18 @@ MonoBehaviour:
     objectType: 1
     objectName: RedBird
     customVec1: {x: 0, y: 0, z: 0}
-    customVec2: {x: 0, y: 0, z: 0}
+    customVec2: {x: 2.5, y: 0, z: 0}
     QueueIdle: 0
     secondaryText: Body
   - editorRect:
       serializedVersion: 2
-      x: 20
+      x: 480
       y: 3540
       width: 200
       height: 180
-    nodeID: 161
-    nodesIn: a0000000
-    nodesOut: a2000000
+    nodeID: 163
+    nodesIn: a2000000
+    nodesOut: a4000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -553006,13 +553094,13 @@ MonoBehaviour:
     secondaryText: 
   - editorRect:
       serializedVersion: 2
-      x: 250
+      x: 710
       y: 3540
       width: 200
       height: 180
-    nodeID: 162
-    nodesIn: a1000000
-    nodesOut: a3000000
+    nodeID: 164
+    nodesIn: a3000000
+    nodesOut: a5000000
     nodesOutIndex: 00000000
     target: 0
     text: Move_Loop
@@ -553049,13 +553137,13 @@ MonoBehaviour:
     secondaryText: 
   - editorRect:
       serializedVersion: 2
-      x: 480
+      x: 940
       y: 3540
       width: 200
       height: 180
-    nodeID: 163
-    nodesIn: a2000000
-    nodesOut: a4000000
+    nodeID: 165
+    nodesIn: a4000000
+    nodesOut: a6000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -553081,13 +553169,13 @@ MonoBehaviour:
     secondaryText: 
   - editorRect:
       serializedVersion: 2
-      x: 710
+      x: 1170
       y: 3540
       width: 200
       height: 180
-    nodeID: 164
-    nodesIn: a3000000
-    nodesOut: a5000000
+    nodeID: 166
+    nodesIn: a5000000
+    nodesOut: a7000000
     nodesOutIndex: 00000000
     target: 0
     text: Rage
@@ -553113,13 +553201,13 @@ MonoBehaviour:
     secondaryText: Idle
   - editorRect:
       serializedVersion: 2
-      x: 940
+      x: 1400
       y: 3540
       width: 200
       height: 180
-    nodeID: 165
-    nodesIn: a4000000
-    nodesOut: a6000000
+    nodeID: 167
+    nodesIn: a6000000
+    nodesOut: a8000000
     nodesOutIndex: 00000000
     target: 0
     text: ScreenEffect_FadeBlack
@@ -553145,13 +553233,13 @@ MonoBehaviour:
     secondaryText: 
   - editorRect:
       serializedVersion: 2
-      x: 1170
+      x: 1630
       y: 3540
       width: 200
       height: 180
-    nodeID: 166
-    nodesIn: a5000000
-    nodesOut: a7000000
+    nodeID: 168
+    nodesIn: a7000000
+    nodesOut: a9000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -553177,13 +553265,13 @@ MonoBehaviour:
     secondaryText: 
   - editorRect:
       serializedVersion: 2
-      x: 1400
+      x: 1860
       y: 3540
       width: 200
       height: 180
-    nodeID: 167
-    nodesIn: a6000000
-    nodesOut: a8000000
+    nodeID: 169
+    nodesIn: a8000000
+    nodesOut: aa000000
     nodesOutIndex: 00000000
     target: 0
     text: Taunt
@@ -553209,13 +553297,13 @@ MonoBehaviour:
     secondaryText: Idle
   - editorRect:
       serializedVersion: 2
-      x: 1630
+      x: 2090
       y: 3540
       width: 200
       height: 180
-    nodeID: 168
-    nodesIn: a7000000
-    nodesOut: a9000000
+    nodeID: 170
+    nodesIn: a9000000
+    nodesOut: ab000000
     nodesOutIndex: 00000000
     target: 0
     text: 
@@ -553241,12 +553329,12 @@ MonoBehaviour:
     secondaryText: 
   - editorRect:
       serializedVersion: 2
-      x: 1860
-      y: 3540
+      x: 20
+      y: 3760
       width: 200
       height: 180
-    nodeID: 169
-    nodesIn: a8000000
+    nodeID: 171
+    nodesIn: aa000000
     nodesOut: 
     nodesOutIndex: 
     target: 0
@@ -601950,6 +602038,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1270869986}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1270869994
@@ -651344,6 +651434,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1363317759}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1363317768
@@ -700068,6 +700160,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ScaleTransform: {fileID: 1363993275}
   m_BaseScale: {x: 1, y: 1, z: 1}
+  m_UseFixedDepth: 0
+  m_FixedDepth: 0
   m_Index: 0
   m_Last_z_Position: 0
 --- !u!114 &1363993284

@@ -81,11 +81,11 @@ namespace ABH.GameDatas.Battle
 
 		public int m_DefeatedPvPBirds;
 
-		// Pirate pigs that died while each pig was alive (Stinkeye's empowered mark)
-		public Dictionary<ICombatant, int> m_PirateDeathsWitnessed = new Dictionary<ICombatant, int>();
-
 		// Snoutlings each Full Pockets pig has already spilled
 		public Dictionary<ICombatant, int> m_FullPocketsDropped = new Dictionary<ICombatant, int>();
+
+		// Combatants left out of the combatant lists while the other side of Porky's Duel acts (DuelDirector)
+		public List<ICombatant> m_IsolatedAway = new List<ICombatant>();
 
 		public string m_CurrentOpponentId;
 
@@ -385,7 +385,7 @@ namespace ABH.GameDatas.Battle
 			{
 				return true;
 			}
-			foreach (var item in m_CombatantsByInitiative)
+			foreach (var item in m_CombatantsByInitiative.Concat(m_IsolatedAway))
 			{
 				if (item.IsParticipating && item.CombatantFaction == faction)
 				{

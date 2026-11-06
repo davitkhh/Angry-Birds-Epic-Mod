@@ -142,12 +142,13 @@ namespace ABH.Services.Logic
 			dictionary.Add(RequirementType.HaveUnlockedHotpsot, delegate(object o, Requirement r)
 			{
 				var player = o as PlayerGameData;
-				return player.WorldGameData.HotspotGameDatas.ContainsKey(r.NameId) && player.WorldGameData.HotspotGameDatas[r.NameId].Data.UnlockState >= HotspotUnlockState.ResolvedNew ? true : false;
+				// Pirate chain hotspots only count once their pirate battle is won (PirateChain).
+				return player.WorldGameData.HotspotGameDatas.ContainsKey(r.NameId) && PirateChain.StoryState(player, player.WorldGameData.HotspotGameDatas[r.NameId]) >= HotspotUnlockState.ResolvedNew ? true : false;
 			});
 			dictionary.Add(RequirementType.NotHaveUnlockedHotpsot, delegate(object o, Requirement r)
 			{
 				var player = o as PlayerGameData;
-				return player.WorldGameData.HotspotGameDatas.ContainsKey(r.NameId) && player.WorldGameData.HotspotGameDatas[r.NameId].Data.UnlockState < HotspotUnlockState.ResolvedNew ? true : false;
+				return player.WorldGameData.HotspotGameDatas.ContainsKey(r.NameId) && PirateChain.StoryState(player, player.WorldGameData.HotspotGameDatas[r.NameId]) < HotspotUnlockState.ResolvedNew ? true : false;
 			});
 			dictionary.Add(RequirementType.HaveBird, delegate(object o, Requirement r)
 			{

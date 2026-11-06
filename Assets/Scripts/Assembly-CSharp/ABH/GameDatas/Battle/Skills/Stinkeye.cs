@@ -4,15 +4,23 @@ using System.Linq;
 using ABH.GameDatas.Interfaces;
 using ABH.Shared.Generic;
 using ABH.Shared.Models.Generic;
+using UnityEngine;
 
 namespace ABH.GameDatas.Battle.Skills
 {
-	// Pirate captain attack: marks the target so blessed pirates deal bonus_in_percent more damage to it. Once
-	// pirate_deaths pirates have died while the captain was alive, his marks (existing ones too) are empowered: every
-	// pirate deals empowered_bonus_in_percent more to them, blessed or not, and pirate attack skills target marked birds.
+	// Pirate captain attack: marks the target. Pirates with a blessing can only attack marked birds and deal
+	// bonus_in_percent more to them (yellow crosshair). Once every bird is marked, all marks refresh to
+	// empowered_duration turns and are empowered: every pirate deals empowered_bonus_in_percent more to them (red skull
+	// crosshair), and no bird can be marked until the empowered marks are gone.
 	public class Stinkeye : AttackSkillTemplate
 	{
 		public const string EffectIdent = "Stinkeye";
+
+		public const string AimIdent = "Stinkeye_Aim";
+
+		public const string EmpoweredAimIdent = "Stinkeye_AimEmpowered";
+
+		private static bool s_RefreshingIndicators;
 
 		private float m_DamageMod;
 
@@ -22,7 +30,7 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private float m_EmpoweredBonusPercent;
 
-		private float m_PirateDeaths;
+		private float m_EmpoweredDuration;
 
 		public override void Init(SkillGameData model)
 		{
@@ -33,7 +41,7 @@ namespace ABH.GameDatas.Battle.Skills
 			base.Model.SkillParameters.TryGetValue("attack_count", out m_AttackCount);
 			base.Model.SkillParameters.TryGetValue("bonus_in_percent", out m_BonusPercent);
 			base.Model.SkillParameters.TryGetValue("empowered_bonus_in_percent", out m_EmpoweredBonusPercent);
-			base.Model.SkillParameters.TryGetValue("pirate_deaths", out m_PirateDeaths);
+			base.Model.SkillParameters.TryGetValue("empowered_duration", out m_EmpoweredDuration);
 			ActionsAfterDamageDealt.Add(delegate(float damage, BattleGameData battle, ICombatant source, ICombatant target)
 			{
 				ShareableActionPart(battle, source, target, false);
@@ -42,32 +50,48 @@ namespace ABH.GameDatas.Battle.Skills
 
 		public override void ShareableActionPart(BattleGameData battle, ICombatant source, ICombatant target, bool isShared)
 		{
-			var battleEffectGameData = new BattleEffectGameData(source, target, new List<BattleEffect>
+			if (target.CombatantFaction != Faction.Birds || target.IsBanner || IsEmpowerActive(battle))
+			{
+				return;
+			}
+			AddMark(battle, source, target, base.Model.Balancing.EffectDuration, false);
+			var birds = GetMarkableBirds(battle);
+			if (birds.Count > 0 && birds.All(b => GetMark(b) != null))
+			{
+				foreach (var bird in birds)
+				{
+					AddMark(battle, source, bird, (int)m_EmpoweredDuration, true);
+				}
+			}
+			RefreshIndicators(battle);
+		}
+
+		private void AddMark(BattleGameData battle, ICombatant source, ICombatant target, int duration, bool empowered)
+		{
+			new BattleEffectGameData(source, target, new List<BattleEffect>
 			{
 				new BattleEffect
 				{
 					EffectTrigger = EffectTriggerType.OnReceiveDamage,
 					EffectType = BattleEffectType.Stinkeye,
 					AfflicionType = base.Model.Balancing.EffectType,
-					Values = new List<float> { m_BonusPercent, m_EmpoweredBonusPercent, m_PirateDeaths },
-					Duration = base.Model.Balancing.EffectDuration,
+					Values = new List<float> { m_BonusPercent, m_EmpoweredBonusPercent, empowered ? 1f : 0f },
+					Duration = duration,
 					EffectAssetId = base.Model.Balancing.EffectIconAssetId,
 					EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
 				}
-			}, base.Model.Balancing.EffectDuration, battle, EffectIdent, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
-			battleEffectGameData.AddEffect();
+			}, duration, battle, EffectIdent, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId).AddEffect();
 		}
 
-		// Values: [bonus %, empowered bonus %, pirate deaths needed]. Checked live, so marks already applied empower too.
-		public static bool IsEmpowered(BattleEffectGameData effectGameData, BattleEffect effect)
+		// Values: [bonus %, empowered bonus %, empowered (1/0)]
+		public static bool IsEmpowered(BattleEffect effect)
 		{
-			int deaths;
-			return effect.Values.Count > 2 && effectGameData.m_Battle.m_PirateDeathsWitnessed.TryGetValue(effectGameData.m_Source, out deaths) && deaths >= effect.Values[2];
+			return effect.Values.Count > 2 && effect.Values[2] > 0f;
 		}
 
-		public static float GetBonusPercent(BattleEffectGameData effectGameData, BattleEffect effect)
+		public static float GetBonusPercent(BattleEffect effect)
 		{
-			return IsEmpowered(effectGameData, effect) ? effect.Values[1] : effect.Values[0];
+			return IsEmpowered(effect) ? effect.Values[1] : effect.Values[0];
 		}
 
 		public static bool IsPirate(ICombatant combatant)
@@ -75,30 +99,118 @@ namespace ABH.GameDatas.Battle.Skills
 			return combatant is PigCombatant && combatant.CombatantNameId.Contains("pirate");
 		}
 
-		// Called once per lethal hit: every pig still alive has now seen one more pirate die
-		public static void RegisterPirateDeath(BattleGameData battle, ICombatant dead)
+		public static bool IsBlessed(ICombatant combatant)
 		{
-			if (!IsPirate(dead))
-			{
-				return;
-			}
-			foreach (var witness in battle.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.IsAlive && c != dead))
-			{
-				int deaths;
-				battle.m_PirateDeathsWitnessed.TryGetValue(witness, out deaths);
-				battle.m_PirateDeathsWitnessed[witness] = deaths + 1;
-			}
+			return combatant.CurrrentEffects != null && combatant.CurrrentEffects.Values.Any(e => !e.m_IsRemoved && e.m_EffectType == SkillEffectTypes.Blessing);
 		}
 
-		// A bird carrying an empowered Stinkeye that this pirate must attack, or null
-		public static ICombatant GetEmpoweredMarkTarget(BattleGameData battle, ICombatant combatant)
+		private static BattleEffect GetMark(ICombatant combatant)
 		{
-			if (!IsPirate(combatant) || !battle.m_CombatantsPerFaction.ContainsKey(Faction.Birds))
+			BattleEffectGameData mark;
+			if (combatant.CurrrentEffects == null || !combatant.CurrrentEffects.TryGetValue(EffectIdent, out mark) || mark.m_IsRemoved)
 			{
 				return null;
 			}
-			var marked = battle.m_CombatantsPerFaction[Faction.Birds].Where(c => c.IsParticipating && c.CurrrentEffects != null && c.CurrrentEffects.Values.Any(e => !e.m_IsRemoved && e.m_Effects.Any(f => f.EffectType == BattleEffectType.Stinkeye && IsEmpowered(e, f)))).ToList();
+			return mark.m_Effects.FirstOrDefault(e => e.EffectType == BattleEffectType.Stinkeye);
+		}
+
+		private static List<ICombatant> GetMarkableBirds(BattleGameData battle)
+		{
+			List<ICombatant> birds;
+			if (!battle.m_CombatantsPerFaction.TryGetValue(Faction.Birds, out birds))
+			{
+				return new List<ICombatant>();
+			}
+			return birds.Where(b => b.IsParticipating && !b.IsBanner).ToList();
+		}
+
+		private static List<ICombatant> GetMarkedBirds(BattleGameData battle, bool empowered)
+		{
+			return GetMarkableBirds(battle).Where(b => GetMark(b) != null && IsEmpowered(GetMark(b)) == empowered).ToList();
+		}
+
+		public static bool IsEmpowerActive(BattleGameData battle)
+		{
+			return GetMarkedBirds(battle, true).Count > 0;
+		}
+
+		// A regularly marked bird this pirate has to attack (pirates with a blessing only attack marked birds), or null
+		public static ICombatant GetForcedMarkTarget(BattleGameData battle, ICombatant combatant)
+		{
+			if (!IsPirate(combatant) || !IsBlessed(combatant))
+			{
+				return null;
+			}
+			var marked = GetMarkedBirds(battle, false);
 			return marked.Count == 0 ? null : marked[UnityEngine.Random.Range(0, marked.Count)];
+		}
+
+		// Shows the yellow crosshair on blessed pirates while regular marks exist, the red skull crosshair on every
+		// pirate while marks are empowered. Called whenever effects change.
+		public static void RefreshIndicators(BattleGameData battle)
+		{
+			List<ICombatant> pigs;
+			if (battle == null || s_RefreshingIndicators || !battle.m_CombatantsPerFaction.TryGetValue(Faction.Pigs, out pigs))
+			{
+				return;
+			}
+			s_RefreshingIndicators = true;
+			try
+			{
+				var marked = GetMarkedBirds(battle, false);
+				var empowered = IsEmpowerActive(battle);
+				var aimIcon = marked.Count == 1 ? "Target_" + marked[0].CombatantAssetId : "Target_Birds";
+				foreach (var pig in pigs.ToList())
+				{
+					if (pig.CombatantView == null || pig.CombatantView.m_AssetController == null || pig.CombatantView.m_BattleMgr == null)
+					{
+						continue;
+					}
+					var pirate = pig.IsParticipating && IsPirate(pig);
+					SetIndicator(pig, EmpoweredAimIdent, pirate && empowered, null);
+					SetIndicator(pig, AimIdent, pirate && !empowered && marked.Count > 0 && IsBlessed(pig), aimIcon);
+				}
+			}
+			finally
+			{
+				s_RefreshingIndicators = false;
+			}
+		}
+
+		private static void SetIndicator(ICombatant pig, string ident, bool show, string icon)
+		{
+			var view = pig.CombatantView;
+			var shown = view.CheckAndContainsVisualEffect(ident);
+			if (!show)
+			{
+				if (shown)
+				{
+					var indicator = view.LastingVisualEffects[ident];
+					UnityEngine.Object.Destroy(indicator, indicator.PlayAnimationOrAnimatorState("End"));
+					view.LastingVisualEffects.Remove(ident);
+				}
+				return;
+			}
+			if (!shown)
+			{
+				VisualEffectSetting setting;
+				if (!DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(ident, out setting))
+				{
+					return;
+				}
+				foreach (var visualEffect in setting.VisualEffects.Where(v => v.SpawnTiming == VisualEffectSpawnTiming.Affected))
+				{
+					view.m_BattleMgr.InstantiateEffect(pig, visualEffect, setting, new List<ICombatant> { pig }, false);
+				}
+			}
+			if (icon != null && view.CheckAndContainsVisualEffect(ident))
+			{
+				var fx = view.LastingVisualEffects[ident].GetComponentInChildren<BattleFXController>();
+				if (fx)
+				{
+					fx.SendParameter(icon);
+				}
+			}
 		}
 
 		public override string GetLocalizedDescription(ICombatant invoker)
@@ -109,7 +221,7 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_2}", string.Empty + base.Model.Balancing.EffectDuration);
 			dictionary.Add("{value_3}", string.Empty + (100f + m_BonusPercent));
 			dictionary.Add("{value_4}", string.Empty + m_AttackCount);
-			dictionary.Add("{value_5}", string.Empty + m_PirateDeaths);
+			dictionary.Add("{value_5}", string.Empty + m_EmpoweredDuration);
 			dictionary.Add("{value_6}", string.Empty + (100f + m_EmpoweredBonusPercent));
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}

@@ -359,7 +359,8 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		{
 			SafeEvaluateTarget();
 		}
-		if (!m_SkillToDo.Model.SkillParameters.ContainsKey("tentacle_grab"))
+		// Porky's Duel hops him straight from his slot to the bird's line.
+		if (!m_SkillToDo.Model.SkillParameters.ContainsKey("tentacle_grab") && !(m_SkillToDo is ABH.GameDatas.Battle.Skills.DuelKnockback))
 		{
 			yield return new WaitForSeconds(PlayGoToFocusPosition());
 		}
@@ -697,7 +698,9 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		DebugLog.Log("Character finished his turn: " + m_Model.CombatantNameId);
 		// Porky's goad already hopped him back to his spot (and gave the ally's damage its own wait), so there is nothing to wait for.
 		var goad = skillUsed as ABH.GameDatas.Battle.Skills.GoadAllyIntoAttack;
-		var alreadyHome = goad != null && goad.ReturnedToBasePosition;
+		// Same for his Duel: he already walked to his spot in the duel area.
+		var duel = skillUsed as ABH.GameDatas.Battle.Skills.DuelKnockback;
+		var alreadyHome = (goad != null && goad.ReturnedToBasePosition) || (duel != null && duel.ReturnedToBasePosition);
 		if (!alreadyHome)
 		{
 			yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForShowDamageAndReturnToBasePosInSec);
@@ -1003,6 +1006,11 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				m_cachedOverCharacterTransform = hitInfo.transform;
 				var cachedOverCharacter = m_cachedOverCharacter;
 				m_cachedOverCharacter = m_cachedOverCharacterTransform.GetComponent<CharacterControllerBattleGroundBase>();
+				// Porky's duel: the other interaction is off limits (off screen, but a drag past the screen edge reaches it).
+				if (m_cachedOverCharacter != null && DuelDirector.IsHiddenFromTargeting(m_BattleMgr, m_cachedOverCharacter.GetModel()))
+				{
+					m_cachedOverCharacter = null;
+				}
 				if (cachedOverCharacter != m_cachedOverCharacter)
 				{
 					if (m_cachedOverCharacter != null && (m_cachedOverCharacter.GetModel().IsKnockedOut || m_cachedOverCharacter.gameObject.layer != (!DIContainerInfrastructure.TutorialMgr.IsCurrentlyLocked ? LayerMask.NameToLayer("Scenery") : LayerMask.NameToLayer("TutorialScenery"))))
@@ -1199,6 +1207,10 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		}
 		DebugLog.Log("RayCastHit! " + hitInfo.transform.gameObject.name);
 		var component = hitInfo.transform.GetComponent<CharacterControllerBattleGroundBase>();
+		if (component != null && DuelDirector.IsHiddenFromTargeting(m_BattleMgr, component.GetModel()))
+		{
+			component = null;
+		}
 		if (component != null)
 		{
 			var skill = component.GetModel().CombatantFaction != m_Model.CombatantFaction ? m_Model.GetSkills()[0] : m_Model.GetSkills()[1];

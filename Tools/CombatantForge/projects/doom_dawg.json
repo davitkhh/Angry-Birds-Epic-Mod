@@ -1,0 +1,28 @@
+{
+ "id": "doom_dawg",
+ "name": "Doom Dawg",
+ "rig": "PigBrute",
+ "variant": "pirate",
+ "slots": {},
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 360,
+  "attack": 25,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ }
+}

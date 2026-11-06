@@ -51,6 +51,26 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 		base.Initialize();
 	}
 
+	// Moves this hotspot's node effects (active sparkles, unlock burst) towards the camera. The default -150 puts them in
+	// front of the zone clouding (-185..-240), whose edges cover nodes near not yet opened areas; 0: as in the effect prefab
+	// (stars at node z - 100). Characters waiting by a level stand below its node, where the stars don't reach.
+	// (Renamed from m_SparkleDepthOffset: scenes saved before the default existed hold 0 there for every hotspot.)
+	[SerializeField]
+	private float m_SparkleDepth = -150f;
+
+	private void ApplySparkleDepth()
+	{
+		if (m_SparkleDepth == 0f || m_CurrentAssetBase == null)
+		{
+			return;
+		}
+		var spawner = m_CurrentAssetBase.GetComponent<InstantiateAndTriggerParticleSystemByAnimation>();
+		if (spawner != null)
+		{
+			spawner.m_SpawnOffset = new Vector3(0f, 0f, m_SparkleDepth);
+		}
+	}
+
 	private void SetProxyOrFullAsset()
 	{
 		if (m_FullAssetBasePrefab && (base.Model.Data.UnlockState == HotspotUnlockState.ResolvedNew || base.Model.Data.UnlockState == HotspotUnlockState.Active))
@@ -61,6 +81,7 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 				m_CurrentAssetBase.transform.parent = base.transform;
 				m_CurrentAssetBase.transform.localPosition = Vector3.zero;
 				m_FullAssetBase = m_CurrentAssetBase;
+				ApplySparkleDepth();
 			}
 			m_ProxyAssetBase.gameObject.SetActive(false);
 		}
@@ -72,6 +93,7 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 				m_CurrentAssetBase.transform.parent = base.transform;
 				m_CurrentAssetBase.transform.localPosition = Vector3.zero;
 				m_FullAssetBase = m_CurrentAssetBase;
+				ApplySparkleDepth();
 			}
 		}
 		else
@@ -129,7 +151,9 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 	private IEnumerator PlayCompleteAnimAsync(bool startUp)
 	{
 		var unlockStateAtStart = base.Model.Data.UnlockState;
-		if (unlockStateAtStart == HotspotUnlockState.ResolvedNew)
+		// A pirate chain hotspot's cutscene belongs to its pirate battle, not its early level (PirateChain).
+		var storyBeaten = PirateChain.StoryState(base.Model) >= HotspotUnlockState.ResolvedNew;
+		if (unlockStateAtStart == HotspotUnlockState.ResolvedNew && storyBeaten)
 		{
 			var execute2 = GetComponent<ExecuteActionTree>();
 			if (execute2 != null)
@@ -143,7 +167,7 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 			}
 		}
 		yield return StartCoroutine(ActivateFollowUpStagesAsync(GetPreviousHotspot(), null));
-		if (unlockStateAtStart != HotspotUnlockState.ResolvedNew || base.Model.Data.UnlockState != HotspotUnlockState.Resolved)
+		if (unlockStateAtStart != HotspotUnlockState.ResolvedNew || base.Model.Data.UnlockState != HotspotUnlockState.Resolved || !storyBeaten)
 		{
 			yield break;
 		}
@@ -174,7 +198,7 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 		var unlockStateAtStart = base.Model.Data.UnlockState;
 		if (unlockStateAtStart == HotspotUnlockState.ResolvedNew && !instant)
 		{
-			var execute2 = GetComponent<ExecuteActionTree>();
+			var execute2 = GetStoryActionTree();
 			if (execute2 != null)
 			{
 				execute2.SetStateMgr(DIContainerInfrastructure.LocationStateMgr as WorldMapStateMgr);
@@ -184,6 +208,8 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 					yield return StartCoroutine(PlayActionTree(execute2));
 				}
 			}
+			// A newly opened area's title and pan (e.g. Cobalt Plateaus after Chuck's rescue), before the popups.
+			yield return StartCoroutine(WorldMapAreaIntro.PlayIfDue(this));
 			StartCoroutine(DIContainerInfrastructure.LocationStateMgr.StoppablePopupCoroutine());
 			while (DIContainerInfrastructure.LocationStateMgr.FeatureUnlocksRunning)
 			{
@@ -233,7 +259,7 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 		yield return StartCoroutine(base.ActivateFollowUpStagesAsync(parentHotSpot, activateTo, instant));
 		if (unlockStateAtStart == HotspotUnlockState.ResolvedNew && base.Model.Data.UnlockState == HotspotUnlockState.Resolved && !instant)
 		{
-			var execute = GetComponent<ExecuteActionTree>();
+			var execute = GetStoryActionTree();
 			if (execute != null)
 			{
 				execute.SetStateMgr(DIContainerInfrastructure.LocationStateMgr as WorldMapStateMgr);

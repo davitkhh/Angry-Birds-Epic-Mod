@@ -152,6 +152,9 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 
 	private void OnDisable()
 	{
+		// Disabling stops coroutines, so a pending mourn-sound watch can't clean up itself.
+		ListenForMournTrigger(false);
+		m_MournSoundRoutine = null;
 		DeregisterEventHandler();
 	}
 
@@ -320,6 +323,10 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				m_BoneAnimation.HideBone("OffHand", true);
 			}
 		}
+		if (Model is PigGameData)
+		{
+			SetForgeFeatures(Model.ClassItem);
+		}
 		m_EquipmentSetOnce = true;
 	}
 
@@ -361,11 +368,40 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			m_BoneAnimation.HideBone(boneName, true);
 			return;
 		}
-		var itemAssetName = itemGameData.ItemAssetName.Replace("_Ancient", string.Empty);
+		var itemAssetName = GetHeadgearPlacement(itemGameData.ItemAssetName.Replace("_Ancient", string.Empty));
 		if (!SwapBoneToTexture(boneName, triggerFrameBone.originalTextureGUID, itemAssetName + suffix))
 		{
 			m_BoneAnimation.HideBone(boneName, true);
 		}
+	}
+
+	// Headgear drawn in several placements on the head; each character picks one once (weights in percent) and wears
+	// texture <asset>_<n> (plus <asset>_<n>_Back when that placement has one).
+	private static readonly Dictionary<string, int[]> RandomPlacementHeadgear = new Dictionary<string, int[]>
+	{
+		{ "Headgear_PirateBucket", new[] { 30, 30, 30, 10 } }
+	};
+
+	private int m_HeadgearPlacement = -1;
+
+	private string GetHeadgearPlacement(string itemAssetName)
+	{
+		int[] weights;
+		if (!RandomPlacementHeadgear.TryGetValue(itemAssetName, out weights))
+		{
+			return itemAssetName;
+		}
+		if (m_HeadgearPlacement < 0 || m_HeadgearPlacement >= weights.Length)
+		{
+			var roll = UnityEngine.Random.Range(0, weights.Sum());
+			m_HeadgearPlacement = 0;
+			while (roll >= weights[m_HeadgearPlacement])
+			{
+				roll -= weights[m_HeadgearPlacement];
+				m_HeadgearPlacement++;
+			}
+		}
+		return itemAssetName + "_" + (m_HeadgearPlacement + 1);
 	}
 
 	// Swaps boneName's original texture for textureName from whichever of the rig's atlases has it.
@@ -455,6 +491,59 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 					m_PirateSwappedBones.Add(bone.boneName);
 				}
 			}
+		}
+	}
+
+	private const string ForgeAssetPrefix = "Forge_";
+
+	private readonly List<string> m_ForgeSwappedBones = new List<string>();
+
+	// Combatant Forge (Tools/CombatantForge): a forged combatant's class item is called Forge_<id>. Its atlas holds
+	// Forge_<id>__<Bone> textures for non-equipment bones (Snout, Eye_Left, Mouth...), each replacing every texture of
+	// that bone. Rigs with _A/_B/_C bones use the name without the suffix for all three.
+	private void SetForgeFeatures(IInventoryItemGameData classItem)
+	{
+		if (base.HasNoBoneAnimation)
+		{
+			return;
+		}
+		foreach (var swappedBone in m_ForgeSwappedBones)
+		{
+			m_BoneAnimation.RestoreBoneTexture(swappedBone);
+		}
+		m_ForgeSwappedBones.Clear();
+		var assetName = classItem == null || string.IsNullOrEmpty(classItem.ItemAssetName) ? string.Empty : classItem.ItemAssetName;
+		if (!assetName.StartsWith(ForgeAssetPrefix))
+		{
+			return;
+		}
+		var atlases = m_BoneAnimation.textureAtlases.Where(a => a != null).ToList();
+		foreach (var bone in m_BoneAnimation.mBoneSource)
+		{
+			var boneKey = bone.boneName;
+			if (boneKey.EndsWith("_A") || boneKey.EndsWith("_B") || boneKey.EndsWith("_C"))
+			{
+				boneKey = boneKey.Substring(0, boneKey.Length - 2);
+			}
+			var forgeName = assetName + "__" + boneKey;
+			var forgeAtlas = atlases.FirstOrDefault(a => a.textureNames.Contains(forgeName));
+			if (forgeAtlas == null)
+			{
+				continue;
+			}
+			// Drops a pirate swap on this bone: the forged texture replaces all of the bone's textures anyway.
+			m_BoneAnimation.RestoreBoneTexture(bone.boneName);
+			var originalGUIDs = m_BoneAnimation.triggerFrames.Select(f => f.GetTriggerFrameBone(bone.boneNodeIndex)).Where(b => b != null && !string.IsNullOrEmpty(b.originalTextureGUID)).Select(b => b.originalTextureGUID).Distinct();
+			foreach (var guid in originalGUIDs)
+			{
+				var originalAtlas = atlases.FirstOrDefault(a => a.GetTextureIndex(guid) != -1);
+				if (originalAtlas == null)
+				{
+					continue;
+				}
+				m_BoneAnimation.SwapBoneTexture(bone.boneName, originalAtlas.name, originalAtlas.textureNames[originalAtlas.GetTextureIndex(guid)], forgeAtlas.name, forgeName);
+			}
+			m_ForgeSwappedBones.Add(bone.boneName);
 		}
 	}
 
@@ -789,6 +878,123 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 	{
 		PlayAnimation("Mourn");
 		PlayAnimationQueued("Idle");
+		WatchMournSound();
+	}
+
+	private const string MournSoundTrigger = "PlaySound_Mourn";
+
+	private Coroutine m_MournSoundRoutine;
+
+	private bool m_MournSoundFired;
+
+	private bool m_MournTriggerListening;
+
+	// Blink is an additive layer-1 clip (the brute's snort) that can animate the bone
+	// carrying Mourn's PlaySound_Mourn trigger; while it is still mixed in, SmoothMoves
+	// drops that trigger and the mourn plays silently. If that happens, fire the sound
+	// ourselves once the snort has finished.
+	private void WatchMournSound()
+	{
+		if (m_MournSoundRoutine != null)
+		{
+			StopCoroutine(m_MournSoundRoutine);
+			m_MournSoundRoutine = null;
+		}
+		if (base.HasNoBoneAnimation || m_BoneAnimation == null || !base.gameObject.activeInHierarchy || !HasClipSilently("Blink") || !m_BoneAnimation.IsPlaying("Blink"))
+		{
+			return;
+		}
+		var sounds = m_BoneAnimation.GetComponent<TriggerSoundByBoneAnimation>();
+		if (sounds == null || !sounds.m_SoundTriggerPairs.Any(p => p.TriggerId == MournSoundTrigger))
+		{
+			return;
+		}
+		var triggerFrame = FirstMournTriggerFrame();
+		if (triggerFrame < 0)
+		{
+			return;
+		}
+		m_MournSoundRoutine = StartCoroutine(PlayMournSoundAfterSnort(sounds, triggerFrame));
+	}
+
+	private int FirstMournTriggerFrame()
+	{
+		var clipIndex = ClipIndexOf("Mourn");
+		if (clipIndex < 0)
+		{
+			return -1;
+		}
+		var frames = m_BoneAnimation.triggerFrames
+			.Where(f => f.clipIndex == clipIndex && f.triggerFrameBones.Any(b => b.userTriggerTag == MournSoundTrigger))
+			.Select(f => f.frame)
+			.ToList();
+		return frames.Count == 0 ? -1 : frames.Min();
+	}
+
+	// The runtime BoneAnimation keeps its clip list private; triggerFrames reference clips by index into it.
+	private int ClipIndexOf(string animationName)
+	{
+		const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+		var field = m_BoneAnimation.GetType().GetField("mAnimationClips", flags);
+		var clips = field != null ? field.GetValue(m_BoneAnimation) as IList : null;
+		if (clips == null)
+		{
+			return -1;
+		}
+		for (var i = 0; i < clips.Count; i++)
+		{
+			var clip = clips[i];
+			var nameField = clip != null ? clip.GetType().GetField("animationName", flags) : null;
+			if (nameField != null && (nameField.GetValue(clip) as string) == animationName)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private IEnumerator PlayMournSoundAfterSnort(TriggerSoundByBoneAnimation sounds, int triggerFrame)
+	{
+		m_MournSoundFired = false;
+		ListenForMournTrigger(true);
+		// SmoothMoves AnimationState.time is in frames.
+		while (m_BoneAnimation.IsPlaying("Mourn") && (m_BoneAnimation.IsPlaying("Blink") || m_BoneAnimation["Mourn"].time < triggerFrame))
+		{
+			yield return null;
+		}
+		// Give the rig's own trigger one evaluation to fire if the snort ended in time.
+		yield return null;
+		ListenForMournTrigger(false);
+		if (!m_MournSoundFired && m_BoneAnimation.IsPlaying("Mourn"))
+		{
+			sounds.OnTriggerEventFired(new UserTriggerEvent { tag = MournSoundTrigger });
+		}
+		m_MournSoundRoutine = null;
+	}
+
+	private void ListenForMournTrigger(bool listen)
+	{
+		if (m_BoneAnimation == null || listen == m_MournTriggerListening)
+		{
+			return;
+		}
+		if (listen)
+		{
+			m_BoneAnimation.RegisterUserTriggerDelegate(OnMournUserTrigger);
+		}
+		else
+		{
+			m_BoneAnimation.UnregisterUserTriggerDelegate(OnMournUserTrigger);
+		}
+		m_MournTriggerListening = listen;
+	}
+
+	private void OnMournUserTrigger(UserTriggerEvent triggerEvent)
+	{
+		if (triggerEvent.tag == MournSoundTrigger)
+		{
+			m_MournSoundFired = true;
+		}
 	}
 
 	public float GetMournAnimationLength()

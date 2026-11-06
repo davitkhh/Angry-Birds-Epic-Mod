@@ -741,7 +741,7 @@
     "NameId": "battle_003",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_003"
+      "bpart_004"
     ],
     "LootTableWheel": {
       "battle_southbeach_02": 1
@@ -919,7 +919,7 @@
     "NameId": "battle_004",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_004"
+      "bpart_003"
     ],
     "LootTableWheel": {
       "battle_water_03": 1
@@ -1534,7 +1534,7 @@
     "NameId": "battle_007",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_008"
+      "bpart_007"
     ],
     "LootTableWheel": {
       "battle_wood": 1
@@ -1553,7 +1553,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -1601,7 +1601,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -1642,7 +1642,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -1689,7 +1689,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -1732,7 +1732,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "MaximumByStrength",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -1780,7 +1780,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "FixedMaximum",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -1821,7 +1821,7 @@
     },
     "BackgroundAssetId": "Battleground_CobaltPlateaus_01",
     "UsableFriendBirdsCount": 0,
-    "SoundAssetId": "Music_Combat_Special",
+    "SoundAssetId": "Music_Combat_Basic",
     "ScoringStrategy": "FixedMaximum",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -2431,9 +2431,9 @@
     "LootTableLost": {
       "gold": 2
     },
-    "BackgroundAssetId": "Battleground_CobaltPlateaus_03",
+    "BackgroundAssetId": "Battleground_PigShip_LimestoneLagoon_01",
     "UsableFriendBirdsCount": 1,
-    "SoundAssetId": "Music_Combat_Basic",
+    "SoundAssetId": "Music_PirateBoss",
     "ScoringStrategy": "FixedMaximum",
     "BonusPoints": 0,
     "EnvironmentalEffects": null,
@@ -92772,6 +92772,273 @@
     "Difficulty": 0,
     "BonusLoot": null,
     "BattleType": "",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_028_early",
+    "BaseLevel": 1,
+    "BattleParticipantsIds": [
+      "bpart_001a"
+    ],
+    "LootTableWheel": {
+      "battle_028_early_wheel": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": [
+      {
+        "RequirementType": "HaveCurrentHotpsotState",
+        "NameId": "active",
+        "Value": 1.0
+      }
+    ],
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_SouthBeach_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 5
+    },
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_006_01_early",
+    "BaseLevel": 1,
+    "BattleParticipantsIds": [
+      "bpart_005a"
+    ],
+    "LootTableWheel": {
+      "battle_stone": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": [
+      {
+        "RequirementType": "HaveCurrentHotpsotState",
+        "NameId": "active",
+        "Value": 1.0
+      }
+    ],
+    "LootTableLost": {
+      "gold": 4
+    },
+    "BackgroundAssetId": "Battleground_CobaltPlateaus_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 22500,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 5
+    },
+    "BattleType": "Ironclad_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_020_01_early",
+    "BaseLevel": 3,
+    "BattleParticipantsIds": [
+      "bpart_031"
+    ],
+    "LootTableWheel": {
+      "battle_stone": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_CobaltForest_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "FixedMaximum",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 16
+    },
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_017_01_early",
+    "BaseLevel": 2,
+    "BattleParticipantsIds": [
+      "bpart_020"
+    ],
+    "LootTableWheel": {
+      "battle_wood": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 14
+    },
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_017_02_early",
+    "BaseLevel": 2,
+    "BattleParticipantsIds": [
+      "bpart_020"
+    ],
+    "LootTableWheel": {
+      "battle_wood": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 14
+    },
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_028_early_resolved",
+    "BaseLevel": 1,
+    "BattleParticipantsIds": [
+      "bpart_001a_1"
+    ],
+    "LootTableWheel": {
+      "battle_028_early_wheel": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_SouthBeach_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": null,
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_006_01_early_resolved",
+    "BaseLevel": 1,
+    "BattleParticipantsIds": [
+      "bpart_005a_1"
+    ],
+    "LootTableWheel": {
+      "battle_stone": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
+    "LootTableLost": {
+      "gold": 4
+    },
+    "BackgroundAssetId": "Battleground_CobaltPlateaus_01",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": null,
+    "BattleType": "Ironclad_Early",
     "PowerlevelModifier": 0.0
   }
 ]

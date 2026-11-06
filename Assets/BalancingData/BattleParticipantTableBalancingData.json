@@ -841,6 +841,60 @@
     ]
   },
   {
+    "NameId": "bpart_001a",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_minion_rogue_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 2.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_bird_catcher_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_001a_1",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_brute_brute_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_bird_catcher_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
     "NameId": "bpart_002",
     "Type": "IgnoreStrength",
     "VictoryCondition": {
@@ -1090,18 +1144,18 @@
     },
     "BattleParticipants": [
       {
-        "NameId": "pig_minion_rogue_dynamite_bird3",
-        "LevelDifference": 0,
-        "Probability": 1.0,
-        "Amount": 2.0,
-        "Unique": false,
-        "ForcePercent": false
-      },
-      {
         "NameId": "pig_minion_stickpig_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_rogue_dynamite_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 2.0,
         "Unique": false,
         "ForcePercent": false
       }
@@ -1241,7 +1295,7 @@
     },
     "BattleParticipants": [
       {
-        "NameId": "pig_minion_guard_bird3",
+        "NameId": "pig_minion_bird_catcher_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
@@ -1454,6 +1508,76 @@
         "Amount": 1.0,
         "Unique": false,
         "ForcePercent": true
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_005a",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_minion_guard_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 2.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_rogue_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_rogue_dynamite_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 2.0,
+        "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_005a_1",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_minion_rogue_dynamite_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 2.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_guard_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_rogue_dynamite_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 2.0,
+        "Unique": false,
+        "ForcePercent": false
       }
     ]
   },

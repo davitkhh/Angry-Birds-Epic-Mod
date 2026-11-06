@@ -49,6 +49,11 @@ namespace ABH.GameDatas.Battle
 		// Net turns IncreaseChargeByTurns added to this charge (negative when shortened)
 		public int m_ChargeTurnsAdded;
 
+		// When this effect was put on its target, relative to all other effects: higher = more recent
+		public int m_AddedOrder;
+
+		private static int s_LastAddedOrder;
+
 		private bool m_PersistIfDefeated = true;
 
 		private int m_StartTurn;
@@ -115,6 +120,7 @@ namespace ABH.GameDatas.Battle
 			m_EndTurn = original.m_EndTurn;
 			currentTurn = original.currentTurn;
 			m_ChargeTurnsAdded = original.m_ChargeTurnsAdded;
+			m_AddedOrder = original.m_AddedOrder;
 			InitActions(m_Source, m_Battle);
 		}
 
@@ -293,6 +299,7 @@ namespace ABH.GameDatas.Battle
 				}
 			}
 			AddEffectValue(m_Target, m_EffectIdent, this);
+			Skills.Stinkeye.RefreshIndicators(m_Battle);
 			if (DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(0f, EffectTriggerType.OnAddEffect, m_Target, m_Target) > 0f)
 			{
 				return true;
@@ -354,6 +361,7 @@ namespace ABH.GameDatas.Battle
 					m_Source.KnockedOut -= OnInvokerDefeated;
 				}
 				m_Target.CurrrentEffects.Remove(m_EffectIdent);
+				Skills.Stinkeye.RefreshIndicators(m_Battle);
 				if (m_LinkedEffect != null)
 				{
 					m_LinkedEffect.m_LinkedEffect = null;
@@ -432,6 +440,7 @@ namespace ABH.GameDatas.Battle
 
 		public void AddEffectValue(ICombatant owner, string ident, BattleEffectGameData effect)
 		{
+			effect.m_AddedOrder = ++s_LastAddedOrder;
 			if (owner.CurrrentEffects == null)
 			{
 				owner.CurrrentEffects = new Dictionary<string, BattleEffectGameData>();

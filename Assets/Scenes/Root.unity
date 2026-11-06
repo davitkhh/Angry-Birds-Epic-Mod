@@ -13535,6 +13535,50 @@ MonoBehaviour:
       EffectTextIdent: 
       HasText: 0
       DoNotMirror: 0
+  - BalancingId: Stinkeye_Aim
+    VisualEffects:
+    - SpawnTiming: 3
+      DelayInSeconds: 0
+      Type: 1
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Curse_StinkeyeAim
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+  - BalancingId: Stinkeye_AimEmpowered
+    VisualEffects:
+    - SpawnTiming: 3
+      DelayInSeconds: 0
+      Type: 1
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Curse_StinkeyeAimEmpowered
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
   - BalancingId: Force_Target_SpotLight
     VisualEffects:
     - SpawnTiming: 3
@@ -40959,6 +41003,21 @@ MonoBehaviour:
       Value: 0.5
     AssetPrioritiy: 4
     Source: {fileID: 0}
+  - NameId: Music_PirateBoss
+    AssetNames:
+    - PirateBoss
+    ChannelId: 0
+    Muted: 0
+    Volume: 0.878
+    Params:
+    - Type: 0
+      Value: 0
+    - Type: 2
+      Value: 0
+    - Type: 3
+      Value: 0.5
+    AssetPrioritiy: 4
+    Source: {fileID: 0}
   - NameId: Character_DrEggman_Attack_1
     AssetNames:
     - character_dreggman_attack_01
@@ -42309,6 +42368,18 @@ MonoBehaviour:
   - NameId: SkillFX_Curse_ForceTarget
     AssetLoadingType: 0
     Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_ForceTarget
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: SkillFX_Curse_StinkeyeAim
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_StinkeyeAim
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: SkillFX_Curse_StinkeyeAimEmpowered
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/7_Curses/SkillFX_Curse_StinkeyeAimEmpowered
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
@@ -50238,6 +50309,12 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: wav
+  - NameId: PirateBoss
+    AssetLoadingType: 0
+    Path: Sound/Music/PirateBoss
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: ogg
   - NameId: ChronicleCave
     AssetLoadingType: 0
     Path: Sound/Music/ChronicleCave

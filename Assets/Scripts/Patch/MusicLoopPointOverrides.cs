@@ -65,6 +65,9 @@ public static class MusicLoopPointOverrides
 		{ "camp", new LoopPoint { StartSeconds = 0, EndSeconds = 75.707 } },
 		{ "arenacamp", new LoopPoint { StartSeconds = 6.65, EndSeconds = 54.653 } },
 		{ "worldmap", new LoopPoint { StartSeconds = 0, EndSeconds = null } },
+		// From 71.3 s the song replays its first ~48 s (70.344854 s later) while fading out from ~100 s;
+		// the loop is one 70.34 s pass, seamed just before the hit at 7.21 s (samples 345075 -> 3721628 @ 48 kHz).
+		{ "worldmapcobalt", new LoopPoint { StartSeconds = 7.1890625, EndSeconds = 77.533917 } },
 		{ "chroniclecave", new LoopPoint { StartSeconds = 0, EndSeconds = 128.742 } },
 		{ "wheeloffortune", new LoopPoint { StartSeconds = 15.6, EndSeconds = 29.371 } },
 
@@ -77,6 +80,9 @@ public static class MusicLoopPointOverrides
 		{ "arenabattle", new LoopPoint { StartSeconds = 3.6, EndSeconds = 67.635 } },
 		{ "boss", new LoopPoint { StartSeconds = 2.8, EndSeconds = 75.064 } },
 		{ "apocalypse", new LoopPoint { StartSeconds = 0.124, EndSeconds = 109.851 } },
+		// The song plays one 80.015375 s section twice (from ~1.7 s) before its ending; the loop is
+		// one pass of it, seamed just before the accent at 6.015 s (samples 288305 -> 4129043 @ 48 kHz).
+		{ "pirateboss", new LoopPoint { StartSeconds = 6.006355, EndSeconds = 86.02173 } },
 	};
 
 	// Last observed playback position per music source, remembered together with the clip it
@@ -90,6 +96,9 @@ public static class MusicLoopPointOverrides
 	}
 
 	private static readonly Dictionary<AudioSource, PlaybackState> LastStates = new Dictionary<AudioSource, PlaybackState>();
+
+	// Further music sources to keep within their loop points (e.g. WorldMapAreaMusic's per-area themes).
+	public static readonly List<AudioSource> ExtraSources = new List<AudioSource>();
 
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 	private static void Init()
@@ -207,6 +216,11 @@ public static class MusicLoopPointOverrides
 		{
 			CheckSource(DIContainerInfrastructure.PrimaryMusicSource);
 			CheckSource(DIContainerInfrastructure.SecondaryMusicSource);
+			ExtraSources.RemoveAll(s => s == null);
+			foreach (var source in ExtraSources)
+			{
+				CheckSource(source);
+			}
 			yield return null;
 		}
 	}

@@ -245,6 +245,7 @@ public class BattleMgr : BattleMgrBase
 		{
 			m_Model.m_CoinsAtBattleStart = data.ItemValue;
 		}
+		StartOnSecondSceneryForDuel();
 		var tree = GetActionTreeForBattle(m_Model.CurrentWaveIndex, false, true);
 		if (tree != null)
 		{
@@ -704,6 +705,12 @@ public class BattleMgr : BattleMgrBase
 			}
 			if (tree.m_ExecuteBeforeWave)
 			{
+				// The intro's cutscene before its boss wave plays without the birds' health bars.
+				var introCutscene = IsIntroBossWave(m_Model) && tree.m_BlockBattleExecution;
+				if (introCutscene)
+				{
+					HideBattleOverlays(m_Model.m_CombatantsPerFaction.Values.SelectMany(f => f).ToList());
+				}
 				if (tree.m_BlockBattleExecution)
 				{
 					yield return StartCoroutine(ExecuteActionTree(tree));
@@ -711,6 +718,10 @@ public class BattleMgr : BattleMgrBase
 				else
 				{
 					StartCoroutine(ExecuteActionTree(tree));
+				}
+				if (introCutscene)
+				{
+					ShowHealthBars(m_Model.m_CombatantsPerFaction.Values.SelectMany(f => f).ToList());
 				}
 			}
 			if (tree.m_LetPigsWaitForEnter)
@@ -1116,14 +1127,32 @@ public class BattleMgr : BattleMgrBase
 				notActedBirds = base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds && !c.ActedThisTurn).ToList();
 				m_HasRevived = false;
 			}
+			// Porky's Duel: the bird he knocked back and Porky go first, then the rest of the cast (the duel bird has acted).
+			var duel = DuelDirector.Find(this);
+			if (duel != null && duel.IsActive && !base.Model.m_PigsStartTurn)
+			{
+				yield return StartCoroutine(duel.RunDuelRound());
+				if (WaveEnded)
+				{
+					WaveEnded = false;
+					base.Model.CurrentCombatant = null;
+					foreach (var bird4 in base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds))
+					{
+						bird4.ActedThisTurn = false;
+					}
+					actingCharacters.Clear();
+					yield break;
+				}
+				duel.IsolateMainGroup();
+			}
 			for (var m = 0; m < notActedBirds.Count; m++)
 			{
 				var character3 = notActedBirds[m];
-				if (base.Model.m_PigsStartTurn)
+				if (base.Model.m_PigsStartTurn || (duel != null && duel.SitsOutTurn(character3)))
 				{
 					character3.ActedThisTurn = true;
 				}
-				else if (character3.IsAlive)
+				else if (character3.IsAlive && !character3.ActedThisTurn)
 				{
 					if (character3.CombatantView.m_CounterAttack)
 					{
@@ -1167,6 +1196,10 @@ public class BattleMgr : BattleMgrBase
 				actingCharacters.Clear();
 				yield break;
 			}
+			if (duel != null)
+			{
+				duel.EndIsolation();
+			}
 			var birdsCopy2 = base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds).ToList();
 			for (var i3 = 0; i3 < birdsCopy2.Count; i3++)
 			{
@@ -1184,7 +1217,8 @@ public class BattleMgr : BattleMgrBase
 				}
 				foreach (var character4 in base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds))
 				{
-					if (character4.CombatantView != null && character4.IsParticipating)
+					// The duel bird is already back on its spot in the duel area.
+					if (character4.CombatantView != null && character4.IsParticipating && !DuelDirector.IsDuelist(this, character4))
 					{
 						character4.CombatantView.PlayGoToBasePosition();
 					}
@@ -1210,6 +1244,11 @@ public class BattleMgr : BattleMgrBase
 			for (var n = 0; n < pigsCopy.Count; n++)
 			{
 				var combatant2 = pigsCopy[n];
+				// Porky had his already, before his duel turn.
+				if (duel != null && duel.AlreadyTickedThisTurn(combatant2))
+				{
+					continue;
+				}
 				DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(base.Model.m_CurrentTurn, EffectTriggerType.OnDealDamagePerTurn, combatant2, null);
 				DIContainerLogic.GetBattleService().HealCurrentTurn(combatant2, m_Model);
 				DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant2, m_Model, null);
@@ -1241,7 +1280,24 @@ public class BattleMgr : BattleMgrBase
 				// Swap crystals placed before this pig act first.
 				yield return StartCoroutine(SwapCrystalDirector.For(this).TakeCrystalTurns(base.Model.CurrentCombatant));
 			}
-			yield return StartCoroutine(StartCombatantTurn(base.Model.CurrentCombatant));
+			// Porky's Duel: a pig only reaches its own side, and sits out when that side has no birds left.
+			var duel = DuelDirector.Find(this);
+			if (duel == null || !duel.SitsOutTurn(base.Model.CurrentCombatant))
+			{
+				if (duel != null)
+				{
+					duel.IsolateFor(base.Model.CurrentCombatant);
+				}
+				yield return StartCoroutine(StartCombatantTurn(base.Model.CurrentCombatant));
+				// Looked up again: the Duel itself may have just added it.
+				duel = DuelDirector.Find(this);
+				if (duel != null)
+				{
+					duel.EndIsolation();
+					// Right after the knockback the knocked back bird has its turn.
+					yield return StartCoroutine(duel.AfterPigTurn());
+				}
+			}
 			StartCoroutine("DoNextStep");
 		}
 	}
@@ -1278,6 +1334,45 @@ public class BattleMgr : BattleMgrBase
 		}
 		actingCharacters = copyQueue;
 		yield return StartCoroutine(StartCombatantTurn(combatant));
+	}
+
+	// For DuelDirector, which runs the duel's turns itself.
+	public IEnumerator RunCombatantTurn(ICombatant combatant)
+	{
+		return StartCombatantTurn(combatant);
+	}
+
+	public int SceneryIndex
+	{
+		get
+		{
+			return m_SceneryIndex;
+		}
+	}
+
+	// Porky's Duel knocks a bird back to the previous battleground. A battle whose first wave has a Duel pig starts on the
+	// second scenery (when it's to the right of the first) so the duel has somewhere to go.
+	protected void StartOnSecondSceneryForDuel()
+	{
+		if (m_SceneryIndex != 0 || m_ScenePerWaveSettings.Count < 2 || m_ScenePerWaveSettings[0].SceneryRoot == null || m_ScenePerWaveSettings[1].SceneryRoot == null || m_BattleCameraTween == null)
+		{
+			return;
+		}
+		List<ICombatant> pigs;
+		if (!m_Model.m_CombatantsPerFaction.TryGetValue(Faction.Pigs, out pigs) || !pigs.Any(p => p.GetSkills().Any(s => s != null && ABH.GameDatas.Battle.Skills.DuelKnockback.IsDuelSkill(s.Model))))
+		{
+			return;
+		}
+		var delta = m_ScenePerWaveSettings[1].SceneryRoot.position - m_ScenePerWaveSettings[0].SceneryRoot.position;
+		if (Mathf.Abs(delta.y) > 1f || delta.x < 1f)
+		{
+			return;
+		}
+		m_SceneryIndex = 1;
+		m_WaveSceneryRepeatCount = 0;
+		m_BattleSetup.position += delta;
+		m_BattleCameraTween.transform.position += delta;
+		m_BattleArea.position = m_BattleAreaPositioning.position;
 	}
 
 	protected IEnumerator StartCombatantTurn(ICombatant combatant)
@@ -1509,6 +1604,12 @@ public class BattleMgr : BattleMgrBase
 			{
 				m_BattleUI.HidePvpTutorial();
 			}
+			// Porky's Duel ends with the battle or wave: everyone back together before the end sequence.
+			var duel = DuelDirector.Find(this);
+			if (duel != null)
+			{
+				yield return StartCoroutine(duel.Dissolve());
+			}
 		}
 		switch (winningFaction)
 		{
@@ -1739,6 +1840,18 @@ public class BattleMgr : BattleMgrBase
 				nothing.transform.SetParent(tree.transform, false);
 			}
 			tree.SetRuntimeObject(find.secondaryText, nothing);
+		}
+	}
+
+	// Brings back the health bars HideBattleOverlays hid (SpawnHealthBar leaves an existing, hidden bar hidden).
+	private static void ShowHealthBars(IEnumerable<ICombatant> combatants)
+	{
+		foreach (var combatant in combatants.Where(c => c.CombatantView != null))
+		{
+			foreach (var bar in combatant.CombatantView.GetComponentsInChildren<CharacterHealthBar>(true))
+			{
+				bar.gameObject.SetActive(true);
+			}
 		}
 	}
 

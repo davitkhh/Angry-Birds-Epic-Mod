@@ -12625,7 +12625,7 @@
     "NameId": "battle_water_03",
     "LootTableEntries": [
       {
-        "NameId": "ingredient_water",
+        "NameId": "ingredient_banana",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
         "Probability": 1.0,
@@ -12643,15 +12643,6 @@
         "CurrentPlayerLevelDelta": 0
       },
       {
-        "NameId": "ingredient_water",
-        "LevelMinIncl": 0,
-        "LevelMaxExcl": 0,
-        "Probability": 1.0,
-        "BaseValue": 1,
-        "Span": 0,
-        "CurrentPlayerLevelDelta": 0
-      },
-      {
         "NameId": "ingredient_banana",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
@@ -12661,7 +12652,16 @@
         "CurrentPlayerLevelDelta": 0
       },
       {
-        "NameId": "ingredient_water",
+        "NameId": "ingredient_vial",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_banana",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
         "Probability": 1.0,
@@ -12679,7 +12679,7 @@
         "CurrentPlayerLevelDelta": 0
       },
       {
-        "NameId": "ingredient_water",
+        "NameId": "ingredient_banana",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
         "Probability": 1.0,
@@ -12688,7 +12688,7 @@
         "CurrentPlayerLevelDelta": 0
       },
       {
-        "NameId": "ingredient_banana",
+        "NameId": "ingredient_vial",
         "LevelMinIncl": 0,
         "LevelMaxExcl": 0,
         "Probability": 1.0,
@@ -104257,6 +104257,86 @@
       }
     ],
     "Type": "Wheel",
+    "PrefabId": "",
+    "LocaId": ""
+  },
+  {
+    "NameId": "battle_028_early_wheel",
+    "LootTableEntries": [
+      {
+        "NameId": "resource_seashell",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 3,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_vial",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "resource_seashell",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_water",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "resource_seashell",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_vial",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "resource_seashell",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      },
+      {
+        "NameId": "ingredient_water",
+        "LevelMinIncl": 0,
+        "LevelMaxExcl": 0,
+        "Probability": 1.0,
+        "BaseValue": 1,
+        "Span": 0,
+        "CurrentPlayerLevelDelta": 0
+      }
+    ],
+    "Type": "WheelForced",
     "PrefabId": "",
     "LocaId": ""
   }

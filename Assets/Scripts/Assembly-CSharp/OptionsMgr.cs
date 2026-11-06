@@ -79,6 +79,7 @@ public class OptionsMgr : MonoBehaviour
 
 	public void Start()
 	{
+		DebugSaveSlots.Install(this); // TEMPORARY testing save slots
 #if UNITY_IOS
 		m_BonusCodeButton.transform.parent.gameObject.SetActive(false);
 		m_Background.GetComponent<UISprite>().width = 566;

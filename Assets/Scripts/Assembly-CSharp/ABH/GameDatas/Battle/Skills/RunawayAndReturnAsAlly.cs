@@ -101,6 +101,8 @@ namespace ABH.GameDatas.Battle.Skills
 		public override IEnumerator DoAction(BattleGameData battle, ICombatant source, ICombatant target, bool shared = false, bool illusion = false)
 		{
 			m_Battle = battle;
+			// Set before the run-off takeover below uses it (base.DoAction would only set it afterwards).
+			m_Source = source;
 			if (!m_RunawayRegistered)
 			{
 				m_RunawayRegistered = true;
