@@ -297,6 +297,18 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		// Runs at the top of an AI turn right before this skill's charge starts from zero (before the charge bubble and
+		// animation); returns how long to wait. King DJ turns his back here (ChargeTurnAround).
+		public virtual float BeforeChargeStart(ICombatant source)
+		{
+			return 0f;
+		}
+
+		public bool IsChargeStarting(ICombatant source)
+		{
+			return Model.SkillParameters != null && Model.SkillParameters.ContainsKey("charge") && !source.ChargeDone && (source.CurrrentEffects == null || !source.CurrrentEffects.ContainsKey("Charge_" + Model.Balancing.AssetId));
+		}
+
 		public bool EvaluateCharge(BattleGameData battle, ICombatant source, List<ICombatant> targets, ICombatant initialSelectionTarget)
 		{
 			if (Model.SkillParameters == null || !Model.SkillParameters.ContainsKey("charge"))

@@ -1,0 +1,373 @@
+{
+ "kind": "existing",
+ "id": "pig_zombie_farmer",
+ "name": "Zombie Farmer",
+ "rig": "ZombiePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
+     "name": "Headgear_EggPainter",
+     "item": "Headgear_EggPainter",
+     "w": 136,
+     "h": 70,
+     "pivot": [
+      -0.20892857,
+      -0.8170408
+     ],
+     "tx": -37.63925594293761,
+     "ty": -34.633561253726114,
+     "rot": 11.992401369153047,
+     "sx": 1.738495279479844,
+     "sy": 1.738495279479844,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DarkCupid",
+     "name": "MainHand_DarkCupid",
+     "item": "MainHand_DarkCupid",
+     "w": 124,
+     "h": 141,
+     "pivot": [
+      -0.27321428,
+      -0.14840426
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_df733",
+   "origin": "pig_attack_forge_pig_zombie_farmer__e0_sow",
+   "type": "Attack",
+   "source": "pig_attack_zombie_farmer_sow",
+   "name": "Sow",
+   "desc": "Deals [ff0000]{value_1}[-] damage.  If the target is attacked, the attacker is healed by [00a800]{value_7}%[-] of dealt damage. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 40,
+    "chance": 100,
+    "health_in_percent": 20
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"health_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "BarfAndApplyHealOnAttackSkill",
+   "duration": 2,
+   "design": "",
+   "nameId": "pig_attack_forge_pig_zombie_farmer__e0_sow"
+  },
+  {
+   "uid": "a1_7ae66",
+   "origin": "pig_attack_zombie_farmer_reap",
+   "type": "Attack",
+   "source": "pig_attack_zombie_farmer_reap",
+   "name": "Reap",
+   "desc": "Deals [ff0000]{value_1}[-] damage to the bird with the most curses, plus [ff0000]{value_3}%[-] for every curse on it.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "bonus_per_curse_in_percent": 10,
+    "target_most_curses": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100 * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_per_curse_in_percent\"))"
+    }
+   },
+   "template": "AttackWithBonusPerCurseSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_6a28a",
+   "origin": "pig_passive_undead",
+   "type": "Passive",
+   "source": "pig_passive_undead",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 2,
+    "pig_support_undead_revive_self": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 180,
+  "attack": 20,
+  "sizeType": "Medium",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_zombie_farmer",
+  "fingerprint": "36f7465ddb69372579e0bd0f60dda3f71ac825db",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_forge_pig_zombie_farmer__e0_sow",
+     "pig_attack_zombie_farmer_reap"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Zombie Farmer",
+   "rig": "ZombiePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
+       "name": "Headgear_EggPainter",
+       "item": "Headgear_EggPainter",
+       "w": 136,
+       "h": 70,
+       "pivot": [
+        -0.20892857,
+        -0.8170408
+       ],
+       "tx": -37.63925594293761,
+       "ty": -34.633561253726114,
+       "rot": 11.992401369153047,
+       "sx": 1.738495279479844,
+       "sy": 1.738495279479844,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DarkCupid",
+       "name": "MainHand_DarkCupid",
+       "item": "MainHand_DarkCupid",
+       "w": 124,
+       "h": 141,
+       "pivot": [
+        -0.27321428,
+        -0.14840426
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 180,
+    "attack": 20,
+    "sizeType": "Medium",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_df733",
+     "origin": "pig_attack_forge_pig_zombie_farmer__e0_sow",
+     "type": "Attack",
+     "source": "pig_attack_zombie_farmer_sow",
+     "name": "Sow",
+     "desc": "Deals [ff0000]{value_1}[-] damage.  If the target is attacked, the attacker is healed by [00a800]{value_7}%[-] of dealt damage. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 40,
+      "chance": 100,
+      "health_in_percent": 20
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"health_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "BarfAndApplyHealOnAttackSkill",
+     "duration": 2,
+     "design": "",
+     "nameId": "pig_attack_forge_pig_zombie_farmer__e0_sow"
+    },
+    {
+     "uid": "a1_7ae66",
+     "origin": "pig_attack_zombie_farmer_reap",
+     "type": "Attack",
+     "source": "pig_attack_zombie_farmer_reap",
+     "name": "Reap",
+     "desc": "Deals [ff0000]{value_1}[-] damage to the bird with the most curses, plus [ff0000]{value_3}%[-] for every curse on it.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "bonus_per_curse_in_percent": 10,
+      "target_most_curses": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(((p(\"damage_in_percent\")) / 100 * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_per_curse_in_percent\"))"
+      }
+     },
+     "template": "AttackWithBonusPerCurseSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_6a28a",
+     "origin": "pig_passive_undead",
+     "type": "Passive",
+     "source": "pig_passive_undead",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 2,
+      "pig_support_undead_revive_self": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ },
+ "guids": {
+  "src:Forge_pig_zombie_farmer__e0": "6e89fb5ffcc347aebfc1fbc83f8a4d48",
+  "tex:HR": "214571fb17b54b0883011ea3d6fecf70",
+  "tex:LR": "eeb0d740a8a74acd839f3fa2b3868910",
+  "mat:HR": "3facc85b9a794ffb9e628dbf7fbf3145",
+  "mat:LR": "fb6e71b455ab434fbf1792a87ae8d570",
+  "atlas:HR": "1086907627eb4468b75d3133c926965f",
+  "atlas:LR": "891a86404d7e4889b1722645b0e7a637"
+ },
+ "publishedAt": "2026-11-08 23:23",
+ "publishedRig": "ZombiePig"
+}

@@ -189,6 +189,7 @@ public class WorldMapStateMgr : BaseLocationStateManager
 		{
 			DIContainerInfrastructure.GetPowerLevelCalculator();
 		}
+		MerchantStall.ApplyLayout(componentsInChildren);
 		SynchBalancing(componentsInChildren);
 		if (ContentLoader.Instance != null)
 		{

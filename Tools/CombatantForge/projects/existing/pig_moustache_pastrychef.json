@@ -1,0 +1,416 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_pastrychef",
+ "name": "Pastry Chef",
+ "rig": "MoustachePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chocolatier",
+     "name": "Headgear_Chocolatier",
+     "item": "Headgear_Chocolatier",
+     "w": 154,
+     "h": 102,
+     "pivot": [
+      0.12857142,
+      -0.3680147
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chocolatier_Back",
+     "name": "Headgear_Chocolatier_Back",
+     "item": "Headgear_Chocolatier",
+     "w": 182,
+     "h": 104,
+     "pivot": [
+      -0.01074976,
+      -0.1410906
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Chocolatier",
+     "name": "MainHand_Chocolatier",
+     "item": "MainHand_Chocolatier",
+     "w": 248,
+     "h": 50,
+     "pivot": [
+      -0.27121082,
+      0.108484335
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_d00fc",
+   "origin": "pig_attack_moustache_pastrychef_01",
+   "type": "Attack",
+   "source": "pig_attack_moustache_pastrychef_01",
+   "name": "Chocolate Rain",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies and covers them in chocolate. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 30,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduce_damage_in_percent\"))"
+    }
+   },
+   "template": "ApplyGooOnTargets",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_a22a6",
+   "origin": "pig_attack_moustache_pastrychef_02",
+   "type": "Attack",
+   "source": "pig_attack_moustache_pastrychef_02",
+   "name": "Hot Chocolate",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target covered in chocolate receives [ff0000]{value_3}%[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 200,
+    "bonus_damage_vs_chocolate": 125,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+    }
+   },
+   "template": "AttackWithBonusDamage",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_c2e38",
+   "origin": "pig_passive_kingpig_dracula_01",
+   "type": "Passive",
+   "source": "pig_passive_kingpig_dracula_01",
+   "name": "Sweet Candy",
+   "desc": "[0000ff]Passive:[-] All pigs are healed by [00a800]{value_3}%[-] of their maximum health. Every [ff0000]{value_2}[-] turns.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Passive_01",
+   "icon": "SweetCandy",
+   "params": {
+    "percentage": 10,
+    "delay_in_turns": 3,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"fixed_heal\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"delay_in_turns\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"percentage\"))"
+    }
+   },
+   "template": "HealOverTime",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 230,
+  "attack": 26,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_pastrychef",
+  "fingerprint": "06fbfd98dd6b1ea1dc34f78ef5878b78b863e7eb",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_attack_moustache_pastrychef_01",
+     "pig_attack_moustache_pastrychef_02"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_moustache_pastrychef_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pastry Chef",
+   "rig": "MoustachePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chocolatier",
+       "name": "Headgear_Chocolatier",
+       "item": "Headgear_Chocolatier",
+       "w": 154,
+       "h": 102,
+       "pivot": [
+        0.12857142,
+        -0.3680147
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chocolatier_Back",
+       "name": "Headgear_Chocolatier_Back",
+       "item": "Headgear_Chocolatier",
+       "w": 182,
+       "h": 104,
+       "pivot": [
+        -0.01074976,
+        -0.1410906
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Chocolatier",
+       "name": "MainHand_Chocolatier",
+       "item": "MainHand_Chocolatier",
+       "w": 248,
+       "h": 50,
+       "pivot": [
+        -0.27121082,
+        0.108484335
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 230,
+    "attack": 26,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_d00fc",
+     "origin": "pig_attack_moustache_pastrychef_01",
+     "type": "Attack",
+     "source": "pig_attack_moustache_pastrychef_01",
+     "name": "Chocolate Rain",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies and covers them in chocolate. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 30,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduce_damage_in_percent\"))"
+      }
+     },
+     "template": "ApplyGooOnTargets",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_a22a6",
+     "origin": "pig_attack_moustache_pastrychef_02",
+     "type": "Attack",
+     "source": "pig_attack_moustache_pastrychef_02",
+     "name": "Hot Chocolate",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target covered in chocolate receives [ff0000]{value_3}%[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 200,
+      "bonus_damage_vs_chocolate": 125,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+      }
+     },
+     "template": "AttackWithBonusDamage",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_c2e38",
+     "origin": "pig_passive_kingpig_dracula_01",
+     "type": "Passive",
+     "source": "pig_passive_kingpig_dracula_01",
+     "name": "Sweet Candy",
+     "desc": "[0000ff]Passive:[-] All pigs are healed by [00a800]{value_3}%[-] of their maximum health. Every [ff0000]{value_2}[-] turns.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Passive_01",
+     "icon": "SweetCandy",
+     "params": {
+      "percentage": 10,
+      "delay_in_turns": 3,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"fixed_heal\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"delay_in_turns\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"percentage\"))"
+      }
+     },
+     "template": "HealOverTime",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

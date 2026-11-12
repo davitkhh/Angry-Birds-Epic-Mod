@@ -32,6 +32,9 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	public bool m_AlreadyPlaced;
 
+	// This turn's skill has "no_focus": the combatant acts from its own slot, not the focus point.
+	public bool m_SkipFocusThisTurn;
+
 	// Row PlaceCharacter last put this combatant in; higher rows are further from the center (rightmost for pigs).
 	[HideInInspector]
 	public int m_PlacedRow;
@@ -205,6 +208,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		SetInitialHUD();
 		RegisterEventHandler();
 		m_StartSize = m_AssetController.gameObject.GetComponent<ScaleController>().m_BaseScale;
+		UpdateHurtState();
 	}
 
 	protected virtual void SetInitialHUD()
@@ -252,6 +256,13 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		}
 		var target = charged.m_InitialTargetSelection;
 		return target != null && target.IsParticipating ? target : null;
+	}
+
+	// True when the combatant stands on its own slot (a "no_focus" skill that didn't move it).
+	public bool IsAtUnfocusedPos()
+	{
+		var center = m_Model.CombatantFaction == Faction.Birds ? m_BattleMgr.m_BirdCenterPosition : m_BattleMgr.m_PigCenterPosition;
+		return center != null && Vector2.Distance(transform.position, center.position + CachedUnfocusedPos) < 1f;
 	}
 
 	public void SetCachedUnfocusedPos(Vector3 startPoint)
@@ -333,6 +344,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 			m_StartSize = scaleController.m_BaseScale;
 		}
 		ReSizeCollider();
+		UpdateHurtState();
 		return oldAsset;
 	}
 
@@ -388,6 +400,42 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 	}
 
+	// Hurt animations: below 30 HP (+5 per level above 1) plus 10% of max HP, rigs with X_Hurt clips play those, and
+	// the hit that crosses the line plays Hit_to_Hurt.
+	public const float HurtThresholdFlat = 20f;
+
+	public const float HurtThresholdFlatPerLevel = 3f;
+
+	public const float HurtThresholdMaxHealthShare = 0.1f;
+
+	public static float GetHurtThreshold(ICombatant combatant)
+	{
+		var level = combatant.CharacterModel != null ? combatant.CharacterModel.Level : 1;
+		return HurtThresholdFlat + HurtThresholdFlatPerLevel * Mathf.Max(0, level - 1) + HurtThresholdMaxHealthShare * combatant.ModifiedHealth;
+	}
+
+	public void UpdateHurtState()
+	{
+		if (m_Model != null)
+		{
+			UpdateHurtState(m_Model.CurrentHealth, false);
+		}
+	}
+
+	protected void UpdateHurtState(float health, bool fromDamage)
+	{
+		if (m_AssetController == null || m_Model == null)
+		{
+			return;
+		}
+		var hurt = m_Model.BaseHealth >= 0f && health < GetHurtThreshold(m_Model);
+		if (hurt && fromDamage && health > 0f && !m_AssetController.IsHurt)
+		{
+			m_AssetController.MarkHurtTransition();
+		}
+		m_AssetController.SetHurt(hurt);
+	}
+
 	protected virtual void OnHealthChanged(float oldHealth, float newHealth)
 	{
 		var zero = Vector3.zero;
@@ -395,6 +443,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		{
 			return;
 		}
+		UpdateHurtState(newHealth, newHealth < oldHealth);
 		if (Time.time - m_LastHealthUpdate <= DIContainerLogic.GetPacingBalancing().TimeForFillHealthBarChangedInSec)
 		{
 			zero.x = UnityEngine.Random.Range((0f - m_AssetController.ColliderSize.x) * 0.5f, m_AssetController.ColliderSize.x * 0.5f);
@@ -433,7 +482,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	private ScrollingCombatText InstantiateScrollingCombatText(ScrollingCombatText prefab)
 	{
-		return Instantiate(prefab, m_CachedTransform.position + Vector3.Scale(m_AssetController.CombatTextPosition, new Vector3(m_AssetController.transform.localScale.x, m_AssetController.transform.localScale.y, 1f * prefab.transform.localScale.z)), Quaternion.identity);
+		return Instantiate(prefab, m_CachedTransform.position + Vector3.Scale(m_AssetController.CombatTextPosition, new Vector3(RigFacing.UnturnedScale(m_AssetController.transform).x, m_AssetController.transform.localScale.y, 1f * prefab.transform.localScale.z)), Quaternion.identity);
 	}
 
 	public void PlayIdle()
@@ -476,6 +525,27 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		gameObject.transform.parent = m_AssetController.BodyRoot;
 		gameObject.transform.localPosition = Vector3.zero;
 		scrollingCombatText.ShowHealthChangedWithText(0, DIContainerInfrastructure.GetLocaService().Tr("btl_miss", "MISS"), "CombatText_Damage_Critical");
+		scrollingCombatText.transform.parent = base.transform;
+	}
+
+	// A label-only combat text over the combatant (like MISS), e.g. "Combo!" or a combo's name.
+	public void ShowCombatLabel(string text, Color color)
+	{
+		if (m_ScrollingCombatTextWithLabelPrefab == null || m_AssetController == null)
+		{
+			return;
+		}
+		var scrollingCombatText = InstantiateScrollingCombatText(m_ScrollingCombatTextWithLabelPrefab);
+		SetLayerRecusively(scrollingCombatText.gameObject, base.gameObject.layer);
+		scrollingCombatText.ShowHealthChangedWithText(0, text, "CombatText_Damage_Critical");
+		if (scrollingCombatText.m_LabelHealthChange != null)
+		{
+			scrollingCombatText.m_LabelHealthChange.text = string.Empty;
+		}
+		if (scrollingCombatText.m_LabelText != null)
+		{
+			scrollingCombatText.m_LabelText.color = color;
+		}
 		scrollingCombatText.transform.parent = base.transform;
 	}
 
@@ -926,6 +996,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		}
 		m_TweenMovement.m_DurationInSeconds = num;
 		m_TweenMovement.Play();
+		num = TweenTime(num);
 		m_EnterEndTime = Time.time + num;
 		m_EnterUnitsPerSecond = num > 0f ? m_TweenMovement.GetMoveDistance() / num : 0f;
 		m_EnterAnimSpeed = speedMultiplier > 0f ? speedMultiplier : 1f;
@@ -1030,6 +1101,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		{
 			m_TweenMovement.m_DurationInSeconds = baseBattleEnterDelay;
 			m_TweenMovement.Play();
+			baseBattleEnterDelay = TweenTime(baseBattleEnterDelay);
 		}
 		if (m_AssetController)
 		{
@@ -1053,6 +1125,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		var baseBattleEnterDelay = DIContainerLogic.GetPacingBalancing().BaseBattleEnterDelay;
 		m_TweenMovement.m_DurationInSeconds = baseBattleEnterDelay;
 		m_TweenMovement.Play();
+		baseBattleEnterDelay = TweenTime(baseBattleEnterDelay);
 		m_AssetController.PlayAnimationForTime("Move_Loop", "Idle", baseBattleEnterDelay);
 		if (destroy)
 		{
@@ -1081,6 +1154,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		var baseBattleEnterDelay = DIContainerLogic.GetPacingBalancing().BaseBattleEnterDelay;
 		m_TweenMovement.m_DurationInSeconds = baseBattleEnterDelay;
 		m_TweenMovement.Play();
+		baseBattleEnterDelay = TweenTime(baseBattleEnterDelay);
 		m_AssetController.PlayAnimationForTime("Move_Loop", !m_Model.IsStunned ? "Idle" : "Stunned", baseBattleEnterDelay);
 		return baseBattleEnterDelay;
 	}
@@ -1168,6 +1242,13 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		return m_TweenMovement.MovementDuration;
 	}
 
+	// How long the move just started really takes: a spring drone's tween is stretched to the time its hops need
+	// (SpringDrone via CHMotionTween.AdjustDuration); for everyone else it's the planned time.
+	private float TweenTime(float planned)
+	{
+		return m_TweenMovement != null && m_TweenMovement.IsPlaying ? Mathf.Max(planned, m_TweenMovement.MovementDuration) : planned;
+	}
+
 	private void SetupTweenMovementPositions(Transform startTransform, Vector3 startOffset, Transform endTransform, Vector3 endOffset)
 	{
 		m_TweenMovement.m_StartTransform = startTransform;
@@ -1210,7 +1291,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		m_TweenMovement.m_DurationInSeconds = timeToJumpInFrontOfAlly;
 		m_TweenMovement.Play();
 		PlayMoveAnim();
-		return timeToJumpInFrontOfAlly;
+		return TweenTime(timeToJumpInFrontOfAlly);
 	}
 
 	// A bird standing where it steps forward to at the start of its turn (its attacking position)
@@ -1253,7 +1334,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		}
 		m_TweenMovement.m_DurationInSeconds = timeFromBasePosToFocusPosInSec;
 		m_TweenMovement.Play();
-		return timeFromBasePosToFocusPosInSec;
+		return TweenTime(timeFromBasePosToFocusPosInSec);
 	}
 
 	public float PlayGoToAttackPosition(bool centerPosition = false, bool focusPosition = false)
@@ -1313,6 +1394,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		var timeFromFocusPosToAttackPosInSec = DIContainerLogic.GetPacingBalancing().TimeFromFocusPosToAttackPosInSec;
 		m_TweenMovement.m_DurationInSeconds = timeFromFocusPosToAttackPosInSec;
 		m_TweenMovement.Play();
+		timeFromFocusPosToAttackPosInSec = TweenTime(timeFromFocusPosToAttackPosInSec);
 		// Porky kicks up dust as he dashes in to attack in the intro battle.
 		if (m_Model.CombatantNameId == "pig_prince_porky_intro" && BattleMgr.IsIntroBattle(m_BattleMgr.Model) && m_AssetController)
 		{
@@ -1418,10 +1500,33 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		return 0f;
 	}
 
+	// Combatant Forge: the skill this character is carrying out. A clip it names (ForgeSkillAnimation) replaces the usual
+	// attack or support clip.
+	[NonSerialized]
+	public SkillBattleDataBase m_ClipSkill;
+
+	// The length of the skill's own clip once it is playing, or -1 when the skill names none (or this rig lacks it).
+	private float PlaySkillClip()
+	{
+		var clip = ForgeSkillAnimation.ClipFor(m_ClipSkill, m_AssetController);
+		if (clip == null)
+		{
+			return -1f;
+		}
+		m_AssetController.PlayAnimation(clip);
+		m_AssetController.PlayAnimationQueued("Idle");
+		return m_AssetController.GetAnimationLength(clip);
+	}
+
 	public float PlayAttackAnimation(bool useOffhand = false)
 	{
 		if (m_AssetController)
 		{
+			var own = PlaySkillClip();
+			if (own >= 0f)
+			{
+				return own;
+			}
 			m_AssetController.PlayAttackAnim(useOffhand);
 			return m_AssetController.GetAttackAnimationLength();
 		}
@@ -1482,6 +1587,11 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 		if (m_AssetController)
 		{
+			var own = PlaySkillClip();
+			if (own >= 0f)
+			{
+				return own;
+			}
 			m_AssetController.PlaySupportAnim();
 			return m_AssetController.GetSupportAnimationLength();
 		}
@@ -2147,7 +2257,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 		speechBubble.transform.parent = character.transform;
 		speechBubble.transform.localScale = Vector3.one / character.m_Model.CharacterModel.Scale;
-		var vector = Vector3.Scale(character.m_AssetController.BubblePosition, m_AssetController.transform.localScale);
+		var vector = Vector3.Scale(character.m_AssetController.BubblePosition, RigFacing.UnturnedScale(m_AssetController.transform));
 		speechBubble.transform.localPosition = new Vector3(vector.x, vector.y, character.m_AssetController.BubblePosition.z);
 		speechBubble.transform.position = new Vector3(speechBubble.transform.position.x, speechBubble.transform.position.y, Mathf.Max(character.m_AssetController.BubblePosition.z, -600f));
 		speechBubble.transform.localRotation = Quaternion.identity;
@@ -2270,6 +2380,7 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		}
 		Ammo.OnSkillStarted(m_Model, m_CounterSkillToDo);
 		yield return StartCoroutine(m_CounterSkillToDo.DoAction(m_BattleMgr.Model, m_Model, m_CounterModel.AttackTarget));
+		HypeBonus.Consume(m_Model);
 		BattleEffectGameData chargeEffect = null;
 		if (m_CounterModel.CurrrentEffects != null && m_CounterModel.CurrrentEffects.TryGetValue("Charge_" + m_CounterSkillToDo.Model.Balancing.AssetId, out chargeEffect) && chargeEffect.GetTurnsLeft() == m_CounterSkillToDo.GetChargeDuration())
 		{

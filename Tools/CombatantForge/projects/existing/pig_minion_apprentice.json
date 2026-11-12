@@ -1,0 +1,291 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_apprentice",
+ "name": "Apprentice",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Apprentice",
+     "name": "Headgear_Apprentice",
+     "item": "Headgear_Apprentice",
+     "w": 96,
+     "h": 128,
+     "pivot": [
+      -0.4,
+      -0.64
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Apprentice",
+     "name": "MainHand_Apprentice",
+     "item": "MainHand_Apprentice",
+     "w": 128,
+     "h": 46,
+     "pivot": [
+      -0.28,
+      0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_6f1f5",
+   "origin": "pig_attack_minion_stickpig_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_stickpig_01",
+   "name": "Poke",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"tumble\"))"
+    }
+   },
+   "template": "SimpleAttackWithMissSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_5d573",
+   "origin": "pig_support_minion_apprentice",
+   "type": "Support",
+   "source": "pig_support_minion_apprentice",
+   "name": "Protective Bubble",
+   "desc": "Target receives [00a800]{value_1}%[-] less damage. Lasts [00a800]{value_2}[-] turns. ",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "percent": 40
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+    }
+   },
+   "template": "BlockDamageSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 70,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_apprentice",
+  "fingerprint": "ed9f1715b111d6a3de0a45be66c2e0a9bbb638a6",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_minion_stickpig_01"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_minion_apprentice"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Apprentice",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Apprentice",
+       "name": "Headgear_Apprentice",
+       "item": "Headgear_Apprentice",
+       "w": 96,
+       "h": 128,
+       "pivot": [
+        -0.4,
+        -0.64
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Apprentice",
+       "name": "MainHand_Apprentice",
+       "item": "MainHand_Apprentice",
+       "w": 128,
+       "h": 46,
+       "pivot": [
+        -0.28,
+        0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 70,
+    "attack": 12,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_6f1f5",
+     "origin": "pig_attack_minion_stickpig_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_stickpig_01",
+     "name": "Poke",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"tumble\"))"
+      }
+     },
+     "template": "SimpleAttackWithMissSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_5d573",
+     "origin": "pig_support_minion_apprentice",
+     "type": "Support",
+     "source": "pig_support_minion_apprentice",
+     "name": "Protective Bubble",
+     "desc": "Target receives [00a800]{value_1}%[-] less damage. Lasts [00a800]{value_2}[-] turns. ",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "percent": 40
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+      }
+     },
+     "template": "BlockDamageSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

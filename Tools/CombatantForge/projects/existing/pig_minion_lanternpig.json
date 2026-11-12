@@ -1,0 +1,361 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_lanternpig",
+ "name": "Lantern Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_LanternPig",
+     "name": "Headgear_LanternPig",
+     "item": "Headgear_LanternPig",
+     "w": 122,
+     "h": 112,
+     "pivot": [
+      -0.23571429,
+      -0.3472098
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_LanternPig_Back",
+     "name": "Headgear_LanternPig_Back",
+     "item": "Headgear_LanternPig",
+     "w": 130,
+     "h": 62,
+     "pivot": [
+      -0.25714284,
+      -0.309
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_LanternPig",
+     "name": "MainHand_LanternPig",
+     "item": "MainHand_LanternPig",
+     "w": 122,
+     "h": 90,
+     "pivot": [
+      -0.31607142,
+      -0.2432738
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_86be8",
+   "origin": "pig_attack_minion_lanternpig",
+   "type": "Attack",
+   "source": "pig_attack_minion_lanternpig",
+   "name": "Blinding Light",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 25,
+    "duration": 1,
+    "use_skill_asset": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_5b4fa",
+   "origin": "pig_support_minion_lanternpig",
+   "type": "Support",
+   "source": "pig_support_minion_lanternpig",
+   "name": "Light the Way",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals [00a800]{value_1}[-] health.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "charge": 2,
+    "invoker": 1,
+    "all": 1,
+    "health_in_percent": 30
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealChargeSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 75,
+  "attack": 15,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_lanternpig",
+  "fingerprint": "7972d1343f7406c98537384321058b942fe9354f",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_minion_lanternpig"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_minion_lanternpig"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Lantern Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_LanternPig",
+       "name": "Headgear_LanternPig",
+       "item": "Headgear_LanternPig",
+       "w": 122,
+       "h": 112,
+       "pivot": [
+        -0.23571429,
+        -0.3472098
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_LanternPig_Back",
+       "name": "Headgear_LanternPig_Back",
+       "item": "Headgear_LanternPig",
+       "w": 130,
+       "h": 62,
+       "pivot": [
+        -0.25714284,
+        -0.309
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_LanternPig",
+       "name": "MainHand_LanternPig",
+       "item": "MainHand_LanternPig",
+       "w": 122,
+       "h": 90,
+       "pivot": [
+        -0.31607142,
+        -0.2432738
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 75,
+    "attack": 15,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_86be8",
+     "origin": "pig_attack_minion_lanternpig",
+     "type": "Attack",
+     "source": "pig_attack_minion_lanternpig",
+     "name": "Blinding Light",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 25,
+      "duration": 1,
+      "use_skill_asset": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_5b4fa",
+     "origin": "pig_support_minion_lanternpig",
+     "type": "Support",
+     "source": "pig_support_minion_lanternpig",
+     "name": "Light the Way",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals [00a800]{value_1}[-] health.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "charge": 2,
+      "invoker": 1,
+      "all": 1,
+      "health_in_percent": 30
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealChargeSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

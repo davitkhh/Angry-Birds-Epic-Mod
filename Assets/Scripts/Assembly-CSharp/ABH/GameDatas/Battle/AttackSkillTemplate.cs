@@ -12,6 +12,8 @@ namespace ABH.GameDatas.Battle
 {
 	public abstract class AttackSkillTemplate : SkillBattleDataBase
 	{
+		private static VisualEffectSetting s_ChargeSplashEffect;
+
 		private bool m_Stopped;
 
 		protected bool m_BlockMovement;
@@ -25,6 +27,15 @@ namespace ABH.GameDatas.Battle
 		// Never treat the attack as melee, even with a single target and no ranged MainHandItem (e.g. thrown items on
 		// pigs without an inventory).
 		protected bool m_ForceRanged;
+
+		// Combatant Forge: the projectile this skill fires instead of its weapon's (ForgeSkillAnimation.ProjectileParam).
+		// The attack is ranged then; a clip without a "Projectile" event fires it halfway through.
+		protected string m_ForgeProjectile;
+
+		private bool m_ProjectileFired;
+
+		// Combatant Forge: a melee attack (it walks up to its single target) even with a ranged weapon.
+		protected bool m_ForceMelee;
 
 		// Set by whoever speeds up the source's animations for this attack (GoadAllyIntoAttack), so ranged attacks don't
 		// wait out the clip's natural length.
@@ -112,6 +123,16 @@ namespace ABH.GameDatas.Battle
 			m_AttackAnimation = c => c.CombatantView.PlayAttackAnimation(m_UseOffhandAnim);
 			m_FallBackTime = DIContainerLogic.GetPacingBalancing().FallBackTimeWaitForSkillImpact;
 			m_NoDamage = base.Model.SkillParameters.ContainsKey("nodamage");
+			float ranged;
+			if (base.Model.SkillParameters.TryGetValue(ForgeSkillAnimation.RangedParam, out ranged))
+			{
+				m_ForceRanged = ranged >= 0.5f;
+				m_ForceMelee = !m_ForceRanged;
+			}
+			else if (base.Model.SkillParameters.ContainsKey(ForgeSkillAnimation.ProjectileParam))
+			{
+				m_ForceRanged = true;
+			}
 		}
 
 		public override void BoneAnimationUserTrigger(UserTriggerEvent triggerEvent)
@@ -133,9 +154,10 @@ namespace ABH.GameDatas.Battle
 				}
 				SpawnVisualEffects(VisualEffectSpawnTiming.Movement, m_VisualEffectSetting);
 			}
-			if (triggerEvent.tag == "Projectile" && triggerEvent.tag == "Projectile")
+			if (triggerEvent.tag == "Projectile" && triggerEvent.tag == "Projectile" && !(m_ForgeProjectile != null && m_ProjectileFired))
 			{
 				DebugLog.Log("Projectile fired");
+				m_ProjectileFired = true;
 				SpawnProjectile(m_Battle, m_Source, m_Targets, m_SkillProjectileAssetId, m_UseOffhandAnim);
 			}
 		}
@@ -183,6 +205,12 @@ namespace ABH.GameDatas.Battle
 			{
 				m_SkillProjectileAssetId = m_Source.CombatantMainHandEquipment.ProjectileAssetName;
 			}
+			m_ForgeProjectile = m_ForceMelee ? null : ForgeSkillAnimation.ProjectileFor(base.Model);
+			if (m_ForgeProjectile != null)
+			{
+				m_SkillProjectileAssetId = m_ForgeProjectile;
+			}
+			m_ProjectileFired = false;
 			foreach (var action4 in ActionsBeforeTargetSelection)
 			{
 				yield return new WaitForSeconds(action4(m_Battle, m_Source, m_InitialTarget));
@@ -270,6 +298,12 @@ namespace ABH.GameDatas.Battle
 				source.IsAttacking = false;
 				yield break;
 			}
+			if (IsMeeleAttack(source))
+			{
+				m_Targets.RemoveAll(ImmunityToMelee.IsImmune);
+			}
+			var weaponCharges = Ammo.TakeCharges(source, this);
+			var chargeSplashDamage = 0f;
 			SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting);
 			if (IsMeeleAttack(source))
 			{
@@ -310,6 +344,17 @@ namespace ABH.GameDatas.Battle
 				}
 				yield return new WaitForSeconds(duration / 2f);
 			}
+			else if (m_ForgeProjectile != null)
+			{
+				var length = m_AttackAnimation(source) / AttackAnimationSpeed;
+				yield return new WaitForSeconds(length / 2f);
+				if (!m_ProjectileFired)
+				{
+					m_ProjectileFired = true;
+					SpawnProjectile(m_Battle, m_Source, m_Targets, m_SkillProjectileAssetId, m_UseOffhandAnim);
+				}
+				yield return new WaitForSeconds(length / 2f);
+			}
 			else
 			{
 				yield return new WaitForSeconds(m_AttackAnimation(source) / AttackAnimationSpeed);
@@ -332,6 +377,8 @@ namespace ABH.GameDatas.Battle
 			}
 			var WaitSlices = DIContainerLogic.GetPacingBalancing().DelayForAllMultiAttacks / attackCount;
 			var m_NormalizedDamagePerTarget = new Dictionary<int, int>();
+			// Ranged attacks with a projectile show it flying on to every enemy it ricochets to (Ricochet)
+			var ricochetProjectile = !IsMeeleAttack(source) && !string.IsNullOrEmpty(m_SkillProjectileAssetId) && DIContainerInfrastructure.ProjectileAssetProvider.ContainsAsset(m_SkillProjectileAssetId) ? m_SkillProjectileAssetId : null;
 			for (var i = 0; (float)i < attackCount; i++)
 			{
 				if (i > 0)
@@ -438,6 +485,10 @@ namespace ABH.GameDatas.Battle
 					{
 						skillTarget.CombatantView.m_CurrentPerkType = PerkType.GroundZero;
 					}
+					if (ricochetProjectile != null)
+					{
+						Ricochet.Open();
+					}
 					modificationdealt2 =DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(modificationdealt2, EffectTriggerType.OnDealDamage, m_Source, skillTarget);
 					if (modificationdealt2 != 1f)
 					{
@@ -447,6 +498,8 @@ namespace ABH.GameDatas.Battle
 						modificationdealt2 = func2(modificationdealt2, m_Battle, m_Source, skillTarget);
 					}
 					m_Source.CurrentSkillAttackValue = m_Source.CurrentSkillAttackValue * perkDamagedealt * modificationdealt2;
+					var unchargedAttackValue = m_Source.CurrentSkillAttackValue;
+					m_Source.CurrentSkillAttackValue *= Ammo.GetChargeDamageMultiplier(source, weaponCharges);
 					var modificationreceived2 = 1f;
 					modificationreceived2 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(modificationreceived2, EffectTriggerType.OnReceiveDamage, skillTarget, m_Source);
 					if (modificationreceived2 != 1f)
@@ -467,6 +520,7 @@ namespace ABH.GameDatas.Battle
 					}
 					if (m_Break || (source.CurrentSkillExecutionInfo != null && source.CurrentSkillExecutionInfo.ExecutionType == SkillExecutionType.Aborted))
 					{
+						Ricochet.CloseAndLandAll();
 						yield return new WaitForSeconds(EvaluateExecutionAbort(source.CurrentSkillExecutionInfo, battle, m_Source, skillTarget));
 						source.CurrentSkillExecutionInfo = null;
 						if (!m_NormalizedDamagePerTarget.ContainsKey(j))
@@ -482,6 +536,7 @@ namespace ABH.GameDatas.Battle
 					}
 					DIContainerLogic.GetBattleService().AddRageForAttack(battle, source, firstTarget);
 					var normalizedDamage = DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(skillTarget, battle, source, m_IgnoreRage);
+					chargeSplashDamage = unchargedAttackValue * Ammo.GetChargeSplashMultiplier(source, weaponCharges);
 					battle.m_DamageLastTurn += normalizedDamage;
 					if (!m_NormalizedDamagePerTarget.ContainsKey(j))
 					{
@@ -511,7 +566,28 @@ namespace ABH.GameDatas.Battle
 							}
 						}
 					}
+					var ricochets = Ricochet.Close();
+					for (var h = 0; ricochets != null && h < ricochets.Count; h++)
+					{
+						var flight = Ricochet.Launch(m_Source, ricochets[h], ricochetProjectile);
+						if (flight > 0f)
+						{
+							yield return new WaitForSeconds(flight);
+						}
+						// A ricochet hit can ricochet again (perks on the bounce)
+						Ricochet.Open();
+						ricochets[h].Land();
+						var more = Ricochet.Close();
+						if (more != null)
+						{
+							ricochets.AddRange(more);
+						}
+					}
 					firstTarget = false;
+				}
+				if (chargeSplashDamage > 0f)
+				{
+					DealChargeSplash(battle, source, chargeSplashDamage);
 				}
 				if (!m_Source.IsAlive)
 				{
@@ -578,6 +654,48 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		// A fully charged weapon's blast on every enemy the attack didn't target (see Ammo)
+		private void DealChargeSplash(BattleGameData battle, ICombatant source, float damage)
+		{
+			var service = DIContainerLogic.GetBattleService();
+			foreach (var enemy in battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction != source.CombatantFaction && c.IsParticipating && !m_Targets.Contains(c)).ToList())
+			{
+				var received = service.ApplyEffectsOnTriggerType(1f, EffectTriggerType.OnReceiveDamage, enemy, source);
+				if (received <= 0f)
+				{
+					continue;
+				}
+				enemy.ReceiveDamage(damage * received * source.DamageModifier, source);
+				service.AddRageForAttack(battle, source, false);
+				service.DealDamageFromCurrentTurn(enemy, battle, source, m_IgnoreRage);
+				SpawnVisualEffects(VisualEffectSpawnTiming.Impact, GetChargeSplashEffect(), new List<ICombatant> { enemy });
+			}
+		}
+
+		private static VisualEffectSetting GetChargeSplashEffect()
+		{
+			if (s_ChargeSplashEffect == null)
+			{
+				s_ChargeSplashEffect = new VisualEffectSetting();
+				s_ChargeSplashEffect.BalancingId = "WeaponChargeSplash";
+				s_ChargeSplashEffect.VisualEffects = new List<VisualEffect>
+				{
+					new VisualEffect
+					{
+						SpawnTiming = VisualEffectSpawnTiming.Impact,
+						Type = VisualEffectType.Instant,
+						TargetCombatant = VisualEffectTargetCombatant.Target,
+						TargetAnchor = VisualEffectTargetAnchor.Center,
+						SoundId = string.Empty,
+						PrefabName = "SkillFX_Hit_Single_Ranged_Explosive",
+						OnHitPrefix = string.Empty,
+						EffectTextIdent = string.Empty
+					}
+				};
+			}
+			return s_ChargeSplashEffect;
+		}
+
 		private void ApplySetItemSkillOfType(BattleGameData battle, ICombatant owner, ICombatant skillTarget, SkillEffectTypes type)
 		{
 			if (owner.CombatantMainHandEquipment != null && owner.CombatantMainHandEquipment.IsSetItem && owner.HasSetCompleted && owner.GetSetItemSkill(battle.IsPvP) != null && owner.GetSetItemSkill(battle.IsPvP).Model.Balancing.EffectType == type)
@@ -596,6 +714,10 @@ namespace ABH.GameDatas.Battle
 			if (m_ForceRanged)
 			{
 				return false;
+			}
+			if (m_ForceMelee)
+			{
+				return m_IsMelee || m_Targets == null || m_Targets.Count <= 1;
 			}
 			return m_IsMelee || ((m_Targets == null || m_Targets.Count <= 1) && (source.CharacterModel.MainHandItem == null || !source.CharacterModel.MainHandItem.IsRanged));
 		}

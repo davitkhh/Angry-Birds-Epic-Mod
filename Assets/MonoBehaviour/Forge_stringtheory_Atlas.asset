@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_stringtheory_Atlas
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: ee282b4db9d245c1a2e134ed009f7625, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.361328125
+    width: 0.369140625
+    height: 0.251953125
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.619140625
+    width: 0.435546875
+    height: 0.380859375
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.173828125
+    width: 0.3359375
+    height: 0.181640625
+  - serializedVersion: 2
+    x: 0.375
+    y: 0.365234375
+    width: 0.3671875
+    height: 0.248046875
+  - serializedVersion: 2
+    x: 0.44140625
+    y: 0.623046875
+    width: 0.279296875
+    height: 0.376953125
+  textureGUIDs:
+  - 8110e8a67b594e82bef65332d8066221
+  - 27493a488d4f43d89863fab78bb38996
+  - 92d770627059486ca59e27bfdf30be45
+  - 98ab195b0a674b6aa79aef7634cee1a0
+  - 2d804fcceb8041fb8543bce6de58d4c9
+  textureSizes:
+  - {x: 189, y: 129}
+  - {x: 223, y: 195}
+  - {x: 172, y: 93}
+  - {x: 188, y: 127}
+  - {x: 143, y: 193}
+  defaultPivotOffsets:
+  - {x: 0.01597308, y: -0.01198761}
+  - {x: -0.006498159, y: -0.2965155}
+  - {x: -0.3589286, y: 0.2031106}
+  - {x: -0.4804263, y: -0.3417862}
+  - {x: 0.4371696, y: -0.9223839}
+  textureNames:
+  - Forge_stringtheory
+  - Forge_stringtheory_Back
+  - Forge_stringtheory_MainHand
+  - Forge_stringtheory_OffHand
+  - Forge_stringtheory_OffHand_Back
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/stringtheory/Forge_stringtheory.png
+  - Assets/content/4_Characters/_Forge/Baked/stringtheory/Forge_stringtheory_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/stringtheory/Forge_stringtheory_MainHand.png
+  - Assets/content/4_Characters/_Forge/Baked/stringtheory/Forge_stringtheory_OffHand.png
+  - Assets/content/4_Characters/_Forge/Baked/stringtheory/Forge_stringtheory_OffHand_Back.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

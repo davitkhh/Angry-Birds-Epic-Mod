@@ -9,6 +9,8 @@ namespace ABH.Shared.Generic
 		Passive,
 		Environmental,
 		SetPassive,
-		SetHit
+		SetHit,
+		// Combo moves (ComboMove template): played like attacks, resolved together at the end of the side's turn.
+		Combo
 	}
 }

@@ -282,6 +282,7 @@ namespace ABH.GameDatas
 				PirateChain.Sync(this);
 			}
 			GrantBlueAmmoBows();
+			GrantBombRocket();
 			if (this.Data.TutorialTracks != null && this.Data.TutorialTracks.ContainsKey("tutorial_equip_crafted_item"))
 			{
 				this.Data.TutorialTracks.Remove("tutorial_equip_crafted_item");
@@ -521,6 +522,25 @@ namespace ABH.GameDatas
 			}
 			DIContainerLogic.InventoryService.AddItem(InventoryGameData, level, 1, "bird_weapon_blue_bow_bone", 1, "grant_blue_ammo_bows", EquipmentSource.Crafting);
 			Data.EquippedSkins[BlueAmmoBowsGrantKey] = "1";
+		}
+
+		// One-time grant of Bomb's charging ammo weapon, like the bows above: waits for loads where Bomb has been unlocked.
+		private const string BombRocketGrantKey = "grant:bomb_rocket";
+
+		private void GrantBombRocket()
+		{
+			if (Data.EquippedSkins == null || Data.EquippedSkins.ContainsKey(BombRocketGrantKey) || m_Birds == null)
+			{
+				return;
+			}
+			var bomb = m_Birds.FirstOrDefault(b => b != null && b.BalancingData != null && b.BalancingData.NameId == "bird_black");
+			if (bomb == null)
+			{
+				return;
+			}
+			var level = bomb.MainHandItem != null ? bomb.MainHandItem.ItemData.Level : Data.Level;
+			DIContainerLogic.InventoryService.AddItem(InventoryGameData, level, 1, "bird_weapon_black_bomb_rocket", 1, "grant_bomb_rocket", EquipmentSource.Crafting);
+			Data.EquippedSkins[BombRocketGrantKey] = "1";
 		}
 
 		// In the player's inventory or equipped on any bird

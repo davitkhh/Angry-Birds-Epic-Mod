@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_pig_zombie_farmer__e0_Atlas_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: fb6e71b455ab434fbf1792a87ae8d570, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.66796875
+    width: 0.50390625
+    height: 0.33203125
+  textureGUIDs:
+  - 6e89fb5ffcc347aebfc1fbc83f8a4d48
+  textureSizes:
+  - {x: 257, y: 169}
+  defaultPivotOffsets:
+  - {x: 0.03589483, y: -0.133487}
+  textureNames:
+  - Forge_pig_zombie_farmer__e0
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/pig_zombie_farmer__e0/Forge_pig_zombie_farmer__e0.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

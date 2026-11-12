@@ -88,8 +88,12 @@ namespace ABH.GameDatas.Battle.Skills
 						}
 					}
 				}
-				var effect = new BattleEffectGameData(source, skillTarget, battleEffectlist, base.Model.Balancing.EffectDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
-				effect.AddEffect();
+				// Without damage_increase (e.g. the Tricksters' Cheer) the skill only cleanses: no empty blessing
+				if (battleEffectlist.Count > 0)
+				{
+					var effect = new BattleEffectGameData(source, skillTarget, battleEffectlist, base.Model.Balancing.EffectDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
+					effect.AddEffect();
+				}
 			}
 		}
 

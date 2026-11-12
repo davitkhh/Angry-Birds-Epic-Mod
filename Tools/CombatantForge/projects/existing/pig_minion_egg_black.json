@@ -1,0 +1,357 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_egg_black",
+ "name": "Black Egg",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BlackEgg",
+     "name": "Headgear_BlackEgg",
+     "item": "Headgear_BlackEgg",
+     "w": 124,
+     "h": 106,
+     "pivot": [
+      -0.1889764,
+      -0.5338259
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BlackEgg_Back",
+     "name": "Headgear_BlackEgg_Back",
+     "item": "Headgear_BlackEgg",
+     "w": 120,
+     "h": 68,
+     "pivot": [
+      -0.1928571,
+      -0.5719538
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_4fc56",
+   "origin": "pig_attack_minion_egg_black_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_egg_black_01",
+   "name": "Scrambled Black Eggs",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_4a1a8",
+   "origin": "pig_attack_minion_egg_black_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_egg_black_02",
+   "name": "Bunch of Eggs",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Damage increased by [ff0000]{value_3}%[-] per egg ally.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "classify_egg": 1,
+    "damage_in_percent": 100,
+    "bonus_damage": 25,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_damage\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithBonusPerPigOfGroup",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_ff441",
+   "origin": "pig_passive_hunter_black",
+   "type": "Passive",
+   "source": "pig_passive_hunter_black",
+   "name": "Black Hunter",
+   "desc": "Bomb takes [ff0000]{value_3}%[-] damage from attacks.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "bonus_damage_vs_black": 150
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+    }
+   },
+   "template": "PassiveBonusAgainstBirds",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 110,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_egg_black",
+  "fingerprint": "de6e8a7c54cd6bfdf1a269bbdb11bb9602c2eeee",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_minion_egg_black_01"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_minion_egg_black_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Black Egg",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BlackEgg",
+       "name": "Headgear_BlackEgg",
+       "item": "Headgear_BlackEgg",
+       "w": 124,
+       "h": 106,
+       "pivot": [
+        -0.1889764,
+        -0.5338259
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BlackEgg_Back",
+       "name": "Headgear_BlackEgg_Back",
+       "item": "Headgear_BlackEgg",
+       "w": 120,
+       "h": 68,
+       "pivot": [
+        -0.1928571,
+        -0.5719538
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 110,
+    "attack": 12,
+    "sizeType": "Small",
+    "sizeScale": 1.1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_4fc56",
+     "origin": "pig_attack_minion_egg_black_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_egg_black_01",
+     "name": "Scrambled Black Eggs",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_4a1a8",
+     "origin": "pig_attack_minion_egg_black_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_egg_black_02",
+     "name": "Bunch of Eggs",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Damage increased by [ff0000]{value_3}%[-] per egg ally.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "classify_egg": 1,
+      "damage_in_percent": 100,
+      "bonus_damage": 25,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_damage\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithBonusPerPigOfGroup",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_ff441",
+     "origin": "pig_passive_hunter_black",
+     "type": "Passive",
+     "source": "pig_passive_hunter_black",
+     "name": "Black Hunter",
+     "desc": "Bomb takes [ff0000]{value_3}%[-] damage from attacks.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "bonus_damage_vs_black": 150
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+      }
+     },
+     "template": "PassiveBonusAgainstBirds",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

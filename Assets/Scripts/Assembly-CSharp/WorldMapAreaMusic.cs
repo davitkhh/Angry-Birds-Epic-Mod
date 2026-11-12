@@ -13,14 +13,22 @@ using UnityEngine;
 // area intro is still to come, and while the game's own music source plays something else (title theme, jingles).
 public class WorldMapAreaMusic : MonoBehaviour
 {
+	// Toggle: true = the Cobalt Plateaus play their own theme (WorldMapCobalt), also during their area intro;
+	// false = they play the regular world map theme like the unlisted zones.
+	public static bool CobaltPlateausOwnTheme = true;
+
+	private const string CobaltPlateausTheme = "WorldMapCobalt";
+
 	// Zone object -> theme: a clip under Resources/Sound/Music, or "" for silence. Zones not listed play the chapter's
 	// world map track (the music_worldmap cue's current clip, see WorldMapStateMgr.SelectWorldMapMusic).
 	private static readonly Dictionary<string, string> s_ZoneThemes = new Dictionary<string, string>
 	{
-		// South Beach: silent until it gets ambience.
-		{ "Zone_01", "" },
+		// South Beach has no song of its own: whatever was playing keeps playing (see ComputeWeights).
+		{ "Zone_01", HoldTheme },
+		// Pseudo-zone for the camp hotspot: music fades out around it.
+		{ "Camp", "" },
 		// Cobalt Plateaus.
-		{ "Zone_02", "WorldMapCobalt" }
+		{ "Zone_02", CobaltPlateausTheme }
 	};
 
 	// Hotspots kept under a zone's hierarchy that stand elsewhere on the map.
@@ -30,10 +38,14 @@ public class WorldMapAreaMusic : MonoBehaviour
 	private static readonly Dictionary<string, string> s_HotspotZones = new Dictionary<string, string>
 	{
 		// On the South Beach (Zone_04 in the scene); reachable early as the pirate chain's first side level.
-		{ "Hotspot_028_Battleground", "Zone_01" }
+		{ "Hotspot_028_Battleground", "Zone_01" },
+		{ "Hotspot_001_Camp", "Camp" }
 	};
 
 	private const string DefaultTheme = "<chapter>";
+
+	// Areas with no song: the camera being nearest one of their hotspots changes nothing, m_HeldTheme plays on.
+	private const string HoldTheme = "<hold>";
 
 	public static WorldMapAreaMusic Instance { get; private set; }
 
@@ -72,6 +84,9 @@ public class WorldMapAreaMusic : MonoBehaviour
 
 	private readonly Dictionary<string, float> m_Weights = new Dictionary<string, float>();
 
+	// The theme of the last area with a song the camera was in (or a forced theme); plays on through HoldTheme areas.
+	private string m_HeldTheme;
+
 	private void Awake()
 	{
 		Instance = this;
@@ -96,6 +111,7 @@ public class WorldMapAreaMusic : MonoBehaviour
 			{
 				theme = DefaultTheme;
 			}
+			theme = Resolve(theme);
 			m_Points.Add(new Point { Position = hotspot.transform.position, Theme = theme, View = hotspot });
 		}
 	}
@@ -176,6 +192,7 @@ public class WorldMapAreaMusic : MonoBehaviour
 		if (forced)
 		{
 			m_Weights[ForcedTheme] = 1f;
+			m_HeldTheme = ForcedTheme;
 			return;
 		}
 		var camera = DIContainerInfrastructure.LocationStateMgr != null ? DIContainerInfrastructure.LocationStateMgr.SceneryCamera : null;
@@ -198,20 +215,55 @@ public class WorldMapAreaMusic : MonoBehaviour
 			}
 		}
 		var closest = nearest.Values.Min();
+		var closestTheme = nearest.First(p => p.Value == closest).Key;
+		// In a songless area (or at the silent camp) other songs don't fade in: only the held song and the silence mix.
+		// Before any song was heard here (just loaded onto the beach), the held song is the nearest reached one.
+		var songless = closestTheme == HoldTheme || closestTheme.Length == 0;
+		if (!songless)
+		{
+			m_HeldTheme = closestTheme;
+		}
+		else if (m_HeldTheme == null && nearest.Keys.Any(IsSong))
+		{
+			m_HeldTheme = nearest.Where(p => IsSong(p.Key)).OrderBy(p => p.Value).First().Key;
+		}
 		var total = 0f;
 		foreach (var pair in nearest)
 		{
+			if (songless ? IsSong(pair.Key) : pair.Key == HoldTheme)
+			{
+				continue;
+			}
 			var weight = Mathf.Exp(-(pair.Value - closest) / Mathf.Max(1f, m_BlendDistance));
-			if (weight > 0.01f)
+			if (weight <= 0.01f)
+			{
+				continue;
+			}
+			total += weight;
+			if (pair.Key != HoldTheme)
 			{
 				m_Weights[pair.Key] = weight;
-				total += weight;
+			}
+			else if (m_HeldTheme != null)
+			{
+				m_Weights[m_HeldTheme] = weight;
 			}
 		}
 		foreach (var key in m_Weights.Keys.ToList())
 		{
 			m_Weights[key] /= total;
 		}
+	}
+
+	// Applies the theme toggles.
+	public static string Resolve(string theme)
+	{
+		return theme == CobaltPlateausTheme && !CobaltPlateausOwnTheme ? DefaultTheme : theme;
+	}
+
+	private static bool IsSong(string theme)
+	{
+		return theme != HoldTheme && theme.Length > 0;
 	}
 
 	private static bool IsReached(Point point)
@@ -359,7 +411,7 @@ public static class WorldMapAreaIntro
 		}
 		if (music != null)
 		{
-			music.ForcedTheme = intro.Theme;
+			music.ForcedTheme = WorldMapAreaMusic.Resolve(intro.Theme);
 		}
 		var label = CreateTitle(intro);
 		var camRoot = state.m_CamRoot;

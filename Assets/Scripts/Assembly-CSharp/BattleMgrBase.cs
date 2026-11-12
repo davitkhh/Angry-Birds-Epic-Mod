@@ -815,7 +815,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			}
 			if (character.CombatantView.m_AlreadyPlaced || character.IsBanner)
 			{
-				repositioningDelay = !character.StartedHisTurn ? Mathf.Max(character.CombatantView.PlayGoToBasePosition()) : Mathf.Max(repositioningDelay, character.CombatantView.PlayGoToFocusPosition());
+				repositioningDelay = !character.StartedHisTurn || character.CombatantView.m_SkipFocusThisTurn ? Mathf.Max(character.CombatantView.PlayGoToBasePosition()) : Mathf.Max(repositioningDelay, character.CombatantView.PlayGoToFocusPosition());
 			}
 			else
 			{
@@ -1274,7 +1274,11 @@ public abstract class BattleMgrBase : MonoBehaviour
 			InstantiateEffectOnArea(invoker, effect, setting, invoker.CombatantFaction);
 			break;
 		case VisualEffectTargetCombatant.TargetArea:
-			InstantiateEffectOnArea(invoker, effect, setting, targets.FirstOrDefault().CombatantFaction);
+			// A melee attack on an ImmunityToMelee combatant has no targets left
+			if (targets.Count > 0)
+			{
+				InstantiateEffectOnArea(invoker, effect, setting, targets.FirstOrDefault().CombatantFaction);
+			}
 			break;
 		case VisualEffectTargetCombatant.CenterArea:
 			InstantiateEffectOnArea(invoker, effect, setting, Faction.None);
@@ -1413,6 +1417,13 @@ public abstract class BattleMgrBase : MonoBehaviour
 			if (character.IsAssetAtWrongSide())
 			{
 				gameObject.transform.localScale = Vector3.Scale(gameObject.transform.localScale, new Vector3(Mathf.Sign(character.transform.lossyScale.x), 1f, 1f));
+			}
+			// A rig turned around by a skill (RigFacing, King DJ) mirrors effects parented on its bones: undo that so texts
+			// read the right way.
+			var rigFacing = character.m_AssetController.GetComponent<RigFacing>();
+			if (rigFacing != null && rigFacing.Facing < 0f)
+			{
+				gameObject.transform.localScale = Vector3.Scale(gameObject.transform.localScale, new Vector3(-1f, 1f, 1f));
 			}
 			gameObject.transform.localRotation = Quaternion.identity;
 		}

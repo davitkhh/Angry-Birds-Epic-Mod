@@ -51,27 +51,35 @@ namespace ABH.GameDatas.Battle.Skills
 					{
 						var combatant = list[UnityEngine.Random.Range(0, list.Count)];
 						list.Remove(combatant);
-						var list2 = new List<ICombatant> { combatant };
-						var effectedParam = 1f;
-						var effectedParam2 = 1f;
-						var num2 = source.ModifiedAttack * m_CollateralDamageMod;
-						var currentSkillAttackValue = m_Source.CurrentSkillAttackValue;
-						m_Source.CurrentSkillAttackValue = num2;
-						effectedParam2 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(effectedParam2, EffectTriggerType.OnDealDamage, m_Source, combatant);
-						num2 *= effectedParam2;
-						effectedParam = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(effectedParam, EffectTriggerType.OnReceiveDamage, combatant, m_Source);
-						combatant.ReceiveDamage(num2 * effectedParam, source);
-						VisualEffectSetting setting = null;
-						if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(m_AddtionalEffectInfo, out setting))
+						Ricochet.Hit(Ricochet.LastHit(target), combatant, delegate
 						{
-							SpawnVisualEffects(VisualEffectSpawnTiming.Start, setting, new List<ICombatant> { combatant });
-						}
-						DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);
-						m_Source.CurrentSkillAttackValue = currentSkillAttackValue;
+							HitCollateral(battle, source, combatant);
+						});
 						num++;
 					}
 				}
 			});
+		}
+
+		// One collateral hit; with a projectile it lands when the ricochet arrives (Ricochet)
+		private void HitCollateral(BattleGameData battle, ICombatant source, ICombatant combatant)
+		{
+			var effectedParam = 1f;
+			var effectedParam2 = 1f;
+			var num2 = source.ModifiedAttack * m_CollateralDamageMod;
+			var currentSkillAttackValue = m_Source.CurrentSkillAttackValue;
+			m_Source.CurrentSkillAttackValue = num2;
+			effectedParam2 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(effectedParam2, EffectTriggerType.OnDealDamage, m_Source, combatant);
+			num2 *= effectedParam2;
+			effectedParam = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(effectedParam, EffectTriggerType.OnReceiveDamage, combatant, m_Source);
+			combatant.ReceiveDamage(num2 * effectedParam, source);
+			VisualEffectSetting setting = null;
+			if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(m_AddtionalEffectInfo, out setting))
+			{
+				SpawnVisualEffects(VisualEffectSpawnTiming.Start, setting, new List<ICombatant> { combatant });
+			}
+			DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);
+			m_Source.CurrentSkillAttackValue = currentSkillAttackValue;
 		}
 
 		public override string GetLocalizedDescription(ICombatant invoker)

@@ -60,6 +60,9 @@ namespace ABH.GameDatas.Battle.Skills
 			// The skill's own visuals belong to the crit buff, which goes on the caster.
 			m_Targets = new List<ICombatant> { source };
 			SpawnVisualEffects(VisualEffectSpawnTiming.Start, m_VisualEffectSetting);
+			// The setting's Impact visuals include the lasting crit effect, which the animation's Impact trigger would spawn
+			// before we know the buff lands. They are spawned below instead.
+			m_Targets = new List<ICombatant>();
 			yield return new WaitForSeconds(source.CombatantView.PlaySupportAnimation());
 			if (!DIContainerLogic.GetBattleService().RemoveMostRecentBattleEffect(ally))
 			{
@@ -85,6 +88,8 @@ namespace ABH.GameDatas.Battle.Skills
 				}
 			}, m_BuffDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
 			effect.AddEffect();
+			m_Targets = new List<ICombatant> { source };
+			SpawnVisualEffects(VisualEffectSpawnTiming.Impact, m_VisualEffectSetting);
 		}
 
 		public override string GetLocalizedDescription(ICombatant invoker)

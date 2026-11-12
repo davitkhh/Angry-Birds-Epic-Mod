@@ -314,7 +314,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		{
 			(m_BattleMgr as BattleMgr).AutoBattleSelectRageSkillWithFallback();
 		}
-		if (m_Model is BirdCombatant && m_BattleMgr.AutoBattle && m_BattleMgr.Model.IsRageFull(Faction.Birds) && (m_Model as BirdCombatant).UseRage && (m_BattleMgr as BattleMgr).AutoBattleDoRage())
+		if (m_Model is BirdCombatant && m_BattleMgr.AutoBattle && m_BattleMgr.Model.IsRageFull(Faction.Birds) && (m_Model as BirdCombatant).UseRage && (m_BattleMgr as BattleMgr).AutoBattleDoRage() && !ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsRageBlocked(m_BattleMgr.Model, m_Model))
 		{
 			if (m_BattleMgr.Model.m_CombatantsPerFaction[Faction.Pigs].Any(p => p.CurrentHealth != 0f))
 			{
@@ -337,6 +337,14 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(0f, EffectTriggerType.OnTarget, m_Model, m_Model.AttackTarget);
 			// The player picks a manual bird's skill later; a charge starts once that skill runs (AttackSkillTemplate).
 			var playerPicksSkill = m_Model is BirdCombatant && !m_BattleMgr.AutoBattle;
+			if (m_SkillToDo != null && !playerPicksSkill && m_SkillToDo.IsChargeStarting(m_Model))
+			{
+				var beforeCharge = m_SkillToDo.BeforeChargeStart(m_Model);
+				if (beforeCharge > 0f)
+				{
+					yield return new WaitForSeconds(beforeCharge);
+				}
+			}
 			if (m_SkillToDo != null && !playerPicksSkill && m_SkillToDo.EvaluateCharge(m_BattleMgr.Model, m_Model, new List<ICombatant> { m_Model.AttackTarget }, null))
 			{
 				yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForPigToChooseTargetAndDoSkillInSec);
@@ -360,7 +368,8 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			SafeEvaluateTarget();
 		}
 		// Porky's Duel hops him straight from his slot to the bird's line.
-		if (!m_SkillToDo.Model.SkillParameters.ContainsKey("tentacle_grab") && !(m_SkillToDo is ABH.GameDatas.Battle.Skills.DuelKnockback))
+		m_SkipFocusThisTurn = m_SkillToDo.Model.SkillParameters.ContainsKey("no_focus");
+		if (!m_SkipFocusThisTurn && !m_SkillToDo.Model.SkillParameters.ContainsKey("tentacle_grab") && !(m_SkillToDo is ABH.GameDatas.Battle.Skills.DuelKnockback))
 		{
 			yield return new WaitForSeconds(PlayGoToFocusPosition());
 		}
@@ -585,6 +594,16 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 					m_SkillToDo = aiTurn.m_UsedSkill;
 				}
 			}
+			// A forced move order (King DJ) also binds the PvP AI and skills picked before the curse landed.
+			var ordered = ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.ForceSkill(m_BattleMgr.Model, m_Model, m_SkillToDo);
+			if (ordered != m_SkillToDo)
+			{
+				m_SkillToDo = ordered;
+				if (!DIContainerLogic.GetBattleService().GetNextTarget(m_BattleMgr.Model, m_Model, m_SkillToDo.Model, m_Model.CombatantFaction))
+				{
+					DIContainerLogic.GetBattleService().GetRandomTarget(m_BattleMgr.Model, m_Model, m_SkillToDo.Model, m_Model.CombatantFaction);
+				}
+			}
 			if (!Ammo.CanAfford(m_Model, m_SkillToDo))
 			{
 				// AI picks avoid skills without ammo; this catches the rest (PvP AI, cached skills)
@@ -619,6 +638,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(0f, EffectTriggerType.BeforeAttack, m_Model, m_Model.AttackTarget);
 			}
 			Ammo.OnSkillStarted(m_Model, m_SkillToDo);
+			m_ClipSkill = m_SkillToDo;
 			if (m_BattleMgr.m_IllusionistCombatant != null && m_BattleMgr.m_IllusionistCombatant == m_Model && m_SkillToDo == m_Model.GetSkill(0))
 			{
 				var attack = m_Model.GetSkill(0) as AttackSkillTemplate;
@@ -649,7 +669,10 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				}
 				yield return StartCoroutine(m_SkillToDo.DoAction(m_BattleMgr.Model, m_Model, m_Model.AttackTarget));
 			}
+			m_ClipSkill = null;
 			Ammo.OnSkillFinished(m_Model, m_SkillToDo);
+			HypeBonus.OnSkillFinished(m_BattleMgr.Model, m_Model, m_SkillToDo);
+			ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.OnMoveFinished(m_Model, m_SkillToDo);
 			if (m_SkillToDo.m_IsRageSkill)
 			{
 				foreach (var enemy in m_BattleMgr.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction != m_Model.CombatantFaction))
@@ -705,6 +728,8 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		{
 			yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForShowDamageAndReturnToBasePosInSec);
 		}
+		// A "no_focus" skill that never moved him (King DJ's sound wave) leaves him on his slot.
+		alreadyHome = alreadyHome || (m_SkipFocusThisTurn && !(m_Model is BirdCombatant) && IsAtUnfocusedPos());
 		if (!m_Model.IsParticipating)
 		{
 			m_ReadyToDestroy = true;
@@ -887,6 +912,11 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			DebugLog.Log("Not enough ammo for that skill");
 			return;
 		}
+		if (ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsMoveBlocked(m_BattleMgr.Model, m_Model, sender.CombatantFaction == m_Model.CombatantFaction))
+		{
+			DebugLog.Log("The forced move order asks for the other move");
+			return;
+		}
 		m_ClickedThisTurn = true;
 		m_CommandGiven = true;
 		m_Model.AttackTarget = sender;
@@ -968,6 +998,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		{
 			var combatant2 = m_BattleMgr.Model.m_CombatantsByInitiative[j];
 			var skill = combatant2.CombatantFaction != m_Model.CombatantFaction ? m_Model.GetSkills()[0] : m_Model.GetSkills()[1];
+			// Targets King DJ's Fog Machine forbids get no blocked icon: the HUD's marker turns into an X over them instead.
 			if (!DIContainerLogic.GetBattleService().isTargetAllowedForSkill(combatant2, skill))
 			{
 				m_BattleMgr.m_CharacterInteractionBlockedItems[j].SetActive(true);
@@ -1023,6 +1054,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 						m_CachedTargetInvalid = m_cachedOverCharacter != null && !DIContainerLogic.GetBattleService().isTargetAllowedForSkill(m_cachedOverCharacter.GetModel(), skill);
 						m_CachedTargetNoAmmo = !m_CachedTargetInvalid && m_cachedOverCharacter != this && !Ammo.CanAfford(m_Model, skill);
 						m_CachedTargetInvalid |= m_CachedTargetNoAmmo;
+						m_CachedTargetInvalid |= m_cachedOverCharacter != this && ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsMoveBlocked(m_BattleMgr.Model, m_Model, m_cachedOverCharacter.GetModel().CombatantFaction == m_Model.CombatantFaction);
 					}
 					else
 					{
@@ -1214,7 +1246,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		if (component != null)
 		{
 			var skill = component.GetModel().CombatantFaction != m_Model.CombatantFaction ? m_Model.GetSkills()[0] : m_Model.GetSkills()[1];
-			if ((m_tauntedTarget != null && component != null && m_tauntedTarget != component.GetModel() && m_tauntedTarget.CombatantFaction == component.GetModel().CombatantFaction) || !DIContainerLogic.GetBattleService().isTargetAllowedForSkill(component.GetModel(), skill) || (component != this && !Ammo.CanAfford(m_Model, skill)))
+			if ((m_tauntedTarget != null && component != null && m_tauntedTarget != component.GetModel() && m_tauntedTarget.CombatantFaction == component.GetModel().CombatantFaction) || !DIContainerLogic.GetBattleService().isTargetAllowedForSkill(component.GetModel(), skill) || (component != this && !Ammo.CanAfford(m_Model, skill)) || (component != this && ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsMoveBlocked(m_BattleMgr.Model, m_Model, component.GetModel().CombatantFaction == m_Model.CombatantFaction)))
 			{
 				return;
 			}

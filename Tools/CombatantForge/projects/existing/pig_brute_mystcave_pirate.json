@@ -1,0 +1,285 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_mystcave_pirate",
+ "name": "Enormous Pirate",
+ "rig": "PigBrute",
+ "variant": "pirate",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BigPirate",
+     "name": "Headgear_BigPirate",
+     "item": "Headgear_BigPirate",
+     "w": 132,
+     "h": 98,
+     "pivot": [
+      0.053571425,
+      -0.21160714
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_BigPirate",
+     "name": "MainHand_BigPirate",
+     "item": "MainHand_BigPirate",
+     "w": 307,
+     "h": 207,
+     "pivot": [
+      -0.39642856,
+      0.013392856
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_c1024",
+   "origin": "pig_attack_brute_pirate_myst",
+   "type": "Attack",
+   "source": "pig_attack_brute_pirate_myst",
+   "name": "Weapon Breaker",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 300,
+    "reduction_in_percent": 100,
+    "chance": 100,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_11cf0",
+   "origin": "pig_passive_dirtytricks",
+   "type": "Passive",
+   "source": "pig_passive_dirtytricks",
+   "name": "Dirty Tricks",
+   "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": null,
+   "values": {},
+   "template": "ImmunityToCurses",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 415,
+  "attack": 28,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_mystcave_pirate",
+  "fingerprint": "7a61977e81c0b11ed9c5a963f8e7b1d6fa9c232d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_pirate_myst"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Enormous Pirate",
+   "rig": "PigBrute",
+   "variant": "pirate",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BigPirate",
+       "name": "Headgear_BigPirate",
+       "item": "Headgear_BigPirate",
+       "w": 132,
+       "h": 98,
+       "pivot": [
+        0.053571425,
+        -0.21160714
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_BigPirate",
+       "name": "MainHand_BigPirate",
+       "item": "MainHand_BigPirate",
+       "w": 307,
+       "h": 207,
+       "pivot": [
+        -0.39642856,
+        0.013392856
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 415,
+    "attack": 28,
+    "sizeType": "Boss",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_c1024",
+     "origin": "pig_attack_brute_pirate_myst",
+     "type": "Attack",
+     "source": "pig_attack_brute_pirate_myst",
+     "name": "Weapon Breaker",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 300,
+      "reduction_in_percent": 100,
+      "chance": 100,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_11cf0",
+     "origin": "pig_passive_dirtytricks",
+     "type": "Passive",
+     "source": "pig_passive_dirtytricks",
+     "name": "Dirty Tricks",
+     "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {},
+     "values": {},
+     "template": "ImmunityToCurses",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

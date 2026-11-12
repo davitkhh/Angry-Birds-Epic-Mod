@@ -669,6 +669,7 @@ public static class UpgradeBlueprints
 		case PerkType.PhatLoot:
 		case PerkType.Amplify:
 		case PerkType.Rally:
+		case PerkType.Hype:
 			return true;
 		default:
 			return false;

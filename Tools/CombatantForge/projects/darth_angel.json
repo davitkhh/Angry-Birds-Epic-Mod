@@ -1,0 +1,121 @@
+{
+ "id": "darth_angel",
+ "name": "Darth Angel",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "dqduo124",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_DarkKnight",
+     "name": "Headgear_DarkKnight",
+     "item": "Headgear_DarkKnight",
+     "w": 236,
+     "h": 173,
+     "pivot": [
+      -0.021428572,
+      -0.11327416
+     ],
+     "tx": -15.139748244009184,
+     "ty": -12.539079283475246,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "p5i8f8oo"
+    }
+   ],
+   "hidden": false,
+   "active": "ugbly722"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "vzfwnmgb",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_DarkKnight_Back",
+     "name": "Headgear_DarkKnight_Back",
+     "item": "Headgear_DarkKnight",
+     "w": 224,
+     "h": 97,
+     "pivot": [
+      -0.01607143,
+      0.14226805
+     ],
+     "tx": -15.139748244009184,
+     "ty": -12.539079283475246,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "p5i8f8oo"
+    }
+   ],
+   "hidden": false,
+   "active": "kui0up21"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "4n4uyeam",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DarkCupid_Back",
+     "name": "Headgear_DarkCupid_Back",
+     "item": "Headgear_DarkCupid",
+     "w": 155,
+     "h": 114,
+     "pivot": [
+      -0.6482143,
+      -0.23672462
+     ],
+     "tx": 48.27067393304793,
+     "ty": 96.27911334565499,
+     "rot": 0,
+     "sx": 1.5565765689088933,
+     "sy": 1.5565765689088933,
+     "shear": 0
+    },
+    {
+     "uid": "l5u71n4u",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_CuteCupid_Back",
+     "name": "Headgear_CuteCupid_Back",
+     "item": "Headgear_CuteCupid",
+     "w": 244,
+     "h": 102,
+     "pivot": [
+      -0.17142856,
+      -0.4293067
+     ],
+     "tx": -33.51721136816843,
+     "ty": 37.75007730356083,
+     "rot": 0,
+     "sx": 1.4814281547784116,
+     "sy": 1.4814281547784116,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "l5u71n4u"
+  }
+ },
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 250,
+  "attack": 12,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ }
+}

@@ -1,0 +1,281 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_egg_white",
+ "name": "White Egg",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_WhiteEgg",
+     "name": "Headgear_WhiteEgg",
+     "item": "Headgear_WhiteEgg",
+     "w": 124,
+     "h": 106,
+     "pivot": [
+      -0.1889764,
+      -0.5338259
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_WhiteEgg_Back",
+     "name": "Headgear_WhiteEgg_Back",
+     "item": "Headgear_WhiteEgg",
+     "w": 120,
+     "h": 68,
+     "pivot": [
+      -0.1928571,
+      -0.5719538
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_28ff8",
+   "origin": "pig_attack_minion_egg_white",
+   "type": "Attack",
+   "source": "pig_attack_minion_egg_white",
+   "name": "Scrambled White Eggs",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "HealingStrike",
+   "params": {
+    "damage_in_percent": 100,
+    "heal_ally": 20,
+    "intensity": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal_ally\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithHealAlly",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_5b574",
+   "origin": "pig_passive_hunter_white",
+   "type": "Passive",
+   "source": "pig_passive_hunter_white",
+   "name": "White Hunter",
+   "desc": "Matilda takes [ff0000]{value_3}%[-] damage from attacks.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "bonus_damage_vs_white": 150
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+    }
+   },
+   "template": "PassiveBonusAgainstBirds",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 105,
+  "attack": 11,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_egg_white",
+  "fingerprint": "14c7ba53342f6f1a9d2f6925acb2abdb9aa34dd2",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_egg_white"
+    ]
+   }
+  ],
+  "original": {
+   "name": "White Egg",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_WhiteEgg",
+       "name": "Headgear_WhiteEgg",
+       "item": "Headgear_WhiteEgg",
+       "w": 124,
+       "h": 106,
+       "pivot": [
+        -0.1889764,
+        -0.5338259
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_WhiteEgg_Back",
+       "name": "Headgear_WhiteEgg_Back",
+       "item": "Headgear_WhiteEgg",
+       "w": 120,
+       "h": 68,
+       "pivot": [
+        -0.1928571,
+        -0.5719538
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 105,
+    "attack": 11,
+    "sizeType": "Small",
+    "sizeScale": 1.1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_28ff8",
+     "origin": "pig_attack_minion_egg_white",
+     "type": "Attack",
+     "source": "pig_attack_minion_egg_white",
+     "name": "Scrambled White Eggs",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "HealingStrike",
+     "params": {
+      "damage_in_percent": 100,
+      "heal_ally": 20,
+      "intensity": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal_ally\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithHealAlly",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_5b574",
+     "origin": "pig_passive_hunter_white",
+     "type": "Passive",
+     "source": "pig_passive_hunter_white",
+     "name": "White Hunter",
+     "desc": "Matilda takes [ff0000]{value_3}%[-] damage from attacks.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "bonus_damage_vs_white": 150
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+      }
+     },
+     "template": "PassiveBonusAgainstBirds",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -187,6 +187,8 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		m_BoardAnimation.Play("Board_Enter");
 		m_GroundAnimation.Play("Ground_Enter");
 		m_BackButtonAnimation.Play("BackButton_Enter");
+		ShowMenuResourceNode();
+		SetUpMerchantBattleButton();
 		var anvilObjects = m_AnvilObjects;
 		foreach (var go in anvilObjects)
 		{
@@ -201,7 +203,8 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		{
 			// Bobs via its PeekIdleBob (speed is editable on that component).
 			// Gone once McCool has left his stall (McCoolDeparture).
-			m_McCoolProp.SetActive(m_MenuType == ShopMenuType.Merchant && !McCoolDeparture.HasLeft());
+			// Only in McCool's own merchant menu (there are other merchants).
+			m_McCoolProp.SetActive(m_MenuType == ShopMenuType.Merchant && MerchantStall.IsMcCoolMerchant(m_hotspot) && !McCoolDeparture.HasLeft());
 		}
 		switch (m_MenuType)
 		{
@@ -636,6 +639,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			m_EagleProp.gameObject.PlayAnimationOrAnimatorState("Ground_Leave");
 		}
 		m_BackButtonAnimation.Play("BackButton_Leave");
+		if (m_MerchantBattleAnimation != null && m_MerchantBattleButton.activeSelf)
+		{
+			m_MerchantBattleAnimation.Play("BackButton_Leave");
+		}
 		if (!m_NoOffersLeft)
 		{
 			m_SkipButtonAnimation.Play("BackButton_Leave");
@@ -656,6 +663,17 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			var shop = m_hotspot as HotSpotWorldMapViewShopNode;
 			shop.CheckForNewMarker();
 		}
+		if (m_MenuResourceNode != null)
+		{
+			m_MenuResourceNode.ReturnToMap();
+			m_MenuResourceNode = null;
+		}
+		if (m_PendingMerchantBattle != null)
+		{
+			var battle = m_PendingMerchantBattle;
+			m_PendingMerchantBattle = null;
+			m_StateMgr.ShowBattlePreparationFor(battle);
+		}
 		if (m_MenuType == ShopMenuType.Dojo)
 		{
 			DIContainerInfrastructure.LocationStateMgr.ProcessRankUpPopUp();
@@ -669,6 +687,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		if (m_BackButton)
 		{
 			m_BackButton.Clicked += m_BackButton_Clicked;
+		}
+		if (m_MerchantBattleTrigger)
+		{
+			m_MerchantBattleTrigger.Clicked += m_MerchantBattle_Clicked;
 		}
 		if (m_SkipButton)
 		{
@@ -812,6 +834,92 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		}
 	}
 
+	// The merchant's resource node (MerchantStall: flagged m_HiddenOnMap, after this merchant) sits in its menu and is
+	// tapped like on the map. Position: window coordinates (like the back button's anchor), scale on its map size.
+	[SerializeField]
+	private Vector3 m_MenuResourceNodePosition = new Vector3(470f, -200f, 0f);
+
+	[SerializeField]
+	private float m_MenuResourceNodeScale = 1f;
+
+	private HotSpotWorldMapViewResource m_MenuResourceNode;
+
+	private void ShowMenuResourceNode()
+	{
+		var node = m_MenuType == ShopMenuType.Merchant ? MerchantStall.GetMenuResourceNode(m_hotspot) : null;
+		if (node == null)
+		{
+			return;
+		}
+		m_MenuResourceNode = node;
+		// Rides on the ground (its enter/leave animation); drawn above the board's widgets.
+		node.ShowInMenu(m_GroundAnimation.transform, base.transform.TransformPoint(m_MenuResourceNodePosition), m_MenuResourceNodeScale, m_GroundAnimation.gameObject.layer, 1);
+	}
+
+	// MerchantStall.GateLeavesMap: the merchant's beaten gate battle, replayed from here. A copy of the back button with
+	// the battle icon, m_MerchantBattleButtonOffset to its right. Only McCool's menu shows it.
+	[SerializeField]
+	private Vector3 m_MerchantBattleButtonOffset = new Vector3(150f, 0f, 0f);
+
+	private GameObject m_MerchantBattleButton;
+
+	private Animation m_MerchantBattleAnimation;
+
+	private UIInputTrigger m_MerchantBattleTrigger;
+
+	private HotspotGameData m_MerchantBattle;
+
+	private HotspotGameData m_PendingMerchantBattle;
+
+	private void SetUpMerchantBattleButton()
+	{
+		m_MerchantBattle = m_MenuType == ShopMenuType.Merchant ? MerchantStall.GetBeatenGate(m_hotspot) : null;
+		if (m_MerchantBattle == null)
+		{
+			if (m_MerchantBattleButton != null)
+			{
+				m_MerchantBattleButton.SetActive(false);
+			}
+			return;
+		}
+		if (m_MerchantBattleButton == null && m_BackButton != null)
+		{
+			// 3_Back (anchor) / Animation / Button_Back.
+			var backRoot = m_BackButtonAnimation.transform.parent;
+			m_MerchantBattleButton = Instantiate(backRoot.gameObject, backRoot.parent);
+			m_MerchantBattleButton.name = "3_MerchantBattle";
+			m_MerchantBattleButton.transform.localPosition = backRoot.localPosition + m_MerchantBattleButtonOffset;
+			m_MerchantBattleButton.transform.localScale = backRoot.localScale;
+			m_MerchantBattleAnimation = m_MerchantBattleButton.transform.Find(m_BackButtonAnimation.name).GetComponent<Animation>();
+			m_MerchantBattleTrigger = m_MerchantBattleButton.GetComponentInChildren<UIInputTrigger>(true);
+			m_MerchantBattleTrigger.Clicked += m_MerchantBattle_Clicked;
+			foreach (var sprite in m_MerchantBattleButton.GetComponentsInChildren<UISprite>(true))
+			{
+				if (sprite.spriteName == "Back")
+				{
+					sprite.spriteName = "StartBattle";
+					sprite.MakePixelPerfect();
+				}
+			}
+		}
+		if (m_MerchantBattleButton != null)
+		{
+			m_MerchantBattleButton.SetActive(true);
+			m_MerchantBattleAnimation.Play("BackButton_Enter");
+		}
+	}
+
+	private void m_MerchantBattle_Clicked()
+	{
+		if (m_MerchantBattle == null || m_IsLeaving)
+		{
+			return;
+		}
+		DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.HideAllTooltips();
+		m_PendingMerchantBattle = m_MerchantBattle;
+		Leave();
+	}
+
 	private void m_BackButton_Clicked()
 	{
 		if (this.BackButtonPressed != null)
@@ -872,6 +980,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		{
 			m_BackButton.Clicked -= m_BackButton_Clicked;
 		}
+		if (m_MerchantBattleTrigger)
+		{
+			m_MerchantBattleTrigger.Clicked -= m_MerchantBattle_Clicked;
+		}
 		if (m_SkipButton)
 		{
 			m_SkipButton.Clicked -= m_SkipButton_Clicked;
@@ -892,6 +1004,11 @@ public class WorldMapShopMenuUI : MonoBehaviour
 
 	private void OnDisable()
 	{
+		if (m_MenuResourceNode != null)
+		{
+			m_MenuResourceNode.ReturnToMap();
+			m_MenuResourceNode = null;
+		}
 		// Deactivation stops the refresh coroutine, so reset its state for the next Enter.
 		m_IsRefreshing = false;
 		m_RefreshPending = false;

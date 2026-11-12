@@ -402,6 +402,12 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
+  - NameId: SkillFX_Blessing_SplitDamageLink
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/8_Blessings/SkillFX_Blessing_SplitDamageLink
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
   - NameId: SkillFX_Blessing_HealOverTime
     AssetLoadingType: 0
     Path: Prefabs/5_Skills/8_Blessings/SkillFX_Blessing_HealOverTime

@@ -1,0 +1,445 @@
+{
+ "kind": "existing",
+ "id": "pig_king_dracula",
+ "name": "Dracula King Pig",
+ "rig": "KingPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "e96119f541d54b243afe42090f52bfb9:Headgear",
+     "name": "Headgear",
+     "item": "Headgear",
+     "w": 114,
+     "h": 222,
+     "pivot": [
+      -0.02,
+      -0.44
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "2fd092ecce56efd41a5b3d076519b5de:OffHand_Dracula",
+     "name": "OffHand_Dracula",
+     "item": "OffHand_Dracula",
+     "w": 388,
+     "h": 206,
+     "pivot": [
+      0,
+      -0.3701493
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "gb6d6e89",
+     "src": "2fd092ecce56efd41a5b3d076519b5de:OffHand_Dracula_Back",
+     "name": "OffHand_Dracula_Back",
+     "item": "OffHand_Dracula",
+     "w": 382,
+     "h": 179,
+     "pivot": [
+      -0.004031554,
+      -0.4804081
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "gb6d6e89"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_f7aab",
+   "origin": "pig_attack_kingpig_dracula_01",
+   "type": "Attack",
+   "source": "pig_attack_kingpig_dracula_01",
+   "name": "Cursed Bite",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 30,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 0,
+    "dot_heal_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_8}": {
+     "expr": "((p(\"dot_heal_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_9}": {
+     "expr": "(p(\"dot_damage_in_percent\"))"
+    }
+   },
+   "template": "AttackAndApplyDotAndHealSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_d2968",
+   "origin": "pig_attack_kingpig_dracula_02",
+   "type": "Attack",
+   "source": "pig_attack_kingpig_dracula_02",
+   "name": "Bat Swarm",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 300,
+    "charge": 3,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_c2e38",
+   "origin": "pig_passive_kingpig_dracula_01",
+   "type": "Passive",
+   "source": "pig_passive_kingpig_dracula_01",
+   "name": "Sweet Candy",
+   "desc": "[0000ff]Passive:[-] All pigs are healed by [00a800]{value_3}%[-] of their maximum health. Every [ff0000]{value_2}[-] turns.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Passive_01",
+   "icon": "SweetCandy",
+   "params": {
+    "percentage": 10,
+    "delay_in_turns": 3,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"fixed_heal\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"delay_in_turns\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"percentage\"))"
+    }
+   },
+   "template": "HealOverTime",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 550,
+  "attack": 20,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_king_dracula",
+  "fingerprint": "f6becceccd31661a9a806ad8149e3e870c0ad845",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_kingpig_dracula_01",
+     "pig_attack_kingpig_dracula_02",
+     "pig_attack_kingpig_dracula_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Dracula King Pig",
+   "rig": "KingPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "e96119f541d54b243afe42090f52bfb9:Headgear",
+       "name": "Headgear",
+       "item": "Headgear",
+       "w": 114,
+       "h": 222,
+       "pivot": [
+        -0.02,
+        -0.44
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "2fd092ecce56efd41a5b3d076519b5de:OffHand_Dracula",
+       "name": "OffHand_Dracula",
+       "item": "OffHand_Dracula",
+       "w": 388,
+       "h": 206,
+       "pivot": [
+        0,
+        -0.3701493
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    },
+    "OffHand_Back": {
+     "layers": [
+      {
+       "uid": "gb6d6e89",
+       "src": "2fd092ecce56efd41a5b3d076519b5de:OffHand_Dracula_Back",
+       "name": "OffHand_Dracula_Back",
+       "item": "OffHand_Dracula",
+       "w": 382,
+       "h": 179,
+       "pivot": [
+        -0.004031554,
+        -0.4804081
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "gb6d6e89"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 550,
+    "attack": 20,
+    "sizeType": "Boss",
+    "sizeScale": 1,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_f7aab",
+     "origin": "pig_attack_kingpig_dracula_01",
+     "type": "Attack",
+     "source": "pig_attack_kingpig_dracula_01",
+     "name": "Cursed Bite",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 30,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 0,
+      "dot_heal_in_percent": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_8}": {
+       "expr": "((p(\"dot_heal_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_9}": {
+       "expr": "(p(\"dot_damage_in_percent\"))"
+      }
+     },
+     "template": "AttackAndApplyDotAndHealSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_d2968",
+     "origin": "pig_attack_kingpig_dracula_02",
+     "type": "Attack",
+     "source": "pig_attack_kingpig_dracula_02",
+     "name": "Bat Swarm",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 300,
+      "charge": 3,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_c2e38",
+     "origin": "pig_passive_kingpig_dracula_01",
+     "type": "Passive",
+     "source": "pig_passive_kingpig_dracula_01",
+     "name": "Sweet Candy",
+     "desc": "[0000ff]Passive:[-] All pigs are healed by [00a800]{value_3}%[-] of their maximum health. Every [ff0000]{value_2}[-] turns.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Passive_01",
+     "icon": "SweetCandy",
+     "params": {
+      "percentage": 10,
+      "delay_in_turns": 3,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"fixed_heal\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"delay_in_turns\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"percentage\"))"
+      }
+     },
+     "template": "HealOverTime",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

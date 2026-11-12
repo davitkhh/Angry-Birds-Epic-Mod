@@ -1,0 +1,845 @@
+{
+ "kind": "existing",
+ "id": "pig_forge_flying_pig",
+ "name": "Flying Pig",
+ "rig": "PigDrone",
+ "variant": "",
+ "slots": {
+  "Body": {
+   "layers": [
+    {
+     "uid": "gac101b3",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Body",
+     "name": "Forge_flying_pig__Body",
+     "item": "Forge_flying_pig",
+     "w": 123,
+     "h": 112,
+     "pivot": [
+      -0.02186427,
+      -0.5668038
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gac101b3"
+  },
+  "Eye_Left": {
+   "layers": [
+    {
+     "uid": "gbf7681f",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eye_Left",
+     "name": "Forge_flying_pig__Eye_Left",
+     "item": "Forge_flying_pig",
+     "w": 15,
+     "h": 22,
+     "pivot": [
+      -0.7329264,
+      -2.295909
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gbf7681f"
+  },
+  "Eye_Right": {
+   "layers": [
+    {
+     "uid": "ga35ee6e",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eye_Right",
+     "name": "Forge_flying_pig__Eye_Right",
+     "item": "Forge_flying_pig",
+     "w": 21,
+     "h": 22,
+     "pivot": [
+      -0.4674908,
+      -2.369669
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "ga35ee6e"
+  },
+  "Eyebrow_Left": {
+   "layers": [
+    {
+     "uid": "gfcc4d7e",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eyebrow_Left",
+     "name": "Forge_flying_pig__Eyebrow_Left",
+     "item": "Forge_flying_pig",
+     "w": 24,
+     "h": 16,
+     "pivot": [
+      -0.3357666,
+      -3.726757
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gfcc4d7e"
+  },
+  "Eyebrow_Right": {
+   "layers": [
+    {
+     "uid": "g66c6ec4",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eyebrow_Right",
+     "name": "Forge_flying_pig__Eyebrow_Right",
+     "item": "Forge_flying_pig",
+     "w": 34,
+     "h": 17,
+     "pivot": [
+      -0.4848812,
+      -3.137306
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g66c6ec4"
+  },
+  "Lid_Left": {
+   "layers": [],
+   "hidden": true
+  },
+  "Lid_Right": {
+   "layers": [],
+   "hidden": true
+  },
+  "Mouth": {
+   "layers": [
+    {
+     "uid": "gd39f272",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Mouth",
+     "name": "Forge_flying_pig__Mouth",
+     "item": "Forge_flying_pig",
+     "w": 24,
+     "h": 18,
+     "pivot": [
+      -0.3261839,
+      -2.881111
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gd39f272"
+  },
+  "Propeller": {
+   "layers": [],
+   "hidden": true
+  },
+  "PropellerShaft": {
+   "layers": [
+    {
+     "uid": "gbe5c1e9",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__PropellerShaft",
+     "name": "Forge_flying_pig__PropellerShaft",
+     "item": "Forge_flying_pig",
+     "w": 24,
+     "h": 18,
+     "pivot": [
+      -2.447435,
+      1.103938
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gbe5c1e9"
+  },
+  "Pupil_Left": {
+   "layers": [
+    {
+     "uid": "g185db4d",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Pupil_Left",
+     "name": "Forge_flying_pig__Pupil_Left",
+     "item": "Forge_flying_pig",
+     "w": 8,
+     "h": 8,
+     "pivot": [
+      -1.658236,
+      -6.26
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g185db4d"
+  },
+  "Pupil_Right": {
+   "layers": [
+    {
+     "uid": "g9ac1d58",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Pupil_Right",
+     "name": "Forge_flying_pig__Pupil_Right",
+     "item": "Forge_flying_pig",
+     "w": 7,
+     "h": 7,
+     "pivot": [
+      -0.985292,
+      -7.47613
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g9ac1d58"
+  },
+  "Shadow": {
+   "layers": [
+    {
+     "uid": "g3f39588",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Shadow",
+     "name": "Forge_flying_pig__Shadow",
+     "item": "Forge_flying_pig",
+     "w": 64,
+     "h": 24,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g3f39588"
+  },
+  "Snout": {
+   "layers": [
+    {
+     "uid": "gd49e37b",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Snout",
+     "name": "Forge_flying_pig__Snout",
+     "item": "Forge_flying_pig",
+     "w": 49,
+     "h": 43,
+     "pivot": [
+      -0.2439513,
+      -1.139767
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gd49e37b"
+  },
+  "Tail": {
+   "layers": [
+    {
+     "uid": "gf492349",
+     "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Tail",
+     "name": "Forge_flying_pig__Tail",
+     "item": "Forge_flying_pig",
+     "w": 227,
+     "h": 85,
+     "pivot": [
+      0.2097703,
+      -0.9367571
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gf492349"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_9ab56",
+   "origin": "pig_attack_forge_flying_pig_angelic_side_eye",
+   "type": "Attack",
+   "source": "pig_attack_forge_flying_pig_angelic_side_eye",
+   "name": "Angelic Side-Eye",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Pigs attacking this target regain [00a800]{value_7}%[-] of their maximum health. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "AngelicTouch",
+   "params": {
+    "damage_in_percent": 70,
+    "health_in_percent": 10,
+    "chance": 100,
+    "attack_count": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"health_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "AttackAndApplyHealOnAttackSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_a806b",
+   "origin": "pig_attack_minion_stickpig_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_stickpig_02",
+   "name": "Stumble",
+   "desc": "The pig stumbles and does nothing. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "tumble": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_d9afb",
+   "origin": "pig_passive_forge_flying_pig_pie_in_the_sky",
+   "type": "Passive",
+   "source": "pig_passive_forge_flying_pig_pie_in_the_sky",
+   "name": "Pie in the Sky",
+   "desc": "Can only be hit by ranged attacks",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {},
+   "values": {},
+   "template": "ImmunityToMelee",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 70,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_forge_flying_pig",
+  "fingerprint": "ce5784e727398c0b82527c081ba9aa752299513e",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_forge_flying_pig_angelic_side_eye"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_minion_stickpig_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Flying Pig",
+   "rig": "PigDrone",
+   "variant": "",
+   "slots": {
+    "Body": {
+     "layers": [
+      {
+       "uid": "gac101b3",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Body",
+       "name": "Forge_flying_pig__Body",
+       "item": "Forge_flying_pig",
+       "w": 123,
+       "h": 112,
+       "pivot": [
+        -0.02186427,
+        -0.5668038
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gac101b3"
+    },
+    "Eye_Left": {
+     "layers": [
+      {
+       "uid": "gbf7681f",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eye_Left",
+       "name": "Forge_flying_pig__Eye_Left",
+       "item": "Forge_flying_pig",
+       "w": 15,
+       "h": 22,
+       "pivot": [
+        -0.7329264,
+        -2.295909
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gbf7681f"
+    },
+    "Eye_Right": {
+     "layers": [
+      {
+       "uid": "ga35ee6e",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eye_Right",
+       "name": "Forge_flying_pig__Eye_Right",
+       "item": "Forge_flying_pig",
+       "w": 21,
+       "h": 22,
+       "pivot": [
+        -0.4674908,
+        -2.369669
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "ga35ee6e"
+    },
+    "Eyebrow_Left": {
+     "layers": [
+      {
+       "uid": "gfcc4d7e",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eyebrow_Left",
+       "name": "Forge_flying_pig__Eyebrow_Left",
+       "item": "Forge_flying_pig",
+       "w": 24,
+       "h": 16,
+       "pivot": [
+        -0.3357666,
+        -3.726757
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gfcc4d7e"
+    },
+    "Eyebrow_Right": {
+     "layers": [
+      {
+       "uid": "g66c6ec4",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Eyebrow_Right",
+       "name": "Forge_flying_pig__Eyebrow_Right",
+       "item": "Forge_flying_pig",
+       "w": 34,
+       "h": 17,
+       "pivot": [
+        -0.4848812,
+        -3.137306
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g66c6ec4"
+    },
+    "Lid_Left": {
+     "layers": [],
+     "hidden": true
+    },
+    "Lid_Right": {
+     "layers": [],
+     "hidden": true
+    },
+    "Mouth": {
+     "layers": [
+      {
+       "uid": "gd39f272",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Mouth",
+       "name": "Forge_flying_pig__Mouth",
+       "item": "Forge_flying_pig",
+       "w": 24,
+       "h": 18,
+       "pivot": [
+        -0.3261839,
+        -2.881111
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gd39f272"
+    },
+    "Propeller": {
+     "layers": [],
+     "hidden": true
+    },
+    "PropellerShaft": {
+     "layers": [
+      {
+       "uid": "gbe5c1e9",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__PropellerShaft",
+       "name": "Forge_flying_pig__PropellerShaft",
+       "item": "Forge_flying_pig",
+       "w": 24,
+       "h": 18,
+       "pivot": [
+        -2.447435,
+        1.103938
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gbe5c1e9"
+    },
+    "Pupil_Left": {
+     "layers": [
+      {
+       "uid": "g185db4d",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Pupil_Left",
+       "name": "Forge_flying_pig__Pupil_Left",
+       "item": "Forge_flying_pig",
+       "w": 8,
+       "h": 8,
+       "pivot": [
+        -1.658236,
+        -6.26
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g185db4d"
+    },
+    "Pupil_Right": {
+     "layers": [
+      {
+       "uid": "g9ac1d58",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Pupil_Right",
+       "name": "Forge_flying_pig__Pupil_Right",
+       "item": "Forge_flying_pig",
+       "w": 7,
+       "h": 7,
+       "pivot": [
+        -0.985292,
+        -7.47613
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g9ac1d58"
+    },
+    "Shadow": {
+     "layers": [
+      {
+       "uid": "g3f39588",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Shadow",
+       "name": "Forge_flying_pig__Shadow",
+       "item": "Forge_flying_pig",
+       "w": 64,
+       "h": 24,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g3f39588"
+    },
+    "Snout": {
+     "layers": [
+      {
+       "uid": "gd49e37b",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Snout",
+       "name": "Forge_flying_pig__Snout",
+       "item": "Forge_flying_pig",
+       "w": 49,
+       "h": 43,
+       "pivot": [
+        -0.2439513,
+        -1.139767
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gd49e37b"
+    },
+    "Tail": {
+     "layers": [
+      {
+       "uid": "gf492349",
+       "src": "02ba9cfaa96945c689444bad20a5c37f:Forge_flying_pig__Tail",
+       "name": "Forge_flying_pig__Tail",
+       "item": "Forge_flying_pig",
+       "w": 227,
+       "h": 85,
+       "pivot": [
+        0.2097703,
+        -0.9367571
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "gf492349"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 70,
+    "attack": 12,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_9ab56",
+     "origin": "pig_attack_forge_flying_pig_angelic_side_eye",
+     "type": "Attack",
+     "source": "pig_attack_forge_flying_pig_angelic_side_eye",
+     "name": "Angelic Side-Eye",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Pigs attacking this target regain [00a800]{value_7}%[-] of their maximum health. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "AngelicTouch",
+     "params": {
+      "damage_in_percent": 70,
+      "health_in_percent": 10,
+      "chance": 100,
+      "attack_count": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"health_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "AttackAndApplyHealOnAttackSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_a806b",
+     "origin": "pig_attack_minion_stickpig_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_stickpig_02",
+     "name": "Stumble",
+     "desc": "The pig stumbles and does nothing. Stupid pig.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "tumble": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_chance\"))"
+      }
+     },
+     "template": "DoNothingSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_d9afb",
+     "origin": "pig_passive_forge_flying_pig_pie_in_the_sky",
+     "type": "Passive",
+     "source": "pig_passive_forge_flying_pig_pie_in_the_sky",
+     "name": "Pie in the Sky",
+     "desc": "Can only be hit by ranged attacks",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {},
+     "values": {},
+     "template": "ImmunityToMelee",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

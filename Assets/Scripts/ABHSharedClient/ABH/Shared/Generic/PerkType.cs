@@ -31,6 +31,7 @@ namespace ABH.Shared.Generic
 		Brilliance,
 		Dynamite,
 		GroundZero,
-		Rally
+		Rally,
+		Hype
 	}
 }

@@ -1,0 +1,439 @@
+{
+ "kind": "existing",
+ "id": "pig_knight_royal_guard_boss",
+ "name": "Royal Bodyguard",
+ "rig": "PigKnight",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoyalGuard",
+     "name": "Headgear_RoyalGuard",
+     "item": "Headgear_RoyalGuard",
+     "w": 241,
+     "h": 264,
+     "pivot": [
+      -0.0053571425,
+      -0.13937703
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoyalGuard_Back",
+     "name": "Headgear_RoyalGuard_Back",
+     "item": "Headgear_RoyalGuard",
+     "w": 144,
+     "h": 81,
+     "pivot": [
+      0.19821429,
+      0.3666667
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_RoyalGuard",
+     "name": "MainHand_RoyalGuard",
+     "item": "MainHand_RoyalGuard",
+     "w": 262,
+     "h": 127,
+     "pivot": [
+      -0.34821427,
+      0.0055258716
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_RoyalGuard",
+     "name": "OffHand_RoyalGuard",
+     "item": "OffHand_RoyalGuard",
+     "w": 128,
+     "h": 140,
+     "pivot": [
+      -0.0053571425,
+      -0.09107142
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_dc80f",
+   "origin": "pig_attack_knight_royal_guard_boss",
+   "type": "Attack",
+   "source": "pig_attack_knight_royal_guard_boss",
+   "name": "Recovering Strike",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "heal": 200
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithLeech",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_5c0e8",
+   "origin": "pig_support_knight_royal_guard_boss",
+   "type": "Support",
+   "source": "pig_support_knight_royal_guard_boss",
+   "name": "Assault",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Attacks random targets [ff0000]{value_1}[-] times.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_01",
+   "icon": "SpeedOfLight",
+   "params": {
+    "attack_count": 3,
+    "damage_in_percent": 100,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"attack_count\")))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "AttackHailSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_5f17f",
+   "origin": "pig_passive_ironclad",
+   "type": "Passive",
+   "source": "pig_passive_ironclad",
+   "name": "Ironclad",
+   "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 22,
+    "lower_or_higher": -1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 750,
+  "attack": 50,
+  "sizeType": "Large",
+  "sizeScale": 1.33,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_01_defeated_gold": 1,
+   "loot_pig_boss_01_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_knight_royal_guard_boss",
+  "fingerprint": "1dd8b1890e52199fe59e38fb12c98d2acf29061d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_support_knight_royal_guard_boss"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Royal Bodyguard",
+   "rig": "PigKnight",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoyalGuard",
+       "name": "Headgear_RoyalGuard",
+       "item": "Headgear_RoyalGuard",
+       "w": 241,
+       "h": 264,
+       "pivot": [
+        -0.0053571425,
+        -0.13937703
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoyalGuard_Back",
+       "name": "Headgear_RoyalGuard_Back",
+       "item": "Headgear_RoyalGuard",
+       "w": 144,
+       "h": 81,
+       "pivot": [
+        0.19821429,
+        0.3666667
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_RoyalGuard",
+       "name": "MainHand_RoyalGuard",
+       "item": "MainHand_RoyalGuard",
+       "w": 262,
+       "h": 127,
+       "pivot": [
+        -0.34821427,
+        0.0055258716
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_RoyalGuard",
+       "name": "OffHand_RoyalGuard",
+       "item": "OffHand_RoyalGuard",
+       "w": 128,
+       "h": 140,
+       "pivot": [
+        -0.0053571425,
+        -0.09107142
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 750,
+    "attack": 50,
+    "sizeType": "Large",
+    "sizeScale": 1.33,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig_boss_01_defeated_gold": 1,
+     "loot_pig_boss_01_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_dc80f",
+     "origin": "pig_attack_knight_royal_guard_boss",
+     "type": "Attack",
+     "source": "pig_attack_knight_royal_guard_boss",
+     "name": "Recovering Strike",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "heal": 200
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithLeech",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_5c0e8",
+     "origin": "pig_support_knight_royal_guard_boss",
+     "type": "Support",
+     "source": "pig_support_knight_royal_guard_boss",
+     "name": "Assault",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Attacks random targets [ff0000]{value_1}[-] times.",
+     "color": "8CCB50",
+     "atlas": "Skills_Birds_01",
+     "icon": "SpeedOfLight",
+     "params": {
+      "attack_count": 3,
+      "damage_in_percent": 100,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"attack_count\")))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "AttackHailSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_5f17f",
+     "origin": "pig_passive_ironclad",
+     "type": "Passive",
+     "source": "pig_passive_ironclad",
+     "name": "Ironclad",
+     "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 22,
+      "lower_or_higher": -1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -154,6 +154,7 @@ public static class SmoothMovesRigRebuilder
 				return;
 			}
 			var references = RecordBoneReferences(root, bones.transform);
+			var atlasesBefore = ReadAtlases(bones);
 			var buildHelper = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType("SmoothMoves.BuildHelper")).First(t => t != null);
 			if (builtData.Add(data))
 			{
@@ -162,7 +163,15 @@ public static class SmoothMovesRigRebuilder
 				log.AppendLine("built data " + AssetDatabase.GetAssetPath(data) + " (" + args[3] + ")");
 			}
 			buildHelper.GetMethod("UpdateBoneAnimation", Statics).Invoke(null, new object[] { bones });
+			// The build can leave animationData null, and then the prefab can't be built again (PigPirate, 2026-11-11).
+			var dataField = bones.GetType().GetField("animationData", Fields);
+			if (dataField.GetValue(bones) as Object == null)
+			{
+				dataField.SetValue(bones, data);
+				log.AppendLine("  animationData re-assigned");
+			}
 			log.AppendLine(prefabPath + ": rebuilt");
+			KeepAtlases(root, bones, atlasesBefore, log);
 			RestoreBoneReferences(references, bones.transform, log);
 			PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
 			log.AppendLine(prefabPath + ": saved");
@@ -170,6 +179,94 @@ public static class SmoothMovesRigRebuilder
 		finally
 		{
 			PrefabUtility.UnloadPrefabContents(root);
+		}
+	}
+
+	private static List<Object> ReadAtlases(Component bones)
+	{
+		var list = new SerializedObject(bones).FindProperty("textureAtlases");
+		var result = new List<Object>();
+		for (var i = 0; i < list.arraySize; i++)
+		{
+			result.Add(list.GetArrayElementAtIndex(i).objectReferenceValue);
+		}
+		return result;
+	}
+
+	// A build sets the atlas list (and every trigger frame's atlases) to the high-res atlases the data uses. The prefab's
+	// own list wins: a _low prefab gets its X_low counterparts back (trigger frames and renderer materials too), and
+	// swap-only atlases added by hand (pirate variants, Forge) are appended again.
+	private static void KeepAtlases(GameObject root, Component bones, List<Object> before, StringBuilder log)
+	{
+		before = before.Where(a => a != null).ToList();
+		var swap = new Dictionary<Object, Object>();
+		foreach (var atlas in ReadAtlases(bones).Where(a => a != null && !before.Contains(a)))
+		{
+			var counterpart = before.FirstOrDefault(a => a.name == atlas.name + "_low" || a.name + "_low" == atlas.name);
+			if (counterpart != null)
+			{
+				swap[atlas] = counterpart;
+			}
+			else
+			{
+				log.AppendLine("  new atlas from the data: " + atlas.name);
+			}
+		}
+		var so = new SerializedObject(bones);
+		var remapped = 0;
+		var triggers = so.FindProperty("triggerFrames");
+		for (var t = 0; t < triggers.arraySize; t++)
+		{
+			var frameBones = triggers.GetArrayElementAtIndex(t).FindPropertyRelative("triggerFrameBones");
+			for (var b = 0; b < frameBones.arraySize; b++)
+			{
+				foreach (var field in new[] { "atlas", "originalAtlas" })
+				{
+					var property = frameBones.GetArrayElementAtIndex(b).FindPropertyRelative(field);
+					Object counterpart;
+					if (property != null && property.objectReferenceValue != null && swap.TryGetValue(property.objectReferenceValue, out counterpart))
+					{
+						property.objectReferenceValue = counterpart;
+						remapped++;
+					}
+				}
+			}
+		}
+		var list = so.FindProperty("textureAtlases");
+		var atlases = new List<Object>();
+		for (var i = 0; i < list.arraySize; i++)
+		{
+			Object counterpart;
+			var atlas = list.GetArrayElementAtIndex(i).objectReferenceValue;
+			atlases.Add(atlas != null && swap.TryGetValue(atlas, out counterpart) ? counterpart : atlas);
+		}
+		var appended = before.Where(a => !atlases.Contains(a)).ToList();
+		atlases.AddRange(appended);
+		list.arraySize = atlases.Count;
+		for (var i = 0; i < atlases.Count; i++)
+		{
+			list.GetArrayElementAtIndex(i).objectReferenceValue = atlases[i];
+		}
+		so.ApplyModifiedPropertiesWithoutUndo();
+		var materials = swap.ToDictionary(p => new SerializedObject(p.Key).FindProperty("material").objectReferenceValue, p => new SerializedObject(p.Value).FindProperty("material").objectReferenceValue);
+		var materialsSwapped = 0;
+		foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
+		{
+			var shared = renderer.sharedMaterials;
+			for (var i = 0; i < shared.Length; i++)
+			{
+				Object material;
+				if (shared[i] != null && materials.TryGetValue(shared[i], out material) && material != null)
+				{
+					shared[i] = (Material)material;
+					materialsSwapped++;
+				}
+			}
+			renderer.sharedMaterials = shared;
+		}
+		if (swap.Count > 0 || appended.Count > 0)
+		{
+			log.AppendLine("  atlases kept: " + swap.Count + " swapped back (" + remapped + " trigger refs, " + materialsSwapped + " materials), appended " + string.Join(", ", appended.Select(a => a.name).ToArray()));
 		}
 	}
 

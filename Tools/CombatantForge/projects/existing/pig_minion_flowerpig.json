@@ -1,0 +1,393 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_flowerpig",
+ "name": "Flower Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_FlowerPig",
+     "name": "Headgear_FlowerPig",
+     "item": "Headgear_FlowerPig",
+     "w": 169,
+     "h": 79,
+     "pivot": [
+      -0.12857142,
+      -0.70480335
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_FlowerPig_Back",
+     "name": "Headgear_FlowerPig_Back",
+     "item": "Headgear_FlowerPig",
+     "w": 51,
+     "h": 22,
+     "pivot": [
+      -1.7554967,
+      -0.9953688
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_FlowerPig",
+     "name": "MainHand_FlowerPig",
+     "item": "MainHand_FlowerPig",
+     "w": 160,
+     "h": 48,
+     "pivot": [
+      -0.3375,
+      -0.4017857
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_09121",
+   "origin": "pig_attack_minion_flowerpig",
+   "type": "Attack",
+   "source": "pig_attack_minion_flowerpig",
+   "name": "Blossom Storm",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "reduction_in_percent": 25,
+    "chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_372e0",
+   "origin": "pig_support_minion_flowerpig",
+   "type": "Support",
+   "source": "pig_support_minion_flowerpig",
+   "name": "Heyday",
+   "desc": "Increases attack power of all allies by [00a800]{value_1}%[-]. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "all": 1,
+    "damage_increase": 25
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"damage_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_friend\"))"
+    }
+   },
+   "template": "IncreaseDamageWithEffectsSkill",
+   "duration": 2,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 140,
+  "attack": 17,
+  "sizeType": "Large",
+  "sizeScale": 1.2,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_flowerpig",
+  "fingerprint": "7dc7821e2f7743349eca5378bf41af3711c154e2",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_support_minion_flowerpig",
+     "pig_attack_minion_flowerpig",
+     "pig_attack_minion_flowerpig"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_minion_flowerpig"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Flower Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_FlowerPig",
+       "name": "Headgear_FlowerPig",
+       "item": "Headgear_FlowerPig",
+       "w": 169,
+       "h": 79,
+       "pivot": [
+        -0.12857142,
+        -0.70480335
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_FlowerPig_Back",
+       "name": "Headgear_FlowerPig_Back",
+       "item": "Headgear_FlowerPig",
+       "w": 51,
+       "h": 22,
+       "pivot": [
+        -1.7554967,
+        -0.9953688
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_FlowerPig",
+       "name": "MainHand_FlowerPig",
+       "item": "MainHand_FlowerPig",
+       "w": 160,
+       "h": 48,
+       "pivot": [
+        -0.3375,
+        -0.4017857
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 140,
+    "attack": 17,
+    "sizeType": "Large",
+    "sizeScale": 1.2,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_09121",
+     "origin": "pig_attack_minion_flowerpig",
+     "type": "Attack",
+     "source": "pig_attack_minion_flowerpig",
+     "name": "Blossom Storm",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "reduction_in_percent": 25,
+      "chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_372e0",
+     "origin": "pig_support_minion_flowerpig",
+     "type": "Support",
+     "source": "pig_support_minion_flowerpig",
+     "name": "Heyday",
+     "desc": "Increases attack power of all allies by [00a800]{value_1}%[-]. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "all": 1,
+      "damage_increase": 25
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"damage_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_friend\"))"
+      }
+     },
+     "template": "IncreaseDamageWithEffectsSkill",
+     "duration": 2,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

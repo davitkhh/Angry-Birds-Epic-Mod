@@ -1,0 +1,421 @@
+{
+ "kind": "existing",
+ "id": "pig_knight_icecave_hard",
+ "name": "Ice Lord",
+ "rig": "PigKnight",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_IceChevallier",
+     "name": "Headgear_IceChevallier",
+     "item": "Headgear_IceChevallier",
+     "w": 201,
+     "h": 227,
+     "pivot": [
+      -0.04,
+      -0.27275407
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_IceChevallier",
+     "name": "MainHand_IceChevallier",
+     "item": "MainHand_IceChevallier",
+     "w": 260,
+     "h": 100,
+     "pivot": [
+      -0.38571426,
+      -0.034821425
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_IceChevallier",
+     "name": "OffHand_IceChevallier",
+     "item": "OffHand_IceChevallier",
+     "w": 104,
+     "h": 158,
+     "pivot": [
+      0.06346154,
+      -0.08164558
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_2972b",
+   "origin": "pig_attack_icecave_knight",
+   "type": "Attack",
+   "source": "pig_attack_icecave_knight",
+   "name": "Winter is Coming",
+   "desc": "[00a800]{value_3}%[-] chance to immediately remove helpful effects from target. Deals [ff0000]{value_1}[-] damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "purge_chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"purge_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"purge_chance\"))"
+    }
+   },
+   "template": "AttackWithPurgeSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_b5ad8",
+   "origin": "pig_attack_icecave_stun_50chance",
+   "type": "Attack",
+   "source": "pig_attack_icecave_stun_50chance",
+   "name": "Sticky Smite",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_3}%[-] chance to freeze the target. Lasts [ff0000]{value_2}[-] turn. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 80,
+    "chance": 50,
+    "duration": 1,
+    "use_skill_asset": 1,
+    "freeze": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_5f17f",
+   "origin": "pig_passive_ironclad",
+   "type": "Passive",
+   "source": "pig_passive_ironclad",
+   "name": "Ironclad",
+   "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 22,
+    "lower_or_higher": -1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 410,
+  "attack": 29,
+  "sizeType": "Boss",
+  "sizeScale": 1.35,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_knight_icecave_hard",
+  "fingerprint": "291557049a590bdae0ff6b05f933c4b013051c6c",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_icecave_knight"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_icecave_stun_50chance"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Ice Lord",
+   "rig": "PigKnight",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_IceChevallier",
+       "name": "Headgear_IceChevallier",
+       "item": "Headgear_IceChevallier",
+       "w": 201,
+       "h": 227,
+       "pivot": [
+        -0.04,
+        -0.27275407
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_IceChevallier",
+       "name": "MainHand_IceChevallier",
+       "item": "MainHand_IceChevallier",
+       "w": 260,
+       "h": 100,
+       "pivot": [
+        -0.38571426,
+        -0.034821425
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_IceChevallier",
+       "name": "OffHand_IceChevallier",
+       "item": "OffHand_IceChevallier",
+       "w": 104,
+       "h": 158,
+       "pivot": [
+        0.06346154,
+        -0.08164558
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 410,
+    "attack": 29,
+    "sizeType": "Boss",
+    "sizeScale": 1.35,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_2972b",
+     "origin": "pig_attack_icecave_knight",
+     "type": "Attack",
+     "source": "pig_attack_icecave_knight",
+     "name": "Winter is Coming",
+     "desc": "[00a800]{value_3}%[-] chance to immediately remove helpful effects from target. Deals [ff0000]{value_1}[-] damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "purge_chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"purge_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"purge_chance\"))"
+      }
+     },
+     "template": "AttackWithPurgeSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_b5ad8",
+     "origin": "pig_attack_icecave_stun_50chance",
+     "type": "Attack",
+     "source": "pig_attack_icecave_stun_50chance",
+     "name": "Sticky Smite",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_3}%[-] chance to freeze the target. Lasts [ff0000]{value_2}[-] turn. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 80,
+      "chance": 50,
+      "duration": 1,
+      "use_skill_asset": 1,
+      "freeze": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_5f17f",
+     "origin": "pig_passive_ironclad",
+     "type": "Passive",
+     "source": "pig_passive_ironclad",
+     "name": "Ironclad",
+     "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 22,
+      "lower_or_higher": -1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -440,7 +440,8 @@ public class RageMeterController : MonoBehaviour
 				m_cachedOverCharacterTransform = hitInfo.transform;
 				var cachedOverCharacter = m_cachedOverCharacter;
 				m_cachedOverCharacter = m_cachedOverCharacterTransform.GetComponent<CharacterControllerBattleGroundBase>();
-				if (m_cachedOverCharacter && !m_cachedOverCharacter.GetModel().IsRageAvailiable)
+				// King DJ's Fog Machine: a cursed bird can't use a rage of the kind its forced order forbids.
+				if (m_cachedOverCharacter && (!m_cachedOverCharacter.GetModel().IsRageAvailiable || ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsRageBlocked(m_battleMgr.Model, m_cachedOverCharacter.GetModel())))
 				{
 					m_cachedOverCharacter = null;
 				}
@@ -513,6 +514,12 @@ public class RageMeterController : MonoBehaviour
 		}
 		if (m_battleMgr.Model.m_CurrentRage < 100f)
 		{
+			return false;
+		}
+		if (ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsRageBlocked(m_battleMgr.Model, combatant))
+		{
+			DebugLog.Log("Rage ability blocked by a forced move order");
+			RageUpdateAnimations.Play("RageOMeter_Blocked_Start");
 			return false;
 		}
 		

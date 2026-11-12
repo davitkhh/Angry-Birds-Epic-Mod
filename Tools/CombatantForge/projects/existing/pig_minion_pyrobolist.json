@@ -1,0 +1,383 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_pyrobolist",
+ "name": "Pyrobolist",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Pyrobolist",
+     "name": "Headgear_Pyrobolist",
+     "item": "Headgear_Pyrobolist",
+     "w": 136,
+     "h": 54,
+     "pivot": [
+      -0.15535714,
+      -0.23611112
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Pyrobolist_Back",
+     "name": "Headgear_Pyrobolist_Back",
+     "item": "Headgear_Pyrobolist",
+     "w": 128,
+     "h": 52,
+     "pivot": [
+      -0.19821428,
+      -0.15164834
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Pyrobolist",
+     "name": "MainHand_Pyrobolist",
+     "item": "MainHand_Pyrobolist",
+     "w": 52,
+     "h": 136,
+     "pivot": [
+      -0.41529736,
+      -0.02126654
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_Pyrobolist",
+     "name": "OffHand_Pyrobolist",
+     "item": "OffHand_Pyrobolist",
+     "w": 66,
+     "h": 110,
+     "pivot": [
+      -0.24107142,
+      -0.13017857
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_d6caa",
+   "origin": "pig_attack_minion_pyrobolist",
+   "type": "Attack",
+   "source": "pig_attack_minion_pyrobolist",
+   "name": "Catch it!",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "all": 1,
+    "damage_in_percent": 35,
+    "attack_count": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_8a735",
+   "origin": "pig_passive_high_explosive",
+   "type": "Passive",
+   "source": "pig_passive_high_explosive",
+   "name": "High Explosive",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all if Pyrobolist is defeated.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 55
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"damage_in_percent\")) / 100 * A)"
+    }
+   },
+   "template": "DealDamageOnDefeat",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 150,
+  "attack": 15,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_pyrobolist",
+  "fingerprint": "16b99a1173a7f3121f50421c9091d8f5bcf52a72",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_pyrobolist"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pyrobolist",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Pyrobolist",
+       "name": "Headgear_Pyrobolist",
+       "item": "Headgear_Pyrobolist",
+       "w": 136,
+       "h": 54,
+       "pivot": [
+        -0.15535714,
+        -0.23611112
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Pyrobolist_Back",
+       "name": "Headgear_Pyrobolist_Back",
+       "item": "Headgear_Pyrobolist",
+       "w": 128,
+       "h": 52,
+       "pivot": [
+        -0.19821428,
+        -0.15164834
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Pyrobolist",
+       "name": "MainHand_Pyrobolist",
+       "item": "MainHand_Pyrobolist",
+       "w": 52,
+       "h": 136,
+       "pivot": [
+        -0.41529736,
+        -0.02126654
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_Pyrobolist",
+       "name": "OffHand_Pyrobolist",
+       "item": "OffHand_Pyrobolist",
+       "w": 66,
+       "h": 110,
+       "pivot": [
+        -0.24107142,
+        -0.13017857
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 150,
+    "attack": 15,
+    "sizeType": "Small",
+    "sizeScale": 1.1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_d6caa",
+     "origin": "pig_attack_minion_pyrobolist",
+     "type": "Attack",
+     "source": "pig_attack_minion_pyrobolist",
+     "name": "Catch it!",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "all": 1,
+      "damage_in_percent": 35,
+      "attack_count": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_8a735",
+     "origin": "pig_passive_high_explosive",
+     "type": "Passive",
+     "source": "pig_passive_high_explosive",
+     "name": "High Explosive",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all if Pyrobolist is defeated.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 55
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"damage_in_percent\")) / 100 * A)"
+      }
+     },
+     "template": "DealDamageOnDefeat",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

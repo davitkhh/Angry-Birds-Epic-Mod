@@ -114,8 +114,17 @@
     "{value_1}": {
      "expr": "((p(\"damage_in_percent\")) / 100 * A)"
     },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
     "{value_6}": {
      "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
     }
    },
    "duration": 0
@@ -140,11 +149,20 @@
     "{value_1}": {
      "expr": "((p(\"damage_in_percent\")) / 100 * A)"
     },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
     "{value_6}": {
      "expr": "(p(\"damage_in_percent\"))"
     },
     "{value_7}": {
      "expr": "(p(\"crit_effectiveness_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
     }
    },
    "duration": 0

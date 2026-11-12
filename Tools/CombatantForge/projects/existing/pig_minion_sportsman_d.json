@@ -1,0 +1,400 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_sportsman_d",
+ "name": "Avid Fan",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanD",
+     "name": "Headgear_SportsmanD",
+     "item": "Headgear_SportsmanD",
+     "w": 140,
+     "h": 92,
+     "pivot": [
+      -0.1821429,
+      -0.4099405
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanD_Back",
+     "name": "Headgear_SportsmanD_Back",
+     "item": "Headgear_SportsmanD",
+     "w": 48,
+     "h": 36,
+     "pivot": [
+      0.4830741,
+      -0.7509911
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Squire",
+     "name": "MainHand_Squire",
+     "item": "MainHand_Squire",
+     "w": 140,
+     "h": 50,
+     "pivot": [
+      -0.13928571,
+      -0.09749999
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_SportsmanD",
+     "name": "OffHand_SportsmanD",
+     "item": "OffHand_SportsmanD",
+     "w": 110,
+     "h": 104,
+     "pivot": [
+      -0.225,
+      -0.09349245
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_f2316",
+   "origin": "pig_attack_minion_sportsman_d",
+   "type": "Attack",
+   "source": "pig_attack_minion_sportsman_d",
+   "name": "Fanfare",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_4}x {value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 50,
+    "attack_count": 2,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_dff80",
+   "origin": "pig_support_minion_sportsman_d",
+   "type": "Support",
+   "source": "pig_support_minion_sportsman_d",
+   "name": "Carry the Team",
+   "desc": "Target becomes immune to negative effects and reflects them back. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "chance": 100,
+    "cleanse_on_cast": 0,
+    "target_immune": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    }
+   },
+   "template": "MirrorDebuffsSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 145,
+  "attack": 16,
+  "sizeType": "Small",
+  "sizeScale": 1.2,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_sportsman_d",
+  "fingerprint": "fbae5750fb9392c39c7c04e2862fd2082f7eb1d1",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 65,
+    "ComboChain": [
+     "pig_attack_minion_sportsman_d"
+    ]
+   },
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_support_minion_sportsman_d",
+     "pig_attack_minion_sportsman_d"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Avid Fan",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanD",
+       "name": "Headgear_SportsmanD",
+       "item": "Headgear_SportsmanD",
+       "w": 140,
+       "h": 92,
+       "pivot": [
+        -0.1821429,
+        -0.4099405
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanD_Back",
+       "name": "Headgear_SportsmanD_Back",
+       "item": "Headgear_SportsmanD",
+       "w": 48,
+       "h": 36,
+       "pivot": [
+        0.4830741,
+        -0.7509911
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Squire",
+       "name": "MainHand_Squire",
+       "item": "MainHand_Squire",
+       "w": 140,
+       "h": 50,
+       "pivot": [
+        -0.13928571,
+        -0.09749999
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_SportsmanD",
+       "name": "OffHand_SportsmanD",
+       "item": "OffHand_SportsmanD",
+       "w": 110,
+       "h": 104,
+       "pivot": [
+        -0.225,
+        -0.09349245
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 145,
+    "attack": 16,
+    "sizeType": "Small",
+    "sizeScale": 1.2,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_f2316",
+     "origin": "pig_attack_minion_sportsman_d",
+     "type": "Attack",
+     "source": "pig_attack_minion_sportsman_d",
+     "name": "Fanfare",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_4}x {value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 50,
+      "attack_count": 2,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_dff80",
+     "origin": "pig_support_minion_sportsman_d",
+     "type": "Support",
+     "source": "pig_support_minion_sportsman_d",
+     "name": "Carry the Team",
+     "desc": "Target becomes immune to negative effects and reflects them back. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "chance": 100,
+      "cleanse_on_cast": 0,
+      "target_immune": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      }
+     },
+     "template": "MirrorDebuffsSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

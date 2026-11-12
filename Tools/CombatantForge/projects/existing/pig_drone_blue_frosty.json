@@ -1,0 +1,409 @@
+{
+ "kind": "existing",
+ "id": "pig_drone_blue_frosty",
+ "name": "Frosty",
+ "rig": "PigDrone",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_BlueHunter",
+     "name": "Headgear_BlueHunter",
+     "item": "Headgear_BlueHunter",
+     "w": 128,
+     "h": 64,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "944fb69e523fc284d8461513e658b534:MainHand_AdvBlueHunter",
+     "name": "MainHand_AdvBlueHunter",
+     "item": "MainHand_AdvBlueHunter",
+     "w": 152,
+     "h": 118,
+     "pivot": [
+      -0.36964285,
+      -0.051955048
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:OffHand_AdvBlueHunter",
+     "name": "OffHand_AdvBlueHunter",
+     "item": "OffHand_AdvBlueHunter",
+     "w": 52,
+     "h": 79,
+     "pivot": [
+      -0.08035714,
+      -0.09344485
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_85466",
+   "origin": "pig_attack_drone_frosty_01",
+   "type": "Attack",
+   "source": "pig_attack_drone_frosty_01",
+   "name": "Frost Ray",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_3}%[-] chance to freeze a target covered in water. Lasts [ff0000]{value_2}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance_to_stun_vs_wet": 100,
+    "duration": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 1,
+   "design": ""
+  },
+  {
+   "uid": "a1_a6d72",
+   "origin": "pig_attack_drone_frosty_02",
+   "type": "Attack",
+   "source": "pig_attack_drone_frosty_02",
+   "name": "Douse Targets",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies and makes them wet. Lasts [ff0000]{value_5}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 75,
+    "all": 1,
+    "charge": 2,
+    "increase_in_percent": 50,
+    "use_offhandanim": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "D"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    }
+   },
+   "template": "ApplyWetOnTargets",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_efd05",
+   "origin": "pig_passive_hunter_blue",
+   "type": "Passive",
+   "source": "pig_passive_hunter_blue",
+   "name": "Blue Hunter",
+   "desc": "Blues take [ff0000]{value_3}%[-] damage from attacks.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "bonus_damage_vs_blues": 150
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+    }
+   },
+   "template": "PassiveBonusAgainstBirds",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": true,
+  "projectile": "Projectile_PigDrone_Snowball",
+  "hitEffect": "_Ranged_Projectile",
+  "directProjectile": true
+ },
+ "stats": {
+  "hp": 140,
+  "attack": 18,
+  "sizeType": "Large",
+  "sizeScale": 1.1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_drone_blue_frosty",
+  "fingerprint": "c23f59aeed43a76e5316ec96fa766a6cae0d819a",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_drone_frosty_02",
+     "pig_attack_drone_frosty_01",
+     "pig_attack_drone_frosty_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Frosty",
+   "rig": "PigDrone",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_BlueHunter",
+       "name": "Headgear_BlueHunter",
+       "item": "Headgear_BlueHunter",
+       "w": 128,
+       "h": 64,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "944fb69e523fc284d8461513e658b534:MainHand_AdvBlueHunter",
+       "name": "MainHand_AdvBlueHunter",
+       "item": "MainHand_AdvBlueHunter",
+       "w": 152,
+       "h": 118,
+       "pivot": [
+        -0.36964285,
+        -0.051955048
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "70afebbe7b2b1564b91403a8dfb13904:OffHand_AdvBlueHunter",
+       "name": "OffHand_AdvBlueHunter",
+       "item": "OffHand_AdvBlueHunter",
+       "w": 52,
+       "h": 79,
+       "pivot": [
+        -0.08035714,
+        -0.09344485
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": true,
+    "projectile": "Projectile_PigDrone_Snowball",
+    "hitEffect": "_Ranged_Projectile",
+    "directProjectile": true
+   },
+   "stats": {
+    "hp": 140,
+    "attack": 18,
+    "sizeType": "Large",
+    "sizeScale": 1.1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_85466",
+     "origin": "pig_attack_drone_frosty_01",
+     "type": "Attack",
+     "source": "pig_attack_drone_frosty_01",
+     "name": "Frost Ray",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_3}%[-] chance to freeze a target covered in water. Lasts [ff0000]{value_2}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance_to_stun_vs_wet": 100,
+      "duration": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 1,
+     "design": ""
+    },
+    {
+     "uid": "a1_a6d72",
+     "origin": "pig_attack_drone_frosty_02",
+     "type": "Attack",
+     "source": "pig_attack_drone_frosty_02",
+     "name": "Douse Targets",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies and makes them wet. Lasts [ff0000]{value_5}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 75,
+      "all": 1,
+      "charge": 2,
+      "increase_in_percent": 50,
+      "use_offhandanim": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "D"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      }
+     },
+     "template": "ApplyWetOnTargets",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_efd05",
+     "origin": "pig_passive_hunter_blue",
+     "type": "Passive",
+     "source": "pig_passive_hunter_blue",
+     "name": "Blue Hunter",
+     "desc": "Blues take [ff0000]{value_3}%[-] damage from attacks.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "bonus_damage_vs_blues": 150
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+      }
+     },
+     "template": "PassiveBonusAgainstBirds",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

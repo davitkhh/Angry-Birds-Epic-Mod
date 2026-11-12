@@ -177,7 +177,7 @@
     },
     "BattleParticipants": [
       {
-        "NameId": "pig_minion_rogue_dynamite",
+        "NameId": "pig_minion_rogue_dynamite_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 2.0,
@@ -185,7 +185,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_golden_pig",
+        "NameId": "pig_golden_pig_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
@@ -193,7 +193,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_minion_rogue_dynamite",
+        "NameId": "pig_minion_rogue_dynamite_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
@@ -209,7 +209,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_minion_guard_fork",
+        "NameId": "pig_minion_guard_fork_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
@@ -217,7 +217,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_golden_pig",
+        "NameId": "pig_golden_pig_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
@@ -225,7 +225,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_minion_guard_fork",
+        "NameId": "pig_minion_guard_fork_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 2.0,
@@ -244,7 +244,7 @@
     },
     "BattleParticipants": [
       {
-        "NameId": "pig_knight_guard_yellow",
+        "NameId": "pig_knight_guard_yellow_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 4.0,
@@ -260,7 +260,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_golden_pig",
+        "NameId": "pig_golden_pig_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 2.0,
@@ -1706,6 +1706,25 @@
         "Probability": 1.0,
         "Amount": 2.0,
         "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_007_forge",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_minion_rogue_spin",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 3.0,
+        "Unique": true,
         "ForcePercent": false
       }
     ]

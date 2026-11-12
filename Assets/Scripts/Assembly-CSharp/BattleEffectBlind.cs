@@ -63,6 +63,7 @@ public class BattleEffectBlind : MonoBehaviour
 			m_EffectIcon.spriteName = effect.m_IconAssetId;
 		}
 		m_EffectName.text = effect.m_LocalizedName;
+		ShowStacks(effect.m_Stacks);
 		switch (effect.m_EffectType)
 		{
 		case SkillEffectTypes.Blessing:
@@ -84,5 +85,24 @@ public class BattleEffectBlind : MonoBehaviour
 			m_Background.color = m_SetColor;
 			break;
 		}
+	}
+
+	// "2x" left of the icon for stacked effects (Hype perk); single stacks show nothing
+	private void ShowStacks(int stacks)
+	{
+		if (stacks <= 1 || m_EffectName == null)
+		{
+			return;
+		}
+		var label = Instantiate(m_EffectName.gameObject).GetComponent<UILabel>();
+		label.name = "Stacks";
+		label.transform.parent = transform;
+		label.transform.localScale = Vector3.one;
+		label.rawPivot = UIWidget.Pivot.Right;
+		// The icon's square background spans x = -1..53 of the row
+		label.transform.localPosition = new Vector3(-6f, 0f, m_EffectName.transform.localPosition.z);
+		label.overflowMethod = UILabel.Overflow.ResizeFreely;
+		label.text = stacks + "x";
+		label.MarkAsChanged();
 	}
 }

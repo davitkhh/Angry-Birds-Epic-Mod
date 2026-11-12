@@ -1,0 +1,407 @@
+{
+ "kind": "existing",
+ "id": "pig_pigmies_forest",
+ "name": "Forest Pigmies",
+ "rig": "Pigmies",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_ForestPigmies",
+     "name": "Headgear_ForestPigmies",
+     "item": "Headgear_ForestPigmies",
+     "w": 98,
+     "h": 24,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_ForestPigmies_Back",
+     "name": "Headgear_ForestPigmies_Back",
+     "item": "Headgear_ForestPigmies",
+     "w": 78,
+     "h": 82,
+     "pivot": [
+      -0.25,
+      -0.5
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:MainHand_ForestPigmies",
+     "name": "MainHand_ForestPigmies",
+     "item": "MainHand_ForestPigmies",
+     "w": 131,
+     "h": 29,
+     "pivot": [
+      -0.4767857,
+      -0.22989532
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_bda04",
+   "origin": "pig_attack_pigmies_forest",
+   "type": "Attack",
+   "source": "pig_attack_pigmies_forest",
+   "name": "Stampede",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_92f4d",
+   "origin": "pig_support_pigmies_forest",
+   "type": "Support",
+   "source": "pig_support_pigmies_forest",
+   "name": "Hoard",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Calls Forest Pigmies as support.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_pigmies_forest": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 170,
+  "attack": 7,
+  "sizeType": "Medium",
+  "sizeScale": 1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_pigmies_forest",
+  "fingerprint": "9e711ab6a723393bc6a047b219fb531ded8402a1",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 80,
+    "ComboChain": [
+     "pig_attack_pigmies_forest"
+    ]
+   },
+   {
+    "Percentage": 20,
+    "ComboChain": [
+     "pig_support_pigmies_forest"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Forest Pigmies",
+   "rig": "Pigmies",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_ForestPigmies",
+       "name": "Headgear_ForestPigmies",
+       "item": "Headgear_ForestPigmies",
+       "w": 98,
+       "h": 24,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_ForestPigmies_Back",
+       "name": "Headgear_ForestPigmies_Back",
+       "item": "Headgear_ForestPigmies",
+       "w": 78,
+       "h": 82,
+       "pivot": [
+        -0.25,
+        -0.5
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:MainHand_ForestPigmies",
+       "name": "MainHand_ForestPigmies",
+       "item": "MainHand_ForestPigmies",
+       "w": 131,
+       "h": 29,
+       "pivot": [
+        -0.4767857,
+        -0.22989532
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 170,
+    "attack": 7,
+    "sizeType": "Medium",
+    "sizeScale": 1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_bda04",
+     "origin": "pig_attack_pigmies_forest",
+     "type": "Attack",
+     "source": "pig_attack_pigmies_forest",
+     "name": "Stampede",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_92f4d",
+     "origin": "pig_support_pigmies_forest",
+     "type": "Support",
+     "source": "pig_support_pigmies_forest",
+     "name": "Hoard",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Calls Forest Pigmies as support.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_pigmies_forest": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

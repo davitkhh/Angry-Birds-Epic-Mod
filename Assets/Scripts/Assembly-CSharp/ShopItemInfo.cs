@@ -334,6 +334,13 @@ public class ShopItemInfo
 		case PerkType.Rally:
 			AddValue(values, "PassiveEffect_Vigor", value, "+", "%", Green);
 			break;
+		case PerkType.Hype:
+			AddValue(values, DamageIcon, value, "+", "%", Red);
+			if (value2 >= 2f)
+			{
+				AddValue(values, DamageIcon, Mathf.Floor(value2), "x", string.Empty, Green);
+			}
+			break;
 		case PerkType.Dispel:
 		case PerkType.Guardian:
 			break;

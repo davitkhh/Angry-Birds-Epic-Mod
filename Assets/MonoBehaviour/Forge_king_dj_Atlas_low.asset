@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_king_dj_Atlas_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: b27cf8f5927149f489213bcb7496734a, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.369140625
+    y: 0.876953125
+    width: 0.099609375
+    height: 0.123046875
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.740234375
+    width: 0.173828125
+    height: 0.259765625
+  - serializedVersion: 2
+    x: 0.17578125
+    y: 0.80859375
+    width: 0.19140625
+    height: 0.19140625
+  - serializedVersion: 2
+    x: 0.470703125
+    y: 0.880859375
+    width: 0.240234375
+    height: 0.119140625
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.619140625
+    width: 0.341796875
+    height: 0.119140625
+  - serializedVersion: 2
+    x: 0.34375
+    y: 0.736328125
+    width: 0.001953125
+    height: 0.001953125
+  textureGUIDs:
+  - 93cabca3d1984a8fbb89c3fb5f88d6c6
+  - a6c68e15494b4afb8c96eca3557d7620
+  - 8a4aee5d0fd64f38acce86bf91bd7b9f
+  - 440d8104f7e24011b154e15389149dd4
+  - bff5c18ef50b4682862f64f082d12784
+  - 6286dcd4407a46d0b7519694793e2a54
+  textureSizes:
+  - {x: 101, y: 126}
+  - {x: 177, y: 265}
+  - {x: 196, y: 196}
+  - {x: 245, y: 122}
+  - {x: 349, y: 121}
+  - {x: 2, y: 2}
+  defaultPivotOffsets:
+  - {x: -0.3382839, y: 0.4133169}
+  - {x: 0.07830967, y: -0.3263029}
+  - {x: -0.06844938, y: 0.04776693}
+  - {x: 0.02899944, y: -0.4502384}
+  - {x: -0.1367634, y: -0.539937}
+  - {x: 0, y: 0}
+  textureNames:
+  - Forge_king_dj
+  - Forge_king_dj_Back
+  - Forge_king_dj_MainHand
+  - Forge_king_dj_OffHand
+  - Forge_king_dj_OffHand_Back
+  - Forge_king_dj__Beard_Bottom
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/king_dj/Forge_king_dj.png
+  - Assets/content/4_Characters/_Forge/Baked/king_dj/Forge_king_dj_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/king_dj/Forge_king_dj_MainHand.png
+  - Assets/content/4_Characters/_Forge/Baked/king_dj/Forge_king_dj_OffHand.png
+  - Assets/content/4_Characters/_Forge/Baked/king_dj/Forge_king_dj_OffHand_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/king_dj/Forge_king_dj__Beard_Bottom.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

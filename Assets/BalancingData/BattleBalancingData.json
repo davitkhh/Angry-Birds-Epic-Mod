@@ -1404,7 +1404,7 @@
     "NameId": "battle_006",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_007"
+      "bpart_007_forge"
     ],
     "LootTableWheel": {
       "battle_cobalt_stone": 1
@@ -1534,7 +1534,7 @@
     "NameId": "battle_007",
     "BaseLevel": 1,
     "BattleParticipantsIds": [
-      "bpart_007"
+      "bpart_007_forge"
     ],
     "LootTableWheel": {
       "battle_wood": 1
@@ -1548,6 +1548,80 @@
         "Value": 1.0
       }
     ],
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 7
+    },
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_008_04",
+    "BaseLevel": 1,
+    "BattleParticipantsIds": [
+      "bpart_007_forge"
+    ],
+    "LootTableWheel": {
+      "battle_wood": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
+    "LootTableLost": {
+      "gold": 2
+    },
+    "BackgroundAssetId": "Battleground_CobaltPlateaus_02",
+    "UsableFriendBirdsCount": 0,
+    "SoundAssetId": "Music_Combat_Basic",
+    "ScoringStrategy": "MaximumByStrength",
+    "BonusPoints": 0,
+    "EnvironmentalEffects": null,
+    "EnvironmentalStartWave": 0,
+    "MaxBirdsInBattle": 3,
+    "AdditionalAttackInPercent": 0.0,
+    "AdditionalHealthInPercent": 0.0,
+    "LootTableWheelAfterWave": null,
+    "Force_Character": "",
+    "PowerLevelThresholdLow": 50.0,
+    "PowerLevelThresholdHigh": 0.0,
+    "ApplyPowerLevelBalancing": false,
+    "Difficulty": 0,
+    "BonusLoot": {
+      "experience": 7
+    },
+    "BattleType": "Generic_Early",
+    "PowerlevelModifier": 0.0
+  },
+  {
+    "NameId": "battle_008_05",
+    "BaseLevel": 1,
+    "BattleParticipantsIds": [
+      "bpart_007_forge"
+    ],
+    "LootTableWheel": {
+      "battle_wood": 1
+    },
+    "LootTableAdditional": null,
+    "StrengthPoints": 15,
+    "BattleRequirements": null,
     "LootTableLost": {
       "gold": 2
     },

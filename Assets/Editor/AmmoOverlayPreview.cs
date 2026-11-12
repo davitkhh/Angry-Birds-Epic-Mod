@@ -120,6 +120,11 @@ public static class AmmoOverlayPreview
 					var plate = Get<UISprite>(blinds[i], "m_Background");
 					plate.color = (Color)colors[i];
 					AmmoUI.ShowOnSkillPlate(plate, Get<UILabel>(blinds[i], "m_SkillName"), i == 0 ? 1 : 0, i == 1 ? 2 : 0, ammo, 10, icon, null);
+					if (i == 0)
+					{
+						// Weapon charge line: half at 10 ammo, full at 4, none at 12, full over an overflow bar at 23
+						AmmoUI.ShowChargeDots(plate, ammo == 10 ? 1 : ammo == 12 ? 0 : 2, 2);
+					}
 				}
 				var row = Get<Transform>(overlay, "m_HealthBarTransform");
 				Vector3? home = null;

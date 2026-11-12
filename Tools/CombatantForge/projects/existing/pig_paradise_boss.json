@@ -1,0 +1,265 @@
+{
+ "kind": "existing",
+ "id": "pig_paradise_boss",
+ "name": "Alphapig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Stickpig",
+     "name": "MainHand_Stickpig",
+     "item": "MainHand_Stickpig",
+     "w": 146,
+     "h": 65,
+     "pivot": [
+      -0.35,
+      -0.07
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_431ce",
+   "origin": "pig_attack_paradise_boss",
+   "type": "Attack",
+   "source": "pig_attack_paradise_boss",
+   "name": "Touch of chaos",
+   "desc": "Deals [ff0000]{value_1}[-] damage and afflicts a random negative status effect on the target.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "AttackAndApplyRandomDebuff",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_c806c",
+   "origin": "pig_support_paradise_boss",
+   "type": "Support",
+   "source": "pig_support_paradise_boss",
+   "name": "Endloss Horde",
+   "desc": "Calls in 2 random pigs for support.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_random": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_809b1",
+   "origin": "pig_passive_block_consumables",
+   "type": "Passive",
+   "source": "pig_passive_block_consumables",
+   "name": "Duel of Honor",
+   "desc": "Potions are not allowed!",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {},
+   "values": {},
+   "template": "BlockConsumables",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 10587,
+  "attack": 37,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 100,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_paradise_boss",
+  "fingerprint": "2a301e714554b7b1a2c2dec5322b562c5edd8bd2",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_paradise_boss",
+     "pig_attack_paradise_boss",
+     "pig_support_paradise_boss"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Alphapig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Stickpig",
+       "name": "MainHand_Stickpig",
+       "item": "MainHand_Stickpig",
+       "w": 146,
+       "h": 65,
+       "pivot": [
+        -0.35,
+        -0.07
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 10587,
+    "attack": 37,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 100,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_431ce",
+     "origin": "pig_attack_paradise_boss",
+     "type": "Attack",
+     "source": "pig_attack_paradise_boss",
+     "name": "Touch of chaos",
+     "desc": "Deals [ff0000]{value_1}[-] damage and afflicts a random negative status effect on the target.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "AttackAndApplyRandomDebuff",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_c806c",
+     "origin": "pig_support_paradise_boss",
+     "type": "Support",
+     "source": "pig_support_paradise_boss",
+     "name": "Endloss Horde",
+     "desc": "Calls in 2 random pigs for support.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_random": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_809b1",
+     "origin": "pig_passive_block_consumables",
+     "type": "Passive",
+     "source": "pig_passive_block_consumables",
+     "name": "Duel of Honor",
+     "desc": "Potions are not allowed!",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {},
+     "values": {},
+     "template": "BlockConsumables",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

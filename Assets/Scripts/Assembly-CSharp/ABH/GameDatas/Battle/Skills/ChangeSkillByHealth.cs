@@ -18,7 +18,7 @@ namespace ABH.GameDatas.Battle.Skills
 			m_skills = new List<SkillBattleDataBase>();
 			foreach (var key in base.Model.SkillParameters.Keys)
 			{
-				if (base.Model.SkillParameters[key] != -1f && key != "ui_color_rgb")
+				if (base.Model.SkillParameters[key] != -1f && key != "ui_color_rgb" && key != ForgeSkillAnimation.Param && key != ForgeSkillAnimation.ProjectileParam && key != ForgeSkillAnimation.RangedParam)
 				{
 					var skillGameData = new SkillGameData(key);
 					var skillBattleDataBase = Activator.CreateInstance(Type.GetType("ABH.GameDatas.Battle.Skills." + skillGameData.Balancing.SkillTemplateType, true, true)) as SkillBattleDataBase;

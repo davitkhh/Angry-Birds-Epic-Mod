@@ -1,0 +1,375 @@
+{
+ "kind": "existing",
+ "id": "pig_ghost_banshee",
+ "name": "Banshee",
+ "rig": "GhostPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "bdef4a6e002e7574ca91373e69a2c846:Headgear_Banshee",
+     "name": "Headgear_Banshee",
+     "item": "Headgear_Banshee",
+     "w": 154,
+     "h": 167,
+     "pivot": [
+      -0.10714285,
+      -0.21983531
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "bdef4a6e002e7574ca91373e69a2c846:Headgear_Banshee_Back",
+     "name": "Headgear_Banshee_Back",
+     "item": "Headgear_Banshee",
+     "w": 123,
+     "h": 165,
+     "pivot": [
+      -0.06428571,
+      -0.22563311
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_c8923",
+   "origin": "pig_attack_ghost_banshee",
+   "type": "Attack",
+   "source": "pig_attack_ghost_banshee",
+   "name": "Siren Song",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 10,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 100,
+    "surprise": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_6}": {
+     "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+    }
+   },
+   "template": "AttackAndApplyDotSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_f6546",
+   "origin": "pig_support_ghost_banshee",
+   "type": "Support",
+   "source": "pig_support_ghost_banshee",
+   "name": "Cry for help",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Summons ghosts.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_undead_boss01": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_6a28a",
+   "origin": "pig_passive_undead",
+   "type": "Passive",
+   "source": "pig_passive_undead",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 2,
+    "pig_support_undead_revive_self": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 175,
+  "attack": 30,
+  "sizeType": "Small",
+  "sizeScale": 1.2,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_ghost_banshee",
+  "fingerprint": "f2ba64894fed0571bf0498b80a8dc4539d3a395d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_attack_ghost_banshee"
+    ]
+   },
+   {
+    "Percentage": 65,
+    "ComboChain": [
+     "pig_support_ghost_banshee"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Banshee",
+   "rig": "GhostPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "bdef4a6e002e7574ca91373e69a2c846:Headgear_Banshee",
+       "name": "Headgear_Banshee",
+       "item": "Headgear_Banshee",
+       "w": 154,
+       "h": 167,
+       "pivot": [
+        -0.10714285,
+        -0.21983531
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "bdef4a6e002e7574ca91373e69a2c846:Headgear_Banshee_Back",
+       "name": "Headgear_Banshee_Back",
+       "item": "Headgear_Banshee",
+       "w": 123,
+       "h": 165,
+       "pivot": [
+        -0.06428571,
+        -0.22563311
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 175,
+    "attack": 30,
+    "sizeType": "Small",
+    "sizeScale": 1.2,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_c8923",
+     "origin": "pig_attack_ghost_banshee",
+     "type": "Attack",
+     "source": "pig_attack_ghost_banshee",
+     "name": "Siren Song",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 10,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 100,
+      "surprise": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_6}": {
+       "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+      }
+     },
+     "template": "AttackAndApplyDotSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_f6546",
+     "origin": "pig_support_ghost_banshee",
+     "type": "Support",
+     "source": "pig_support_ghost_banshee",
+     "name": "Cry for help",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Summons ghosts.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_undead_boss01": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_6a28a",
+     "origin": "pig_passive_undead",
+     "type": "Passive",
+     "source": "pig_passive_undead",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 2,
+      "pig_support_undead_revive_self": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

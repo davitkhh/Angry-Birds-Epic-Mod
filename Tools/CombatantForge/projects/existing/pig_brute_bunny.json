@@ -1,0 +1,397 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_bunny",
+ "name": "Bunny Brute",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Bunny",
+     "name": "Headgear_Bunny",
+     "item": "Headgear_Bunny",
+     "w": 411,
+     "h": 387,
+     "pivot": [
+      0.010714285,
+      0.14792357
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Bunny_Back",
+     "name": "Headgear_Bunny_Back",
+     "item": "Headgear_Bunny",
+     "w": 247,
+     "h": 211,
+     "pivot": [
+      -0.08035714,
+      0.52677727
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:MainHand_Bunny",
+     "name": "MainHand_Bunny",
+     "item": "MainHand_Bunny",
+     "w": 296,
+     "h": 98,
+     "pivot": [
+      -0.2357143,
+      -0.5177843
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_b1b56",
+   "origin": "pig_attack_brute_bunny",
+   "type": "Attack",
+   "source": "pig_attack_brute_bunny",
+   "name": "Carrot Smash",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 300,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_ceb59",
+   "origin": "pig_support_brute_bunny",
+   "type": "Support",
+   "source": "pig_support_brute_bunny",
+   "name": "Carrot Snack",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals [00a800]{value_1}[-] health.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Heal",
+   "params": {
+    "health_in_percent": 60,
+    "charge": 2,
+    "self": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealChargeSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 360,
+  "attack": 25,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_bunny",
+  "fingerprint": "c74b8c73ada72a74f579c19328b573924133198d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_bunny"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Bunny Brute",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Bunny",
+       "name": "Headgear_Bunny",
+       "item": "Headgear_Bunny",
+       "w": 411,
+       "h": 387,
+       "pivot": [
+        0.010714285,
+        0.14792357
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Bunny_Back",
+       "name": "Headgear_Bunny_Back",
+       "item": "Headgear_Bunny",
+       "w": 247,
+       "h": 211,
+       "pivot": [
+        -0.08035714,
+        0.52677727
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:MainHand_Bunny",
+       "name": "MainHand_Bunny",
+       "item": "MainHand_Bunny",
+       "w": 296,
+       "h": 98,
+       "pivot": [
+        -0.2357143,
+        -0.5177843
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 360,
+    "attack": 25,
+    "sizeType": "Boss",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig7_defeated_gold": 1,
+     "loot_pig7_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_b1b56",
+     "origin": "pig_attack_brute_bunny",
+     "type": "Attack",
+     "source": "pig_attack_brute_bunny",
+     "name": "Carrot Smash",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 300,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_ceb59",
+     "origin": "pig_support_brute_bunny",
+     "type": "Support",
+     "source": "pig_support_brute_bunny",
+     "name": "Carrot Snack",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals [00a800]{value_1}[-] health.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Heal",
+     "params": {
+      "health_in_percent": 60,
+      "charge": 2,
+      "self": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealChargeSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

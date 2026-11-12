@@ -23,9 +23,11 @@ public static class AmmoUI
 		public Vector2 Size;
 	}
 
-	// Empty share of an ammo bar has this much less saturation (absolute, HSV 0..1) than the plate's own colour, which
-	// is a full bar. Every lap of overflow adds LapSaturation saturation and takes LapDarkness off the value.
-	public const float SaturationStep = 0.4f;
+	// Empty share of an ammo bar has this much less saturation and this much more value (absolute, HSV 0..1) than the
+	// plate's own colour, which is a full bar. Every lap of overflow adds LapSaturation saturation and takes LapDarkness off the value.
+	public const float SaturationStep = 0.32f;
+
+	public const float EmptyLightness = 0.1f;
 
 	public const float LapSaturation = 0.2f;
 
@@ -39,6 +41,17 @@ public static class AmmoUI
 	private const string SkillFillName = "AmmoFill";
 
 	private const string RegenRootName = "AmmoRegen";
+
+	private const string ChargeDotsName = "AmmoChargeDots";
+
+	// Height of the dotted charge line (one dot's cell), and how far it sits from the plate's middle
+	public const int ChargeDotSize = 12;
+
+	private const float ChargeDotsOffsetY = -13f;
+
+	private static readonly Color ChargeDotColor = new Color(1f, 0.88f, 0.1f);
+
+	private static Texture2D s_ChargeDotTexture;
 
 	private static readonly Dictionary<string, IconSource> s_IconCache = new Dictionary<string, IconSource>();
 
@@ -235,7 +248,7 @@ public static class AmmoUI
 	{
 		if (lap <= 0)
 		{
-			return ShiftColor(baseColor, -SaturationStep, 0f);
+			return ShiftColor(baseColor, -SaturationStep, EmptyLightness);
 		}
 		return ShiftColor(baseColor, LapSaturation * (lap - 1), -LapDarkness * (lap - 1));
 	}
@@ -251,12 +264,71 @@ public static class AmmoUI
 		var header = plate.cachedTransform.parent;
 		ClearSkillPlate(header);
 		var state = Ammo.GetState(invoker);
-		// Only the attacks that use the weapon's ammo get a tag
+		var gain = Ammo.GetGain(invoker, skill);
+		if (gain > 0)
+		{
+			ShowOnSkillPlate(plate, style, 0, gain, state.Current, state.Start, GetIconSource(invoker), invoker);
+			return;
+		}
+		// Otherwise only the attacks that use the weapon's ammo get a tag
 		if (!Ammo.UsesAmmo(invoker, skill) || state == null)
 		{
 			return;
 		}
 		ShowOnSkillPlate(plate, style, 1, 0, state.Current, state.Start, GetIconSource(invoker), invoker);
+		if (state.MaxCharges > 0)
+		{
+			ShowChargeDots(plate, state.Charges, state.MaxCharges, invoker);
+		}
+	}
+
+	// A dotted yellow line along the plate from its left edge, as far right as the weapon is charged.
+	// user: whose charge it follows live (null keeps it at charges)
+	public static void ShowChargeDots(UISprite plate, int charges, int maxCharges, ICombatant user = null)
+	{
+		var header = plate.cachedTransform.parent;
+		DestroyChild(header, ChargeDotsName);
+		var go = new GameObject(ChargeDotsName);
+		go.layer = header.gameObject.layer;
+		go.transform.parent = header;
+		go.transform.localRotation = Quaternion.identity;
+		go.transform.localScale = Vector3.one;
+		var dots = go.AddComponent<UITexture>();
+		dots.mainTexture = GetChargeDotTexture();
+		dots.rawPivot = UIWidget.Pivot.Left;
+		dots.depth = plate.depth + 2;
+		dots.height = ChargeDotSize;
+		dots.color = ChargeDotColor;
+		var platePos = plate.cachedTransform.localPosition;
+		var pivot = plate.pivotOffset;
+		go.transform.localPosition = new Vector3(platePos.x - pivot.x * plate.width, platePos.y + (0.5f - pivot.y) * plate.height + ChargeDotsOffsetY, platePos.z);
+		go.AddComponent<AmmoChargeDots>().Init(dots, plate.width, charges, maxCharges, user);
+	}
+
+	private static Texture2D GetChargeDotTexture()
+	{
+		if (s_ChargeDotTexture != null)
+		{
+			return s_ChargeDotTexture;
+		}
+		// One round dot with a gap, repeated along the line
+		const int size = 32;
+		s_ChargeDotTexture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+		s_ChargeDotTexture.name = "AmmoChargeDot";
+		s_ChargeDotTexture.wrapMode = TextureWrapMode.Repeat;
+		s_ChargeDotTexture.hideFlags = HideFlags.DontSave;
+		var center = (size - 1) * 0.5f;
+		var radius = size * 0.32f;
+		for (var y = 0; y < size; y++)
+		{
+			for (var x = 0; x < size; x++)
+			{
+				var distance = Mathf.Sqrt((x - center) * (x - center) + (y - center) * (y - center));
+				s_ChargeDotTexture.SetPixel(x, y, new Color(1f, 1f, 1f, Mathf.Clamp01(radius - distance + 0.5f)));
+			}
+		}
+		s_ChargeDotTexture.Apply();
+		return s_ChargeDotTexture;
 	}
 
 	// user: whose ammo the bar follows live (null keeps it at current)
@@ -264,7 +336,7 @@ public static class AmmoUI
 	{
 		var header = plate.cachedTransform.parent;
 		ClearSkillPlate(header);
-		if (cost <= 0)
+		if (cost <= 0 && gain <= 0)
 		{
 			return;
 		}
@@ -290,6 +362,7 @@ public static class AmmoUI
 		}
 		DestroyChild(header, SkillTagName);
 		DestroyChild(header, SkillFillName);
+		DestroyChild(header, ChargeDotsName);
 	}
 
 	// The left part of the plate, recoloured one lap up (AmmoPlateBar sets its width and colour)
@@ -641,6 +714,51 @@ public class AmmoPlateBar : MonoBehaviour
 		m_Fill.enabled = width >= 2;
 		m_Fill.width = Mathf.Max(2, width);
 		m_Fill.color = AmmoUI.LapColor(m_BaseColor, laps + 1);
+	}
+}
+
+// A skill plate's dotted charge line, following its user's charges as they change.
+public class AmmoChargeDots : MonoBehaviour
+{
+	private UITexture m_Dots;
+
+	private int m_PlateWidth;
+
+	private int m_MaxCharges;
+
+	private int m_Shown;
+
+	private ICombatant m_User;
+
+	public void Init(UITexture dots, int plateWidth, int charges, int maxCharges, ICombatant user)
+	{
+		m_Dots = dots;
+		m_PlateWidth = plateWidth;
+		m_MaxCharges = Mathf.Max(1, maxCharges);
+		m_Shown = charges;
+		m_User = user;
+		Apply();
+	}
+
+	private void Update()
+	{
+		var state = Ammo.GetState(m_User);
+		if (state != null && m_Shown != state.Charges)
+		{
+			m_Shown = state.Charges;
+			Apply();
+		}
+	}
+
+	private void Apply()
+	{
+		var width = Mathf.RoundToInt(m_PlateWidth * Mathf.Clamp01((float)m_Shown / m_MaxCharges));
+		m_Dots.enabled = width > 0;
+		if (width > 0)
+		{
+			m_Dots.width = Mathf.Max(2, width);
+			m_Dots.uvRect = new Rect(0f, 0f, (float)width / AmmoUI.ChargeDotSize, 1f);
+		}
 	}
 }
 

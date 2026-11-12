@@ -1,0 +1,195 @@
+{
+ "kind": "existing",
+ "id": "pig_bomb_royal",
+ "name": "Royal Bomb",
+ "rig": "PigBomb",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "196f9324781d11f468dbd411c92ab46e:Headgear_RoyalBomb",
+     "name": "Headgear_RoyalBomb",
+     "item": "Headgear_RoyalBomb",
+     "w": 100,
+     "h": 86,
+     "pivot": [
+      0.12,
+      -0.5
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_89d59",
+   "origin": "pig_attack_bomb_royal",
+   "type": "Attack",
+   "source": "pig_attack_bomb_royal",
+   "name": "Tick Tack",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "all": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"ragereduce\"))"
+    }
+   },
+   "template": "AttackAndSelfDestruct",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 60,
+  "attack": 30,
+  "sizeType": "Small",
+  "sizeScale": 1.25,
+  "strength": 1,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_bomb_royal",
+  "fingerprint": "e3f1c5510aa8fbb65c46d87b41129057a4de327f",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_bomb_royal"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Royal Bomb",
+   "rig": "PigBomb",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "196f9324781d11f468dbd411c92ab46e:Headgear_RoyalBomb",
+       "name": "Headgear_RoyalBomb",
+       "item": "Headgear_RoyalBomb",
+       "w": 100,
+       "h": 86,
+       "pivot": [
+        0.12,
+        -0.5
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 60,
+    "attack": 30,
+    "sizeType": "Small",
+    "sizeScale": 1.25,
+    "strength": 1,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {}
+   },
+   "abilities": [
+    {
+     "uid": "a0_89d59",
+     "origin": "pig_attack_bomb_royal",
+     "type": "Attack",
+     "source": "pig_attack_bomb_royal",
+     "name": "Tick Tack",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "all": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"ragereduce\"))"
+      }
+     },
+     "template": "AttackAndSelfDestruct",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

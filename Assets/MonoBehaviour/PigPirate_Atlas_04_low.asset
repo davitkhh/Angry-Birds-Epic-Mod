@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: PigPirate_Atlas_04_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 1d67993f7a9346aea7a57a3ddce83ddc, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.16796875
+    y: 0.70703125
+    width: 0.1875
+    height: 0.0859375
+  - serializedVersion: 2
+    x: 0
+    y: 0.65625
+    width: 0.1640625
+    height: 0.13671875
+  - serializedVersion: 2
+    x: 0.20703125
+    y: 0.82421875
+    width: 0.28515625
+    height: 0.17578125
+  - serializedVersion: 2
+    x: 0.671875
+    y: 0.84765625
+    width: 0.16796875
+    height: 0.15234375
+  - serializedVersion: 2
+    x: 0.359375
+    y: 0.73046875
+    width: 0.19921875
+    height: 0.0625
+  - serializedVersion: 2
+    x: 0.49609375
+    y: 0.828125
+    width: 0.171875
+    height: 0.171875
+  - serializedVersion: 2
+    x: 0
+    y: 0.796875
+    width: 0.203125
+    height: 0.203125
+  textureGUIDs:
+  - 28b97a5745a94668aad7b5b5eec9e0c0
+  - 18a8c5e4a3e949ae9d8c74ce9d7e5b7c
+  - 0fc0586861d748338f975fbe2376144f
+  - cf5fe72bafa54693945f3abaefab293f
+  - 437a7a1ada004e5e8e51eaa712b7ef93
+  - 4f8bf58aebf344aebf810e63a42e821e
+  - d3145e5872da4dff863fd3efa2c626b3
+  textureSizes:
+  - {x: 96, y: 44}
+  - {x: 84, y: 70}
+  - {x: 146, y: 90}
+  - {x: 86, y: 78}
+  - {x: 102, y: 32}
+  - {x: 88, y: 88}
+  - {x: 104, y: 104}
+  defaultPivotOffsets:
+  - {x: 0.058928575, y: -0.1051948}
+  - {x: 0.10178571, y: 0.05785714}
+  - {x: 0.17678571, y: 0.034761902}
+  - {x: -0.21643764, y: -0.074999996}
+  - {x: -0.016071428, y: 0.08537947}
+  - {x: 0.14464286, y: 0.14464286}
+  - {x: 0.10178571, y: 0.20357142}
+  textureNames:
+  - MouthPirate
+  - Mouth_AngryPirate
+  - Mouth_AttackPirate
+  - Mouth_HappyPirate
+  - Mouth_SadPirate
+  - Mouth_ScaredPirate
+  - Mouth_WideOpenPirate
+  texturePaths:
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/MouthPirate.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Mouth_AngryPirate.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Mouth_AttackPirate.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Mouth_HappyPirate.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Mouth_SadPirate.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Mouth_ScaredPirate.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Mouth_WideOpenPirate.png
+  lastBuildID: 2013111119195281
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 0

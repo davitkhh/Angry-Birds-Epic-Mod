@@ -10,7 +10,7 @@ import re
 import threading
 import uuid
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # The game project. The installed desktop app sets FORGE_ROOT; run from the project, it's two folders up.
@@ -23,11 +23,14 @@ CHARACTERS = os.path.join(ASSETS, 'Resources', 'Prefabs', '4_Characters')
 UPLOADS = os.path.join(ASSETS, 'content', '4_Characters', '_Forge')
 BALANCING = os.path.join(ASSETS, 'BalancingData')
 META_TEMPLATE = os.path.join(ASSETS, 'content', '4_Characters', '2_Pigs', '1_MinionPig', 'BodyParts', 'Headgear_RogueRoyal.png.meta')
-CACHE_VERSION = 4
+CACHE_VERSION = 11
 
 RIG_DIRS = (('1_Birds', 'bird'), ('2_Pigs', 'pig'), ('8_Base', 'pig'))
 BIRD_RIGS_ELSEWHERE = {'MightyEagle'}
 GEAR_SLOTS = ('Headgear', 'Headgear_Back', 'MainHand', 'MainHand_Arrow', 'OffHand', 'OffHand_Back')
+# Body-parented twins of gear bones (PigPirate Action_Attack_3 draws the gear on these): they belong to the gear slot and
+# wear its art, like the game's CharacterAssetController.GearBodyTwins.
+GEAR_BODY_TWINS = {'HeadgearBody': 'Headgear', 'HeadgearBody_Back': 'Headgear_Back', 'MainHandBody': 'MainHand'}
 ICON_ATLASES = ('Skills_Pigs_01', 'Skills_Birds_01', 'Skills_Birds_02', 'Skills_Passive_01', 'Skills_Banner', 'GenericElements')
 SKILL_COLORS = {'Attack': 'E55B5B', 'Support': '8CCB50', 'Passive': 'BEE8FE'}
 UI_SPRITES = ('InfoOverlay_TL', 'InfoOverlay_T', 'InfoOverlay_TR', 'InfoOverlay_L', 'InfoOverlay_R', 'InfoOverlay_BL', 'InfoOverlay_B',
@@ -355,36 +358,75 @@ def bake_rig(rig_id):
         if path and path.endswith('.anim'):
             anims[os.path.basename(path)[:-5]] = parse_anim(path)
 
-    # texture events per clip per bone node
+    # Texture events per clip per bone node. SmoothMoves' TriggerFrameBone.TRIGGER_EVENT_TYPE: 0 UserTrigger, 1 HideTexture,
+    # 2 ChangeMaterial, 3 ChangeDepth, 4 ChangeTexture, 5 ChangePivot, 6 ChangeCollider. A record only carries the changes
+    # its events name, so each bone's state is stepped through its clip's frames in order.
     textures = {}
     timelines = {}
+    tags = {}
+    clip_events = {}
     field = re.compile(r'^\s+(pivotOffset|upperLeft|bottomRight|textureGUID|depth|triggerEventTypes|boneNodeIndex|atlas): ?(.*)$', re.M)
+    frames = []
     for block in text[trig_i:atlas_i].split('  - clipIndex: ')[1:]:
         clip = int(block[:block.index('\n')])
         frame = int(re.search(r'frame: (-?\d+)', block).group(1))
+        frames.append((clip, frame, block))
+    frames.sort(key=lambda f: (f[0], f[1]))
+    states = {}
+    for clip, frame, block in frames:
         for rec in block.split('    - userTriggerTag:')[1:]:
             f = dict(field.findall(rec))
             raw = f.get('triggerEventTypes', '')
-            events = [int(raw[k:k + 8][:2], 16) for k in range(0, len(raw), 8)]
+            events = {int(raw[k:k + 8][:2], 16) for k in range(0, len(raw), 8)}
+            tag = rec.split('\n', 1)[0].strip()
+            if 0 in events and tag:
+                tags.setdefault(clip, set()).add(tag)
+                clip_events.setdefault(clip, set()).add((frame, tag))
+            if 'boneNodeIndex' not in f or not events & {1, 3, 4, 5}:
+                continue
             node = int(f['boneNodeIndex'])
-            row = None
-            if 1 in events:
-                row = [frame, None, 0]
-            elif 2 in events or 5 in events:
+            st = states.setdefault((clip, node), {'key': None, 'depth': 0, 'quad': None, 'hidden': True})
+            if 4 in events:
                 guid = f.get('textureGUID', '').strip()
                 am = re.search(r'guid: (\w+)', f.get('atlas', ''))
                 atlas = parse_atlas(am.group(1)) if am else None
                 name = atlas['byGuid'].get(guid) if atlas else None
                 if name:
-                    key = '%s:%s' % (atlas['guid'], name)
+                    st['key'] = '%s:%s' % (atlas['guid'], name)
                     s = atlas['sprites'][name]
-                    textures[key] = {'name': name, 'w': s['size'][0], 'h': s['size'][1], 'pivot': s['pivot']}
-                    ul, br = _vec(f['upperLeft']), _vec(f['bottomRight'])
-                    row = [frame, key, int(f.get('depth', 0)), round(ul[0], 2), round(ul[1], 2), round(br[0], 2), round(br[1], 2)]
-                elif guid:
-                    row = [frame, None, 0]
-            if row is not None:
-                timelines.setdefault(clip, {}).setdefault(node, []).append(row)
+                    textures[st['key']] = {'name': name, 'w': s['size'][0], 'h': s['size'][1], 'pivot': s['pivot']}
+                    st['hidden'] = False
+                else:
+                    st['key'] = None
+            if 4 in events or 5 in events:
+                ul, br = _vec(f['upperLeft']), _vec(f['bottomRight'])
+                st['quad'] = [round(ul[0], 2), round(ul[1], 2), round(br[0], 2), round(br[1], 2)]
+            if 3 in events:
+                st['depth'] = int(f.get('depth', 0))
+            if 1 in events:
+                st['hidden'] = True
+            if st['hidden'] or not st['key'] or not st['quad']:
+                row = [frame, None, 0]
+            else:
+                row = [frame, st['key'], st['depth']] + st['quad']
+            rows = timelines.setdefault(clip, {}).setdefault(node, [])
+            if rows and rows[-1][0] == frame:
+                rows[-1] = row
+            else:
+                rows.append(row)
+
+    # In a clip where a gear twin (HeadgearBody, MainHandBody) shows art, its gear bones are hidden: the twin takes their
+    # place, like CharacterAssetController.HideGearBonesUnderTwins (SmoothMoves ignores the per-clip visible flag).
+    node_of = {name: node for node, name in bones.items()}
+    for twin in {t for t in GEAR_BODY_TWINS if not t.endswith('_Back')}:
+        if twin not in node_of:
+            continue
+        gear_nodes = [node_of[g] for t, g in GEAR_BODY_TWINS.items() if t in (twin, twin + '_Back') and g in node_of]
+        for clip, per_node in timelines.items():
+            if any(r[1] for r in per_node.get(node_of[twin], ())):
+                for node in gear_nodes:
+                    if node in per_node:
+                        per_node[node] = [[r[0], None, 0] for r in per_node[node]]
 
     # transform tree
     all_paths = set()
@@ -399,7 +441,7 @@ def bake_rig(rig_id):
     for node, name in sorted(bones.items()):
         bone_path = by_leaf.get(name)
         sprite_path = by_leaf.get(name + '_Sprite')
-        slot = re.sub(r'_[ABC]$', '', name)
+        slot = GEAR_BODY_TWINS.get(name) or re.sub(r'_[ABC]$', '', name)
         bone_rows.append({'node': node, 'name': name, 'slot': slot, 'bone': index.get(bone_path, -1), 'sprite': index.get(sprite_path, index.get(bone_path, -1))})
 
     clips = []
@@ -422,7 +464,8 @@ def bake_rig(rig_id):
                 row['s'] = _compact([[round(v, 3) for v in eval_curve(kinds['s'], t)[:2]] for t in range(steps + 1)])
             out_tracks[index[path]] = row
         clips.append({'name': name, 'fps': float(fps), 'wrap': int(wrap), 'length': length, 'steps': steps, 'tracks': out_tracks,
-                      'tex': {str(k): sorted(v, key=lambda r: r[0]) for k, v in timelines.get(ci, {}).items()}})
+                      'tex': {str(k): v for k, v in timelines.get(ci, {}).items()}, 'tags': sorted(tags.get(ci, ())),
+                      'events': sorted([f, t] for f, t in clip_events.get(ci, ()))})
 
     # which bones can hold art
     with_art = {}
@@ -442,25 +485,59 @@ def bake_rig(rig_id):
     for s in slot_rows:
         s['textures'] = sorted(s['textures'])
 
-    # pirate variant: every texture X with an XPirate in one of the rig's atlases
+    # texture variants: every texture X with an X<Suffix> (Pirate, Regular, ...) in one of the rig's atlases. The game
+    # swaps them in for a class item named after the suffix (CharacterAssetController.VariantSuffix).
     atlases = rig_atlases(rig_id)
-    pirate = {}
+    variants = {'pirate': {}}
     for key, tex in list(textures.items()):
-        for atlas in atlases:
-            s = atlas['sprites'].get(tex['name'] + 'Pirate')
-            if s:
-                pkey = '%s:%s' % (atlas['guid'], s['name'])
-                textures[pkey] = {'name': s['name'], 'w': s['size'][0], 'h': s['size'][1], 'pivot': s['pivot']}
-                pirate[key] = pkey
-                break
-    return {'id': rig_id, 'side': rig['side'], 'paths': paths, 'parents': parents, 'bones': bone_rows, 'slots': slot_rows,
-            'clips': clips, 'textures': textures, 'variants': {'pirate': pirate}}
+        for suffix in rig_variant_suffixes(rig_id):
+            for atlas in atlases:
+                s = atlas['sprites'].get(tex['name'] + suffix)
+                if s:
+                    vkey = '%s:%s' % (atlas['guid'], s['name'])
+                    textures[vkey] = {'name': s['name'], 'w': s['size'][0], 'h': s['size'][1], 'pivot': s['pivot']}
+                    variants.setdefault(suffix.lower(), {})[key] = vkey
+                    break
+    # A rig whose game pigs always wear the variant (every PigPirate has a pirate hat) shows it as its default look
+    # ('base') and doesn't offer it as a separate variant.
+    default = DEFAULT_VARIANT.get(rig_id)
+    base = variants.pop(default, {}) if default else {}
+    looks = rig_looks(rig_id)
+    for name, look in looks.items():
+        variants.setdefault(name, {})
+        # The pod's rest height, as SpringDrone reads it from the fresh prefab (the Base clip holds the prefab pose).
+        body = paths.index('Root/Body') if 'Root/Body' in paths else -1
+        rest_clip = next((c for c in clips if c['name'] == 'Base'), None) or next((c for c in clips if c['name'] == 'Idle'), clips[0])
+        p = _track_value(rest_clip['tracks'].get(body, rest_clip['tracks'].get(str(body), {})).get('p')) if body >= 0 else None
+        look['bodyRestY'] = float(p[1]) if p else 80.0
+        look['bodyRestX'] = float(p[0]) if p else 0.0
+        bottom = paths.index('Root/Bottom') if 'Root/Bottom' in paths else -1
+        q = _track_value(rest_clip['tracks'].get(bottom, rest_clip['tracks'].get(str(bottom), {})).get('p')) if bottom >= 0 else None
+        look['bottomRestY'] = float(q[1]) if q else look['bodyRestY'] + look['mount'][1]
+    centre = re.search(r'  BodyCenter: \{fileID: (\d+)\}', text)
+    body = [0.0, 45.0]
+    if centre and ('&%s\n' % centre.group(1)) in text:
+        block = text[text.index('&%s\n' % centre.group(1)):]
+        pos = re.search(r'm_LocalPosition: \{x: ([-\d.e]+), y: ([-\d.e]+)', block)
+        if pos:
+            body = [float(pos.group(1)), float(pos.group(2))]
+    return {'id': rig_id, 'side': rig['side'], 'bodyCenter': body, 'paths': paths, 'parents': parents, 'bones': bone_rows, 'slots': slot_rows,
+            'clips': clips, 'textures': textures, 'variants': variants, 'base': base, 'looks': looks}
+
+
+def rig_mtime(rig_id):
+    """Newest of the rig prefab and its atlases (assets + textures): a repacked variant atlas must refresh the caches."""
+    paths = [rig_info(rig_id)['path']]
+    if rig_id in LOOK_RIGS:
+        paths.append(SPRING_SOURCE)
+    for atlas in rig_atlases(rig_id):
+        paths += [asset_path(atlas['guid']), atlas['texture']]
+    return max(os.path.getmtime(p) for p in paths if p and os.path.exists(p))
 
 
 def rig_json(rig_id):
-    rig = rig_info(rig_id)
     path = os.path.join(CACHE, 'rigs', '%s.%d.json' % (rig_id, CACHE_VERSION))
-    if os.path.exists(path) and os.path.getmtime(path) >= os.path.getmtime(rig['path']):
+    if os.path.exists(path) and os.path.getmtime(path) >= rig_mtime(rig_id):
         return open(path, 'rb').read()
     data = json.dumps(bake_rig(rig_id), separators=(',', ':')).encode()
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -472,23 +549,173 @@ def rig_json(rig_id):
 def rig_catalog():
     out = []
     for r in rig_list():
-        out.append({'id': r['id'], 'side': r['side'], 'pirate': _rig_has_pirate(r['id'])})
+        variants = [s.lower() for s in rig_variant_suffixes(r['id']) if s.lower() != DEFAULT_VARIANT.get(r['id'])] + list(LOOK_RIGS.get(r['id'], ()))
+        out.append({'id': r['id'], 'side': r['side'], 'pirate': 'pirate' in variants, 'variants': variants})
     return out
 
 
-def _rig_has_pirate(rig_id):
-    for atlas in rig_atlases(rig_id):
+VARIANT_SUFFIX = re.compile(r'[A-Z][a-z]+$')
+# Rigs whose default look is a texture variant: every game PigPirate wears a pirate hat, so the game always swaps in
+# its XPirate sprites. Their Forge combatants are published with that variant's tag (publish.asset_base).
+DEFAULT_VARIANT = {'PigPirate': 'pirate'}
+# Looks that change how a rig moves rather than its textures. A Forge combatant with one is published as Forge_<id>_<Look>,
+# which the game recognises (SpringDrone.IsSpringDrone); game pigs listed in the look's 'pigs' always have it.
+LOOK_RIGS = {'PigDrone': ('spring',)}
+SPRING_SOURCE = os.path.join(ASSETS, 'Scripts', 'Assembly-CSharp', 'SpringDrone.cs')
+
+
+def spring_look():
+    """The spring drone's settings, read from the game's SpringDrone.cs so the preview moves like the game."""
+    text = read_text(SPRING_SOURCE)
+    look = {m.group(1): float(m.group(2)) for m in re.finditer(r'public (?:float|int) (\w+) = (-?[\d.]+)f?;', text)}
+
+    def strings(field):
+        m = re.search(field + r'[^{;]*\{([^}]*)\}', text)
+        return re.findall(r'"([^"]+)"', m.group(1)) if m else []
+    mount = re.search(r'MountPoint = new Vector2\((-?[\d.]+)f, (-?[\d.]+)f\)', text)
+    ground = re.search(r'const float GroundY = (-?[\d.]+)f', text)
+    look.update({'kind': 'spring', 'pigs': strings('s_PigIds'), 'pod': ['Root/' + b for b in strings('s_PodBones')], 'hide': strings('s_HiddenBones'),
+                 'hover': strings('s_HoverClips'), 'limp': strings('s_LimpClips'),
+                 'mount': [float(mount.group(1)), float(mount.group(2))] if mount else [0.0, -40.0],
+                 'ground': float(ground.group(1)) if ground else 5.0, 'bands': {}})
+    # Cel-shading bands per part: Band(width, offset, r, g, b), outline first.
+    for name in ('FrontWire', 'BackWire', 'PlateBands'):
+        m = re.search(r'Band\[\] ' + name + r'\s*=\s*\{(.*?)\};', text, re.S)
+        rows = re.findall(r'new Band\((-?[\d.]+)f, (-?[\d.]+)f, (\d+), (\d+), (\d+)\)', m.group(1)) if m else []
+        look['bands'][name] = [[float(w), float(o), [int(r), int(g_), int(b)]] for w, o, r, g_, b in rows]
+    return look
+
+
+def rig_looks(rig_id):
+    return {name: spring_look() for name in LOOK_RIGS.get(rig_id, ())}
+
+
+def look_of_pig(rig_id, name_id):
+    """The look a game pig always has (the spring drones), or ''."""
+    for name, look in rig_looks(rig_id).items():
+        if name_id in look.get('pigs', ()):
+            return name
+    return ''
+
+
+def _track_value(track, frame=0):
+    if track is None:
+        return None
+    return track[min(frame, len(track) - 1)] if isinstance(track[0], list) else track
+
+
+def look_pose(rig, look, clip, world, height=None):
+    """Moves the pod bones in world (rig-space affines, one per path) by the bounce, as SpringDrone.LateUpdate does.
+    height: the mount's height above the ground; None = settled on the spring. Returns the spring (top, axis, length)."""
+    paths = rig['paths']
+    body = paths.index('Root/Body') if 'Root/Body' in paths else -1
+    if body < 0:
+        return None
+    if height is None:
+        height = look['RestLength'] - look['StaticSag']
+    rest_height = look['bodyRestY'] + look['mount'][1] - look['ground']
+    hovering = clip['name'] in look['hover']
+    hover_x = (world[body][4] - look['bodyRestX']) if hovering else 0.0
+    hover_y = (world[body][5] - look['bodyRestY']) if hovering else 0.0
+    offset = height - rest_height - hover_y
+    for i, path in enumerate(paths):
+        if any(path == pod or path.startswith(pod + '/') for pod in look['pod']):
+            m = world[i]
+            world[i] = (m[0], m[1], m[2], m[3], m[4] - hover_x, m[5] + offset)
+    m = world[body]
+    top = (m[0] * look['mount'][0] + m[2] * look['mount'][1] + m[4], m[1] * look['mount'][0] + m[3] * look['mount'][1] + m[5])
+    # The spring hangs straight down from its pivot; planted, its foot is on the ground below.
+    length = min(look['RestLength'], top[1] - look['ground'])
+    return top, (0.0, -1.0), max(length, look['SolidLength'])
+
+
+def look_hides(look, path):
+    return bool(look) and any(name in path.split('/') for name in look.get('hide', ()))
+
+
+def spring_quads(look, top, axis, length):
+    """[(4 corners, (r, g, b))] in rig space, back to front, as SpringDrone.BuildMesh builds its mesh."""
+    ax, ay = axis
+    sx, sy = -ay, ax
+    turns = int(look['Coils'])
+    count = turns * 20
+    r = look['CoilRadius']
+    wire = look['WireWidth']
+    end = wire * 0.6
+    pitched = max(1, turns - 1) / max(1, turns)
+    pts = []
+    for i in range(count + 1):
+        t = i / count
+        a = t * turns * math.pi * 2
+        # closed last turn: a flat ring on the ground (SpringDrone.BuildMesh)
+        ring = max(end, length - end - r * 0.22)
+        along = end + (ring - end) * min(1.0, t / pitched) + math.sin(a) * r * 0.22
+        c = math.cos(a) * r
+        pts.append(((top[0] + ax * along + sx * c, top[1] + ay * along + sy * c), math.sin(a)))
+    out = []
+
+    def segment(a, b, thickness, band):
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        n = math.hypot(dx, dy)
+        if n < 1e-4:
+            return
+        dx, dy = dx / n, dy / n
+        ux, uy = -dy, dx
+        if uy < 0:
+            ux, uy = -ux, -uy
+        width = thickness * band[0]
+        shx, shy = ux * thickness * band[1], uy * thickness * band[1]
+        ex, ey = dx * width / 2, dy * width / 2
+        nx, ny = ux * width / 2, uy * width / 2
+        out.append(([(a[0] - ex - nx + shx, a[1] - ey - ny + shy), (a[0] - ex + nx + shx, a[1] - ey + ny + shy),
+                     (b[0] + ex + nx + shx, b[1] + ey + ny + shy), (b[0] + ex - nx + shx, b[1] + ey - ny + shy)], tuple(band[2])))
+
+    for front, name in ((False, 'BackWire'), (True, 'FrontWire')):
+        for band in look['bands'][name]:
+            for i in range(count):
+                if ((pts[i][1] + pts[i + 1][1]) / 2 >= 0) == front:
+                    segment(pts[i][0], pts[i + 1][0], wire, band)
+
+    # mounting pad under the pod, bands from the outline inward, up toward the pod
+    for w, o, color in look['bands'].get('PlateBands', []):
+        half_len, half_thick = r + 6, 5
+        half = half_len - (1 - w) * half_thick
+        thick = half_thick * w
+        x, y = top[0] - ax * 2 * half_thick * o, top[1] - ay * 2 * half_thick * o
+        out.append(([(x - sx * half - ax * thick, y - sy * half - ay * thick), (x + sx * half - ax * thick, y + sy * half - ay * thick),
+                     (x + sx * half + ax * thick, y + sy * half + ay * thick), (x - sx * half + ax * thick, y - sy * half + ay * thick)], tuple(color)))
+
+    return out
+
+
+def rig_variant_suffixes(rig_id):
+    """Suffixes S such that some feature sprite X in the rig's atlases has an XS twin: ['Pirate', 'Regular', ...],
+    Pirate first. Gear (Headgear/MainHand/OffHand) never counts: Headgear_Pirate is a hat, not a variant."""
+    # A variant sprite lives in a swap-only atlas, apart from its base; that rules out ordinary pairs drawn in one
+    # atlas, like Eyebrow_Left_Curved / Eyebrow_Left_CurvedPointed.
+    atlases = rig_atlases(rig_id)
+    names = set()
+    for atlas in atlases:
+        names.update(atlas['sprites'])
+    found = set()
+    for atlas in atlases:
         for name in atlas['sprites']:
-            if name.endswith('Pirate') and not name.startswith(('Headgear', 'MainHand', 'OffHand')):
-                return True
-    return False
+            if name.startswith(('Headgear', 'MainHand', 'OffHand')):
+                continue
+            m = VARIANT_SUFFIX.search(name)
+            base = name[:m.start()] if m else ''
+            if base and not base.endswith('_') and base in names and base not in atlas['sprites']:
+                found.add(m.group(0))
+    return sorted(found, key=lambda s: (s != 'Pirate', s))
 
 
-def rig_icon(rig_id, variant=''):
-    """A portrait of the bare rig in its first Idle pose, for the base picker."""
-    path = os.path.join(CACHE, 'icons', '%s_%s.%d.png' % (rig_id, variant or 'base', CACHE_VERSION))
-    if os.path.exists(path):
+def rig_icon(rig_id, variant='', slots=None, path=None):
+    """A portrait of the rig in its first Idle pose. Bare for the base picker; with slots ({slot: {layers, hidden}}, as in
+    a project) it wears that art, for a combatant's tile."""
+    path = path or os.path.join(CACHE, 'icons', '%s_%s.%d.png' % (rig_id, variant or 'base', CACHE_VERSION))
+    if os.path.exists(path) and os.path.getmtime(path) >= rig_mtime(rig_id):
         return open(path, 'rb').read()
+    slots = slots or {}
     rig = json.loads(rig_json(rig_id))
     clip = next((c for c in rig['clips'] if c['name'] == 'Idle' and c['tex']), None) or next(c for c in rig['clips'] if c['tex'])
     tracks = {int(k): v for k, v in clip['tracks'].items()}
@@ -511,12 +738,36 @@ def rig_icon(rig_id, variant=''):
             local = (m[0] * local[0] + m[2] * local[1], m[1] * local[0] + m[3] * local[1], m[0] * local[2] + m[2] * local[3], m[1] * local[2] + m[3] * local[3],
                      m[0] * local[4] + m[2] * local[5] + m[4], m[1] * local[4] + m[3] * local[5] + m[5])
         world.append(local)
-    pirate = rig['variants']['pirate'] if variant == 'pirate' else {}
+    pirate = rig['variants'].get(variant, {}) if variant else rig.get('base', {})  # the chosen texture variant, or the default look's
+    look = rig.get('looks', {}).get(variant) if variant else None
+    spring = look_pose(rig, look, clip, world) if look else None
+    # Each part: (depth, order, sprite key, w, h, L, m). L maps a source pixel (top-left origin) to bone space.
     parts = []
     for bone in rig['bones']:
         rows = clip['tex'].get(str(bone['node'])) or []
         row = rows[0] if rows else None
-        if bone['sprite'] < 0 or not row or not row[1] or bone['slot'] in GEAR_SLOTS or bone['slot'] == 'Shadow':
+        if bone['sprite'] < 0 or not row or not row[1] or bone['slot'] == 'Shadow':
+            continue
+        if look_hides(look, rig['paths'][bone['sprite']]):
+            continue
+        m = world[bone['sprite']]
+        slot = slots.get(bone['slot'])
+        if slot and slot.get('hidden'):
+            continue
+        layers = [l for l in (slot or {}).get('layers', []) if not l.get('hidden')]
+        if layers:
+            for seq, l in enumerate(layers):
+                rot = math.radians(l.get('rot', 0))
+                c, sn = math.cos(rot), math.sin(rot)
+                sx, sy, k = l.get('sx', 1), l.get('sy', 1), l.get('shear', 0)
+                a, b, d, e = c * sx, (c * k - sn) * sy, sn * sx, (sn * k + c) * sy
+                w, h = l['w'], l['h']
+                cx, cy = l.get('tx', 0) - l['pivot'][0] * w, l.get('ty', 0) - l['pivot'][1] * h
+                # pixel (px, py) -> offset from the centre (px - w/2, h/2 - py) -> bone space
+                L = (a, -b, cx - a * w / 2 + b * h / 2, d, -e, cy - d * w / 2 + e * h / 2)
+                parts.append((row[2], -bone['node'], seq, l['src'], w, h, L, m))
+            continue
+        if bone['slot'] in GEAR_SLOTS:
             continue
         key = pirate.get(row[1], row[1])
         x0, y0, x1, y1 = row[3], row[4], row[5], row[6]
@@ -524,27 +775,52 @@ def rig_icon(rig_id, variant=''):
             tex = rig['textures'][key]
             cx, cy = -tex['pivot'][0] * tex['w'], -tex['pivot'][1] * tex['h']
             x0, x1, y0, y1 = cx - tex['w'] / 2, cx + tex['w'] / 2, cy + tex['h'] / 2, cy - tex['h'] / 2
-        m = world[bone['sprite']]
-        parts.append((row[2], -bone['node'], key, x0, y0, x1, y1, m))
-    parts.sort(key=lambda r: (-r[0], r[1]))
+        parts.append((row[2], -bone['node'], 0, key, None, None, (x0, x1, y0, y1), m))
+    sized = []
+    for depth, order, seq, key, w, h, L, m in parts:
+        try:
+            im = sprite_image(key).convert('RGBa')
+        except (KeyError, OSError, TypeError):
+            continue
+        iw, ih = im.size
+        if w is None:
+            x0, x1, y0, y1 = L
+            kx, ky = (x1 - x0) / iw, (y1 - y0) / ih
+            L = (kx, 0, x0, 0, ky, y0)
+        else:
+            # the layer's size may differ from the image's: stretch to it
+            L = (L[0] * w / iw, L[1] * h / ih, L[2], L[3] * w / iw, L[4] * h / ih, L[5])
+        sized.append((depth, order, seq, im, L, m))
+    sized.sort(key=lambda r: (-r[0], r[1], r[2]))
     points = []
-    for _, _, _, x0, y0, x1, y1, m in parts:
-        for x, y in ((x0, y0), (x1, y0), (x0, y1), (x1, y1)):
+    for _, _, _, im, L, m in sized:
+        iw, ih = im.size
+        for px, py in ((0, 0), (iw, 0), (0, ih), (iw, ih)):
+            x, y = L[0] * px + L[1] * py + L[2], L[3] * px + L[4] * py + L[5]
             points.append((m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]))
+    quads = spring_quads(look, *spring) if spring else []
+    for corners, _ in quads:
+        points.extend(corners)
     minx, maxx = min(p[0] for p in points), max(p[0] for p in points)
     miny, maxy = min(p[1] for p in points), max(p[1] for p in points)
     size = 192
     scale = (size - 12) / max(maxx - minx, maxy - miny, 1)
     ox, oy = size / 2 - (minx + maxx) / 2 * scale, size / 2 + (miny + maxy) / 2 * scale
     out = Image.new('RGBA', (size, size), (0, 0, 0, 0))
-    for _, _, key, x0, y0, x1, y1, m in parts:
-        im = sprite_image(key).convert('RGBa')
-        w, h = im.size
-        # source pixel -> output pixel
-        kx, ky = (x1 - x0) / w, (y1 - y0) / h
-        a, b = scale * m[0] * kx, scale * m[2] * ky
-        d, e = -scale * m[1] * kx, -scale * m[3] * ky
-        c, f = ox + scale * (m[0] * x0 + m[2] * y0 + m[4]), oy - scale * (m[1] * x0 + m[3] * y0 + m[5])
+    if quads:
+        # Behind the rig, like the game's spring mesh. Drawn 4x and scaled down for smooth edges.
+        k = 4
+        big = Image.new('RGBA', (size * k, size * k), (0, 0, 0, 0))
+        pen = ImageDraw.Draw(big)
+        for corners, color in quads:
+            pen.polygon([((ox + x * scale) * k, (oy - y * scale) * k) for x, y in corners], fill=color + (255,))
+        out.alpha_composite(big.resize((size, size), Image.LANCZOS))
+    for _, _, _, im, L, m in sized:
+        # source pixel -> bone space (L) -> world (m) -> output pixel (scale, y down)
+        wa, wb, wc = m[0] * L[0] + m[2] * L[3], m[0] * L[1] + m[2] * L[4], m[0] * L[2] + m[2] * L[5] + m[4]
+        wd, we, wf = m[1] * L[0] + m[3] * L[3], m[1] * L[1] + m[3] * L[4], m[1] * L[2] + m[3] * L[5] + m[5]
+        a, b, c = scale * wa, scale * wb, ox + scale * wc
+        d, e, f = -scale * wd, -scale * we, oy - scale * wf
         det = a * e - b * d
         if abs(det) < 1e-9:
             continue
@@ -852,6 +1128,177 @@ def skills_catalog():
                     'template': r.get('SkillTemplateType', ''), 'params': params, 'atlas': r.get('IconAtlasId', ''), 'icon': r.get('IconAssetId', ''),
                     'color': color, 'duration': r.get('EffectDuration', 0), 'values': template_values(r.get('SkillTemplateType', ''))})
     return out
+
+
+_projectiles = (None, [])
+
+
+def projectile_catalog():
+    """Projectile prefab names the game can fire: CharacterHighResAndEquipmentAssetProvider's entries under
+    4_Projectiles in Root.unity (DIContainerInfrastructure.ProjectileAssetProvider)."""
+    global _projectiles
+    path = os.path.join(ASSETS, 'Scenes', 'Root.unity')
+    stamp = os.path.getmtime(path)
+    if _projectiles[0] != stamp:
+        text = read_text(path)
+        names = sorted(set(re.findall(r'- NameId: (\S+)\n    AssetLoadingType: \d+\n    Path: [^\n]*4_Projectiles/', text)))
+        _projectiles = (stamp, names)
+    return _projectiles[1]
+
+
+def projectile_icon(name):
+    """The projectile's picture for its library tile: its first CHMeshSprite (SmoothMoves or NGUI atlas), else the
+    texture of its particle material (the barf is particles only). PNG bytes."""
+    if name not in projectile_catalog():
+        raise KeyError(name)
+    path = os.path.join(CACHE, 'icons', 'projectile_%s.%d.png' % (name, CACHE_VERSION))
+    if os.path.exists(path):
+        return open(path, 'rb').read()
+    text = read_text(os.path.join(ASSETS, 'Resources', 'Prefabs', '4_Characters', '4_Projectiles', name + '.prefab'))
+    image = None
+    for m in re.finditer(r'm_SmoothMovesAtlas: \{fileID: \d+(?:, guid: (\w+))?[^}]*\}\n  m_NguiAtlas: \{fileID: \d+(?:, guid: (\w+))?[^}]*\}\n  m_AtlasType: (\d)\n  m_SpriteName: (.*)\n', text):
+        sm, ngui, kind, sprite = m.group(1), m.group(2), m.group(3), m.group(4).strip()
+        try:
+            if kind == '2' and sm:
+                image = sprite_image('%s:%s' % (sm, sprite))
+            elif kind == '1' and ngui:
+                atlas_path = asset_path(ngui)
+                if atlas_path:
+                    image = Image.open(io.BytesIO(ngui_png(os.path.basename(atlas_path)[:-7], sprite))).convert('RGBA')
+        except (KeyError, TypeError, OSError):
+            image = None
+        if image:
+            break
+    if image is None:
+        for guid in re.findall(r'm_Materials:\n  - \{fileID: \d+, guid: (\w+)', text):
+            mat = asset_path(guid)
+            t = re.search(r'm_Texture: \{fileID: \d+, guid: (\w+)', read_text(mat)) if mat else None
+            tex = asset_path(t.group(1)) if t else None
+            if tex and tex.lower().endswith(('.png', '.tga', '.psd', '.jpg')):
+                try:
+                    image = Image.open(tex).convert('RGBA')
+                    break
+                except OSError:
+                    continue
+    if image is None:
+        image = Image.new('RGBA', (2, 2), (0, 0, 0, 0))
+    image.thumbnail((160, 160))
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    image.save(path)
+    return open(path, 'rb').read()
+
+
+def _projectile_image(text):
+    """(image, width, height, GameObject fileID) of the projectile's first drawable sprite, else its particle texture."""
+    for m in re.finditer(r'--- !u!114 &(\d+)\nMonoBehaviour:\n(.*?)(?=\n--- |\Z)', text, re.S):
+        body = m.group(2)
+        sm = re.search(r'm_SmoothMovesAtlas: \{fileID: \d+(?:, guid: (\w+))?', body)
+        ng = re.search(r'm_NguiAtlas: \{fileID: \d+(?:, guid: (\w+))?', body)
+        kind = re.search(r'm_AtlasType: (\d)', body)
+        sprite = re.search(r'm_SpriteName: (.*)', body)
+        if not (sprite and kind):
+            continue
+        go = re.search(r'm_GameObject: \{fileID: (\d+)\}', body).group(1)
+        w = float(re.search(r'm_Width: ([-\d.]+)', body).group(1))
+        h = float(re.search(r'm_Height: ([-\d.]+)', body).group(1))
+        try:
+            if kind.group(1) == '2' and sm and sm.group(1):
+                return sprite_image('%s:%s' % (sm.group(1), sprite.group(1).strip())), w, h, go
+            if kind.group(1) == '1' and ng and ng.group(1):
+                atlas_path = asset_path(ng.group(1))
+                if atlas_path:
+                    data = ngui_png(os.path.basename(atlas_path)[:-7], sprite.group(1).strip())
+                    return Image.open(io.BytesIO(data)).convert('RGBA'), w, h, go
+        except (KeyError, TypeError, OSError):
+            continue
+    for m in re.finditer(r'--- !u!\d+ &\d+\n\w+:\n(.*?)(?=\n--- |\Z)', text, re.S):
+        body = m.group(1)
+        mats = re.search(r'm_Materials:\n  - \{fileID: \d+, guid: (\w+)', body)
+        go = re.search(r'm_GameObject: \{fileID: (\d+)\}', body)
+        if not (mats and go):
+            continue
+        mat = asset_path(mats.group(1))
+        t = re.search(r'm_Texture: \{fileID: \d+, guid: (\w+)', read_text(mat)) if mat else None
+        tex = asset_path(t.group(1)) if t else None
+        if tex and tex.lower().endswith(('.png', '.tga', '.jpg')):
+            try:
+                image = Image.open(tex).convert('RGBA')
+            except OSError:
+                continue
+            return image, 80.0, 80.0 * image.height / max(1, image.width), go.group(1)
+    return None, 0, 0, None
+
+
+def _projectile_prefab(name):
+    if name not in projectile_catalog():
+        raise KeyError(name)
+    return read_text(os.path.join(ASSETS, 'Resources', 'Prefabs', '4_Characters', '4_Projectiles', name + '.prefab'))
+
+
+def projectile_art(name):
+    """Full-size PNG of the projectile, for the preview shot."""
+    image = _projectile_image(_projectile_prefab(name))[0] or Image.new('RGBA', (2, 2), (0, 0, 0, 0))
+    buf = io.BytesIO()
+    image.save(buf, 'PNG')
+    return buf.getvalue()
+
+
+def _curve_keys(block):
+    num = r'([-\d.eE+]+|-?Infinity)'
+    return [[float(a), float(b), float(c), float(d)] for a, b, c, d in
+            re.findall(r'time: %s\n\s+value: %s\n\s+inSlope: %s\n\s+outSlope: %s' % (num, num, num, num), block)]
+
+
+def projectile_info(name):
+    """How the game flies the projectile (CHMotionTween): duration, the curve per axis, and where its sprite sits
+    relative to the moving object. SkillBattleDataBase.SpawnProjectile starts it at the MainHand bone and ends it at the
+    target's BodyCenter; the X and Y curves swap when the target is lower."""
+    text = _projectile_prefab(name)
+    transforms = {}
+    for m in re.finditer(r'--- !u!4 &(\d+)\nTransform:\n(.*?)(?=\n--- |\Z)', text, re.S):
+        body = m.group(2)
+        go = re.search(r'm_GameObject: \{fileID: (\d+)\}', body).group(1)
+        rot = [float(v) for v in re.search(r'm_LocalRotation: \{x: ([-\d.eE+]+), y: ([-\d.eE+]+), z: ([-\d.eE+]+), w: ([-\d.eE+]+)\}', body).groups()]
+        pos = [float(v) for v in re.search(r'm_LocalPosition: \{x: ([-\d.eE+]+), y: ([-\d.eE+]+)', body).groups()]
+        scale = [float(v) for v in re.search(r'm_LocalScale: \{x: ([-\d.eE+]+), y: ([-\d.eE+]+)', body).groups()]
+        father = re.search(r'm_Father: \{fileID: (\d+)\}', body).group(1)
+        transforms[go] = {'id': m.group(1), 'pos': pos, 'angle': 2 * math.atan2(rot[2], rot[3]), 'scale': scale, 'father': father}
+    by_id = {t['id']: go for go, t in transforms.items()}
+    tween_go, duration, curves, single = None, 0.2, {}, []
+    for m in re.finditer(r'--- !u!114 &(\d+)\nMonoBehaviour:\n(.*?)(?=\n--- |\Z)', text, re.S):
+        body = m.group(2)
+        if 'm_AnimationCurvesPerAxis:' not in body:
+            continue
+        tween_go = re.search(r'm_GameObject: \{fileID: (\d+)\}', body).group(1)
+        d = re.search(r'm_DurationInSeconds: ([-\d.eE+]+)', body)
+        duration = float(d.group(1)) if d else 0.2
+        head, _, per_axis = body.partition('m_AnimationCurvesPerAxis:')
+        single = _curve_keys(head.partition('m_AnimationCurve:')[2])
+        for axis, chunk in re.findall(r'- Axis: (\d)\n(.*?)(?=\n  - Axis: |\Z)', per_axis, re.S):
+            curves['xyz'[int(axis)]] = _curve_keys(chunk)
+        break
+    image, w, h, sprite_go = _projectile_image(text)
+
+    def matrix(t):
+        c, s = math.cos(t['angle']), math.sin(t['angle'])
+        return [c * t['scale'][0], s * t['scale'][0], -s * t['scale'][1], c * t['scale'][1], t['pos'][0], t['pos'][1]]
+
+    def mul(a, b):
+        return [a[0] * b[0] + a[2] * b[1], a[1] * b[0] + a[3] * b[1], a[0] * b[2] + a[2] * b[3], a[1] * b[2] + a[3] * b[3],
+                a[0] * b[4] + a[2] * b[5] + a[4], a[1] * b[4] + a[3] * b[5] + a[5]]
+    local = [1, 0, 0, 1, 0, 0]
+    go = sprite_go
+    while go and go in transforms and go != tween_go:
+        local = mul(matrix(transforms[go]), local)
+        go = by_id.get(transforms[go]['father'])
+    return {'name': name, 'w': w, 'h': h, 'local': [round(v, 4) for v in local], 'duration': duration, 'curves': curves, 'curve': single,
+            'image': '/projectileart/' + name}
+
+
+def power_levels():
+    """Level to HealthModifier %, which sets a battle pig's health and attack (PigGameData.ApplyDifficultyOnHealth)."""
+    rows = json.load(open(os.path.join(BALANCING, 'PowerLevelBalancingData.json'), encoding='utf-8'))
+    return {int(r['NameId'].split('_')[1]): r.get('HealthModifier', 0) for r in rows}
 
 
 def template_stats(rig_id):

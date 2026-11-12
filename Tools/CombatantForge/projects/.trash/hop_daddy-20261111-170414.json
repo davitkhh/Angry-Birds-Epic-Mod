@@ -1,0 +1,104 @@
+{
+ "id": "hop_daddy",
+ "name": "Hop Daddy",
+ "rig": "PigKnight",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "q94e0cut",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Bunny",
+     "name": "Headgear_Bunny",
+     "item": "Headgear_Bunny",
+     "w": 411,
+     "h": 387,
+     "pivot": [
+      0.010714285,
+      0.14792357
+     ],
+     "tx": -19.27072100700707,
+     "ty": 69.53326089054536,
+     "rot": 0,
+     "sx": 0.6837356558825355,
+     "sy": 0.6837356558825355,
+     "shear": 0,
+     "pair": "2inzyr59"
+    }
+   ],
+   "hidden": false,
+   "active": "q94e0cut"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "ahazhjhf",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Bunny_Back",
+     "name": "Headgear_Bunny_Back",
+     "item": "Headgear_Bunny",
+     "w": 247,
+     "h": 211,
+     "pivot": [
+      -0.08035714,
+      0.52677727
+     ],
+     "tx": -26.940695793574495,
+     "ty": 86.58104201753777,
+     "rot": 0,
+     "sx": 0.6837356558825355,
+     "sy": 0.6837356558825355,
+     "shear": 0,
+     "pair": "2inzyr59"
+    }
+   ],
+   "hidden": false,
+   "active": "ahazhjhf"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "k1e4ylle",
+     "src": "944fb69e523fc284d8461513e658b534:MainHand_BlueHunter",
+     "name": "MainHand_BlueHunter",
+     "item": "MainHand_BlueHunter",
+     "w": 124,
+     "h": 50,
+     "pivot": [
+      -0.43392855,
+      -0.04765625
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "k1e4ylle"
+  }
+ },
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 260,
+  "attack": 23,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ }
+}

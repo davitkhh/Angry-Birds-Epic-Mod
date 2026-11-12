@@ -1,0 +1,465 @@
+{
+ "kind": "existing",
+ "id": "pig_knight_clockwork",
+ "name": "Clockwork Knight",
+ "rig": "PigKnight",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_WindupKnight",
+     "name": "Headgear_WindupKnight",
+     "item": "Headgear_WindupKnight",
+     "w": 244,
+     "h": 220,
+     "pivot": [
+      -0.02,
+      -0.28
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_WindupKnight_Back",
+     "name": "Headgear_WindupKnight_Back",
+     "item": "Headgear_WindupKnight",
+     "w": 164,
+     "h": 92,
+     "pivot": [
+      0.22,
+      -0.07
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_WindupKnight",
+     "name": "MainHand_WindupKnight",
+     "item": "MainHand_WindupKnight",
+     "w": 268,
+     "h": 94,
+     "pivot": [
+      -0.34,
+      -0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_WindupKnight",
+     "name": "OffHand_WindupKnight",
+     "item": "OffHand_WindupKnight",
+     "w": 124,
+     "h": 142,
+     "pivot": [
+      0.07,
+      -0.04
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_571ff",
+   "origin": "pig_attack_knight_clockwork",
+   "type": "Attack",
+   "source": "pig_attack_knight_clockwork",
+   "name": "Eureka!",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 35,
+    "attack_count": 3,
+    "reduction_in_percent": 20,
+    "chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_d20c6",
+   "origin": "pig_support_knight_clockwork",
+   "type": "Support",
+   "source": "pig_support_knight_clockwork",
+   "name": "Pig Protection",
+   "desc": "The Clockwork Knight protects [00a800]{value_1}[-] allies and has a [00a800]{value_3}%[-] chance to take the damage instead of the ally. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "amount_of_targets": 3,
+    "chance_to_protect": 50
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"chance_to_protect\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_1}": {
+     "expr": "(p(\"amount_of_targets\"))"
+    }
+   },
+   "template": "ChanceToProtectAlliesSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a2_5f17f",
+   "origin": "pig_passive_ironclad",
+   "type": "Passive",
+   "source": "pig_passive_ironclad",
+   "name": "Ironclad",
+   "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 22,
+    "lower_or_higher": -1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 300,
+  "attack": 28,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_knight_clockwork",
+  "fingerprint": "775ae41aaf7eb0ca84571424783715e64de597d9",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_knight_clockwork"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_knight_clockwork"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Clockwork Knight",
+   "rig": "PigKnight",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_WindupKnight",
+       "name": "Headgear_WindupKnight",
+       "item": "Headgear_WindupKnight",
+       "w": 244,
+       "h": 220,
+       "pivot": [
+        -0.02,
+        -0.28
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_WindupKnight_Back",
+       "name": "Headgear_WindupKnight_Back",
+       "item": "Headgear_WindupKnight",
+       "w": 164,
+       "h": 92,
+       "pivot": [
+        0.22,
+        -0.07
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_WindupKnight",
+       "name": "MainHand_WindupKnight",
+       "item": "MainHand_WindupKnight",
+       "w": 268,
+       "h": 94,
+       "pivot": [
+        -0.34,
+        -0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_WindupKnight",
+       "name": "OffHand_WindupKnight",
+       "item": "OffHand_WindupKnight",
+       "w": 124,
+       "h": 142,
+       "pivot": [
+        0.07,
+        -0.04
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 300,
+    "attack": 28,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_571ff",
+     "origin": "pig_attack_knight_clockwork",
+     "type": "Attack",
+     "source": "pig_attack_knight_clockwork",
+     "name": "Eureka!",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 35,
+      "attack_count": 3,
+      "reduction_in_percent": 20,
+      "chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_d20c6",
+     "origin": "pig_support_knight_clockwork",
+     "type": "Support",
+     "source": "pig_support_knight_clockwork",
+     "name": "Pig Protection",
+     "desc": "The Clockwork Knight protects [00a800]{value_1}[-] allies and has a [00a800]{value_3}%[-] chance to take the damage instead of the ally. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "amount_of_targets": 3,
+      "chance_to_protect": 50
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"chance_to_protect\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_1}": {
+       "expr": "(p(\"amount_of_targets\"))"
+      }
+     },
+     "template": "ChanceToProtectAlliesSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a2_5f17f",
+     "origin": "pig_passive_ironclad",
+     "type": "Passive",
+     "source": "pig_passive_ironclad",
+     "name": "Ironclad",
+     "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 22,
+      "lower_or_higher": -1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -18852,6 +18852,9 @@ public sealed class ABHModelSerializer : TypeModel
         case SkillTargetTypes.SetHit:
           ProtoWriter.WriteInt32(6, _param1);
           break;
+        case SkillTargetTypes.Combo:
+          ProtoWriter.WriteInt32(7, _param1);
+          break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -19131,6 +19134,9 @@ public sealed class ABHModelSerializer : TypeModel
               break;
             case 6:
               skillTargetTypes = SkillTargetTypes.SetHit;
+              break;
+            case 7:
+              skillTargetTypes = SkillTargetTypes.Combo;
               break;
             default:
               _param1.ThrowEnumException(typeof (SkillTargetTypes), num3);
@@ -30656,6 +30662,9 @@ public sealed class ABHModelSerializer : TypeModel
         case PerkType.Rally:
           ProtoWriter.WriteInt32(27, _param1);
           break;
+        case PerkType.Hype:
+          ProtoWriter.WriteInt32(28, _param1);
+          break;
         default:
           ProtoWriter.ThrowEnumException(_param1, (object) enumValue);
           break;
@@ -30781,6 +30790,9 @@ public sealed class ABHModelSerializer : TypeModel
               break;
             case 27:
               perkType = PerkType.Rally;
+              break;
+            case 28:
+              perkType = PerkType.Hype;
               break;
             default:
               _param1.ThrowEnumException(typeof (PerkType), num2);
@@ -39601,6 +39613,9 @@ public sealed class ABHModelSerializer : TypeModel
       case SkillTargetTypes.SetHit:
         ProtoWriter.WriteInt32(6, _param1);
         break;
+      case SkillTargetTypes.Combo:
+        ProtoWriter.WriteInt32(7, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -39630,6 +39645,9 @@ public sealed class ABHModelSerializer : TypeModel
         break;
       case 6:
         skillTargetTypes = SkillTargetTypes.SetHit;
+        break;
+      case 7:
+        skillTargetTypes = SkillTargetTypes.Combo;
         break;
       default:
         _param1.ThrowEnumException(typeof (SkillTargetTypes), num);
@@ -41656,6 +41674,9 @@ public sealed class ABHModelSerializer : TypeModel
       case PerkType.Rally:
         ProtoWriter.WriteInt32(27, _param1);
         break;
+      case PerkType.Hype:
+        ProtoWriter.WriteInt32(28, _param1);
+        break;
       default:
         ProtoWriter.ThrowEnumException(_param1, (object) _param0);
         break;
@@ -41751,6 +41772,9 @@ public sealed class ABHModelSerializer : TypeModel
         break;
       case 27:
         perkType = PerkType.Rally;
+        break;
+      case 28:
+        perkType = PerkType.Hype;
         break;
       default:
         _param1.ThrowEnumException(typeof (PerkType), num);

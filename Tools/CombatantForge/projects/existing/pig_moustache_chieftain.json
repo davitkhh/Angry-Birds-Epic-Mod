@@ -1,0 +1,393 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_chieftain",
+ "name": "Chieftain",
+ "rig": "MoustachePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chieftain",
+     "name": "Headgear_Chieftain",
+     "item": "Headgear_Chieftain",
+     "w": 237,
+     "h": 226,
+     "pivot": [
+      0.04285714,
+      -0.2190977
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chieftain_Back",
+     "name": "Headgear_Chieftain_Back",
+     "item": "Headgear_Chieftain",
+     "w": 190,
+     "h": 99,
+     "pivot": [
+      0.1017857,
+      0.2364719
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Chieftain",
+     "name": "MainHand_Chieftain",
+     "item": "MainHand_Chieftain",
+     "w": 217,
+     "h": 114,
+     "pivot": [
+      -0.3857143,
+      -0.005098684
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_05146",
+   "origin": "pig_attack_moustache_chieftain",
+   "type": "Attack",
+   "source": "pig_attack_moustache_chieftain",
+   "name": "Unbroken Will",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_8f105",
+   "origin": "pig_support_moustache_chieftain",
+   "type": "Support",
+   "source": "pig_support_moustache_chieftain",
+   "name": "Spiritual Guidance",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals all pigs for [00a800]{value_1}[-] health.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Heal",
+   "params": {
+    "health_in_percent": 25,
+    "charge": 2,
+    "all": 1,
+    "invoker": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealChargeSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_67846",
+   "origin": "pig_passive_incompetentminions",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 250,
+  "attack": 28,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_chieftain",
+  "fingerprint": "137bf5c2eb80fbc09813e6a97cf2621d3c7524d5",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 65,
+    "ComboChain": [
+     "pig_attack_moustache_chieftain"
+    ]
+   },
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_support_moustache_chieftain"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Chieftain",
+   "rig": "MoustachePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chieftain",
+       "name": "Headgear_Chieftain",
+       "item": "Headgear_Chieftain",
+       "w": 237,
+       "h": 226,
+       "pivot": [
+        0.04285714,
+        -0.2190977
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Chieftain_Back",
+       "name": "Headgear_Chieftain_Back",
+       "item": "Headgear_Chieftain",
+       "w": 190,
+       "h": 99,
+       "pivot": [
+        0.1017857,
+        0.2364719
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Chieftain",
+       "name": "MainHand_Chieftain",
+       "item": "MainHand_Chieftain",
+       "w": 217,
+       "h": 114,
+       "pivot": [
+        -0.3857143,
+        -0.005098684
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 250,
+    "attack": 28,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_05146",
+     "origin": "pig_attack_moustache_chieftain",
+     "type": "Attack",
+     "source": "pig_attack_moustache_chieftain",
+     "name": "Unbroken Will",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_8f105",
+     "origin": "pig_support_moustache_chieftain",
+     "type": "Support",
+     "source": "pig_support_moustache_chieftain",
+     "name": "Spiritual Guidance",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals all pigs for [00a800]{value_1}[-] health.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Heal",
+     "params": {
+      "health_in_percent": 25,
+      "charge": 2,
+      "all": 1,
+      "invoker": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealChargeSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_67846",
+     "origin": "pig_passive_incompetentminions",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

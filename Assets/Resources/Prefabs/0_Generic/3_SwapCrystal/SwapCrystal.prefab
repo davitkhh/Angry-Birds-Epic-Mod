@@ -394,6 +394,7 @@ MonoBehaviour:
   m_BobHeight: 6
   m_BobSpeed: 1.6
   m_GlowSize: 150
+  m_CounterBubble: {fileID: 114385919261074040, guid: cfa227b2ef114d839811084e7aa88fce, type: 3}
   m_BeamTexture: {fileID: 2800000, guid: 0f4ed95f9e71424995a1980216daaf2a, type: 3}
   m_BeamLength: 520
   m_BeamBaseWidth: 52
@@ -440,7 +441,7 @@ MonoBehaviour:
   BodyRoot: {fileID: 49805234237885}
   HealthBarPosition: {x: 0, y: -20, z: -1000}
   CombatTextPosition: {x: 0, y: 160, z: -1010}
-  BubblePosition: {x: 38, y: 112, z: -1000}
+  BubblePosition: {x: 20, y: 112, z: -1000}
   ColliderSize: {x: 150, y: 170, z: 0}
   ColliderOffset: {x: 0, y: 80, z: 0}
   MinMaxTimeForBlink: {x: 2, y: 4}

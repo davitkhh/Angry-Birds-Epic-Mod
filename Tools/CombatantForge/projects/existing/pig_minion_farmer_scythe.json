@@ -1,0 +1,337 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_farmer_scythe",
+ "name": "Scythe Farmer",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
+     "name": "Headgear_EggPainter",
+     "item": "Headgear_EggPainter",
+     "w": 136,
+     "h": 70,
+     "pivot": [
+      -0.20892857,
+      -0.8170408
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DarkCupid",
+     "name": "MainHand_DarkCupid",
+     "item": "MainHand_DarkCupid",
+     "w": 124,
+     "h": 141,
+     "pivot": [
+      -0.27321428,
+      -0.14840426
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_BirdCatcher",
+     "name": "OffHand_BirdCatcher",
+     "item": "OffHand_BirdCatcher",
+     "w": 124,
+     "h": 88,
+     "pivot": [
+      -0.29,
+      0.01
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_93caa",
+   "origin": "pig_attack_minion_farmer_heal",
+   "type": "Attack",
+   "source": "pig_attack_minion_farmer_heal",
+   "name": "Headbutt",
+   "desc": "Deals [ff0000]{value_1}[-] damage. The most hurt pig is healed by [00a800]{value_3}%[-] of the dealt damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "heal_ally": 30,
+    "intensity": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal_ally\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithHealWeakerAlly",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_a806b",
+   "origin": "pig_attack_minion_stickpig_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_stickpig_02",
+   "name": "Stumble",
+   "desc": "The pig stumbles and does nothing. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "tumble": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 60,
+  "attack": 26,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_farmer_scythe",
+  "fingerprint": "c9cb6239d5bc861e295e643500bbba1554b6bc51",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 80,
+    "ComboChain": [
+     "pig_attack_minion_farmer_heal"
+    ]
+   },
+   {
+    "Percentage": 20,
+    "ComboChain": [
+     "pig_attack_minion_stickpig_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Scythe Farmer",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
+       "name": "Headgear_EggPainter",
+       "item": "Headgear_EggPainter",
+       "w": 136,
+       "h": 70,
+       "pivot": [
+        -0.20892857,
+        -0.8170408
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DarkCupid",
+       "name": "MainHand_DarkCupid",
+       "item": "MainHand_DarkCupid",
+       "w": 124,
+       "h": 141,
+       "pivot": [
+        -0.27321428,
+        -0.14840426
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_BirdCatcher",
+       "name": "OffHand_BirdCatcher",
+       "item": "OffHand_BirdCatcher",
+       "w": 124,
+       "h": 88,
+       "pivot": [
+        -0.29,
+        0.01
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 60,
+    "attack": 26,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_93caa",
+     "origin": "pig_attack_minion_farmer_heal",
+     "type": "Attack",
+     "source": "pig_attack_minion_farmer_heal",
+     "name": "Headbutt",
+     "desc": "Deals [ff0000]{value_1}[-] damage. The most hurt pig is healed by [00a800]{value_3}%[-] of the dealt damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "heal_ally": 30,
+      "intensity": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal_ally\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithHealWeakerAlly",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_a806b",
+     "origin": "pig_attack_minion_stickpig_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_stickpig_02",
+     "name": "Stumble",
+     "desc": "The pig stumbles and does nothing. Stupid pig.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "tumble": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_chance\"))"
+      }
+     },
+     "template": "DoNothingSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

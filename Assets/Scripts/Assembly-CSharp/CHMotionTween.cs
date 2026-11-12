@@ -12,6 +12,10 @@ public class CHMotionTween : MonoBehaviour
 
 	public Action Finished;
 
+	// Lets a character change how long a Duration tween takes (SpringDrone: as long as its hops need). Gets the tween,
+	// its start and end and the requested duration; returns the duration to use.
+	public static Func<CHMotionTween, Vector3, Vector3, float, float> AdjustDuration;
+
 	public Action<bool> Paused;
 
 	public Transform m_StartTransform;
@@ -126,7 +130,7 @@ public class CHMotionTween : MonoBehaviour
 		}
 		if (m_Timing == TimingTypes.Duration)
 		{
-			m_KeyDuration = m_DurationInSeconds;
+			m_KeyDuration = AdjustDuration != null ? AdjustDuration(this, m_StartKey, m_EndKey, m_DurationInSeconds) : m_DurationInSeconds;
 		}
 		else if (m_Timing == TimingTypes.UnitsPerSecond)
 		{

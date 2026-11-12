@@ -49,6 +49,20 @@ public class RageSplineLite : MonoBehaviour
 	}
 	#endif
 
+	// Runtime path through these local points (straight between them), walked from first to last.
+	public void SetPolyline(Vector3[] points)
+	{
+		var ctrl = new Vector3[points.Length * 2];
+		var natural = new bool[points.Length];
+		var width = new float[points.Length];
+		for (var i = 0; i < width.Length; i++)
+		{
+			width[i] = 1f;
+		}
+		m_SplineCurve = new RageCurve(points, ctrl, natural, width);
+		m_IsOpenEnded = true;
+	}
+
 	public Vector3 GetPositionWorldSpace(float splinePosition)
 	{
 		return base.transform.TransformPoint(m_SplineCurve.GetPoint(splinePosition * GetLastSplinePosition()));

@@ -13,12 +13,17 @@ namespace ABH.GameDatas.Battle
 	//   ammo_start                   ammo at the start of every battle
 	//   ammo_cost                    ammo each attack (the class's attack skills, not rage) uses; default 1. An attack
 	//                                can't be used without that much
-	//   ammo_regen                   ammo gained every ammo_regen_turns turns (counted at the end of each turn after the
-	//   ammo_regen_turns             battle's first)
+	//   ammo_regen                   ammo gained every ammo_regen_turns turns (counted as each turn after the battle's first
+	//   ammo_regen_turns             one begins)
 	//   ammo_on_support              ammo gained after using a support skill
 	//   ammo_on_kill                 ammo gained for every pig the combatant knocks out
 	//   ammo_free_with_blessing      1: attacks use no ammo while the attacker has a positive effect
 	//   damage_per_blessing_percent  attacks deal this much more damage (%) for every positive effect on the attacker
+	//   charge_max                   charges the weapon holds; every attack uses them all (needs ammo_start too)
+	//   charge_on_self_support       charges gained after using a support skill on yourself
+	//   charge_damage_percent        the attack's target takes this much more damage (%) per charge used
+	//   charge_splash_percent        an attack using charge_max charges also hits every other enemy for this much (%) of
+	//                                its uncharged damage
 	// Positive effects are the visible Blessings on the combatant. Later an ammo item will add attributes of its own
 	// (GetAttributes is where they get merged). Combatants are rebuilt for every battle, so the state lives as long as the
 	// combatant.
@@ -40,9 +45,21 @@ namespace ABH.GameDatas.Battle
 
 		public const string DamagePerBlessingKey = "damage_per_blessing_percent";
 
+		public const string ChargeMaxKey = "charge_max";
+
+		public const string ChargeOnSelfSupportKey = "charge_on_self_support";
+
+		public const string ChargeDamageKey = "charge_damage_percent";
+
+		public const string ChargeSplashKey = "charge_splash_percent";
+
 		public class State
 		{
 			public int Current;
+
+			public int Charges;
+
+			public int MaxCharges;
 
 			public int Start;
 
@@ -103,6 +120,7 @@ namespace ABH.GameDatas.Battle
 				Start = GetInt(attributes, StartKey),
 				Regen = GetInt(attributes, RegenKey),
 				RegenTurns = GetInt(attributes, RegenTurnsKey),
+				MaxCharges = GetInt(attributes, ChargeMaxKey),
 				Attributes = attributes
 			};
 			state.Current = state.Start;
@@ -126,12 +144,28 @@ namespace ABH.GameDatas.Battle
 		// rage is triggered, so a bird's rage skill (slot 2) is also recognised by name.
 		public static bool IsAmmoSkill(ICombatant combatant, SkillBattleDataBase skill)
 		{
-			if (skill == null || skill.Model == null || skill.m_IsRageSkill || skill.Model.Balancing.TargetType != SkillTargetTypes.Attack)
+			return skill != null && skill.Model != null && skill.Model.Balancing.TargetType == SkillTargetTypes.Attack && !IsRageSkill(combatant, skill);
+		}
+
+		private static bool IsRageSkill(ICombatant combatant, SkillBattleDataBase skill)
+		{
+			if (skill.m_IsRageSkill)
 			{
-				return false;
+				return true;
 			}
 			var rage = combatant is BirdCombatant ? combatant.GetSkill(2) : null;
-			return rage == null || rage.Model == null || rage.Model.Balancing.NameId != skill.Model.Balancing.NameId;
+			return rage != null && rage.Model != null && rage.Model.Balancing.NameId == skill.Model.Balancing.NameId;
+		}
+
+		// Ammo the combatant gets for using the skill (its weapon's ammo_on_support on support skills, never rage)
+		public static int GetGain(ICombatant combatant, SkillBattleDataBase skill)
+		{
+			var state = GetState(combatant);
+			if (state == null || skill == null || skill.Model == null || skill.Model.Balancing.TargetType != SkillTargetTypes.Support || IsRageSkill(combatant, skill))
+			{
+				return 0;
+			}
+			return GetInt(state.Attributes, SupportGainKey);
 		}
 
 		// Whether the skill shows and spends ammo for this combatant (ignores free shots)
@@ -205,6 +239,33 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		// An attack starts: it uses up all the weapon's charges, returning how many (rage neither gets nor loses them).
+		public static int TakeCharges(ICombatant combatant, SkillBattleDataBase skill)
+		{
+			var state = GetState(combatant);
+			if (state == null || state.Charges <= 0 || !IsAmmoSkill(combatant, skill))
+			{
+				return 0;
+			}
+			var charges = state.Charges;
+			state.Charges = 0;
+			RaiseChanged(combatant);
+			return charges;
+		}
+
+		// What the attack's target takes from charges, as a damage multiplier
+		public static float GetChargeDamageMultiplier(ICombatant source, int charges)
+		{
+			return charges > 0 ? 1f + charges * GetFloat(GetAttributes(source), ChargeDamageKey) / 100f : 1f;
+		}
+
+		// What the other enemies take as a share of the uncharged damage: 0 unless the attack used a full charge.
+		public static float GetChargeSplashMultiplier(ICombatant source, int charges)
+		{
+			var state = GetState(source);
+			return state != null && state.MaxCharges > 0 && charges >= state.MaxCharges ? GetFloat(state.Attributes, ChargeSplashKey) / 100f : 0f;
+		}
+
 		// The skill the combatant would use, or the first other usable skill it can afford when it lacks the ammo
 		// (attack/support only, never rage). Falls back to the skill itself when nothing is affordable.
 		public static SkillBattleDataBase GetAffordableSkill(ICombatant combatant, SkillBattleDataBase skill)
@@ -245,13 +306,18 @@ namespace ABH.GameDatas.Battle
 			RaiseChanged(combatant);
 		}
 
-		// Called after the skill ran: supports give the weapon's ammo_on_support to their user.
+		// Called after the skill ran: supports give the weapon's ammo_on_support to their user, and charges when used on themselves.
 		public static void OnSkillFinished(ICombatant combatant, SkillBattleDataBase skill)
 		{
 			var state = GetState(combatant);
 			if (state == null || skill == null || skill.m_IsRageSkill || skill.Model.Balancing.TargetType != SkillTargetTypes.Support || combatant == null || !combatant.IsParticipating)
 			{
 				return;
+			}
+			if (state.MaxCharges > 0 && combatant.AttackTarget == combatant)
+			{
+				state.Charges = Mathf.Min(state.MaxCharges, state.Charges + GetInt(state.Attributes, ChargeOnSelfSupportKey));
+				RaiseChanged(combatant);
 			}
 			Gain(combatant, GetInt(state.Attributes, SupportGainKey));
 		}
@@ -285,8 +351,9 @@ namespace ABH.GameDatas.Battle
 		// End of a turn: counts towards each combatant's regen and pays it out every RegenTurns turns.
 		public static void OnTurnEnded(BattleGameData battle)
 		{
-			// m_CurrentTurn was already advanced; the battle's first turn (and the set-up step before it) don't count
-			if (battle == null || battle.m_CombatantsByInitiative == null || battle.m_CurrentTurn - 1 < 2)
+			// m_CurrentTurn was already advanced to the turn that's beginning. It starts at 0 and the set-up step moves it to
+			// 1, so the battle's first turn gets nothing and turn 2 is the first to pay.
+			if (battle == null || battle.m_CombatantsByInitiative == null || battle.m_CurrentTurn < 2)
 			{
 				return;
 			}
@@ -316,6 +383,12 @@ namespace ABH.GameDatas.Battle
 			{
 				Changed(combatant);
 			}
+		}
+
+		private static float GetFloat(Dictionary<string, float> attributes, string key)
+		{
+			float value;
+			return attributes != null && attributes.TryGetValue(key, out value) ? value : 0f;
 		}
 
 		private static int GetInt(Dictionary<string, float> attributes, string key)

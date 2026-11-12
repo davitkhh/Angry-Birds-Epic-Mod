@@ -135,6 +135,7 @@
 		IncreaseDamageAndHealingOnAttack,
 		ReduceDamageDealtAgainstSource,
 		SummonCombatantHealthGated,
-		Stinkeye
+		Stinkeye,
+		SplitDamageAndCounter
 	}
 }

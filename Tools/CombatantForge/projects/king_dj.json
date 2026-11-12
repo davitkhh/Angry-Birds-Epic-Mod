@@ -1,0 +1,333 @@
+{
+ "id": "king_dj",
+ "name": "King DJ",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "4dm7gwer",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+     "name": "Headgear_BestBoy_Back",
+     "item": "Headgear_BestBoy",
+     "w": 98,
+     "h": 52,
+     "pivot": [
+      -0.3267857,
+      -0.6512019
+     ],
+     "tx": -45.88581068390218,
+     "ty": -32.91267674228755,
+     "rot": 0,
+     "sx": 1.7980999866623801,
+     "sy": 1.7980999866623801,
+     "shear": 0,
+     "pair": "0wr395xb"
+    },
+    {
+     "uid": "y6pnyp3m",
+     "src": "e96119f541d54b243afe42090f52bfb9:Headgear",
+     "name": "Headgear",
+     "item": "Headgear",
+     "w": 114,
+     "h": 222,
+     "pivot": [
+      -0.02,
+      -0.44
+     ],
+     "tx": -6.218690472273522,
+     "ty": 10.06132201887354,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "3wfx0sri"
+  },
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "6ml46kc0",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+     "name": "Headgear_BestBoy",
+     "item": "Headgear_BestBoy",
+     "w": 56,
+     "h": 70,
+     "pivot": [
+      -1.0488416,
+      -0.062450107
+     ],
+     "tx": -24.568455489051757,
+     "ty": -56.44943651345892,
+     "rot": 0,
+     "sx": 1.7980999866623801,
+     "sy": 1.7980999866623801,
+     "shear": 0,
+     "pair": "0wr395xb"
+    },
+    {
+     "uid": "xx4072zq",
+     "src": "8c498735e058742438cc0f869bf1bf96:Headgear_Iceshaman",
+     "name": "Headgear_Iceshaman",
+     "item": "Headgear_Iceshaman",
+     "w": 256,
+     "h": 274,
+     "pivot": [
+      -0.15535714,
+      -0.10260688
+     ],
+     "tx": -52.27587441803456,
+     "ty": -16.985550413084027,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "hidden": true
+    }
+   ],
+   "hidden": false,
+   "active": "xx4072zq"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "50co3klg",
+     "src": "4d9c840e678851340991edfc95c8a866:MainHand_Director",
+     "name": "MainHand_Director",
+     "item": "MainHand_Director",
+     "w": 140,
+     "h": 138,
+     "pivot": [
+      -0.34285712,
+      -0.05964721
+     ],
+     "tx": -34.58391864966407,
+     "ty": -17.593634107016968,
+     "rot": 230.59904117283398,
+     "sx": -1,
+     "sy": -1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "50co3klg"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "txqk0tpf",
+     "src": "2fd092ecce56efd41a5b3d076519b5de:OffHand_Dracula_Back",
+     "name": "OffHand_Dracula_Back",
+     "item": "OffHand_Dracula",
+     "w": 382,
+     "h": 179,
+     "pivot": [
+      -0.004031554,
+      -0.4804081
+     ],
+     "tx": -7.736768844316421,
+     "ty": -25.31907939370951,
+     "rot": 0,
+     "sx": 0.6308871389138395,
+     "sy": 0.5896857175674487,
+     "shear": 0,
+     "pair": "q6im5q2f",
+     "hidden": true
+    },
+    {
+     "uid": "8chk851w",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Foreman",
+     "name": "MainHand_Foreman",
+     "item": "MainHand_Foreman",
+     "w": 195,
+     "h": 121,
+     "pivot": [
+      -0.3375,
+      -0.04748376
+     ],
+     "tx": 58.84454295600477,
+     "ty": 59.586839957115956,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "txqk0tpf"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "gbrv8j3s",
+     "src": "2fd092ecce56efd41a5b3d076519b5de:OffHand_Dracula",
+     "name": "OffHand_Dracula",
+     "item": "OffHand_Dracula",
+     "w": 388,
+     "h": 206,
+     "pivot": [
+      0,
+      -0.3701493
+     ],
+     "tx": -7.104862845035953,
+     "ty": -21.321676980821138,
+     "rot": 0,
+     "sx": 0.6308871389138395,
+     "sy": 0.5896857175674487,
+     "shear": 0,
+     "pair": "q6im5q2f"
+    }
+   ],
+   "hidden": false,
+   "active": "zfsa96sk"
+  },
+  "Beard_Bottom": {
+   "layers": [],
+   "hidden": true
+  }
+ },
+ "abilities": [
+  {
+   "uid": "by2z073f",
+   "type": "Attack",
+   "name": "Hit Single",
+   "desc": "Walks up to a single target and clobbers it at close range, dealing [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "The animation for this ability is the pig walking ito its target and using his attack animation 1 to visually clobber the target in close range instead of the pig mage's usual long-range. The attack dals 180% damage to a single target",
+   "nameId": "pig_attack_forge_king_dj_new_ability_2",
+   "written": true,
+   "template": "WalkUpMeleeAttack",
+   "params": {
+    "damage_in_percent": 180
+   },
+   "duration": 0,
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   }
+  },
+  {
+   "uid": "ftqpk95n",
+   "type": "Attack",
+   "name": "Fog Machine",
+   "desc": "deals [ff0000]{value_1}[-] damage to a random target. The target can only perform a strict order of moves for [ff0000]{value_2}[-] turns. [0000ff]Charge:[-] [ff0000]{value_3}[-]\n turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "This attack's animation is the pig turning areound then doing his support animation. A blast particle appear out of the end of the pipe at the frame it stops expanding. The projectile is a sound wave you will make yourself. It travels like a physically accurate sound wave, and it has colorful notes around it. The sound wave is dark blue but it has rainbowy details around the edges that change it color. It deals 130% damage to a random enemy. The attacked target can only perform a strict order of moves for 4 turns. The order is attack -> support -> support -> attack. Charge: 2 turns.",
+   "nameId": "pig_attack_forge_king_dj_new_ability",
+   "written": true,
+   "template": "AttackAndForceMoveOrder",
+   "params": {
+    "damage_in_percent": 130,
+    "charge": 2,
+    "move_1": 0,
+    "move_2": 1,
+    "move_3": 1,
+    "move_4": 0
+   },
+   "duration": 4,
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    }
+   },
+   "anim": "Action_Support",
+   "ranged": "ranged"
+  },
+  {
+   "uid": "8v7hxj09",
+   "type": "Attack",
+   "name": "Booty Blast",
+   "desc": "Every enemy and an additional enemy take 130% damage and get stunned for 1 turn. Charge: 2 turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "This attack's animation is the pig turning areound then doing his Hit animation. A blast particle appear out of the end of the pipe at the frame it stops expanding. The prrojectiles are various musical assets from the game broken into several pieces (they should look like they fit in the pipe). A projectile gets shot at every enemy as well as an additional enemy. Every projectile deals 50% damage and stuns the target for 1 turn. Charge: 2 turns",
+   "nameId": "pig_attack_forge_king_dj_new_ability",
+   "written": true,
+   "template": "MusicShrapnelVolley",
+   "params": {
+    "damage_in_percent": 50,
+    "duration": 1,
+    "charge": 2,
+    "all": 1,
+    "extra_projectiles": 1
+   },
+   "duration": 0,
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(Math.max(0, ((p(\"extra_projectiles\")))))"
+    }
+   },
+   "ranged": "ranged",
+   "projectile": "Projectile_PigDrone_RocketStrike",
+   "anim": "Hit"
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 420,
+  "attack": 14,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 10,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "guids": {
+  "src:Forge_king_dj_Back": "a6c68e15494b4afb8c96eca3557d7620",
+  "src:Forge_king_dj": "93cabca3d1984a8fbb89c3fb5f88d6c6",
+  "src:Forge_king_dj_MainHand": "8a4aee5d0fd64f38acce86bf91bd7b9f",
+  "src:Forge_king_dj_OffHand_Back": "bff5c18ef50b4682862f64f082d12784",
+  "src:Forge_king_dj_OffHand": "440d8104f7e24011b154e15389149dd4",
+  "src:Forge_king_dj__Beard_Bottom": "6286dcd4407a46d0b7519694793e2a54",
+  "tex:HR": "52c883c9cac64e558a932edbf0dbac03",
+  "tex:LR": "93e858b7d5a049ef9b11f71aa26c9e62",
+  "mat:HR": "a6a4a2c3485947adbd211e4ad964aae1",
+  "mat:LR": "b27cf8f5927149f489213bcb7496734a",
+  "atlas:HR": "b808477a26e04e92a295d2965e305182",
+  "atlas:LR": "7c730a77ec2845cda4c76c6602610f13"
+ },
+ "publishedAt": "2026-11-07 23:56",
+ "publishedRig": "PigMage"
+}

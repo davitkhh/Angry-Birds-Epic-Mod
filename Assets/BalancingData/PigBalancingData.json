@@ -3143,6 +3143,38 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_golden_pig_bird3",
+    "AssetId": "GoldenPig",
+    "LocaId": "pig_golden_pig",
+    "DefaultInventoryNameId": "pig_minion_goldenpig_01",
+    "BaseHealth": 165,
+    "BaseAttack": 12,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_golden_pig_01"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_golden_pig_01"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "lucky_coin": 1,
+      "loot_pig5_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 5,
+    "PassiveSkillNameId": "pig_passive_fullpockets_golden",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_golden_pig_boss",
     "AssetId": "GoldenPig",
     "LocaId": "pig_golden_pig_boss",
@@ -5981,7 +6013,7 @@
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "",
     "BaseHealth": 110,
-    "BaseAttack": 18,
+    "BaseAttack": 13,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -6013,7 +6045,7 @@
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "",
     "BaseHealth": 145,
-    "BaseAttack": 24,
+    "BaseAttack": 18,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
@@ -14081,6 +14113,38 @@
     "IgnoreDifficulty": false
   },
   {
+    "NameId": "pig_drone_tinker_spring",
+    "AssetId": "PigDrone",
+    "LocaId": "pig_drone_tinker_spring",
+    "DefaultInventoryNameId": "pig_drone_tinkered_01",
+    "BaseHealth": 70,
+    "BaseAttack": 12,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_drone_tinker"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_drone_tinker"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig2_defeated_gold": 1,
+      "loot_pig2_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 0.9,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
     "NameId": "pig_drone_blue_hunter",
     "AssetId": "PigDrone",
     "LocaId": "pig_drone_blue_hunter",
@@ -19101,20 +19165,20 @@
     "NameId": "pig_zombie_farmer",
     "AssetId": "ZombiePig",
     "LocaId": "pig_zombie_farmer",
-    "DefaultInventoryNameId": "pig_zombie_farmer_01",
+    "DefaultInventoryNameId": "pig_forge_pig_zombie_farmer__e0_inv1",
     "BaseHealth": 180,
     "BaseAttack": 20,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_zombie_farmer_sow",
+      "pig_attack_forge_pig_zombie_farmer__e0_sow",
       "pig_attack_zombie_farmer_reap"
     ],
     "SkillCombos": [
       {
         "Percentage": 100.0,
         "ComboChain": [
-          "pig_attack_zombie_farmer_sow",
+          "pig_attack_forge_pig_zombie_farmer__e0_sow",
           "pig_attack_zombie_farmer_reap"
         ]
       }
@@ -19241,6 +19305,173 @@
     },
     "SizeScale": 1.5,
     "PigStrength": 5,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_forge_stringtheory",
+    "AssetId": "PigMage",
+    "LocaId": "pig_forge_stringtheory",
+    "DefaultInventoryNameId": "pig_forge_stringtheory_01",
+    "BaseHealth": 240,
+    "BaseAttack": 18,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_forge_cactus_new_ability",
+      "pig_attack_forge_cactus_new_ability_2",
+      "pig_support_forge_cactus_new_ability"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_cactus_new_ability",
+          "pig_attack_forge_cactus_new_ability"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_cactus_new_ability",
+          "pig_attack_forge_cactus_new_ability_2"
+        ]
+      }
+    ],
+    "SizeType": "Medium",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "lucky_coin": 1,
+      "loot_pig5_defeated_exp": 1,
+      "loot_pigboss_defeated_mastery": 1
+    },
+    "SizeScale": 1.5,
+    "PigStrength": 5,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_forge_flying_pig",
+    "AssetId": "PigDrone",
+    "LocaId": "pig_forge_flying_pig",
+    "DefaultInventoryNameId": "pig_forge_flying_pig_01",
+    "BaseHealth": 70,
+    "BaseAttack": 12,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_forge_flying_pig_angelic_side_eye",
+      "pig_attack_minion_stickpig_02"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_forge_flying_pig_angelic_side_eye"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_stickpig_02"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig2_defeated_gold": 1,
+      "loot_pig2_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 0.9,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "pig_passive_forge_flying_pig_pie_in_the_sky",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_forge_king_dj",
+    "AssetId": "PigMage",
+    "LocaId": "pig_forge_king_dj",
+    "DefaultInventoryNameId": "pig_forge_king_dj_01",
+    "BaseHealth": 1050,
+    "BaseAttack": 43,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+    "pig_attack_forge_king_dj",
+    "pig_attack_forge_king_dj_sound",
+    "pig_attack_forge_king_dj_shrapnel"
+
+
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 35,
+        "ComboChain": [
+          "pig_attack_forge_king_dj"       ]
+      },
+      {
+        "Percentage": 30,
+        "ComboChain": [
+          "pig_attack_forge_king_dj_sound"
+        ]
+      },
+      {
+        "Percentage": 30,
+        "ComboChain": [
+          "pig_attack_forge_king_dj_shrapnel"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig6_defeated_gold": 1,
+      "loot_pig6_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.7,
+    "PigStrength": 10,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_rogue_spin",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_rogue",
+    "DefaultInventoryNameId": "pig_minion_rogue_01",
+    "BaseHealth": 110,
+    "BaseAttack": 10,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_01_intro",
+      "pig_combo_rogue_spin"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01_intro"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_combo_rogue_spin"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 3,
     "PassiveSkillNameId": "",
     "IgnoreDifficulty": false
   }

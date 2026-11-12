@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ABH.GameDatas.Battle;
 using ABH.GameDatas.Interfaces;
 using ABH.Shared.BalancingData;
@@ -11,7 +12,8 @@ using ABH.Shared.Models.Generic;
 // Placing one: add a battle participant entry named "crystal_<anything>" to a wave's participant table, among the
 // pigs; it takes a formation slot where it's listed (Amount = how many, Probability and LevelDifference are ignored).
 // It acts when its slot's turn comes. It's configured by the SkillBalancingData with the same NameId:
-//   TargetCulling   - the two pig NameIds it swaps between
+//   TargetCulling   - the two pig types it swaps between. Difficulty suffixes don't matter: pig_minion_rogue also
+//                     means pig_minion_rogue_bird2 etc., and each pig stays at its own suffix through every swap
 //   SkillParameters - "turns": swaps on every this-many of its own turns (default 2)
 //                     "start_color": 0 = red primary (default), 1 = blue primary
 //                     "scale": size multiplier (default 1)
@@ -20,6 +22,12 @@ using ABH.Shared.Models.Generic;
 public class SwapCrystalConfig
 {
 	public const string EntryPrefix = "crystal_";
+
+	// A difficulty suffix and whatever follows it: "_bird2", "_bird2_castle", "_bird1_25". Not "_bird_catcher" or "_fork",
+	// which are different pig types.
+	private static readonly Regex DifficultySuffix = new Regex("_bird[0-9].*$");
+
+	private static readonly Regex DifficultyTier = new Regex("^_bird[0-9]+");
 
 	private const string AssetPath = "Prefabs/0_Generic/3_SwapCrystal/SwapCrystal";
 
@@ -83,18 +91,44 @@ public class SwapCrystalConfig
 		return config;
 	}
 
-	// The pig type a pig of this crystal becomes, or null if the crystal doesn't swap it.
-	public string GetSwapTarget(string pigNameId)
+	public static string GetSuffix(string pigNameId)
 	{
-		if (pigNameId == PigNameIds[0])
+		return DifficultySuffix.Match(pigNameId).Value;
+	}
+
+	private static string GetBaseType(string pigNameId)
+	{
+		return DifficultySuffix.Replace(pigNameId, string.Empty);
+	}
+
+	// Which of the crystal's two types this pig is, at any suffix: 0 or 1, or -1 if the crystal doesn't swap it.
+	public int GetTypeIndex(string pigNameId)
+	{
+		var baseType = GetBaseType(pigNameId);
+		return baseType == GetBaseType(PigNameIds[0]) ? 0 : baseType == GetBaseType(PigNameIds[1]) ? 1 : -1;
+	}
+
+	// The pig a pig of this crystal becomes, or null if the crystal doesn't swap it. suffix is the one it spawned with.
+	// Not every type exists at every suffix (the yellow knight only has _bird3): then the nearest variant stands in,
+	// and the pig gets its own suffix back on the way home because the suffix isn't taken from its current name.
+	public string GetSwapTarget(string pigNameId, string suffix)
+	{
+		var index = GetTypeIndex(pigNameId);
+		if (index < 0)
 		{
-			return PigNameIds[1];
+			return null;
 		}
-		if (pigNameId == PigNameIds[1])
+		var listed = PigNameIds[1 - index];
+		var baseType = GetBaseType(listed);
+		foreach (var candidate in new[] { suffix, DifficultyTier.Match(suffix).Value })
 		{
-			return PigNameIds[0];
+			PigBalancingData pig;
+			if (DIContainerBalancing.Service.TryGetBalancingData(baseType + candidate, out pig))
+			{
+				return baseType + candidate;
+			}
 		}
-		return null;
+		return listed;
 	}
 
 	// The pig generators would treat crystal entries as pigs, so they get the table without them.

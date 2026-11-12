@@ -1,0 +1,311 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_battering",
+ "name": "Battering Brute",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BatteringBrute",
+     "name": "Headgear_BatteringBrute",
+     "item": "Headgear_BatteringBrute",
+     "w": 312,
+     "h": 344,
+     "pivot": [
+      -0.27857143,
+      0.24536958
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BatteringBrute_Back",
+     "name": "Headgear_BatteringBrute_Back",
+     "item": "Headgear_BatteringBrute",
+     "w": 258,
+     "h": 304,
+     "pivot": [
+      -0.007,
+      0.24
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_a809a",
+   "origin": "pig_attack_brute_battering",
+   "type": "Attack",
+   "source": "pig_attack_brute_battering",
+   "name": "Battering Ram",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage and [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_5}[-] turn. All other enemies receive [ff0000]{value_7}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 250,
+    "charge": 3,
+    "collateral_damage_in_percent": 125,
+    "additional_enemies_affected": 2,
+    "GenericDamage": -1,
+    "chance": 100,
+    "collateral_stun_chance": 0,
+    "stun_duration": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_7}": {
+     "expr": "(A * ((p(\"collateral_damage_in_percent\")) / 100))"
+    }
+   },
+   "template": "AttackWithCollateralDamageAndStun",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_a22dc",
+   "origin": "pig_passive_pig_headed",
+   "type": "Passive",
+   "source": "pig_passive_pig_headed",
+   "name": "Pig Headed",
+   "desc": "[0000ff]Passive:[-] Battering Brute is stunned for [ff0000]{value_2}[-] turn after attacking.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "chance": 100,
+    "duration": 1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "SufferStunOnAttack",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 420,
+  "attack": 35,
+  "sizeType": "Large",
+  "sizeScale": 1.1,
+  "strength": 10,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig10_defeated_gold": 1,
+   "loot_pig10_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_battering",
+  "fingerprint": "5bcedbaf007c04ca3900e4dcf65b3e2578ce96db",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_battering"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Battering Brute",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BatteringBrute",
+       "name": "Headgear_BatteringBrute",
+       "item": "Headgear_BatteringBrute",
+       "w": 312,
+       "h": 344,
+       "pivot": [
+        -0.27857143,
+        0.24536958
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BatteringBrute_Back",
+       "name": "Headgear_BatteringBrute_Back",
+       "item": "Headgear_BatteringBrute",
+       "w": 258,
+       "h": 304,
+       "pivot": [
+        -0.007,
+        0.24
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 420,
+    "attack": 35,
+    "sizeType": "Large",
+    "sizeScale": 1.1,
+    "strength": 10,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig10_defeated_gold": 1,
+     "loot_pig10_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_a809a",
+     "origin": "pig_attack_brute_battering",
+     "type": "Attack",
+     "source": "pig_attack_brute_battering",
+     "name": "Battering Ram",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage and [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_5}[-] turn. All other enemies receive [ff0000]{value_7}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 250,
+      "charge": 3,
+      "collateral_damage_in_percent": 125,
+      "additional_enemies_affected": 2,
+      "GenericDamage": -1,
+      "chance": 100,
+      "collateral_stun_chance": 0,
+      "stun_duration": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_7}": {
+       "expr": "(A * ((p(\"collateral_damage_in_percent\")) / 100))"
+      }
+     },
+     "template": "AttackWithCollateralDamageAndStun",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_a22dc",
+     "origin": "pig_passive_pig_headed",
+     "type": "Passive",
+     "source": "pig_passive_pig_headed",
+     "name": "Pig Headed",
+     "desc": "[0000ff]Passive:[-] Battering Brute is stunned for [ff0000]{value_2}[-] turn after attacking.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "chance": 100,
+      "duration": 1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "SufferStunOnAttack",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

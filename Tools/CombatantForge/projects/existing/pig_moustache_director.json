@@ -1,0 +1,417 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_director",
+ "name": "Director",
+ "rig": "MoustachePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "4d9c840e678851340991edfc95c8a866:Headgear_Director",
+     "name": "Headgear_Director",
+     "item": "Headgear_Director",
+     "w": 180,
+     "h": 116,
+     "pivot": [
+      0.010714286,
+      -0.29094827
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "4d9c840e678851340991edfc95c8a866:Headgear_Director_Back",
+     "name": "Headgear_Director_Back",
+     "item": "Headgear_Director",
+     "w": 138,
+     "h": 62,
+     "pivot": [
+      0.08035715,
+      -0.059619818
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "4d9c840e678851340991edfc95c8a866:MainHand_Director",
+     "name": "MainHand_Director",
+     "item": "MainHand_Director",
+     "w": 140,
+     "h": 138,
+     "pivot": [
+      -0.34285712,
+      -0.05964721
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_e4055",
+   "origin": "pig_attack_moustache_director",
+   "type": "Attack",
+   "source": "pig_attack_moustache_director",
+   "name": "Raging Instructions",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_3e887",
+   "origin": "pig_support_moustache_director",
+   "type": "Support",
+   "source": "pig_support_moustache_director",
+   "name": "Cancel that Show!",
+   "desc": "Removes all harmful effects from target.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "cleanse_chance": 100,
+    "invoker": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_7}": {
+     "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+    },
+    "{value_9}": {
+     "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"cleanse_chance\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealAndCleanseSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_41584",
+   "origin": "pig_passive_moustache_director",
+   "type": "Passive",
+   "source": "pig_passive_moustache_director",
+   "name": "Time is Snoutlings",
+   "desc": "[0000ff]Passive:[-] All charging abilites charge faster by [00a800]{value_1}[-] turn.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "reduce_charge_turns": 1,
+    "chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduce_charge_turns\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "PassiveReduceCharge",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 230,
+  "attack": 26,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_director",
+  "fingerprint": "6e48854138f0121e2ddaaa6030325ecde09a1dce",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_attack_moustache_director"
+    ]
+   },
+   {
+    "Percentage": 25,
+    "ComboChain": [
+     "pig_support_moustache_director"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Director",
+   "rig": "MoustachePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "4d9c840e678851340991edfc95c8a866:Headgear_Director",
+       "name": "Headgear_Director",
+       "item": "Headgear_Director",
+       "w": 180,
+       "h": 116,
+       "pivot": [
+        0.010714286,
+        -0.29094827
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "4d9c840e678851340991edfc95c8a866:Headgear_Director_Back",
+       "name": "Headgear_Director_Back",
+       "item": "Headgear_Director",
+       "w": 138,
+       "h": 62,
+       "pivot": [
+        0.08035715,
+        -0.059619818
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "4d9c840e678851340991edfc95c8a866:MainHand_Director",
+       "name": "MainHand_Director",
+       "item": "MainHand_Director",
+       "w": 140,
+       "h": 138,
+       "pivot": [
+        -0.34285712,
+        -0.05964721
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 230,
+    "attack": 26,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_e4055",
+     "origin": "pig_attack_moustache_director",
+     "type": "Attack",
+     "source": "pig_attack_moustache_director",
+     "name": "Raging Instructions",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_3e887",
+     "origin": "pig_support_moustache_director",
+     "type": "Support",
+     "source": "pig_support_moustache_director",
+     "name": "Cancel that Show!",
+     "desc": "Removes all harmful effects from target.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "cleanse_chance": 100,
+      "invoker": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_7}": {
+       "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+      },
+      "{value_9}": {
+       "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"cleanse_chance\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealAndCleanseSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_41584",
+     "origin": "pig_passive_moustache_director",
+     "type": "Passive",
+     "source": "pig_passive_moustache_director",
+     "name": "Time is Snoutlings",
+     "desc": "[0000ff]Passive:[-] All charging abilites charge faster by [00a800]{value_1}[-] turn.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "reduce_charge_turns": 1,
+      "chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"reduce_charge_turns\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "PassiveReduceCharge",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -60,31 +60,36 @@ namespace ABH.GameDatas.Battle.Skills
 					}
 					var combatant = list[UnityEngine.Random.Range(0, list.Count)];
 					list.Remove(combatant);
-					var effectedParam = 1f;
-					var num2 = num * Mathf.Pow((100f - m_ReductionPerChain) / 100f, i + 1);
-					var currentSkillAttackValue = m_Source.CurrentSkillAttackValue;
-					m_Source.CurrentSkillAttackValue = num2;
-					effectedParam = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(effectedParam, EffectTriggerType.OnReceiveDamage, combatant, m_Source);
-					num2 *= effectedParam;
-					DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(1f, EffectTriggerType.BeforeReceiveDamage, combatant, source);
-					VisualEffectSetting setting = null;
-					if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(m_AddtionalEffectInfo, out setting))
+					var hopDamage = num * Mathf.Pow((100f - m_ReductionPerChain) / 100f, i + 1);
+					// With a projectile the hit lands when the ricochet arrives (Ricochet)
+					Ricochet.Hit(Ricochet.LastHit(target), combatant, delegate
 					{
-						SpawnVisualEffects(VisualEffectSpawnTiming.Start, setting, new List<ICombatant> { combatant });
-					}
-					var effectedParam2 = 1f;
-					if (num2 > 0f && source.CombatantMainHandEquipment != null && m_ApplyPerks && ApplyDelayedPerkSharedRoll(source, combatant, battle, ref effectedParam2) && combatant.CombatantView != null)
-					{
-						combatant.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;
-					}
-					combatant.ReceiveDamage(num2, source);
-					battle.m_DamageLastTurn += DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);
+						var effectedParam = 1f;
+						var num2 = hopDamage;
+						var currentSkillAttackValue = m_Source.CurrentSkillAttackValue;
+						m_Source.CurrentSkillAttackValue = num2;
+						effectedParam = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(effectedParam, EffectTriggerType.OnReceiveDamage, combatant, m_Source);
+						num2 *= effectedParam;
+						DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(1f, EffectTriggerType.BeforeReceiveDamage, combatant, source);
+						VisualEffectSetting setting = null;
+						if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(m_AddtionalEffectInfo, out setting))
+						{
+							SpawnVisualEffects(VisualEffectSpawnTiming.Start, setting, new List<ICombatant> { combatant });
+						}
+						var effectedParam2 = 1f;
+						if (num2 > 0f && source.CombatantMainHandEquipment != null && m_ApplyPerks && ApplyDelayedPerkSharedRoll(source, combatant, battle, ref effectedParam2) && combatant.CombatantView != null)
+						{
+							combatant.CombatantView.m_CurrentPerkType = source.CombatantMainHandEquipment.Perk.Type;
+						}
+						combatant.ReceiveDamage(num2, source);
+						battle.m_DamageLastTurn += DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);
+						m_Source.CurrentSkillAttackValue = currentSkillAttackValue;
+					});
 					if (target.ChainedTargets == null)
 					{
 						target.ChainedTargets = new List<ICombatant>();
 					}
 					target.ChainedTargets.Add(combatant);
-					m_Source.CurrentSkillAttackValue = currentSkillAttackValue;
 				}
 			});
 		}

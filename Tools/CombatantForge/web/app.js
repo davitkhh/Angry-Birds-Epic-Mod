@@ -98,7 +98,136 @@ function pose(clip, t) {
     const local = [c * s[0], sn * s[0], -sn * s[1], c * s[1], p[0], p[1]];
     out[i] = rig.parents[i] >= 0 ? mul(out[rig.parents[i]], local) : local;
   }
+  const look = currentLook();
+  if (look) out.spring = applyLook(out, clip, look);
   return out;
+}
+
+/* ---------------------------------------------------------------- looks: the spring drone (game: SpringDrone.cs) */
+
+function currentLook() {
+  return S.rig && S.project && S.project.variant && S.rig.looks ? S.rig.looks[S.project.variant] || null : null;
+}
+function lookHides(look, path) {
+  return !!look && path.split('/').some(part => look.hide.includes(part));
+}
+function springState(look) {
+  if (!S.spring || S.spring.look !== look) {
+    S.spring = { look, h: look.RestLength + 0.6 * look.HopHeight, v: 0, ext: 0, bias: 0.25 * look.HopHeight, acc: 0 };
+  }
+  return S.spring;
+}
+// SpringDrone.Simulate: gravity, a push-only damped spring, and the pogo actuator that keeps it hopping.
+function stepSpring(dt) {
+  const look = currentLook();
+  if (!look) { S.spring = null; return; }
+  const st = springState(look);
+  const pumping = !look.limp.includes(S.rig.clips[S.clip].name);
+  const g = 9.81 * look.PixelsPerMeter, k = g / Math.max(1, look.StaticSag), c = 2 * look.DampingRatio * Math.sqrt(k);
+  const step = 1 / 600;
+  st.acc += Math.min(dt, 0.1);
+  while (st.acc >= step) {
+    st.acc -= step;
+    const previous = st.v;
+    let a = -g, contact = false;
+    const compression = look.RestLength + st.ext - st.h;
+    if (compression > 0) {
+      const force = k * compression - c * st.v;
+      if (force > 0) { a += force; contact = true; }
+    }
+    st.v += a * step;
+    st.h += st.v * step;
+    if (st.h < look.SolidLength) { st.h = look.SolidLength; if (st.v < 0) st.v = -st.v * look.SolidRestitution; }
+    if (!pumping) { st.ext = 0; continue; }
+    if (contact && previous < 0 && st.v >= 0) {
+      const target = g * (look.RestLength + look.HopHeight + st.bias) - g * st.h;
+      if (target > 0) {
+        const needed = Math.sqrt(2 * target / k), current = look.RestLength + st.ext - st.h;
+        st.ext = Math.min(look.MaxExtension, Math.max(0, st.ext + Math.max(0, needed - current)));
+      }
+    } else if (!contact && st.h > look.RestLength + st.ext) st.ext = 0;
+    if (!contact && previous > 0 && st.v <= 0) {
+      st.bias = Math.min(look.HopHeight * 1.5, Math.max(-look.HopHeight, st.bias + 0.8 * (look.HopHeight - (st.h - look.RestLength))));
+    }
+  }
+}
+// Moves the pod bones by the bounce (the hover bob of Idle is replaced by it); returns where the spring goes.
+function applyLook(out, clip, look) {
+  const paths = S.rig.paths, body = paths.indexOf('Root/Body');
+  if (body < 0) return null;
+  const st = S.spring && S.spring.look === look ? S.spring : null;
+  const height = st ? st.h : look.RestLength - look.StaticSag;
+  const restHeight = look.bodyRestY + look.mount[1] - look.ground;
+  const hovering = look.hover.includes(clip.name);
+  const hoverX = hovering ? out[body][4] - look.bodyRestX : 0, hoverY = hovering ? out[body][5] - look.bodyRestY : 0;
+  const offset = height - restHeight - hoverY;
+  paths.forEach((path, i) => {
+    if (look.pod.some(pod => path === pod || path.startsWith(pod + '/'))) out[i] = [...out[i].slice(0, 4), out[i][4] - hoverX, out[i][5] + offset];
+  });
+  // Shadow: the regular drone's ratio (its Idle: 10 units up, 0.9 the size) from the pod's real height. A hover clip's
+  // own shadow pulse goes with its bob.
+  const bottom = paths.indexOf('Root/Bottom'), shadow = paths.indexOf('Root/Shadow/Shadow_Sprite');
+  if (shadow >= 0 && bottom >= 0) {
+    // Measured from where this drone rests on its spring (full size there), like the regular drone from its hover.
+    const rise = out[bottom][5] - look.bottomRestY - (look.RestLength - look.StaticSag - restHeight);
+    const size = Math.min(look.MaxShadow, Math.max(look.MinShadow, 1 - look.ShadowShrinkPerUnit * rise));
+    const m = out[shadow];
+    const sx = hovering ? Math.hypot(m[0], m[1]) || 1 : 1, sy = hovering ? Math.hypot(m[2], m[3]) || 1 : 1;
+    out[shadow] = [m[0] / sx * size, m[1] / sx * size, m[2] / sy * size, m[3] / sy * size, m[4], m[5]];
+  }
+  // The spring hangs straight down from its pivot under the pod; planted, its foot is on the ground below.
+  const top = apply(out[body], look.mount[0], look.mount[1]);
+  const length = Math.min(look.RestLength + (st ? st.ext : 0), top[1] - look.ground);
+  return { top, axis: [0, -1], length: Math.max(length, look.SolidLength) };
+}
+// Same mesh as SpringDrone.BuildMesh (and gamedata.spring_quads): cel-shaded bands from the outline inward, each
+// shifted toward the light; back half of the coil, front half, then the plate at the pod and the rubber foot.
+function drawSpring(V, base, spring, look) {
+  if (!spring) return;
+  const [ax, ay] = spring.axis, sx = -ay, sy = ax;
+  const turns = Math.round(look.Coils), count = turns * 20, r = look.CoilRadius, wire = look.WireWidth;
+  const end = wire * 0.6;
+  // Closed last turn: the spring ends in a flat ring standing on the ground.
+  const pitched = Math.max(1, turns - 1) / Math.max(1, turns), ring = Math.max(end, spring.length - end - r * 0.22);
+  const pts = [];
+  for (let i = 0; i <= count; i++) {
+    const t = i / count, a = t * turns * Math.PI * 2;
+    const along = end + (ring - end) * Math.min(1, t / pitched) + Math.sin(a) * r * 0.22, c = Math.cos(a) * r;
+    pts.push({ p: [spring.top[0] + ax * along + sx * c, spring.top[1] + ay * along + sy * c], d: Math.sin(a) });
+  }
+  ctx.setTransform(...base);
+  const quad = (corners, color) => {
+    ctx.fillStyle = `rgb(${color[0]},${color[1]},${color[2]})`;
+    ctx.beginPath();
+    corners.forEach((c, i) => { const q = apply(V, c[0], c[1]); if (i) ctx.lineTo(...q); else ctx.moveTo(...q); });
+    ctx.closePath(); ctx.fill();
+  };
+  const segment = (a, b, [w, o, color]) => {
+    let dx = b[0] - a[0], dy = b[1] - a[1];
+    const n = Math.hypot(dx, dy);
+    if (n < 1e-4) return;
+    dx /= n; dy /= n;
+    let ux = -dy, uy = dx;
+    if (uy < 0) { ux = -ux; uy = -uy; }
+    const width = wire * w, shx = ux * wire * o, shy = uy * wire * o;
+    const ex = dx * width / 2, ey = dy * width / 2, nx = ux * width / 2, ny = uy * width / 2;
+    quad([[a[0] - ex - nx + shx, a[1] - ey - ny + shy], [a[0] - ex + nx + shx, a[1] - ey + ny + shy],
+      [b[0] + ex + nx + shx, b[1] + ey + ny + shy], [b[0] + ex - nx + shx, b[1] + ey - ny + shy]], color);
+  };
+  for (const [front, name] of [[false, 'BackWire'], [true, 'FrontWire']]) {
+    for (const band of look.bands[name]) {
+      for (let i = 0; i < count; i++) {
+        if (((pts[i].d + pts[i + 1].d) / 2 >= 0) === front) segment(pts[i].p, pts[i + 1].p, band);
+      }
+    }
+  }
+  // Mounting pad under the pod.
+  for (const [w, o, color] of look.bands.PlateBands || []) {
+    const halfLen = r + 6, halfThick = 5, half = halfLen - (1 - w) * halfThick, thick = halfThick * w;
+    const x = spring.top[0] - ax * 2 * halfThick * o, y = spring.top[1] - ay * 2 * halfThick * o;
+    quad([[x - sx * half - ax * thick, y - sy * half - ay * thick], [x + sx * half - ax * thick, y + sy * half - ay * thick],
+      [x + sx * half + ax * thick, y + sy * half + ay * thick], [x - sx * half + ax * thick, y - sy * half + ay * thick]], color);
+  }
 }
 function boneRow(clip, node, t) {
   const rows = clip.tex[node];
@@ -131,20 +260,25 @@ function visibleLayers(slot) {
 function collectDraw() {
   const rig = S.rig, clip = rig.clips[S.clip];
   const poses = pose(clip, S.time);
+  const look = currentLook();
+  S.springDraw = look ? poses.spring : null;
   const list = [];
   const anchors = new Map();
-  const pirate = S.project.variant === 'pirate' ? rig.variants.pirate : null;
+  const pirate = S.project.variant ? rig.variants[S.project.variant] || null : rig.base || null;  // texture variant map, or the rig's default look (PigPirate: pirate)
   rig.bones.forEach(bone => {
     const slotDef = rig.slotByKey[bone.slot];
     if (bone.sprite < 0 || !slotDef) return;
     const row = boneRow(clip, bone.node, S.time);
     const M = poses[bone.sprite];
     const anyRow = row && row[1] ? row : (rig.anyRow[bone.node] || null);
-    if (!anchors.has(bone.slot)) {
+    // A slot with several bones (gear + its Body twin) anchors on the one drawn in this frame.
+    const shown = !!(row && row[1]);
+    if (!anchors.has(bone.slot) || (shown && !anchors.get(bone.slot).shown)) {
       const center = anyRow ? [(anyRow[3] + anyRow[5]) / 2, (anyRow[4] + anyRow[6]) / 2] : [0, 0];
-      anchors.set(bone.slot, { key: bone.slot, kind: slotDef.kind, world: apply(M, center[0], center[1]) });
+      anchors.set(bone.slot, { key: bone.slot, kind: slotDef.kind, world: apply(M, center[0], center[1]), shown });
     }
     if (!row || !row[1]) return;
+    if (look && lookHides(look, rig.paths[bone.sprite])) return;
     const slot = S.project.slots[bone.slot];
     if (slot && slot.hidden) return;
     const isGear = slotDef.kind === 'gear';
@@ -179,7 +313,7 @@ function resizeCanvas() {
   }
   return dpr;
 }
-function draw() {
+function draw(now = performance.now()) {
   const dpr = resizeCanvas();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -195,6 +329,7 @@ function draw() {
 
   const list = collectDraw();
   S.drawn = list;
+  if (S.springDraw) drawSpring(V, base, S.springDraw, currentLook());
   for (const d of list) {
     const local = mul(mul(V, d.M), d.local);
     d.screen = local;
@@ -203,7 +338,13 @@ function draw() {
       ctx.drawImage(d.image, -d.w / 2, -d.h / 2, d.w, d.h);
     }
   }
+  drawFlights(now, base);
   ctx.setTransform(...base);
+  if (showsTarget()) {
+    if ($('showPaths').checked) drawPaths();
+    targets().forEach(drawTarget);
+  }
+  syncTargetControls();
   drawGizmo();
   if ($('showSlots').checked || S.drag) drawAnchors(V);
 }
@@ -278,11 +419,341 @@ function fitView() {
     }
   }
   S.view = saved;
+  if (showsTarget()) {
+    const gs = gameScale() || 1;
+    for (const t of targets()) {
+      minx = Math.min(minx, t.x / gs - 40); maxx = Math.max(maxx, t.x / gs + 40);
+      miny = Math.min(miny, t.y / gs - 40); maxy = Math.max(maxy, t.y / gs + 40);
+    }
+  }
   // Room is made for a scaled-up character, but a scaled-down one stays small so Fit doesn't hide its scale.
   const scale = gameScale(), room = Math.max(1, Math.abs(scale));
   const zoom = Math.min(r.width / ((maxx - minx) * room + 160), r.height / ((maxy - miny) * room + 160), 4);
   S.view = { zoom, x: r.width / 2 - (minx + maxx) / 2 * zoom * scale, y: r.height / 2 + (miny + maxy) / 2 * zoom * scale };
 }
+
+/* ---------------------------------------------------------------- targets and projectile shots (Abilities tab) */
+
+// Enemies the attacks aim at, in battle space (the combatant's feet at 0, 0, y up), at each target's body centre.
+// Pigs face left, so targets start on their left; a pig on a bird rig is mirrored in battle, so they're on its right.
+// Only for a combatant with an attack that fires a projectile: without one there's nothing to aim or draw.
+const showsTarget = () => !!S.rig && !!S.project && !$('tab-abilities').hidden && S.project.abilities.some(a => shotFor(a));
+const rigMirrored = () => !!S.rig && S.rig.side === 'bird';
+const MAX_TARGETS = 20;
+const ALL_ENEMIES = 3; // "every enemy" counts as a full party of three birds until you add more targets
+const targetColor = i => i === 0 ? '#ef6b6b' : `hsl(${(i * 137.5 + 200) % 360}, 75%, 64%)`;
+const targetLabel = i => i === 0 ? 'Target' : `Target ${i + 1}`;
+function targetSpot(i) {
+  // Columns of four, zig-zagging so a line between two targets doesn't run through a third.
+  const col = Math.floor(i / 4), row = i % 4;
+  const x = 470 + col * 190 + (row % 2) * 80;
+  return { x: rigMirrored() ? x : -x, y: 40 + row * 85 };
+}
+// How an ability hits, from its template and parameters, the way the game plays it. shots: projectiles from the hand
+// ('center' = the middle of the enemy side, where the game sends one projectile at several targets). links: damage
+// passed from one target to another. ricochet: the game's Ricochet flies the attack's projectile along those links,
+// each hop from the last enemy hit to the next (collateral and chain attacks); other links have no projectile.
+// n: how many targets there are (the need doesn't depend on it).
+function shotModel(a, n = targetCount()) {
+  const p = a.params || {}, t = a.template || '';
+  const range = k => Array.from({ length: Math.max(0, k) }, (_, i) => i);
+  if (t === 'MusicShrapnelVolley') {
+    const extra = Math.max(0, Math.round(p.extra_projectiles || 0));
+    return { need: ALL_ENEMIES, shots: [...range(n), ...range(extra).map(i => i % n)], links: [] };
+  }
+  if (t === 'SprayAttackSkill') {
+    const k = Math.max(1, Math.round(p.spray_count || 1));
+    return { need: Math.min(k, ALL_ENEMIES), shots: range(k).map(i => i % n), links: [] };
+  }
+  if ('all' in p || 'delayed_all' in p) return { need: ALL_ENEMIES, shots: [n > 1 ? 'center' : 0], links: [] };
+  // A huge count (Frankenpig's 99) means every other enemy, however many there are.
+  const others = k => k >= 10 ? { need: ALL_ENEMIES, reach: n - 1 } : { need: Math.min(MAX_TARGETS, 1 + k), reach: Math.min(k, n - 1) };
+  const hops = k => range(k).map(i => [i, i + 1]); // Ricochet.LastHit: each hit leaves from the one before
+  if (t === 'AttackWithChainSkill' || t === 'AttackWithChainAndDotSkill' || 'chain' in p) {
+    const o = others(Math.max(0, Math.round(p.chain || 0)));
+    return { need: o.need, shots: [0], links: hops(o.reach), ricochet: true };
+  }
+  if (p.additional_enemies_affected > 0) {
+    const o = others(Math.round(p.additional_enemies_affected));
+    return { need: o.need, shots: [0], links: hops(o.reach), ricochet: true };
+  }
+  const extra = Math.round(t === 'BonusDamageAndRandomTarget' ? p.spray_count || 0 : 0);
+  if (extra > 0) { const o = others(extra); return { need: o.need, shots: [0], links: range(o.reach).map(i => [0, i + 1]) }; }
+  if (t === 'AttackAndLinkDamage') return { need: 2, shots: [0], links: n > 1 ? [[0, 1]] : [] };
+  return { need: 1, shots: [0], links: [] };
+}
+function neededTargets() {
+  const attacks = S.project ? S.project.abilities.filter(a => a.type === 'Attack') : [];
+  return Math.min(MAX_TARGETS, Math.max(1, ...attacks.map(a => shotModel(a, 1).need)));
+}
+// The count follows the abilities until you change it with the Targets buttons.
+function targetCount() {
+  const key = S.rig ? S.rig.id + '|' + (S.project && S.project.id) : '';
+  if (S.targetCountFor !== key) { S.targetCountFor = key; S.targetCountSet = null; }
+  return Math.min(MAX_TARGETS, Math.max(1, S.targetCountSet || neededTargets()));
+}
+function targets() {
+  if (!S.targetList || S.targetList.rig !== S.rig.id) S.targetList = { rig: S.rig.id, items: [] };
+  const items = S.targetList.items;
+  for (let i = items.length; i < targetCount(); i++) items.push(targetSpot(i));
+  return items.slice(0, targetCount());
+}
+function targetCentre(list = targets()) {
+  return { x: list.reduce((s, t) => s + t.x, 0) / list.length, y: list.reduce((s, t) => s + t.y, 0) / list.length };
+}
+function worldMatrix() { return [S.view.zoom, 0, 0, -S.view.zoom, S.view.x, S.view.y]; }
+const toScreen = t => apply(worldMatrix(), t.x, t.y);
+function targetUnder(p) {
+  const list = targets();
+  for (let i = list.length - 1; i >= 0; i--) { const [x, y] = toScreen(list[i]); if (Math.hypot(p[0] - x, p[1] - y) <= 22) return i; }
+  return -1;
+}
+function targetOnScreen() {
+  if (!showsTarget()) return true;
+  const r = canvas.getBoundingClientRect();
+  return targets().every(t => { const [x, y] = toScreen(t); return x > 20 && y > 20 && x < r.width - 20 && y < r.height - 20; });
+}
+function drawTarget(t, i) {
+  const [x, y] = toScreen(t);
+  const color = targetColor(i);
+  ctx.save();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color + '';
+  ctx.globalAlpha = 0.22;
+  ctx.beginPath(); ctx.arc(x, y, 15, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.beginPath(); ctx.arc(x, y, 15, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x - 21, y); ctx.lineTo(x - 9, y); ctx.moveTo(x + 9, y); ctx.lineTo(x + 21, y);
+  ctx.moveTo(x, y - 21); ctx.lineTo(x, y - 9); ctx.moveTo(x, y + 9); ctx.lineTo(x, y + 21);
+  ctx.stroke();
+  ctx.fillStyle = color; ctx.font = '11px system-ui, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(targetLabel(i), x, y + 34);
+  ctx.restore();
+}
+
+// Unity AnimationCurve: Hermite between keys [time, value, inSlope, outSlope]; an infinite slope holds the value.
+function evalUnityCurve(keys, t) {
+  if (!keys || !keys.length) return t;
+  if (t <= keys[0][0]) return keys[0][1];
+  const last = keys[keys.length - 1];
+  if (t >= last[0]) return last[1];
+  for (let i = 0; i < keys.length - 1; i++) {
+    const a = keys[i], b = keys[i + 1];
+    if (t > b[0]) continue;
+    const dt = b[0] - a[0];
+    if (!dt || !Number.isFinite(a[3]) || !Number.isFinite(b[2])) return a[1];
+    const s = (t - a[0]) / dt, s2 = s * s, s3 = s2 * s;
+    return (2 * s3 - 3 * s2 + 1) * a[1] + (s3 - 2 * s2 + s) * a[3] * dt + (-2 * s3 + 3 * s2) * b[1] + (s3 - s2) * b[2] * dt;
+  }
+  return last[1];
+}
+// CHMotionTween: start + curve(u) per axis * (end - start); X and Y swap when the end is lower than the start.
+function flightPoint(info, start, end, u) {
+  let ax, ay;
+  if (info && info.curves && Object.keys(info.curves).length) { ax = info.curves.x ? evalUnityCurve(info.curves.x, u) : 0; ay = info.curves.y ? evalUnityCurve(info.curves.y, u) : 0; }
+  else if (info && info.curve && info.curve.length) ax = ay = evalUnityCurve(info.curve, u);
+  else ax = ay = u;
+  if (end[1] < start[1]) [ax, ay] = [ay, ax];
+  return [start[0] + ax * (end[0] - start[0]), start[1] + ay * (end[1] - start[1])];
+}
+const projectileInfo = new Map();
+function loadProjectile(name) {
+  if (!projectileInfo.has(name)) {
+    const entry = { info: null, image: new Image() };
+    projectileInfo.set(name, entry);
+    api('/api/projectile/' + encodeURIComponent(name)).then(info => { entry.info = info; entry.image.src = info.image; }).catch(() => {});
+  }
+  return projectileInfo.get(name);
+}
+// The projectile an attack fires and the frame of its clip it fires on: the clip's Projectile event, or halfway
+// through for a projectile the ability names (AttackSkillTemplate). A main hand projectile needs the event.
+function shotFor(a) {
+  if (a.type !== 'Attack' || !isRangedAttack(a)) return null;
+  const own = abilityProjectile(a);
+  const w = S.project.weapon || {};
+  const name = own || (w.isRanged && (S.projectiles || []).includes(w.projectile) ? w.projectile : '');
+  if (!name) return null;
+  const clipName = abilityClip(a) || defaultClip(a);
+  const clip = S.rig.clips.findIndex(c => c.name === clipName);
+  if (clip < 0) return null;
+  const event = (S.rig.clips[clip].events || []).find(e => e[1] === 'Projectile');
+  const frame = event ? event[0] : own ? S.rig.clips[clip].length / 2 : null;
+  if (frame === null) return null;
+  loadProjectile(name);
+  return { clip, frame, name, uid: a.uid, fired: false, last: 0 };
+}
+// Where the MainHand bone is on a frame of a clip, in battle space: SpawnProjectile starts there.
+function handAt(clipIndex, time) {
+  const clip = S.rig.clips[clipIndex];
+  const bone = S.rig.bones.find(b => b.name === 'MainHand');
+  const gs = gameScale();
+  if (!bone || bone.bone < 0) return [0, (S.rig.bodyCenter || [0, 45])[1] * gs];
+  const M = pose(clip, time)[bone.bone];
+  return [M[4] * gs, M[5] * gs];
+}
+const shotEnd = (to, list) => { const t = to === 'center' ? targetCentre(list) : list[Math.min(to, list.length - 1)]; return [t.x, t.y]; };
+// Plays the ability's clip; a ranged attack fires its projectiles at the targets as it would in battle.
+function playAbility(a) {
+  playClipNamed(abilityClip(a) || defaultClip(a));
+  S.pathAbility = a.uid;
+  S.shotPlan = shotFor(a);
+  if (!targetOnScreen()) fitView();
+}
+S.flights = [];
+function updateShots(now) {
+  const plan = S.shotPlan;
+  if (!plan || !S.rig) return;
+  if (plan.clip !== S.clip) { S.shotPlan = null; return; }
+  if (S.time < plan.last) plan.fired = false; // looped
+  plan.last = S.time;
+  if (plan.fired || S.time < plan.frame) return;
+  plan.fired = true;
+  const a = S.project.abilities.find(x => x.uid === plan.uid);
+  const model = a ? shotModel(a) : { shots: [0] };
+  const entry = loadProjectile(plan.name);
+  const start = handAt(S.clip, S.time);
+  const list = targets();
+  // Several shots (a spray, the King DJ volley) leave one after another.
+  model.shots.forEach((to, k) => S.flights.push({ entry, start, end: shotEnd(to, list), t0: now + k * 120, speed: S.speed }));
+  // Ricochets: the attack waits out its clip, the target is hit, then a copy of the projectile hops from enemy to
+  // enemy, each hop leaving when the one before arrives (at most 1 s each).
+  if (model.ricochet) {
+    const clip = S.rig.clips[S.clip];
+    let t = now + Math.max(0, clip.length - S.time) / (clip.fps * S.speed) * 1000;
+    for (const [i, j] of model.links) {
+      if (i >= list.length || j >= list.length) continue;
+      S.flights.push({ entry, start: [list[i].x, list[i].y], end: [list[j].x, list[j].y], t0: t, speed: S.speed, hop: true });
+      t += Math.min(1, (entry.info && entry.info.duration) || 0.2) / S.speed * 1000;
+    }
+  }
+}
+// Ricochet.Launch turns a hop's projectile from "toward the enemy side" to the hop's direction.
+function hopTurn(f) {
+  const forward = Math.sign(f.start[0]) || -1;
+  return Math.atan2(f.end[1] - f.start[1], f.end[0] - f.start[0]) - Math.atan2(0, forward);
+}
+function drawFlights(now, base) {
+  const W = worldMatrix();
+  S.flights = S.flights.filter(f => {
+    const info = f.entry.info;
+    if (now < f.t0) return true;
+    if (!info) return now - f.t0 < 2000;
+    const u = (now - f.t0) / 1000 * f.speed / (info.duration || 0.2);
+    if (u >= 1) return false; // the game destroys it when its tween ends
+    const [x, y] = flightPoint(info, f.start, f.end, u);
+    const img = f.entry.image;
+    if (img.complete && img.naturalWidth) {
+      let m = mul(W, [1, 0, 0, 1, x, y]);
+      if (f.hop) { const r = hopTurn(f), c = Math.cos(r), s = Math.sin(r); m = mul(m, [c, s, -s, c, 0, 0]); }
+      if (rigMirrored()) m = mul(m, [-1, 0, 0, 1, 0, 0]);
+      m = mul(m, info.local);
+      ctx.setTransform(...mul(base, mul(m, [1, 0, 0, -1, 0, 0])));
+      ctx.drawImage(img, -info.w / 2, -info.h / 2, info.w, info.h);
+    }
+    return true;
+  });
+}
+// The ability whose paths are drawn: the one last played, else the first attack.
+function pathAbility() {
+  const list = S.project.abilities.filter(a => a.type === 'Attack');
+  return list.find(a => a.uid === S.pathAbility) || list[0] || null;
+}
+function arrowHead(x0, y0, x1, y1) {
+  const ang = Math.atan2(y1 - y0, x1 - x0);
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x1 - 10 * Math.cos(ang - 0.4), y1 - 10 * Math.sin(ang - 0.4));
+  ctx.lineTo(x1 - 10 * Math.cos(ang + 0.4), y1 - 10 * Math.sin(ang + 0.4));
+  ctx.closePath(); ctx.fill();
+}
+// Solid: each projectile's flight from the hand. Dashed: damage passed on between targets (no projectile in the game).
+function drawPaths() {
+  const a = pathAbility();
+  if (!a) return;
+  const list = targets();
+  const model = shotModel(a);
+  const plan = shotFor(a);
+  ctx.save();
+  ctx.lineWidth = 2;
+  ctx.font = '11px system-ui, sans-serif';
+  if (plan) {
+    const entry = loadProjectile(plan.name);
+    const start = handAt(plan.clip, plan.frame);
+    const drawn = new Set();
+    model.shots.forEach(to => {
+      const key = String(to);
+      if (drawn.has(key)) return;
+      drawn.add(key);
+      const end = shotEnd(to, list);
+      const color = to === 'center' ? '#f0b23c' : targetColor(Math.min(to, list.length - 1));
+      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.setLineDash([]);
+      ctx.beginPath();
+      let prev = null, last = null;
+      for (let k = 0; k <= 24; k++) {
+        const [fx, fy] = flightPoint(entry.info, start, end, k / 24);
+        const pt = toScreen({ x: fx, y: fy });
+        if (k === 0) ctx.moveTo(pt[0], pt[1]); else ctx.lineTo(pt[0], pt[1]);
+        prev = last; last = pt;
+      }
+      ctx.stroke();
+      if (prev) arrowHead(prev[0], prev[1], last[0], last[1]);
+      if (to === 'center') {
+        const [cx, cy] = toScreen({ x: end[0], y: end[1] });
+        ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.textAlign = 'center'; ctx.fillText('enemy side centre', cx, cy - 10);
+        // The game's one projectile reaches every target from there.
+        ctx.setLineDash([2, 4]); ctx.lineWidth = 1;
+        list.forEach((t, i) => { const [x, y] = toScreen(t); ctx.strokeStyle = targetColor(i); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke(); });
+        ctx.lineWidth = 2;
+      }
+    });
+  }
+  const hopsFly = !!(plan && model.ricochet);
+  ctx.setLineDash(hopsFly ? [] : [7, 6]);
+  model.links.forEach(([i, j]) => {
+    if (i >= list.length || j >= list.length) return;
+    ctx.strokeStyle = ctx.fillStyle = targetColor(j);
+    ctx.beginPath();
+    let prev = null, last = null;
+    const start = [list[i].x, list[i].y], end = [list[j].x, list[j].y];
+    for (let k = 0; k <= (hopsFly ? 24 : 1); k++) {
+      const [fx, fy] = hopsFly ? flightPoint(loadProjectile(plan.name).info, start, end, k / 24) : k ? end : start;
+      const pt = toScreen({ x: fx, y: fy });
+      if (k === 0) ctx.moveTo(pt[0], pt[1]); else ctx.lineTo(pt[0], pt[1]);
+      prev = last; last = pt;
+    }
+    ctx.stroke();
+    if (prev) arrowHead(prev[0], prev[1], last[0], last[1]);
+  });
+  ctx.setLineDash([]);
+  const r = canvas.getBoundingClientRect();
+  ctx.fillStyle = '#c9ccd3'; ctx.textAlign = 'left';
+  const note = !plan ? (isRangedAttack(a) ? 'fires nothing it can show (no projectile, or its clip has no Projectile event)' : 'melee: no projectile')
+    : model.links.length && model.ricochet ? 'the projectile, then its ricochets from enemy to enemy'
+    : model.links.length ? 'solid: projectile · dashed: damage passed on (no projectile in the game)' : 'solid: projectile path';
+  ctx.fillText(`Paths of ${a.name || 'this attack'}: ${note}`, 12, r.height - 12);
+  ctx.restore();
+}
+function syncTargetControls() {
+  const shown = showsTarget();
+  const n = shown ? targetCount() : 0, need = shown ? neededTargets() : 0;
+  const key = `${shown}|${n}|${need}`;
+  if (S.targetControlsKey === key) return; // runs every frame: only touch the page when something changed
+  S.targetControlsKey = key;
+  $('targetControls').hidden = !shown;
+  if (!shown) return;
+  $('targetCount').textContent = n;
+  $('targetLess').disabled = n <= 1;
+  $('targetMore').disabled = n >= MAX_TARGETS;
+  $('targetControls').title = `Your attacks need ${need} target${need === 1 ? '' : 's'}${need === ALL_ENEMIES ? ' (an attack hits every enemy: add more for a bigger party)' : ''}. Drag a target to move it.`;
+}
+$('targetLess').addEventListener('click', () => { S.targetCountSet = Math.max(1, targetCount() - 1); syncTargetControls(); });
+$('targetMore').addEventListener('click', () => { S.targetCountSet = Math.min(MAX_TARGETS, targetCount() + 1); syncTargetControls(); if (!targetOnScreen()) fitView(); });
+$('showPaths').addEventListener('change', e => { try { localStorage.setItem('forge.paths', e.target.checked ? '1' : ''); } catch (err) { /* optional */ } });
+try { $('showPaths').checked = localStorage.getItem('forge.paths') === '1'; } catch (e) { /* storage is optional */ }
 
 let lastFrame = performance.now();
 function tick(now) {
@@ -294,6 +765,7 @@ function tick(now) {
     if (still) S.time = 0;
     else if (S.playing) {
       S.time += dt * clip.fps * S.speed;
+      stepSpring(dt * S.speed);
       if (S.time >= clip.length) {
         if (S.loop) S.time %= clip.length;
         else { S.time = clip.length; S.playing = false; syncPlay(); }
@@ -303,7 +775,8 @@ function tick(now) {
     $('frameLabel').textContent = still ? '1 / 1' : `${Math.floor(S.time)} / ${Math.round(clip.length)}`;
     $('scrub').disabled = still;
   }
-  draw();
+  updateShots(now);
+  draw(now);
   requestAnimationFrame(tick);
 }
 function syncPlay() { $('playBtn').textContent = S.playing ? 'Pause' : 'Play'; }
@@ -343,9 +816,15 @@ function eachLinked(layer, fn) {
   if (other) fn(other, false);
 }
 canvas.addEventListener('pointerdown', e => {
-  if (!S.rig) return;
+  if (!S.rig || (e.button !== 0 && e.button !== 1)) return;
   canvas.setPointerCapture(e.pointerId);
   const p = pointerPos(e);
+  // Only the left button picks up art; the middle button pans.
+  if (e.button === 1) { e.preventDefault(); S.gesture = { type: 'pan', p, x: S.view.x, y: S.view.y }; return; }
+  if (showsTarget()) {
+    const i = targetUnder(p);
+    if (i >= 0) { const t = targets()[i]; S.gesture = { type: 'target', t, p, x: t.x, y: t.y }; return; }
+  }
   const g = S.gizmo;
   if (g) {
     for (const hd of g.handles) {
@@ -390,6 +869,10 @@ canvas.addEventListener('pointermove', e => {
   if (g.type === 'pan') {
     S.view.x = g.x + p[0] - g.p[0];
     S.view.y = g.y + p[1] - g.p[1];
+  } else if (g.type === 'target') {
+    const t = g.t;
+    t.x = g.x + (p[0] - g.p[0]) / S.view.zoom;
+    t.y = g.y - (p[1] - g.p[1]) / S.view.zoom;
   } else if (g.type === 'move') {
     const local = slotLocal(g.d, p);
     const dx = local[0] - g.start[0], dy = local[1] - g.start[1];
@@ -459,6 +942,7 @@ function updateCursor(e) {
     else if (inside(g.d, p)) cursor = 'move';
   }
   if (cursor === 'grab' && S.drawn.some(d => d.slot !== 'Shadow' && d.screen && inside(d, p))) cursor = 'pointer';
+  if (showsTarget() && targetUnder(p) >= 0) cursor = 'move';
   canvas.style.cursor = cursor;
 }
 canvas.addEventListener('pointerup', () => {
@@ -466,6 +950,7 @@ canvas.addEventListener('pointerup', () => {
   S.gesture = null;
 });
 canvas.addEventListener('wheel', e => {
+  if (e.ctrlKey) return;  // Ctrl+scroll zooms the whole window instead
   e.preventDefault();
   const p = pointerPos(e);
   const f = Math.exp(-e.deltaY * (e.deltaMode ? 0.05 : 0.0016));
@@ -477,14 +962,78 @@ canvas.addEventListener('wheel', e => {
 
 /* ---------------------------------------------------------------- library */
 
-const CATS = [['Headgear', 'Headgear'], ['MainHand', 'Main hand'], ['OffHand', 'Off hand'], ['Feature', 'Features']];
+const CATS = [['Headgear', 'Headgear'], ['MainHand', 'Main hand'], ['OffHand', 'Off hand'], ['Feature', 'Features'], ['Projectile', 'Projectiles']];
+// Projectiles are the game's projectile prefabs (birds' and pigs' alike): drag one onto an attack to have it fire it.
+const projectileOwner = name => (name.split('_')[1] || '');
+const projectileLabel = name => name.replace(/^Projectile_/, '');
+function filteredProjectiles() {
+  const q = S.search.trim().toLowerCase();
+  return (S.projectiles || []).filter(n => (!S.rigFilter || projectileOwner(n) === S.rigFilter) && (!q || n.toLowerCase().includes(q)));
+}
+function projectileCard(name) {
+  const el = h('div', { class: 'card projectile', title: `${projectileLabel(name)}. Drag it onto an attack in the Abilities tab to make that attack fire it.` },
+    h('img', { src: `/projectileicon/${encodeURIComponent(name)}`, alt: '', loading: 'lazy', draggable: false }),
+    h('span', { class: 'cName' }, projectileLabel(name)));
+  el.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    S.pendingDrag = { projectile: name, x: e.clientX, y: e.clientY };
+  });
+  return el;
+}
+// The attack under the pointer while a projectile is dragged.
+function abilityUnderPointer(e) {
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const card = el && el.closest('.ability');
+  if (!card) return null;
+  const a = S.project.abilities.find(x => x.uid === card.dataset.uid);
+  return a && a.type === 'Attack' ? a : null;
+}
+function setAbilityProjectile(a, name) {
+  a.projectile = name;
+  // A projectile means a ranged attack: say so, unless the main hand already makes it ranged.
+  if (a.ranged === 'melee' || (!a.ranged && !(S.project.weapon || {}).isRanged)) a.ranged = 'ranged';
+  touch(); renderAbilities();
+  playAbility(a);
+  toast(`${a.name || 'The attack'} fires ${projectileLabel(name)}`);
+}
 function filteredLibrary() {
   const q = S.search.trim().toLowerCase();
   return S.lib.filter(i => i.side === S.side && i.cat === S.cat && (!S.rigFilter || i.rig === S.rigFilter) && (!q || i.name.toLowerCase().includes(q) || i.rig.toLowerCase().includes(q)));
 }
 let gridItems = [], gridShown = 0;
+function setSide(side) {
+  if (side !== 'game') S.spriteSide = side;
+  S.side = side;
+  $('searchInput').value = side === 'game' ? S.gameSearch || '' : S.search;
+  renderLibrary();
+}
 function renderLibrary() {
+  const game = S.side === 'game';
+  document.querySelectorAll('#sideTabs button').forEach(b => b.classList.toggle('on', b.dataset.side === S.side));
+  $('existingBtn').classList.toggle('on', game);
+  $('existingBtn').setAttribute('aria-pressed', game);
+  $('searchInput').placeholder = game ? 'Search combatants' : 'Search sprites';
+  $('splitAll').closest('label').style.visibility = game ? 'hidden' : '';
+  $('dropZone').style.display = game ? 'none' : '';
+  $('rigFilter').title = game ? 'Only combatants on this base' : 'Only sprites from this character';
+  if (game) { renderCombatants(); return; }
   $('catChips').replaceChildren(...CATS.map(([k, label]) => h('button', { class: S.cat === k ? 'on' : '', onclick: () => { S.cat = k; renderLibrary(); } }, label)));
+  const projectiles = S.cat === 'Projectile';
+  $('splitAll').closest('label').style.visibility = projectiles ? 'hidden' : '';
+  $('dropZone').style.display = projectiles ? 'none' : '';
+  if (projectiles) {
+    const owners = [...new Set((S.projectiles || []).map(projectileOwner))].sort();
+    if (S.rigFilter && !owners.includes(S.rigFilter)) S.rigFilter = '';
+    $('rigFilter').replaceChildren(h('option', { value: '' }, 'All characters'), ...owners.map(r => h('option', { value: r, selected: r === S.rigFilter }, r)));
+    gridItems = filteredProjectiles();
+    gridShown = 0;
+    $('grid').replaceChildren();
+    $('grid').scrollTop = 0;
+    $('libCount').textContent = `${gridItems.length} projectiles`;
+    appendGrid();
+    return;
+  }
   document.querySelectorAll('#sideTabs button').forEach(b => b.classList.toggle('on', b.dataset.side === S.side));
   const rigs = [...new Set(S.lib.filter(i => i.side === S.side && i.cat === S.cat).map(i => i.rig))].sort();
   if (S.rigFilter && !rigs.includes(S.rigFilter)) S.rigFilter = '';
@@ -499,7 +1048,7 @@ function renderLibrary() {
 function appendGrid() {
   const next = gridItems.slice(gridShown, gridShown + 90);
   gridShown += next.length;
-  $('grid').append(...next.map(card));
+  $('grid').append(...next.map(S.side === 'game' ? combatantCard : S.cat === 'Projectile' ? projectileCard : card));
 }
 function partBox(sprite) {
   // Places one part the way the rig would: centre at -pivot * size relative to the bone.
@@ -554,6 +1103,8 @@ function card(item) {
   return el;
 }
 
+canvas.addEventListener('mousedown', e => { if (e.button === 1) e.preventDefault(); }); // no autoscroll
+
 /* drag from the library to a slot */
 function startDragOn(el, item, part, joined) {
   el.addEventListener('pointerdown', e => {
@@ -563,6 +1114,22 @@ function startDragOn(el, item, part, joined) {
   });
 }
 window.addEventListener('pointermove', e => {
+  if (S.pendingDrag && S.pendingDrag.projectile && !S.drag && Math.hypot(e.clientX - S.pendingDrag.x, e.clientY - S.pendingDrag.y) > 4) {
+    S.drag = { projectile: S.pendingDrag.projectile };
+    S.pendingDrag = null;
+    $('dragGhost').replaceChildren(h('img', { src: `/projectileicon/${encodeURIComponent(S.drag.projectile)}`, alt: '' }));
+    $('dragGhost').hidden = false;
+    setTab('abilities');
+  }
+  if (S.drag && S.drag.projectile) {
+    const ghost = $('dragGhost');
+    ghost.style.left = e.clientX + 'px';
+    ghost.style.top = e.clientY + 'px';
+    const target = abilityUnderPointer(e);
+    S.drag.target = target;
+    document.querySelectorAll('.ability').forEach(r => r.classList.toggle('target', !!target && r.dataset.uid === target.uid));
+    return;
+  }
   if (S.pendingDrag && !S.drag && Math.hypot(e.clientX - S.pendingDrag.x, e.clientY - S.pendingDrag.y) > 4) {
     const { item, part, joined } = S.pendingDrag;
     S.drag = { item, part, joined, preferKind: item.cat === 'Feature' ? 'feature' : 'gear' };
@@ -582,6 +1149,15 @@ window.addEventListener('pointermove', e => {
 });
 window.addEventListener('pointerup', () => {
   S.pendingDrag = null;
+  if (S.drag && S.drag.projectile) {
+    const { projectile, target } = S.drag;
+    S.drag = null;
+    $('dragGhost').hidden = true;
+    document.querySelectorAll('.ability.target').forEach(r => r.classList.remove('target'));
+    if (target) setAbilityProjectile(target, projectile);
+    else toast('Drop it on an attack in the Abilities tab');
+    return;
+  }
   if (!S.drag) return;
   const { item, part, joined } = S.drag;
   const slot = S.hoverSlot;
@@ -749,7 +1325,6 @@ function renderInspector() {
   if (!def) return;
   if (!s) {
     box.append(h('div', { class: 'row between' }, h('h3', {}, S.selected), h('span', { class: 'dim' }, slot && slot.hidden ? 'Hidden on this combatant' : 'Drag art here to fill this slot')));
-    if (def.key === 'MainHand') box.append(weaponFields());
     return;
   }
   box.append(h('div', { class: 'row between' }, h('h3', {}, S.selected + (slot.hidden ? ' (hidden)' : '')), h('span', { class: 'dim' }, 'Drop more art to add a layer')));
@@ -766,7 +1341,6 @@ function renderInspector() {
     h('button', { onclick: () => { eachLinked(s, x => { x.sy = -x.sy; }); touch(); refreshInspector(true); } }, 'Flip Y'),
     h('button', { onclick: () => { eachLinked(s, x => Object.assign(x, { tx: 0, ty: 0, rot: 0, sx: 1, sy: 1, shear: 0 })); touch(); refreshInspector(true); } }, 'Reset'),
     h('span', { class: 'dim' }, 'Corner: keep shape. Shift+corner: free. Shift+rotate: 15° steps.')));
-  if (def.key === 'MainHand') box.append(weaponFields());
 }
 function setField(s, f, value) {
   const delta = value - (s[f] ?? 0);
@@ -786,16 +1360,6 @@ function refreshInspector(force) {
     if (el !== document.activeElement) el.value = round(s[el.dataset.field] ?? 0);
   });
 }
-function weaponFields() {
-  const w = S.project.weapon;
-  const attacks = S.rig.clips.map(c => c.name).filter(n => /^Action_Attack_\d+$/.test(n));
-  return h('div', { class: 'fields' },
-    h('label', {}, 'Attack animation', h('select', { onchange: ev => { w.animationIndex = +ev.target.value; touch(); playClipNamed('Action_Attack_' + w.animationIndex); } },
-      attacks.map(n => { const i = +n.split('_').pop(); return h('option', { value: i, selected: i === w.animationIndex }, n); }))),
-    h('label', {}, 'Ranged', h('select', { onchange: ev => { w.isRanged = ev.target.value === '1'; touch(); renderInspector(); } },
-      h('option', { value: '0', selected: !w.isRanged }, 'Melee'), h('option', { value: '1', selected: !!w.isRanged }, 'Ranged'))),
-    w.isRanged ? h('label', {}, 'Projectile asset', h('input', { value: w.projectile || '', oninput: ev => { w.projectile = ev.target.value; touch(); } })) : null);
-}
 function playClipNamed(name) {
   const i = S.rig.clips.findIndex(c => c.name === name);
   if (i >= 0) { S.clip = i; S.time = 0; S.playing = true; $('clipSelect').value = i; syncPlay(); }
@@ -804,13 +1368,19 @@ function playClipNamed(name) {
 /* ---------------------------------------------------------------- abilities */
 
 function newUid() { return Math.random().toString(36).slice(2, 10); }
-// In-game formula: value = base + base * perLevel% * (level - 1), rounded.
-function statAtLevel(base, perLevel) {
-  return Math.round(num(base) + num(base) * (num(perLevel) / 100) * (S.level - 1));
+// Mathf.Round: halves go to the even number.
+function mathfRound(v) {
+  const r = Math.round(v);
+  return Math.abs(v % 1) === 0.5 && r % 2 ? r - 1 : r;
+}
+// PigGameData at difficulty 0: base + base * modifier%, in floats. The game uses the health modifier for attack too.
+function statAtLevel(base) {
+  const f = Math.fround, b = f(num(base));
+  return mathfRound(f(b + f(b * f(f(S.powerLevels[S.level] || 0) / 100))));
 }
 function levelStats() {
   const st = S.project.stats;
-  return { hp: statAtLevel(st.hp, st.perLevelHealth), attack: statAtLevel(st.attack, st.perLevelAttack) };
+  return { hp: statAtLevel(st.hp), attack: statAtLevel(st.attack) };
 }
 const formulaCache = new Map();
 function evalFormula(expr, params, stats, duration, level = S.level) {
@@ -887,7 +1457,7 @@ function renderTooltip() {
   skin('Resource_XP', X(-189) - 37, Y(284) - 37, 75, 75);
   tip.append(h('div', { class: 'ttValue', style: `left:${X(-213)}px;top:${Y(285) - 20}px;width:48px;font-size:${S.level > 99 ? 22 : 32}px;line-height:40px;color:#1a2f5a` }, String(S.level)));
   tip.append(h('button', { class: 'ttLevelBtn', title: 'Lower level', 'aria-label': 'Lower level', disabled: S.level <= 1, style: `left:${X(-189) - 42}px;top:${Y(284) + 16}px`, onclick: () => setLevel(S.level - 1) }, '−'));
-  tip.append(h('button', { class: 'ttLevelBtn', title: 'Higher level', 'aria-label': 'Higher level', style: `left:${X(-189) + 18}px;top:${Y(284) + 16}px`, onclick: () => setLevel(S.level + 1) }, '+'));
+  tip.append(h('button', { class: 'ttLevelBtn', title: 'Higher level', 'aria-label': 'Higher level', disabled: S.level >= maxLevel(), style: `left:${X(-189) + 18}px;top:${Y(284) + 16}px`, onclick: () => setLevel(S.level + 1) }, '+'));
   tip.append(h('input', { class: 'ttName abs', 'aria-label': 'Combatant name', value: S.project.name, placeholder: 'Name', style: `left:${X(-150)}px;top:${Y(276) - 22}px;width:300px;height:45px`,
     oninput: ev => { S.project.name = ev.target.value; syncNameFromTooltip(); } }));
   // health
@@ -915,8 +1485,11 @@ function renderTooltip() {
   tip.style.height = height + 'px';
   fitTooltip(height);
 }
+function maxLevel() {
+  return Math.max(1, ...Object.keys(S.powerLevels).map(Number));
+}
 function setLevel(level) {
-  S.level = Math.max(1, Math.min(999, level));
+  S.level = Math.max(1, Math.min(maxLevel(), level));
   renderTooltip();
 }
 function fitTooltip(height) {
@@ -942,6 +1515,95 @@ function renderAbilityTitles() {
     if (a) card.querySelector('.title').textContent = a.name || 'Unnamed';
   });
 }
+/* Which clip an ability plays. The game stores it in the skill parameter anim_clip as a 24-bit FNV-1a hash of the clip
+   name (ForgeSkillAnimation.cs, publish.clip_hash); no parameter means the usual clip. */
+function clipHash(name) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < name.length; i++) { h ^= name.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h & 0xFFFFFF;
+}
+function defaultClip(a) {
+  if (a.type === 'Support') return 'Action_Support';
+  const own = 'Action_Attack_' + ((S.project.weapon || {}).animationIndex || 1);
+  return S.rig.clips.some(c => c.name === own) ? own : 'Action_Attack_1';
+}
+function abilityClip(a) {
+  if ('anim' in a) return a.anim || '';
+  const value = a.params && a.params.anim_clip;
+  if (value === undefined) return '';
+  const clip = S.rig.clips.find(c => clipHash(c.name) === Math.round(value));
+  return clip ? clip.name : '';
+}
+// The battle events a clip carries that the default one has: a melee attack walks up on Movement and hits on Impact,
+// a ranged one fires on Projectile, a support takes effect on Impact.
+function missingEvents(a, clipName) {
+  const tagsOf = name => new Set((S.rig.clips.find(c => c.name === name) || { tags: [] }).tags || []);
+  const want = tagsOf(defaultClip(a)), have = tagsOf(clipName);
+  let needed = ['Movement', 'Impact', 'Projectile'];
+  if (a.type === 'Attack' && isRangedAttack(a)) {
+    // Ranged: no walking, damage after the clip; a projectile the ability names fires halfway without the event.
+    needed = abilityProjectile(a) ? [] : ['Projectile'];
+    return needed.filter(t => !have.has(t) && (want.has(t) || (S.project.weapon || {}).isRanged));
+  }
+  if (a.type === 'Attack') needed = ['Movement', 'Impact'];
+  return needed.filter(t => want.has(t) && !have.has(t));
+}
+const EVENT_NOTES = { Movement: 'it won\'t step up to its target', Impact: 'the hit lands after a short fallback delay instead of on a frame of the clip', Projectile: 'it won\'t fire its projectile' };
+function animationRow(a) {
+  if (a.type === 'Passive' || !S.rig) return null;
+  const current = abilityClip(a);
+  const usable = S.rig.clips.filter(c => c.name !== 'Base');
+  const label = c => { const t = (c.tags || []).filter(x => ['Movement', 'Impact', 'Projectile'].includes(x)); return t.length ? `${c.name} (${t.join(', ')})` : c.name; };
+  const play = () => playAbility(a);
+  const select = h('select', { 'aria-label': 'Animation for this ability', onchange: ev => { a.anim = ev.target.value; touch(); renderAbilities(); playAbility(a); } },
+    h('option', { value: '', selected: !current }, `Usual: ${defaultClip(a)}`),
+    ...usable.map(c => h('option', { value: c.name, selected: c.name === current }, label(c))));
+  const missing = current ? missingEvents(a, current) : [];
+  return [h('div', { class: 'row animRow' }, h('label', {}, 'Animation', select), h('button', { class: 'iconBtn', title: 'Play it on the character', 'aria-label': 'Play this animation', onclick: play }, '▶')),
+    missing.length ? h('span', { class: 'warnNote' }, `${current} has no ${missing.join(' or ')} event, so ${missing.map(m => EVENT_NOTES[m]).join(', and ')}.`) : null];
+}
+// How an attack reaches its target, overriding its weapon: ranged/melee (skill parameter anim_ranged) and the projectile
+// it fires (anim_projectile, hashed like the clip). A ranged attack stays in place and fires on the clip's Projectile
+// event, or halfway through a clip without one.
+function abilityRanged(a) {
+  if ('ranged' in a) return a.ranged || '';
+  const v = a.params && a.params.anim_ranged;
+  return v === undefined ? '' : v >= 0.5 ? 'ranged' : 'melee';
+}
+function abilityProjectile(a) {
+  if ('projectile' in a) return a.projectile || '';
+  const value = a.params && a.params.anim_projectile;
+  if (value === undefined) return '';
+  return (S.projectiles || []).find(n => clipHash(n) === Math.round(value)) || '';
+}
+function isRangedAttack(a) {
+  const r = abilityRanged(a);
+  if (r) return r === 'ranged';
+  return !!((S.project.weapon || {}).isRanged || abilityProjectile(a));
+}
+function projectileRow(a) {
+  if (a.type !== 'Attack' || !S.projectiles) return null;
+  const w = S.project.weapon || {};
+  const ranged = abilityRanged(a);
+  const rangedSel = h('select', { 'aria-label': 'Melee or ranged', onchange: ev => { a.ranged = ev.target.value; touch(); renderAbilities(); } },
+    h('option', { value: '', selected: !ranged }, `Usual: ${w.isRanged ? 'ranged' : 'melee'} (main hand)`),
+    h('option', { value: 'melee', selected: ranged === 'melee' }, 'Melee: walks up and hits'),
+    h('option', { value: 'ranged', selected: ranged === 'ranged' }, 'Ranged: stays in place'));
+  const rows = [h('div', { class: 'row animRow' }, h('label', {}, 'Reach', rangedSel))];
+  if (!isRangedAttack(a)) return rows;
+  const current = abilityProjectile(a);
+  const usual = w.isRanged && w.projectile ? `Main hand's: ${projectileLabel(w.projectile)}` : 'None';
+  const select = h('select', { 'aria-label': 'Projectile for this ability', onchange: ev => { a.projectile = ev.target.value; touch(); renderAbilities(); playAbility(a); } },
+    h('option', { value: '', selected: !current }, usual), ...(S.projectiles || []).map(n => h('option', { value: n, selected: n === current }, projectileLabel(n))));
+  const shown = current || (w.isRanged && w.projectile && (S.projectiles || []).includes(w.projectile) ? w.projectile : '');
+  rows.push(h('div', { class: 'row animRow projectileDrop', title: 'Drag a projectile from the library\'s Projectiles onto this attack' },
+    shown ? h('img', { src: `/projectileicon/${encodeURIComponent(shown)}`, alt: '' }) : null,
+    h('label', {}, 'Projectile', select)));
+  const clip = abilityClip(a) || defaultClip(a);
+  const tags = (S.rig.clips.find(c => c.name === clip) || { tags: [] }).tags || [];
+  if (current) rows.push(h('span', { class: 'dim note' }, `Fires ${projectileLabel(current)} ${tags.includes('Projectile') ? `on ${clip}'s Projectile event` : `halfway through ${clip}, which has no Projectile event`}.`));
+  return rows;
+}
 function statusOf(a) {
   if (a.written) return ['done', `Written by Claude (${a.template || 'template'})`];
   if (a.source) return a.nameId ? ['', 'Own copy of a game ability'] : ['', 'From the game: ' + a.source];
@@ -959,11 +1621,14 @@ function renderAbilities() {
       h('div', { class: 'row' },
         h('button', { class: 'iconBtn', title: 'Move up', 'aria-label': 'Move up', disabled: i === 0, onclick: () => moveAbility(i, -1) }, '↑'),
         h('button', { class: 'iconBtn', title: 'Move down', 'aria-label': 'Move down', disabled: i === list.length - 1, onclick: () => moveAbility(i, 1) }, '↓'),
-        h('span', { class: 'title' }, a.name || 'Unnamed'),
+        h('input', { class: 'title', 'aria-label': 'Ability name', value: a.name || '', placeholder: 'Unnamed', maxlength: 40,
+          oninput: ev => { a.name = ev.target.value; touch(); renderTooltip(); renderStats(); } }),
         h('select', { 'aria-label': 'Ability type', onchange: ev => changeType(a, ev.target.value) }, ['Attack', 'Support', 'Passive'].map(t => h('option', { selected: t === a.type }, t))),
         h('button', { class: 'danger', onclick: () => { S.project.abilities.splice(i, 1); touch(); renderAbilities(); renderTooltip(); renderStats(); } }, 'Remove')),
       h('span', { class: `status ${cls}` }, text),
       showsRawPercent(a) ? h('span', { class: 'warnNote' }, 'This tooltip prints damage as a percent. Rewrite it with Claude, or use the placeholder that holds the real number.') : null,
+      animationRow(a),
+      projectileRow(a),
       design,
       h('div', { class: 'row' }, createBtn));
   }));
@@ -1112,7 +1777,9 @@ function renderStats() {
   const actives = S.project.abilities.filter(a => a.type !== 'Passive');
   const attacks = actives.filter(a => a.type === 'Attack'), supports = actives.filter(a => a.type === 'Support');
   let plan = 'It has no ability it can use in battle yet.';
-  if (attacks.length) plan = `Each turn: ${supports.map(a => a.name + ', then ').join('')}${attacks.length > 1 ? 'one of ' : ''}${attacks.map(a => a.name).join(' or ')}${attacks.length > 1 ? ', equally often' : ''}.`;
+  const gamePlan = existingPlan();
+  if (gamePlan) plan = gamePlan;
+  else if (attacks.length) plan = `Each turn: ${supports.map(a => a.name + ', then ').join('')}${attacks.length > 1 ? 'one of ' : ''}${attacks.map(a => a.name).join(' or ')}${attacks.length > 1 ? ', equally often' : ''}.`;
   else if (supports.length) plan = `Each turn: ${supports.map(a => a.name).join(', then ')}.`;
   const resetScale = h('button', { title: 'Back to 1, the size the game draws this character at unscaled', disabled: num(st.sizeScale) === 1, onclick: ev => { ev.preventDefault(); st.sizeScale = 1; S.project.statsEdited = true; touch(); renderStats(); } }, 'Reset');
   const scaleField = field('Scale', 'sizeScale', 'number', 0.05);
@@ -1122,11 +1789,44 @@ function renderStats() {
   $('statsForm').replaceChildren(
     field('Health', 'hp', 'number', 1), field('Attack', 'attack', 'number', 1),
     h('label', {}, 'Size', h('select', { onchange: ev => { st.sizeType = ev.target.value; S.project.statsEdited = true; touch(); } }, ['Small', 'Medium', 'Large', 'Boss'].map(t => h('option', { selected: t === st.sizeType }, t)))),
-    field('Health per level %', 'perLevelHealth', 'number', 1), field('Attack per level %', 'perLevelAttack', 'number', 1),
     scaleField, field('Strength', 'strength', 'number', 1),
+    h('p', { class: 'note' }, 'Health and Attack are the level 1 values. In battle the pig takes the level of the battle, and the game\'s level table raises both. Change the level in the tap-and-hold preview to see them. Each battle can add its own difficulty on top.'),
     h('p', { class: 'note' }, 'Scale is how big it looks in battle, and the preview shows it. Size doesn\'t change how big it looks: it sets the room it takes on the battlefield, its tap area and the size of effects on it.'),
     h('p', { class: 'note' }, plan),
-    h('p', { class: 'note' }, 'The defeat rewards come from the first game pig on this base. Own inventory: ', h('code', {}, `pig_forge_${S.project.id || 'id'}_01`), '.'));
+    isExisting()
+      ? h('p', { class: 'note' }, 'This is the game\'s own ', h('code', {}, S.project.id), '. Update in game writes your edits into it. Inventories, items, abilities and names that other pigs share are copied for it first, so those pigs stay as they are.')
+      : h('p', { class: 'note' }, 'The defeat rewards come from the first game pig on this base. Own inventory: ', h('code', {}, `pig_forge_${S.project.id || 'id'}_01`), '.'),
+    isExisting() ? variantBox() : null);
+}
+// The game's turn plan, which an existing combatant keeps unless an ability is added.
+function existingPlan() {
+  const ex = isExisting() ? S.project.existing : null;
+  if (!ex || !ex.combos || !ex.combos.length) return null;
+  const origins = new Set(S.project.existing.original.abilities.map(a => a.origin));
+  if (S.project.abilities.some(a => a.type !== 'Passive' && !origins.has(a.origin))) return null;
+  const nameOf = id => { const a = S.project.abilities.find(x => x.origin === id); const s = S.skills.find(x => x.id === id); return a ? a.name : s ? s.name : id; };
+  const live = new Set(S.project.abilities.map(a => a.origin));
+  const parts = ex.combos.map(c => [c.Percentage, c.ComboChain.filter(i => live.has(i)).map(nameOf)]).filter(([, chain]) => chain.length);
+  if (!parts.length) return null;
+  return 'Each turn, as in the game: ' + parts.map(([pct, chain]) => `${round(pct, 1)}% ${chain.join(', then ')}`).join(' · ') + '.';
+}
+function variantBox() {
+  const box = h('div', { class: 'variantBox' }, h('h3', {}, 'Variants'));
+  if (!S.existing) {
+    box.append(h('p', { class: 'dim' }, 'Loading…'));
+    loadExisting().then(() => { if (isExisting()) renderStats(); });
+    return box;
+  }
+  const kids = existingDescendants(S.project.id);
+  if (!kids.length) { box.append(h('p', { class: 'dim' }, 'This combatant has no variants.')); return box; }
+  const off = new Set(S.existing.unticked[S.project.id] || []);
+  box.append(h('p', { class: 'note' }, 'Ticked variants get the same edits when you update: the same art, abilities and settings, and Health, Attack and Scale scaled by the same factor. A name change reaches variants that had the same name.'));
+  for (const v of kids) {
+    box.append(h('label', { class: 'check', title: `Tick to give ${v.id} the same edits` },
+      h('span', { class: 'vName' }, h('input', { type: 'checkbox', checked: !off.has(v.id), onchange: ev => setTick(S.project.id, v.id, ev.target.checked) }), ' ', v.name, ' ', h('span', { class: 'vId' }, v.id)),
+      h('span', { class: 'vStats' }, `${v.hp} HP · ${v.attack} ATK`)));
+  }
+  return box;
 }
 function renderTooltipIfVisible() { renderTooltip(); }
 
@@ -1136,8 +1836,9 @@ function blankProject(rig) {
   return { id: '', name: '', rig, variant: '', slots: {}, abilities: [], weapon: { animationIndex: 1, isRanged: false, projectile: '', hitEffect: '_Melee_Smash' }, stats: { hp: 100, attack: 10, sizeType: 'Medium', sizeScale: 1, strength: 5, perLevelHealth: 0, perLevelAttack: 0, loot: {} } };
 }
 let saveTimer, historyTimer;
-const SERVER_FIELDS = ['guids', 'publishedAt', 'publishedRig'];
-const SERVER_ABILITY_FIELDS = ['nameId', 'written', 'template', 'params', 'duration', 'values'];
+const SERVER_FIELDS = ['guids', 'publishedAt', 'publishedRig', 'existing'];
+const SERVER_ABILITY_FIELDS = ['nameId', 'written', 'template', 'params', 'duration', 'values', 'origin'];
+const isExisting = () => !!(S.project && S.project.kind === 'existing');
 function queueSave() {
   $('saveState').textContent = S.project.id ? 'Saving…' : 'Set a name to save';
   clearTimeout(saveTimer);
@@ -1181,17 +1882,18 @@ async function stepHistory(from, to, label) {
   queueSave();
 }
 async function saveNow() {
-  if (!S.project.id) return;
+  if (!S.project.id || S.deleting) return;
   try {
     await api('/api/save', { ...S.project, renamedFrom: S.savedId && S.savedId !== S.project.id ? S.savedId : undefined });
     S.savedId = S.project.id;
-    $('saveState').textContent = S.project.publishedAt ? `Saved · uploaded ${S.project.publishedAt}` : 'Saved';
+    $('saveState').textContent = S.project.publishedAt ? `Saved · ${isExisting() ? 'updated' : 'uploaded'} ${S.project.publishedAt}` : 'Saved';
     S.projects = (await api('/api/bootstrap')).projects;
     renderProjectList();
   } catch (e) { $('saveState').textContent = 'Not saved: ' + e.message; }
 }
 function renderProjectList() {
-  $('projectSelect').replaceChildren(h('option', { value: '' }, S.project && S.project.id ? '—' : 'Unsaved'), ...S.projects.map(p => h('option', { value: p.id, selected: S.project && p.id === S.project.id }, p.name || p.id)));
+  const first = isExisting() ? h('option', { value: '', selected: true }, `Game: ${S.project.name || S.project.id}`) : h('option', { value: '' }, S.project && S.project.id ? '—' : 'Unsaved');
+  $('projectSelect').replaceChildren(first, ...S.projects.map(p => h('option', { value: p.id, selected: !isExisting() && S.project && p.id === S.project.id }, p.name || p.id)));
 }
 function syncNameFromTooltip() {
   $('nameInput').value = S.project.name;
@@ -1222,7 +1924,7 @@ async function loadRig(id) {
   $('clipSelect').replaceChildren(...rig.clips.map((c, i) => h('option', { value: i }, c.name)));
   S.clip = rig.restClip; S.time = 0;
   $('clipSelect').value = S.clip;
-  if (!Object.keys(rig.variants.pirate).length) S.project.variant = '';
+  if (S.project.variant && !Object.keys(rig.variants[S.project.variant] || {}).length && !(rig.looks || {})[S.project.variant]) S.project.variant = '';
   const dropped = Object.keys(S.project.slots).filter(k => !rig.slotByKey[k]);
   dropped.forEach(k => delete S.project.slots[k]);
   if (dropped.length) toast(`${id} has no ${dropped.join(', ')} slot, so that art was removed`);
@@ -1240,13 +1942,191 @@ async function openProject(project) {
   S.idTouched = !!project.id;
   $('nameInput').value = project.name || '';
   $('idInput').value = project.id || '';
-  $('idInput').disabled = !!project.publishedAt;
-  S.side = (S.rigs.find(r => r.id === project.rig) || {}).side || 'pig';
+  $('idInput').disabled = !!project.publishedAt || project.kind === 'existing';
+  syncExistingMode();
+  if (S.side !== 'game') S.side = (S.rigs.find(r => r.id === project.rig) || {}).side || 'pig';
   await loadRig(project.rig);
   if (!project.statsEdited && !project.id) project.stats = await api('/api/stats/' + encodeURIComponent(project.rig));
   resetHistory();
   renderLibrary(); renderProjectList(); renderAbilities(); renderTooltip(); renderStats();
-  $('saveState').textContent = project.publishedAt ? `Uploaded ${project.publishedAt}` : '';
+  $('saveState').textContent = project.publishedAt ? `${project.kind === 'existing' ? 'Updated' : 'Uploaded'} ${project.publishedAt}` : '';
+}
+
+/* ---------------------------------------------------------------- the game's own combatants */
+
+async function loadExisting() {
+  S.existing = await api('/api/existing');
+  S.existingById = Object.fromEntries(S.existing.pigs.map(x => [x.id, x]));
+  return S.existing;
+}
+function existingDescendants(id) {
+  const out = [];
+  const walk = parent => S.existing.pigs.filter(x => x.parent === parent).sort((a, b) => a.id.localeCompare(b.id)).forEach(x => { out.push(x); walk(x.id); });
+  walk(id);
+  return out;
+}
+async function setTick(parent, variant, on) {
+  try {
+    const res = await api('/api/existing_tick', { parent, variant, on });
+    S.existing.unticked = res.unticked;
+  } catch (e) { toast(e.message); }
+  // The same ticks show in the library and in the Stats tab.
+  refreshCombatants();
+  if (isExisting() && S.project.id === parent) renderStats();
+}
+async function openExisting(id) {
+  clearTimeout(saveTimer);
+  await saveNow();
+  try {
+    const { project, note } = await api('/api/existing_open', { id });
+    await openProject(project);
+    refreshCombatants();
+    if (note) toast(note);
+  } catch (e) { toast(e.message); }
+}
+async function duplicateExisting(id) {
+  clearTimeout(saveTimer);
+  await saveNow();
+  try {
+    const { project } = await api('/api/existing_duplicate', { id });
+    S.projects = (await api('/api/bootstrap')).projects;
+    await openProject(project);
+    toast(`Duplicated as "${project.name}". It is a new combatant: upload it to add it to the game.`);
+  } catch (e) { toast(e.message); }
+}
+function closeFileMenu() {
+  $('filePanel').hidden = true;
+  $('fileBtn').setAttribute('aria-expanded', 'false');
+}
+$('fileBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  const open = $('filePanel').hidden;
+  $('filePanel').hidden = !open;
+  $('fileBtn').setAttribute('aria-expanded', String(open));
+});
+document.addEventListener('pointerdown', e => { if (!$('fileMenu').contains(e.target)) closeFileMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('filePanel').hidden) { closeFileMenu(); $('fileBtn').focus(); } });
+['existingBtn', 'importBtn', 'exportBtn', 'deleteBtn'].forEach(id => $(id).addEventListener('click', closeFileMenu));
+
+// Delete: the project file goes to projects/.trash; an uploaded combatant can also be taken out of the game.
+$('deleteBtn').addEventListener('click', () => {
+  const project = S.project;
+  if (!project || isExisting()) return;
+  const saved = !!project.id && S.projects.some(x => x.id === project.id);
+  const name = project.name || project.id || 'this combatant';
+  if (!saved) {
+    if (confirm(`Discard ${name}? It was never saved.`)) { S.deleting = true; clearTimeout(saveTimer); openProject(blankProject(project.rig)).finally(() => { S.deleting = false; }); }
+    return;
+  }
+  const modal = $('modal');
+  modal.className = '';
+  const fromGame = h('input', { type: 'checkbox', checked: !!project.publishedAt });
+  const go = h('button', { class: 'danger', onclick: () => deleteProject(project, fromGame.checked) }, 'Delete');
+  modal.replaceChildren(
+    h('h3', {}, `Delete ${name}?`),
+    h('p', { class: 'dim' }, 'Its project file moves to the projects/.trash folder, so it can be put back by hand.'),
+    project.publishedAt ? h('label', { class: 'check', style: 'margin:6px 0' }, fromGame,
+      ` Also remove pig_forge_${project.id} from the game: the combatant, its inventory and items, its own abilities, its text and its art`) : null,
+    project.publishedAt ? h('p', { class: 'dim note' }, 'If a battle or another combatant still uses it, nothing is removed from the game and the project stays.') : null,
+    h('div', { class: 'row', style: 'justify-content:flex-end;margin-top:10px' }, h('button', { onclick: () => modal.close() }, 'Cancel'), go));
+  modal.showModal();
+  go.focus();
+});
+async function deleteProject(project, fromGame) {
+  $('modal').close();
+  clearTimeout(saveTimer);
+  S.deleting = true;
+  try {
+    const res = await api('/api/delete', { id: project.id, fromGame });
+    if (res.job) {
+      const job = await followJob(res.job, `Delete ${project.name || project.id}`);
+      if (job.error) { toast(job.error); return; }
+      S.skills = await api('/api/skills');
+    }
+    S.projects = (await api('/api/bootstrap')).projects;
+    S.savedId = null;
+    await openProject(blankProject(project.rig));
+    toast(`Deleted ${project.name || project.id}${fromGame ? ' and took it out of the game' : ''}`);
+  } catch (e) {
+    toast(e.message);
+  } finally {
+    S.deleting = false;
+  }
+}
+
+// View existing swaps the left panel to the game's combatants; pressing it again, or Pigs or Birds, goes back.
+$('existingBtn').addEventListener('click', () => setSide(S.side === 'game' ? S.spriteSide || 'pig' : 'game'));
+
+// The Combatants tab of the library: the game's pigs as tiles, variants folded under their parent.
+function renderCombatants() {
+  $('catChips').replaceChildren(...[['all', 'All'], ['updated', 'Updated by the Forge']].map(([k, label]) =>
+    h('button', { class: (S.gameFilter || 'all') === k ? 'on' : '', onclick: () => { S.gameFilter = k; renderLibrary(); } }, label)));
+  if (!S.existing) {
+    $('grid').replaceChildren(h('p', { class: 'dim' }, 'Loading…'));
+    loadExisting().then(() => { if (S.side === 'game') renderLibrary(); }).catch(e => toast(e.message));
+    return;
+  }
+  const rigs = [...new Set(S.existing.pigs.map(x => x.rig))].sort();
+  if (S.gameRig && !rigs.includes(S.gameRig)) S.gameRig = '';
+  $('rigFilter').replaceChildren(h('option', { value: '' }, 'All characters'), ...rigs.map(r => h('option', { value: r, selected: r === S.gameRig }, r)));
+  const q = (S.gameSearch || '').trim().toLowerCase();
+  const filtering = !!(q || S.gameRig || S.gameFilter === 'updated');
+  const hit = x => (!q || x.id.includes(q) || x.name.toLowerCase().includes(q)) && (!S.gameRig || x.rig === S.gameRig) && (S.gameFilter !== 'updated' || x.updatedAt);
+  const open = S.existingOpen || (S.existingOpen = new Set());
+  const roots = S.existing.pigs.filter(x => !x.parent).sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+  const items = [];
+  let shown = 0;
+  for (const r of roots) {
+    const kids = existingDescendants(r.id);
+    const kidHits = kids.filter(hit);
+    if (!hit(r) && !kidHits.length) continue;
+    shown++;
+    items.push({ x: r, root: r, kids, variant: false });
+    // A search opens the groups with a matching variant.
+    for (const k of open.has(r.id) ? kids : filtering ? kidHits : []) items.push({ x: k, root: r, kids: [], variant: true });
+  }
+  gridItems = items;
+  gridShown = 0;
+  $('grid').replaceChildren();
+  $('libCount').textContent = `${shown} combatant${shown === 1 ? '' : 's'}`;
+  appendGrid();
+}
+function refreshCombatants() {
+  if (S.side !== 'game') return;
+  const grid = $('grid');
+  const keep = grid.scrollTop;
+  renderLibrary();
+  while (gridShown < gridItems.length && grid.scrollHeight < keep + grid.clientHeight + 200) appendGrid();
+  grid.scrollTop = keep;
+}
+// Variants mostly share their parent's name: the tile shows what sets it apart, such as bird3 or boss.
+function variantLabel(x, root) {
+  const suffix = x.id.startsWith(root.id + '_') ? x.id.slice(root.id.length + 1) : x.id;
+  return x.name === root.name ? suffix : `${x.name} · ${suffix}`;
+}
+function combatantCard({ x, root, kids, variant }) {
+  const why = x.supported ? '' : `The Forge can't draw the ${x.rig} base yet, so this one can't be opened.`;
+  const current = isExisting() && S.project.id === x.id;
+  const open = S.existingOpen.has(x.id);
+  const el = h('div', { class: 'card combatant' + (variant ? ' variant' : '') + (x.supported ? '' : ' off') + (current ? ' current' : ''),
+    title: `${x.name}\n${x.id} · ${x.rig}\n${x.hp} HP · ${x.attack} ATK${x.updatedAt ? '\nUpdated ' + x.updatedAt : ''}\n${why || 'Click to view and edit it.'}`,
+    onclick: () => { if (x.supported) openExisting(x.id); } },
+    x.supported ? h('img', { class: 'cIcon', src: `/pigicon/${encodeURIComponent(x.id)}`, alt: '', loading: 'lazy', draggable: false }) : h('div', { class: 'cNoIcon' }, x.rig),
+    h('span', { class: 'cName' }, variant ? variantLabel(x, root) : x.name));
+  if (x.updatedAt) el.append(h('span', { class: 'cEdited' }, 'Edited'));
+  if (kids.length) {
+    el.append(h('button', { class: 'cKids', title: open ? 'Hide its variants' : `Show its ${kids.length} variant${kids.length === 1 ? '' : 's'}`,
+      onclick: ev => { ev.stopPropagation(); if (open) S.existingOpen.delete(x.id); else S.existingOpen.add(x.id); refreshCombatants(); } }, open ? '−' : `+${kids.length}`));
+  }
+  if (variant) {
+    const off = new Set(S.existing.unticked[root.id] || []);
+    el.append(h('input', { type: 'checkbox', class: 'cTick', title: `Ticked: gets the edits made to ${root.name} (${root.id})`, checked: !off.has(x.id),
+      onclick: ev => ev.stopPropagation(), onchange: ev => setTick(root.id, x.id, ev.target.checked) }));
+  }
+  if (x.supported) {
+    el.append(h('button', { class: 'cDup', title: 'Duplicate: a new combatant that starts as a copy of this one', onclick: ev => { ev.stopPropagation(); duplicateExisting(x.id); } }, '⧉'));
+  }
+  return el;
 }
 
 /* ---------------------------------------------------------------- upload and Claude jobs */
@@ -1257,7 +2137,16 @@ function idLocked() {
   return running.size > 0 || !!S.generating;
 }
 function syncIdLock() {
-  $('idInput').disabled = idLocked() || !!(S.project && S.project.publishedAt);
+  $('idInput').disabled = idLocked() || !!(S.project && S.project.publishedAt) || isExisting();
+}
+function syncExistingMode() {
+  const ex = isExisting();
+  $('uploadBtn').textContent = ex ? 'Update in game' : 'Upload to game';
+  $('uploadBtn').title = ex ? 'Write the edits into this game combatant, and into its ticked variants (Stats tab)' : '';
+  $('exportBtn').disabled = ex;
+  $('deleteBtn').disabled = ex;
+  $('deleteBtn').title = ex ? 'The game\'s own combatants can\'t be deleted here: battles use them' : 'Delete this combatant';
+  $('exportBtn').title = ex ? 'Duplicate it from View existing to export a copy' : 'Save this combatant and its art as a .forge file';
 }
 function renderJobChips() {
   syncIdLock();
@@ -1314,6 +2203,7 @@ function followJob(jobId, title, show = true) {
 }
 async function applyJobResult(job) {
   S.skills = await api('/api/skills');
+  if (S.existing) loadExisting().then(() => { refreshCombatants(); if (isExisting()) renderStats(); }).catch(() => {});
   S.projects = (await api('/api/bootstrap')).projects;
   renderProjectList();
   const result = job.project;
@@ -1329,7 +2219,7 @@ async function applyJobResult(job) {
   S.snapshot = JSON.stringify(S.project);
   syncIdLock();
   renderAbilities(); renderTooltip(); renderStats(); renderSlots(); renderInspector();
-  $('saveState').textContent = S.project.publishedAt ? `Uploaded ${S.project.publishedAt}` : 'Saved';
+  $('saveState').textContent = S.project.publishedAt ? `${isExisting() ? 'Updated' : 'Uploaded'} ${S.project.publishedAt}` : 'Saved';
 }
 $('uploadBtn').addEventListener('click', async () => {
   clearTimeout(saveTimer);
@@ -1338,7 +2228,7 @@ $('uploadBtn').addEventListener('click', async () => {
   $('uploadBtn').disabled = true;
   try {
     const { job } = await api('/api/publish', S.project);
-    await applyJobResult(await followJob(job, 'Upload to game'));
+    await applyJobResult(await followJob(job, isExisting() ? 'Update in game' : 'Upload to game'));
   } catch (e) { toast(e.message); }
   $('uploadBtn').disabled = false;
 });
@@ -1348,6 +2238,13 @@ async function runAbilityJob(ability, title, show) {
   const { job } = await api('/api/ability', { uid: ability.uid, project: S.project });
   const result = await followJob(job, title, show);
   await applyJobResult(result);
+  // Done without trouble: close the window instead of leaving the log up.
+  const clean = !result.error && !result.log.some(l => l.startsWith('WARNING'));
+  if (clean && S.viewJob === job && $('logDialog').open) {
+    $('logDialog').close();
+    result.autoClosed = true;
+    toast(`${ability.name || 'Ability'}: written`);
+  }
   return result;
 }
 async function createAbility(ability) {
@@ -1384,7 +2281,7 @@ async function generateAll() {
       if (!ability) continue; // removed while waiting
       const job = await runAbilityJob(ability, `Claude ${i + 1} of ${uids.length}: ${ability.name}`, show);
       // Minimized stays minimized for the next ability.
-      show = !!S.viewJob;
+      show = !!S.viewJob || !!job.autoClosed;
       if (job.error) {
         const rest = uids.length - i - 1;
         if (rest) toast(`${job.stopped ? 'Stopped' : 'Failed'} on ${ability.name}. ${rest} not started.`);
@@ -1442,14 +2339,14 @@ for (const el of [zone, $('library')]) {
 function setTab(tab) {
   document.querySelectorAll('#sideNav button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
   for (const t of ['slots', 'abilities', 'stats']) $('tab-' + t).hidden = t !== tab;
-  if (tab === 'abilities') renderTooltip();
+  if (tab === 'abilities') { renderTooltip(); if (!targetOnScreen()) fitView(); }
 }
 document.querySelectorAll('#sideNav button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
-document.querySelectorAll('#sideTabs button').forEach(b => b.addEventListener('click', () => { S.side = b.dataset.side; renderLibrary(); }));
+document.querySelectorAll('#sideTabs button').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side)));
 $('grid').addEventListener('scroll', e => { const g = e.target; if (g.scrollTop + g.clientHeight > g.scrollHeight - 200 && gridShown < gridItems.length) appendGrid(); });
 new ResizeObserver(() => { const g = $('grid'); g.style.setProperty('--tile', parseFloat(getComputedStyle(g).gridTemplateColumns) + 'px'); }).observe($('grid'));
-$('searchInput').addEventListener('input', e => { S.search = e.target.value; renderLibrary(); });
-$('rigFilter').addEventListener('change', e => { S.rigFilter = e.target.value; renderLibrary(); });
+$('searchInput').addEventListener('input', e => { if (S.side === 'game') S.gameSearch = e.target.value; else S.search = e.target.value; renderLibrary(); });
+$('rigFilter').addEventListener('change', e => { if (S.side === 'game') S.gameRig = e.target.value; else S.rigFilter = e.target.value; renderLibrary(); });
 $('splitAll').addEventListener('change', e => { S.splitAll = e.target.checked; renderLibrary(); });
 async function setBase(rigId, variant) {
   const sameRig = rigId === S.project.rig;
@@ -1458,11 +2355,14 @@ async function setBase(rigId, variant) {
   if (!sameRig) {
     if (await loadRig(rigId) === false) return;
     if (!S.project.statsEdited) S.project.stats = await api('/api/stats/' + encodeURIComponent(rigId));
-    S.side = S.rig.side;
-    renderLibrary(); renderStats(); renderTooltip();
+    if (S.side !== 'game') S.side = S.rig.side;
+    renderLibrary(); renderStats(); renderTooltip(); renderAbilities();
   }
   renderBase();
   touch();
+}
+function variantName(variant) {
+  return variant ? ' · ' + variant.charAt(0).toUpperCase() + variant.slice(1) : '';
 }
 function rigIconUrl(id, variant) {
   return `/rigicon/${encodeURIComponent(id)}${variant ? '/' + variant : ''}`;
@@ -1470,14 +2370,14 @@ function rigIconUrl(id, variant) {
 function renderBase() {
   if (!S.project) return;
   $('baseIcon').src = rigIconUrl(S.project.rig, S.project.variant);
-  $('baseName').textContent = S.project.rig + (S.project.variant === 'pirate' ? ' · Pirate' : '');
+  $('baseName').textContent = S.project.rig + variantName(S.project.variant);
 }
 $('baseBtn').addEventListener('click', () => {
   const modal = $('modal');
   modal.className = '';
-  const tile = (rig, variant) => h('button', { class: 'baseTile' + (rig.id === S.project.rig && variant === (S.project.variant || '') ? ' on' : ''), title: rig.id + (variant ? ' (Pirate)' : ''), onclick: () => { modal.close(); setBase(rig.id, variant); } },
-    h('img', { src: rigIconUrl(rig.id, variant), alt: '', loading: 'lazy' }), h('span', {}, rig.id + (variant ? ' · Pirate' : '')));
-  const group = (side, label) => [h('div', { class: 'baseGroup' }, label), h('div', { class: 'baseGrid' }, S.rigs.filter(r => r.side === side).flatMap(r => r.pirate ? [tile(r, ''), tile(r, 'pirate')] : [tile(r, '')]))];
+  const tile = (rig, variant) => h('button', { class: 'baseTile' + (rig.id === S.project.rig && variant === (S.project.variant || '') ? ' on' : ''), title: rig.id + variantName(variant), onclick: () => { modal.close(); setBase(rig.id, variant); } },
+    h('img', { src: rigIconUrl(rig.id, variant), alt: '', loading: 'lazy' }), h('span', {}, rig.id + variantName(variant)));
+  const group = (side, label) => [h('div', { class: 'baseGroup' }, label), h('div', { class: 'baseGrid' }, S.rigs.filter(r => r.side === side).flatMap(r => [tile(r, ''), ...(r.variants || []).map(v => tile(r, v))]))];
   modal.replaceChildren(h('div', { class: 'row between' }, h('h3', {}, 'Choose a base'), h('button', { onclick: () => modal.close() }, 'Cancel')),
     h('div', { id: 'baseList' }, group('bird', 'Birds'), group('pig', 'Pigs')));
   modal.showModal();
@@ -1538,12 +2438,22 @@ $('loopCheck').addEventListener('change', e => { S.loop = e.target.checked; });
 $('fitBtn').addEventListener('click', fitView);
 $('nameInput').addEventListener('input', e => { S.project.name = e.target.value; nameChanged(); renderTooltip(); });
 $('idInput').addEventListener('input', e => { S.idTouched = true; e.target.value = slugify(e.target.value) + (e.target.value.endsWith('_') ? '_' : ''); S.project.id = e.target.value.replace(/_+$/, ''); renderStats(); touch(); });
-$('newBtn').addEventListener('click', () => openProject(blankProject(S.project ? S.project.rig : 'MinionPig')));
-$('projectSelect').addEventListener('change', async e => {
-  if (!e.target.value) return;
+// Switching saves the current combatant first, if it can be saved (it has an id).
+async function leaveProject() {
   clearTimeout(saveTimer);
   await saveNow();
-  openProject(await api('/api/project/' + e.target.value));
+}
+$('newBtn').addEventListener('click', async () => {
+  closeFileMenu();
+  await leaveProject();
+  openProject(blankProject(S.project ? S.project.rig : 'MinionPig'));
+});
+$('projectSelect').addEventListener('change', async e => {
+  const id = e.target.value; // saving redraws this list, so read the choice first
+  if (!id) return;
+  closeFileMenu();
+  await leaveProject();
+  openProject(await api('/api/project/' + id));
 });
 window.addEventListener('resize', () => { renderTooltip(); fitView(); });
 window.addEventListener('keydown', e => {
@@ -1580,9 +2490,9 @@ async function boot() {
   const pill = $('unityState');
   pill.textContent = data.unity ? 'Unity open' : 'Unity closed: upload encodes in batch mode';
   pill.classList.toggle('on', data.unity);
-  [S.lib, S.skills, S.icons] = await Promise.all([api('/api/library'), api('/api/skills'), api('/api/icons')]);
+  [S.lib, S.skills, S.icons, S.powerLevels, S.projectiles] = await Promise.all([api('/api/library'), api('/api/skills'), api('/api/icons'), api('/api/powerlevels'), api('/api/projectiles')]);
   await openProject(blankProject('MinionPig'));
   requestAnimationFrame(tick);
 }
-window.forge = { S, assign, openProject, renderTooltip, setTab, setLevel, stepHistory, activeLayer, renderAbilities, generateAll };
+window.forge = { S, assign, openProject, renderTooltip, setTab, setLevel, stepHistory, activeLayer, renderAbilities, generateAll, openExisting, duplicateExisting, loadExisting, setTick };
 boot().catch(e => { document.body.prepend(h('pre', { style: 'color:#ef6b6b;padding:12px' }, 'Could not start: ' + e.message)); });

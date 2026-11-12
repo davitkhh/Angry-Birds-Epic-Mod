@@ -1,0 +1,199 @@
+{
+ "id": "slime_dawg",
+ "name": "Slime Dawg",
+ "rig": "PigPirate",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "y13y4gui",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_CameraPig",
+     "name": "Headgear_CameraPig",
+     "item": "Headgear_CameraPig",
+     "w": 118,
+     "h": 66,
+     "pivot": [
+      -0.42857146,
+      -0.89553577
+     ],
+     "tx": 15.740288469147828,
+     "ty": -44.217403938106,
+     "rot": -0.4036154032866177,
+     "sx": 1.9979598183191463,
+     "sy": 1.8524484176532032,
+     "shear": 0,
+     "pair": "a287kot3"
+    },
+    {
+     "uid": "5w99nowt",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig",
+     "name": "Headgear_SecurityPig",
+     "item": "Headgear_SecurityPig",
+     "w": 138,
+     "h": 34,
+     "pivot": [
+      -0.18750001,
+      -0.3805147
+     ],
+     "tx": 0.02579053645118279,
+     "ty": -72.27601239411459,
+     "rot": 0,
+     "sx": 1.6263929186550732,
+     "sy": 1.5308786637339353,
+     "shear": 0,
+     "pair": "38mygt7y"
+    }
+   ],
+   "hidden": false,
+   "active": "y13y4gui"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "a8440bmq",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig_Back",
+     "name": "Headgear_SecurityPig_Back",
+     "item": "Headgear_SecurityPig",
+     "w": 38,
+     "h": 26,
+     "pivot": [
+      -0.14464286,
+      -0.26229396
+     ],
+     "tx": -10.792758907329674,
+     "ty": -75.52385205824932,
+     "rot": 0,
+     "sx": 1.6263929186550732,
+     "sy": 1.5308786637339353,
+     "shear": 0,
+     "pair": "38mygt7y"
+    },
+    {
+     "uid": "x7b0j0v9",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_CameraPig_Back",
+     "name": "Headgear_CameraPig_Back",
+     "item": "Headgear_CameraPig",
+     "w": 80,
+     "h": 38,
+     "pivot": [
+      -0.41250002,
+      -1.5958647
+     ],
+     "tx": -6.020049094036914,
+     "ty": -42.03400984947352,
+     "rot": -0.4036154032866177,
+     "sx": 1.9979598183191465,
+     "sy": 1.8524484176532028,
+     "shear": 0,
+     "pair": "a287kot3"
+    }
+   ],
+   "hidden": false,
+   "active": "x7b0j0v9"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "ka4x6erp",
+     "src": "upload:Pigs/MainHand/MainHand_SlimeGun.png",
+     "name": "MainHand_SlimeGun",
+     "item": "MainHand_SlimeGun",
+     "w": 142,
+     "h": 92,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 33.599490657173874,
+     "ty": 10.491344133832627,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "ka4x6erp"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "4fn7hhiy",
+   "type": "Attack",
+   "name": "Slime Out",
+   "desc": "Deals [ff0000]{value_1}[-] damage and ricochets once for [ff0000]{value_10}[-] damage. Target takes [ff0000]{value_7}[-] damage for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "Deals 40% damage and ricochets once for 10% less damage. Target takes 80% damage for the next 3 turns. ",
+   "projectile": "Projectile_ZombiePig_Barf",
+   "nameId": "pig_attack_forge_slime_dawg_slime_out",
+   "written": true,
+   "template": "AttackWithChainAndDotSkill",
+   "params": {
+    "damage_in_percent": 40,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 80,
+    "chain": 1,
+    "chain_reduction": 10
+   },
+   "duration": 3,
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_8}": {
+     "expr": "(p(\"chain\"))"
+    },
+    "{value_9}": {
+     "expr": "(p(\"chain_reduction\"))"
+    },
+    "{value_10}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100) * A * (100 - (p(\"chain_reduction\"))) / 100)"
+    },
+    "{value_11}": {
+     "expr": "(p(\"chain_chance\"))"
+    }
+   },
+   "anim": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 3,
+  "isRanged": true,
+  "projectile": "Projectile_PigDrone_Fireblast",
+  "hitEffect": "",
+  "directProjectile": true
+ },
+ "stats": {
+  "hp": 180,
+  "attack": 12,
+  "sizeType": "Large",
+  "sizeScale": 0.9,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true
+}

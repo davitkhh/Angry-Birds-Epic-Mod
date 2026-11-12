@@ -374,6 +374,48 @@
     "MaxLevel": 0
   },
   {
+    "NameId": "hotspot_008_04_battleground",
+    "Type": "Battle",
+    "BattleId": [
+      "battle_008_04"
+    ],
+    "HotspotContents": null,
+    "ZoneLocaIdent": "zone_cobalt_plateaus",
+    "ZoneStageIndex": 2,
+    "EnterRequirements": null,
+    "CooldownInSeconds": 0,
+    "VisibleRequirements": null,
+    "IsSpawnEventPossible": false,
+    "ProgressId": 8,
+    "OrderId": 8,
+    "IsSpawnGoldenPigPossible": false,
+    "UseProgressIndicator": false,
+    "AutoSpawnBirds": true,
+    "CountForStars": false,
+    "MaxLevel": 2
+  },
+  {
+    "NameId": "hotspot_008_05_battleground",
+    "Type": "Battle",
+    "BattleId": [
+      "battle_008_05"
+    ],
+    "HotspotContents": null,
+    "ZoneLocaIdent": "zone_cobalt_plateaus",
+    "ZoneStageIndex": 2,
+    "EnterRequirements": null,
+    "CooldownInSeconds": 0,
+    "VisibleRequirements": null,
+    "IsSpawnEventPossible": false,
+    "ProgressId": 8,
+    "OrderId": 8,
+    "IsSpawnGoldenPigPossible": false,
+    "UseProgressIndicator": false,
+    "AutoSpawnBirds": true,
+    "CountForStars": false,
+    "MaxLevel": 2
+  },
+  {
     "NameId": "hotspot_014_01_resourcenode",
     "Type": "Resource",
     "BattleId": null,

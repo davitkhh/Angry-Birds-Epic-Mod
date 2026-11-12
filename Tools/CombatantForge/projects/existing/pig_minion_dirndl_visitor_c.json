@@ -1,0 +1,366 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_dirndl_visitor_c",
+ "name": "Funfair Pal",
+ "rig": "Piglette",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DirndlVisitorC",
+     "name": "Headgear_DirndlVisitorC",
+     "item": "Headgear_DirndlVisitorC",
+     "w": 122,
+     "h": 104,
+     "pivot": [
+      0.06428571,
+      0.27022663
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DirndlVisitorC_Back",
+     "name": "Headgear_DirndlVisitorC_Back",
+     "item": "Headgear_DirndlVisitorC",
+     "w": 120,
+     "h": 88,
+     "pivot": [
+      0.3910714,
+      0.37987015
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DirndlVisitorC",
+     "name": "MainHand_DirndlVisitorC",
+     "item": "MainHand_DirndlVisitorC",
+     "w": 132,
+     "h": 98,
+     "pivot": [
+      -0.24642856,
+      -0.10823615
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_a9486",
+   "origin": "pig_attack_minion_dirndl_visitor_c",
+   "type": "Attack",
+   "source": "pig_attack_minion_dirndl_visitor_c",
+   "name": "Furious Wipe",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_24dd4",
+   "origin": "pig_support_minion_dirndl_visitor_c",
+   "type": "Support",
+   "source": "pig_support_minion_dirndl_visitor_c",
+   "name": "Cleansing Call",
+   "desc": "Removes all harmful effects from target ally. Target is healed by [00a800]{value_1}[-].",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "cleanse_chance": 100,
+    "invoker": 1,
+    "health_in_percent": 25
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_7}": {
+     "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+    },
+    "{value_9}": {
+     "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"cleanse_chance\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealAndCleanseSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 230,
+  "attack": 26,
+  "sizeType": "Small",
+  "sizeScale": 1.4,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_dirndl_visitor_c",
+  "fingerprint": "2a8ced5dff69cce30651315c834577d9e9f5ed55",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_attack_minion_dirndl_visitor_c"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_support_minion_dirndl_visitor_c",
+     "pig_attack_minion_dirndl_visitor_c"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Funfair Pal",
+   "rig": "Piglette",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DirndlVisitorC",
+       "name": "Headgear_DirndlVisitorC",
+       "item": "Headgear_DirndlVisitorC",
+       "w": 122,
+       "h": 104,
+       "pivot": [
+        0.06428571,
+        0.27022663
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DirndlVisitorC_Back",
+       "name": "Headgear_DirndlVisitorC_Back",
+       "item": "Headgear_DirndlVisitorC",
+       "w": 120,
+       "h": 88,
+       "pivot": [
+        0.3910714,
+        0.37987015
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DirndlVisitorC",
+       "name": "MainHand_DirndlVisitorC",
+       "item": "MainHand_DirndlVisitorC",
+       "w": 132,
+       "h": 98,
+       "pivot": [
+        -0.24642856,
+        -0.10823615
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 230,
+    "attack": 26,
+    "sizeType": "Small",
+    "sizeScale": 1.4,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_a9486",
+     "origin": "pig_attack_minion_dirndl_visitor_c",
+     "type": "Attack",
+     "source": "pig_attack_minion_dirndl_visitor_c",
+     "name": "Furious Wipe",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_24dd4",
+     "origin": "pig_support_minion_dirndl_visitor_c",
+     "type": "Support",
+     "source": "pig_support_minion_dirndl_visitor_c",
+     "name": "Cleansing Call",
+     "desc": "Removes all harmful effects from target ally. Target is healed by [00a800]{value_1}[-].",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "cleanse_chance": 100,
+      "invoker": 1,
+      "health_in_percent": 25
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_7}": {
+       "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+      },
+      "{value_9}": {
+       "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"cleanse_chance\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealAndCleanseSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

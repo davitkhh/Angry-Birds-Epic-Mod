@@ -7,7 +7,7 @@ WORK="$(mktemp -d)"
 trap 'rm -rf "${WORK:?}"' EXIT
 PKG="$WORK/CombatantForge"
 mkdir -p "$PKG/app/web" "$OUT"
-cp "$FORGE"/forge.py "$FORGE"/desktop.py "$FORGE"/gamedata.py "$FORGE"/publish.py "$FORGE"/portable.py "$PKG/app/"
+cp "$FORGE"/forge.py "$FORGE"/desktop.py "$FORGE"/gamedata.py "$FORGE"/publish.py "$FORGE"/portable.py "$FORGE"/existing.py "$PKG/app/"
 cp "$FORGE"/web/index.html "$FORGE"/web/app.js "$FORGE"/web/style.css "$PKG/app/web/"
 cp "$FORGE"/packaging/linux/install.sh "$FORGE"/packaging/linux/uninstall.sh "$FORGE"/packaging/linux/README.txt "$PKG/"
 chmod +x "$PKG/install.sh" "$PKG/uninstall.sh"

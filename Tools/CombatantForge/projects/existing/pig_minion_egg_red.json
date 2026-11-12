@@ -1,0 +1,299 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_egg_red",
+ "name": "Red Egg",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RedEgg",
+     "name": "Headgear_RedEgg",
+     "item": "Headgear_RedEgg",
+     "w": 124,
+     "h": 106,
+     "pivot": [
+      -0.1889764,
+      -0.5338259
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RedEgg_Back",
+     "name": "Headgear_RedEgg_Back",
+     "item": "Headgear_RedEgg",
+     "w": 120,
+     "h": 68,
+     "pivot": [
+      -0.19285713,
+      -0.5719538
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_6e06f",
+   "origin": "pig_attack_minion_egg_red",
+   "type": "Attack",
+   "source": "pig_attack_minion_egg_red",
+   "name": "Scrambled Red Eggs",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "reduction_in_percent": 50,
+    "chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_b55b0",
+   "origin": "pig_passive_hunter_red",
+   "type": "Passive",
+   "source": "pig_passive_hunter_red",
+   "name": "Red Hunter",
+   "desc": "Red takes [ff0000]{value_3}%[-] damage from attacks. ",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "bonus_damage_vs_red": 150
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+    }
+   },
+   "template": "PassiveBonusAgainstBirds",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 120,
+  "attack": 10,
+  "sizeType": "Small",
+  "sizeScale": 1.2,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_egg_red",
+  "fingerprint": "04798788ac910709c1078f698cc31ccaa75cebb8",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_egg_red"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Red Egg",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RedEgg",
+       "name": "Headgear_RedEgg",
+       "item": "Headgear_RedEgg",
+       "w": 124,
+       "h": 106,
+       "pivot": [
+        -0.1889764,
+        -0.5338259
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RedEgg_Back",
+       "name": "Headgear_RedEgg_Back",
+       "item": "Headgear_RedEgg",
+       "w": 120,
+       "h": 68,
+       "pivot": [
+        -0.19285713,
+        -0.5719538
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 120,
+    "attack": 10,
+    "sizeType": "Small",
+    "sizeScale": 1.2,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_6e06f",
+     "origin": "pig_attack_minion_egg_red",
+     "type": "Attack",
+     "source": "pig_attack_minion_egg_red",
+     "name": "Scrambled Red Eggs",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "reduction_in_percent": 50,
+      "chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_b55b0",
+     "origin": "pig_passive_hunter_red",
+     "type": "Passive",
+     "source": "pig_passive_hunter_red",
+     "name": "Red Hunter",
+     "desc": "Red takes [ff0000]{value_3}%[-] damage from attacks. ",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "bonus_damage_vs_red": 150
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+      }
+     },
+     "template": "PassiveBonusAgainstBirds",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

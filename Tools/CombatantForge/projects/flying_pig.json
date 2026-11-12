@@ -1,0 +1,496 @@
+{
+ "id": "flying_pig",
+ "name": "Flying Pig",
+ "rig": "PigDrone",
+ "variant": "",
+ "slots": {
+  "Body": {
+   "layers": [
+    {
+     "uid": "9xoayjoi",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Body",
+     "name": "Body",
+     "item": "Body",
+     "w": 120,
+     "h": 110,
+     "pivot": [
+      0,
+      -0.5
+     ],
+     "tx": 2.689304971134675,
+     "ty": 8.482028767556784,
+     "rot": 0,
+     "sx": 1.018181818181818,
+     "sy": 1.018181818181818,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "9xoayjoi"
+  },
+  "Eye_Left": {
+   "layers": [
+    {
+     "uid": "cp3ahrks",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Eye_Left",
+     "name": "Eye_Left",
+     "item": "Eye_Left",
+     "w": 16,
+     "h": 24,
+     "pivot": [
+      0.04,
+      0.09
+     ],
+     "tx": 11.633896295770665,
+     "ty": 52.67,
+     "rot": 0,
+     "sx": 0.9166666666666666,
+     "sy": 0.9166666666666666,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "cp3ahrks"
+  },
+  "Eye_Right": {
+   "layers": [
+    {
+     "uid": "xqom6myg",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Eye_Right",
+     "name": "Eye_Right",
+     "item": "Eye_Right",
+     "w": 22,
+     "h": 24,
+     "pivot": [
+      -0.05,
+      0.09
+     ],
+     "tx": 8.717307019215754,
+     "ty": 54.29271261054782,
+     "rot": 0,
+     "sx": 0.9166666666666666,
+     "sy": 0.9166666666666666,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "xqom6myg"
+  },
+  "Snout": {
+   "layers": [
+    {
+     "uid": "vimet1gg",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Snout",
+     "name": "Snout",
+     "item": "Snout",
+     "w": 44,
+     "h": 38,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 11.95361473632866,
+     "ty": 49.01,
+     "rot": 0,
+     "sx": 1.105263157894737,
+     "sy": 1.105263157894737,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "vimet1gg"
+  },
+  "Pupil_Left": {
+   "layers": [
+    {
+     "uid": "lusl67y1",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Pupil_Left",
+     "name": "Pupil_Left",
+     "item": "Pupil_Left",
+     "w": 8,
+     "h": 8,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 13.265888253823395,
+     "ty": 50.08,
+     "rot": 0,
+     "sx": 0.9874775353775459,
+     "sy": 0.9874775353775459,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "lusl67y1"
+  },
+  "Pupil_Right": {
+   "layers": [
+    {
+     "uid": "ilz2g79a",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Pupil_Right",
+     "name": "Pupil_Right",
+     "item": "Pupil_Right",
+     "w": 8,
+     "h": 8,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 6.897044317443239,
+     "ty": 52.33291266050068,
+     "rot": 0,
+     "sx": 0.8326353389583248,
+     "sy": 0.8326353389583248,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "ilz2g79a"
+  },
+  "Mouth": {
+   "layers": [
+    {
+     "uid": "g0x2cswm",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Mouth",
+     "name": "Mouth",
+     "item": "Mouth",
+     "w": 25,
+     "h": 18,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 7.828413101048454,
+     "ty": 51.86,
+     "rot": 0,
+     "sx": 0.96,
+     "sy": 0.96,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g0x2cswm"
+  },
+  "Eyebrow_Left": {
+   "layers": [
+    {
+     "uid": "uwzwkmqi",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Eyebrow_Left_Curved",
+     "name": "Eyebrow_Left_Curved",
+     "item": "Eyebrow_Left_Curved",
+     "w": 52,
+     "h": 36,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 8.058397579145986,
+     "ty": 59.628109209584636,
+     "rot": 0,
+     "sx": 0.4444444444444444,
+     "sy": 0.4444444444444444,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "uwzwkmqi"
+  },
+  "Eyebrow_Right": {
+   "layers": [
+    {
+     "uid": "6d0oxv4q",
+     "src": "24737ef5c450b084e84264d632831bbc:Eyebrow_Right",
+     "name": "Eyebrow_Right",
+     "item": "Eyebrow_Right",
+     "w": 52,
+     "h": 26,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 16.485961513039186,
+     "ty": 53.334205855838434,
+     "rot": 0,
+     "sx": 0.6538461538461539,
+     "sy": 0.6538461538461539,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "6d0oxv4q"
+  },
+  "Tail": {
+   "layers": [
+    {
+     "uid": "3ynp0axw",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_CuteCupid_Back",
+     "name": "Headgear_CuteCupid_Back",
+     "item": "Headgear_CuteCupid",
+     "w": 244,
+     "h": 102,
+     "pivot": [
+      -0.17142856,
+      -0.4293067
+     ],
+     "tx": -89.4464218779777,
+     "ty": 35.83506726837956,
+     "rot": -0.42582763272491597,
+     "sx": 0.9253708611773794,
+     "sy": 0.8083394725703062,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "3ynp0axw"
+  },
+  "Lid_Left": {
+   "layers": [
+    {
+     "uid": "telylx8q",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Lid_Left_Closed",
+     "name": "Lid_Left_Closed",
+     "item": "Lid_Left_Closed",
+     "w": 16,
+     "h": 24,
+     "pivot": [
+      0.04,
+      0.09
+     ],
+     "tx": 11.178699464715649,
+     "ty": 52.37,
+     "rot": 0,
+     "sx": 0.9439418808866336,
+     "sy": 0.9439418808866336,
+     "shear": 0
+    }
+   ],
+   "hidden": true,
+   "active": "telylx8q"
+  },
+  "Lid_Right": {
+   "layers": [
+    {
+     "uid": "fycadm9t",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Lid_Right_Closed",
+     "name": "Lid_Right_Closed",
+     "item": "Lid_Right_Closed",
+     "w": 22,
+     "h": 24,
+     "pivot": [
+      -0.05,
+      0.09
+     ],
+     "tx": 6.876647068624822,
+     "ty": 58.54,
+     "rot": 0,
+     "sx": 1.0279681299663654,
+     "sy": 1.0279681299663654,
+     "shear": 0
+    }
+   ],
+   "hidden": true,
+   "active": "fycadm9t"
+  },
+  "Shadow": {
+   "layers": [
+    {
+     "uid": "x20rkdfv",
+     "src": "944fb69e523fc284d8461513e658b534:Shadow",
+     "name": "Shadow",
+     "item": "Shadow",
+     "w": 80,
+     "h": 30,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 0.8,
+     "sy": 0.8,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "x20rkdfv"
+  },
+  "Propeller": {
+   "layers": [
+    {
+     "uid": "q931o7su",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:Propeller_Normal_1",
+     "name": "Propeller_Normal_1",
+     "item": "Propeller_Normal_1",
+     "w": 150,
+     "h": 32,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 38.122844921698885,
+     "ty": 28.213453305851075,
+     "rot": -10.708069903933785,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": true,
+   "active": "q931o7su"
+  },
+  "PropellerShaft": {
+   "layers": [
+    {
+     "uid": "32flvpk3",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Tail",
+     "name": "Tail",
+     "item": "Tail",
+     "w": 24,
+     "h": 18,
+     "pivot": [
+      -0.41,
+      -0.08
+     ],
+     "tx": 48.8984388947964,
+     "ty": -21.310877757244782,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "32flvpk3"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "qzwm47j9",
+   "type": "Attack",
+   "source": "bird_attack_white_priest",
+   "name": "Angelic Side-Eye",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Pigs attacking this target regain [00a800]{value_7}%[-] of their maximum health. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "AngelicTouch",
+   "params": {
+    "damage_in_percent": 70,
+    "health_in_percent": 10,
+    "chance": 100,
+    "attack_count": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"health_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "AttackAndApplyHealOnAttackSkill",
+   "duration": 3,
+   "design": "",
+   "nameId": "pig_attack_forge_flying_pig_angelic_side_eye"
+  },
+  {
+   "uid": "3rtpji9e",
+   "type": "Attack",
+   "source": "pig_attack_minion_stickpig_02",
+   "name": "Stumble",
+   "desc": "The pig stumbles and does nothing. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "tumble": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "ghw2dscg",
+   "type": "Passive",
+   "name": "Pie in the Sky",
+   "desc": "Can only be hit by ranged attacks",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "Can only be hit by ranged attacks",
+   "nameId": "pig_passive_forge_flying_pig_pie_in_the_sky",
+   "written": true,
+   "template": "ImmunityToMelee",
+   "params": {},
+   "duration": -1,
+   "values": {}
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 70,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "guids": {
+  "src:Forge_flying_pig__Body": "972e764fa0a44b8481bc03bb7607a0f3",
+  "src:Forge_flying_pig__Eye_Left": "3b612c4adce147feb5aae94421f2a8e2",
+  "src:Forge_flying_pig__Eye_Right": "6ad34b1a5da44c93a09bf38b0ae5926a",
+  "src:Forge_flying_pig__Snout": "5f7913a7722f45bc9d2d04a73bbbe6f4",
+  "src:Forge_flying_pig__Pupil_Left": "e011e93d8a75453e9307bde664f89a90",
+  "src:Forge_flying_pig__Pupil_Right": "a69db7a3b29c4f87870f337665490d3a",
+  "src:Forge_flying_pig__Mouth": "f4083fb05b634a4c9ec15d62930efe28",
+  "src:Forge_flying_pig__Eyebrow_Left": "b1e93a25cb3c4bf8a668faf09e9152be",
+  "src:Forge_flying_pig__Eyebrow_Right": "c42cfa3886b64599983552cd09c62201",
+  "src:Forge_flying_pig__Tail": "563d8c5b0a184147b4197582a77e0cb7",
+  "src:Forge_flying_pig__Propeller": "d5066a44fc244cbd8370d964050c6863",
+  "src:Forge_flying_pig__PropellerShaft": "d2aa533092084e188d14b309992bcb0f",
+  "src:Forge_flying_pig__Lid_Left": "cee4cf9932de4e60b28f59f166129712",
+  "src:Forge_flying_pig__Lid_Right": "9cc3f77057fd448eb5dd248ba001fac7",
+  "src:Forge_flying_pig__Shadow": "3beacd6b0bc14faf8fd7d94ba2ca95c7",
+  "tex:HR": "43a10c3fb55748f6a7f5b8df6e145b7d",
+  "tex:LR": "d13e9d18eddf4146b1bff6916616e65a",
+  "mat:HR": "da6367045084409d9b7efdc55650ce93",
+  "mat:LR": "ba58739d66ed46f1a81481af7bf793a2",
+  "atlas:HR": "02ba9cfaa96945c689444bad20a5c37f",
+  "atlas:LR": "54282f295c7e4280983271b3ea4c2751"
+ },
+ "publishedAt": "2026-11-06 19:55",
+ "publishedRig": "PigDrone"
+}

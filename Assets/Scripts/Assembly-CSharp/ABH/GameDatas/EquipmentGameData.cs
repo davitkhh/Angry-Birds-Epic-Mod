@@ -443,6 +443,7 @@ namespace ABH.GameDatas
 				return "PassiveEffect_HocusPocus";
 			case PerkType.Might:
 			case PerkType.Brilliance:
+			case PerkType.Hype:
 				return "PassiveEffect_Might";
 			case PerkType.Dynamite:
 				return "PassiveEffect_ChainAttack";

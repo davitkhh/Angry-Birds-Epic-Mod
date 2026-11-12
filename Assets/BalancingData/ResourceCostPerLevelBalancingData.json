@@ -2704,6 +2704,19 @@
     "FallbackItemCount": 10
   },
   {
+    "NameId": "cost_upgrade_offhand_blue_warhorn_start_01",
+    "Level": 1,
+    "AppliedItemNameId": "upgrade_offhand_blue_warhorn_start",
+    "FirstMaterialNameId": "resource_wood",
+    "FirstMaterialAmount": 3,
+    "SecondMaterialNameId": "resource_seashell",
+    "SecondMaterialAmount": 3,
+    "ThirdMaterialNameId": "resource_flotsam",
+    "ThirdMaterialAmount": 2,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
+  },
+  {
     "NameId": "cost_upgrade_class_knight_01",
     "Level": 1,
     "AppliedItemNameId": "upgrade_class_knight",

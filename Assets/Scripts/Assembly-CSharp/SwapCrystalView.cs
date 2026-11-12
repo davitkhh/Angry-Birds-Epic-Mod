@@ -44,6 +44,9 @@ public class SwapCrystalView : MonoBehaviour
 
 	public float m_GlowSize = 150f;
 
+	// Turn counter: the charge bubble without room for a target icon, its bar rounded at both ends.
+	public CharacterSpeechBubble m_CounterBubble;
+
 	// Swap beam (PlayBeam): a ray of light from the crystal that turns about the X axis, tipping toward the camera
 	// from straight up to straight down and on around, flickering red/blue, for as long as its sound plays.
 	public Texture2D m_BeamTexture;

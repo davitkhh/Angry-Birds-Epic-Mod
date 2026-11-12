@@ -616,6 +616,17 @@
     "RecipeCategoryType": "OffHandEquipment"
   },
   {
+    "NameId": "upgrade_offhand_blue_warhorn_start",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_offhand_blue_warhorn_start",
+    "LocaBaseId": "upgrade_offhand_blue_warhorn_start",
+    "SortPriority": 2,
+    "ResultLoot": {
+      "bird_offhand_blue_warhorn_start": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
     "NameId": "upgrade_class_knight",
     "ItemType": "CraftingRecipes",
     "AssetBaseId": "upgrade_class_knight",

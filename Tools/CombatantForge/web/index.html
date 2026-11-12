@@ -9,10 +9,17 @@
 <body>
 <header id="topbar">
   <strong class="brand">Combatant Forge</strong>
-  <label>Combatant <select id="projectSelect"></select></label>
-  <button id="newBtn">New</button>
-  <button id="importBtn" title="Open a .forge file">Import</button>
-  <button id="exportBtn" title="Save this combatant and its art as a .forge file">Export</button>
+  <div class="menu" id="fileMenu">
+    <button id="fileBtn" aria-haspopup="true" aria-expanded="false" aria-controls="filePanel">File ▾</button>
+    <div class="menuPanel" id="filePanel" role="menu" hidden>
+      <label>Combatant <select id="projectSelect"></select></label>
+      <button id="newBtn" role="menuitem">New</button>
+      <button id="existingBtn" role="menuitem" title="Show the game's own combatants in the left panel; press again for the sprites">View existing</button>
+      <button id="importBtn" role="menuitem" title="Open a .forge file">Import</button>
+      <button id="exportBtn" role="menuitem" title="Save this combatant and its art as a .forge file">Export</button>
+      <button id="deleteBtn" role="menuitem" class="danger">Delete…</button>
+    </div>
+  </div>
   <input id="importInput" type="file" accept=".forge,application/zip" hidden>
   <label class="grow">Name <input id="nameInput" placeholder="Shown in battle" maxlength="40"></label>
   <label>Id <input id="idInput" class="mono" placeholder="id" maxlength="40"></label>
@@ -65,6 +72,14 @@
       <label class="check"><input type="checkbox" id="showGear" checked> Show equipment</label>
       <label class="check"><input type="checkbox" id="showFeatures" checked> Show swapped features</label>
       <label class="check"><input type="checkbox" id="showSlots"> Slot labels</label>
+      <span id="targetControls" class="row" hidden>
+        <span class="sep"></span>
+        <span class="dim">Targets</span>
+        <button id="targetLess" class="iconBtn" aria-label="One target fewer">−</button>
+        <span id="targetCount" class="mono"></span>
+        <button id="targetMore" class="iconBtn" aria-label="One more target">+</button>
+        <label class="check" title="Draw the path of every projectile the attack you last played fires, and the damage it passes on"><input type="checkbox" id="showPaths"> Projectile paths</label>
+      </span>
       <span class="grow"></span>
       <button id="fitBtn">Fit</button>
     </div>

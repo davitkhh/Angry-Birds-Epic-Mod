@@ -2222,5 +2222,39 @@
       "pig_forge_gonchacho_headgear": 1
     },
     "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_stringtheory_01",
+    "DefaultInventoryContent": {
+      "pig_forge_stringtheory_mainhand": 1,
+      "pig_forge_stringtheory_offhand": 1,
+      "pig_forge_stringtheory_headgear": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_flying_pig_01",
+    "DefaultInventoryContent": {
+      "pig_forge_flying_pig_mainhand": 1,
+      "pig_forge_flying_pig_headgear": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_king_dj_01",
+    "DefaultInventoryContent": {
+      "pig_forge_king_dj_mainhand": 1,
+      "pig_forge_king_dj_offhand": 1,
+      "pig_forge_king_dj_headgear": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_zombie_farmer__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_cupid_dark_01": 1,
+      "pig_forge_pig_zombie_farmer__e0_headgear": 1
+    },
+    "InitializingLevel": 0
   }
 ]

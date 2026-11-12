@@ -1,0 +1,367 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_frosthog",
+ "name": "Frost Hog",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_FrostHog",
+     "name": "Headgear_FrostHog",
+     "item": "Headgear_FrostHog",
+     "w": 282,
+     "h": 265,
+     "pivot": [
+      -0.23035714,
+      -0.0028504042
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_FrostHog_Back",
+     "name": "Headgear_FrostHog_Back",
+     "item": "Headgear_FrostHog",
+     "w": 260,
+     "h": 139,
+     "pivot": [
+      -0.0053571425,
+      0.5260791
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_FrostHog",
+     "name": "MainHand_FrostHog",
+     "item": "MainHand_FrostHog",
+     "w": 296,
+     "h": 156,
+     "pivot": [
+      -0.45000002,
+      -0.26936814
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_49745",
+   "origin": "pig_attack_brute_frosthog",
+   "type": "Attack",
+   "source": "pig_attack_brute_frosthog",
+   "name": "Shattering Blow",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 300,
+    "charge": 3,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 60,
+    "additional_enemies_affected": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_6}": {
+     "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+    }
+   },
+   "template": "AttackAndApplyDotSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 375,
+  "attack": 25,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_frosthog",
+  "fingerprint": "2d3d197e5d75dadd1fe745d2b785433dc3a455a9",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_frosthog"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Frost Hog",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_FrostHog",
+       "name": "Headgear_FrostHog",
+       "item": "Headgear_FrostHog",
+       "w": 282,
+       "h": 265,
+       "pivot": [
+        -0.23035714,
+        -0.0028504042
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_FrostHog_Back",
+       "name": "Headgear_FrostHog_Back",
+       "item": "Headgear_FrostHog",
+       "w": 260,
+       "h": 139,
+       "pivot": [
+        -0.0053571425,
+        0.5260791
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_FrostHog",
+       "name": "MainHand_FrostHog",
+       "item": "MainHand_FrostHog",
+       "w": 296,
+       "h": 156,
+       "pivot": [
+        -0.45000002,
+        -0.26936814
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 375,
+    "attack": 25,
+    "sizeType": "Boss",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_49745",
+     "origin": "pig_attack_brute_frosthog",
+     "type": "Attack",
+     "source": "pig_attack_brute_frosthog",
+     "name": "Shattering Blow",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 300,
+      "charge": 3,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 60,
+      "additional_enemies_affected": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_6}": {
+       "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+      }
+     },
+     "template": "AttackAndApplyDotSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

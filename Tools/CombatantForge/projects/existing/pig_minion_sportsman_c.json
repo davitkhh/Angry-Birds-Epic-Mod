@@ -1,0 +1,369 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_sportsman_c",
+ "name": "Football Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanC",
+     "name": "Headgear_SportsmanC",
+     "item": "Headgear_SportsmanC",
+     "w": 140,
+     "h": 92,
+     "pivot": [
+      -0.1821429,
+      -0.4099405
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanC_Back",
+     "name": "Headgear_SportsmanC_Back",
+     "item": "Headgear_SportsmanC",
+     "w": 48,
+     "h": 36,
+     "pivot": [
+      0.4830741,
+      -0.7509911
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_SportsmanC",
+     "name": "OffHand_SportsmanC",
+     "item": "OffHand_SportsmanC",
+     "w": 78,
+     "h": 74,
+     "pivot": [
+      0.54503524,
+      -1.2208052
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_8d5d1",
+   "origin": "pig_attack_minion_sportsman_c",
+   "type": "Attack",
+   "source": "pig_attack_minion_sportsman_c",
+   "name": "Header",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 15,
+    "duration": 1,
+    "use_skill_asset": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_11848",
+   "origin": "pig_support_minion_sportsman_c",
+   "type": "Support",
+   "source": "pig_support_minion_sportsman_c",
+   "name": "Counterattack",
+   "desc": "[ff0000]{value_3}%[-] chance the target counters enemy attacks with its own attack, dealing [ff0000]{value_7}%[-] damage. Lasts [ff0000]{value_2}[-] turns. ",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "counter": 30,
+    "damage_in_percent": 50
+   },
+   "values": {
+    "{value_6}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"counter\"))"
+    }
+   },
+   "template": "CounterEnemiesBlessing",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 140,
+  "attack": 18,
+  "sizeType": "Small",
+  "sizeScale": 1.2,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_sportsman_c",
+  "fingerprint": "9ce9de536f82f470960856f71c012a63cab35a0a",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_attack_minion_sportsman_c"
+    ]
+   },
+   {
+    "Percentage": 25,
+    "ComboChain": [
+     "pig_support_minion_sportsman_c"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Football Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanC",
+       "name": "Headgear_SportsmanC",
+       "item": "Headgear_SportsmanC",
+       "w": 140,
+       "h": 92,
+       "pivot": [
+        -0.1821429,
+        -0.4099405
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanC_Back",
+       "name": "Headgear_SportsmanC_Back",
+       "item": "Headgear_SportsmanC",
+       "w": 48,
+       "h": 36,
+       "pivot": [
+        0.4830741,
+        -0.7509911
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_SportsmanC",
+       "name": "OffHand_SportsmanC",
+       "item": "OffHand_SportsmanC",
+       "w": 78,
+       "h": 74,
+       "pivot": [
+        0.54503524,
+        -1.2208052
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 140,
+    "attack": 18,
+    "sizeType": "Small",
+    "sizeScale": 1.2,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_8d5d1",
+     "origin": "pig_attack_minion_sportsman_c",
+     "type": "Attack",
+     "source": "pig_attack_minion_sportsman_c",
+     "name": "Header",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 15,
+      "duration": 1,
+      "use_skill_asset": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_11848",
+     "origin": "pig_support_minion_sportsman_c",
+     "type": "Support",
+     "source": "pig_support_minion_sportsman_c",
+     "name": "Counterattack",
+     "desc": "[ff0000]{value_3}%[-] chance the target counters enemy attacks with its own attack, dealing [ff0000]{value_7}%[-] damage. Lasts [ff0000]{value_2}[-] turns. ",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "counter": 30,
+      "damage_in_percent": 50
+     },
+     "values": {
+      "{value_6}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"counter\"))"
+      }
+     },
+     "template": "CounterEnemiesBlessing",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -131,6 +131,11 @@ namespace ABH.Services.Logic
 			{
 				return false;
 			}
+			// Testing override, saved per profile in EquippedSkins like other mod state: "forcevisible:<hotspot>" skips the requirements.
+			if (playerGameData != null && playerGameData.Data.EquippedSkins != null && playerGameData.Data.EquippedSkins.ContainsKey("forcevisible:" + hotspot.BalancingData.NameId))
+			{
+				return true;
+			}
 			return m_requirementService.CheckGenericRequirements(playerGameData, hotspot.BalancingData.VisibleRequirements);
 		}
 

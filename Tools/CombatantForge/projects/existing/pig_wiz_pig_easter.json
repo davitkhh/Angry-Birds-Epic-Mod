@@ -1,0 +1,346 @@
+{
+ "kind": "existing",
+ "id": "pig_wiz_pig_easter",
+ "name": "Easter Wiz Pig",
+ "rig": "WizPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear_EasterWizPig",
+     "name": "Headgear_EasterWizPig",
+     "item": "Headgear_EasterWizPig",
+     "w": 279,
+     "h": 192,
+     "pivot": [
+      0.06428571,
+      -0.16736886
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_EasterWizPig",
+     "name": "MainHand_EasterWizPig",
+     "item": "MainHand_EasterWizPig",
+     "w": 235,
+     "h": 67,
+     "pivot": [
+      -0.26785713,
+      0.009394989
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_ba701",
+   "origin": "pig_attack_wiz_pig_easter",
+   "type": "Attack",
+   "source": "pig_attack_wiz_pig_easter",
+   "name": "Egg Rain",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 200,
+    "charge": 2,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_0bafb",
+   "origin": "pig_support_wiz_pig_easter",
+   "type": "Support",
+   "source": "pig_support_wiz_pig_easter",
+   "name": "Egg Rush",
+   "desc": "Summons [00a800]{value_1}[-] egg bombs.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_egg_bombs": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_db10b",
+   "origin": "pig_passive_drainlife",
+   "type": "Passive",
+   "source": "pig_passive_drainlife",
+   "name": "Drain Life",
+   "desc": "Increases received healing by [ff0000]{value_3}%[-].",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "increase_in_percent": 100
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "IncreaseHealingReceivedPassive",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 800,
+  "attack": 35,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_wiz_pig_easter",
+  "fingerprint": "b02dc5cd33fbacf27d7279a244ef29835315529c",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_wiz_pig_easter",
+     "pig_support_wiz_pig_easter"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Easter Wiz Pig",
+   "rig": "WizPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear_EasterWizPig",
+       "name": "Headgear_EasterWizPig",
+       "item": "Headgear_EasterWizPig",
+       "w": 279,
+       "h": 192,
+       "pivot": [
+        0.06428571,
+        -0.16736886
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_EasterWizPig",
+       "name": "MainHand_EasterWizPig",
+       "item": "MainHand_EasterWizPig",
+       "w": 235,
+       "h": 67,
+       "pivot": [
+        -0.26785713,
+        0.009394989
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 800,
+    "attack": 35,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig_boss_defeated_gold": 1,
+     "loot_pig_boss_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_ba701",
+     "origin": "pig_attack_wiz_pig_easter",
+     "type": "Attack",
+     "source": "pig_attack_wiz_pig_easter",
+     "name": "Egg Rain",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 200,
+      "charge": 2,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_0bafb",
+     "origin": "pig_support_wiz_pig_easter",
+     "type": "Support",
+     "source": "pig_support_wiz_pig_easter",
+     "name": "Egg Rush",
+     "desc": "Summons [00a800]{value_1}[-] egg bombs.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_egg_bombs": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_db10b",
+     "origin": "pig_passive_drainlife",
+     "type": "Passive",
+     "source": "pig_passive_drainlife",
+     "name": "Drain Life",
+     "desc": "Increases received healing by [ff0000]{value_3}%[-].",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "increase_in_percent": 100
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "IncreaseHealingReceivedPassive",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,185 @@
+{
+ "id": "cupido_copy",
+ "name": "Cupido copy",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "64fdefec",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Cupido",
+     "name": "Headgear_Cupido",
+     "item": "Headgear_Cupido",
+     "w": 89,
+     "h": 51,
+     "pivot": [
+      0,
+      -1.6220063
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class_cupido_copy"
+    }
+   ],
+   "hidden": false,
+   "active": "64fdefec"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "205b8840",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Cupido_Back",
+     "name": "Headgear_Cupido_Back",
+     "item": "Headgear_Cupido",
+     "w": 256,
+     "h": 110,
+     "pivot": [
+      -0.1714286,
+      -0.4293067
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class_cupido_copy"
+    }
+   ],
+   "hidden": false,
+   "active": "205b8840"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "9bb22f5c",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_Cupido",
+     "name": "MainHand_Cupido",
+     "item": "MainHand_Cupido",
+     "w": 102,
+     "h": 97,
+     "pivot": [
+      -0.31607142,
+      -0.036616348
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "9bb22f5c"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "bae29f82",
+   "type": "Attack",
+   "source": "pig_attack_minion_cupido",
+   "name": "Calming Smite",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-].",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "ragereduce": 10,
+    "falloff": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"ragereduce\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "ReduceRageAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "7bab9024",
+   "type": "Support",
+   "source": "pig_support_minion_cupido",
+   "name": "Angelic Protection",
+   "desc": "Target receives [00a800]{value_1}%[-] less damage. Lasts [00a800]{value_2}[-] turns. ",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "percent": 15
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+    }
+   },
+   "template": "BlockDamageSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 90,
+  "attack": 14,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "duplicateOf": "pig_minion_cupido",
+ "combos": [
+  {
+   "Percentage": 65,
+   "ComboChain": [
+    "pig_attack_minion_cupido",
+    "pig_support_minion_cupido"
+   ]
+  },
+  {
+   "Percentage": 35,
+   "ComboChain": [
+    "pig_support_minion_cupido"
+   ]
+  }
+ ],
+ "keepSkills": []
+}

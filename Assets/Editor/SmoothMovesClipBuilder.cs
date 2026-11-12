@@ -69,7 +69,9 @@ public static class SmoothMovesClipBuilder
 
 	private static void Build(string rig, string clipName, string scenePath, StringBuilder log)
 	{
-		var prefabPath = AssetDatabase.FindAssets(rig + " t:Prefab", new[] { PrefabRoot }).Select(AssetDatabase.GUIDToAssetPath).FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == rig);
+		// Custom copies (MyPrefabs/<Rig>.prefab) can share the rig's name: prefer the one with a _low sibling.
+		var prefabPath = AssetDatabase.FindAssets(rig + " t:Prefab", new[] { PrefabRoot }).Select(AssetDatabase.GUIDToAssetPath).Where(p => Path.GetFileNameWithoutExtension(p) == rig)
+			.OrderBy(p => File.Exists(p.Replace(".prefab", "_low.prefab")) ? 0 : 1).ThenBy(p => p.Length).FirstOrDefault();
 		var clipPath = "Assets/AnimationClip/" + rig + "/" + clipName + ".anim";
 		var prefab = prefabPath != null ? AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) : null;
 		if (prefab == null)
@@ -120,20 +122,23 @@ public static class SmoothMovesClipBuilder
 			var builtClips = GetList(built, "mAnimationClips");
 			var index = Names(builtClips).IndexOf(clipName);
 			var builtStates = GetList(built, "mAnimationStates");
-			var builtTriggers = GetList(built, "triggerFrames").Cast<object>().Where(t => ClipIndex(t) == index).ToList();
+			var allBuiltTriggers = GetList(built, "triggerFrames").Cast<object>().ToList();
+			var builtTriggers = allBuiltTriggers.Where(t => ClipIndex(t) == index).ToList();
+			s_EventsRetargeted = false;
+			s_BuiltTriggerPositions = Enumerable.Range(0, allBuiltTriggers.Count).Where(i => ClipIndex(allBuiltTriggers[i]) == index).ToList();
 			log.AppendLine("built index " + index + ", trigger frames " + builtTriggers.Count);
 
 			var builtState = builtStates != null && index < builtStates.Count ? builtStates[index] : null;
 			if (scenePath != null)
 			{
-				PatchScene(scenePath, data, clipName, clipAsset, index, builtClips[index], builtState, builtTriggers, log);
+				PatchScene(scenePath, data, clipName, clipAsset, index, builtClips[index], builtState, builtTriggers, Names(builtClips), log);
 				return;
 			}
 			foreach (var path in new[] { prefabPath, prefabPath.Replace(".prefab", "_low.prefab") })
 			{
 				if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null)
 				{
-					PatchPrefab(path, clipName, clipAsset, index, builtClips[index], builtState, builtTriggers, log);
+					PatchPrefab(path, clipName, clipAsset, index, builtClips[index], builtState, builtTriggers, Names(builtClips), log);
 				}
 			}
 		}
@@ -143,7 +148,7 @@ public static class SmoothMovesClipBuilder
 		}
 	}
 
-	private static void PatchScene(string scenePath, Object data, string clipName, AnimationClip clip, int index, object liteClip, object state, List<object> triggers, StringBuilder log)
+	private static void PatchScene(string scenePath, Object data, string clipName, AnimationClip clip, int index, object liteClip, object state, List<object> triggers, List<string> dataNames, StringBuilder log)
 	{
 		if (EditorApplication.isPlaying)
 		{
@@ -161,7 +166,7 @@ public static class SmoothMovesClipBuilder
 		foreach (var target in targets)
 		{
 			var name = target.transform.parent != null ? target.transform.parent.name + "/" + target.name : target.name;
-			if (PatchRig(target, name, clipName, clip, index, liteClip, state, triggers, log))
+			if (PatchRig(target, name, clipName, clip, index, liteClip, state, triggers, dataNames, log))
 			{
 				EditorUtility.SetDirty(target);
 				patched++;
@@ -184,12 +189,12 @@ public static class SmoothMovesClipBuilder
 		}
 	}
 
-	private static void PatchPrefab(string path, string clipName, AnimationClip clip, int index, object liteClip, object state, List<object> triggers, StringBuilder log)
+	private static void PatchPrefab(string path, string clipName, AnimationClip clip, int index, object liteClip, object state, List<object> triggers, List<string> dataNames, StringBuilder log)
 	{
 		var root = PrefabUtility.LoadPrefabContents(path);
 		try
 		{
-			if (PatchRig(FindBoneAnimation(root), path, clipName, clip, index, liteClip, state, triggers, log))
+			if (PatchRig(FindBoneAnimation(root), path, clipName, clip, index, liteClip, state, triggers, dataNames, log))
 			{
 				PrefabUtility.SaveAsPrefabAsset(root, path);
 			}
@@ -200,13 +205,26 @@ public static class SmoothMovesClipBuilder
 		}
 	}
 
-	private static bool PatchRig(Component target, string label, string clipName, AnimationClip clip, int index, object liteClip, object state, List<object> triggers, StringBuilder log)
+	private static bool PatchRig(Component target, string label, string clipName, AnimationClip clip, int index, object liteClip, object state, List<object> triggers, List<string> dataNames, StringBuilder log)
 	{
 		var names = Names(GetList(target, "mAnimationClips"));
 		var existing = names.IndexOf(clipName);
-		if (existing >= 0 && existing != index || existing < 0 && names.Count != index)
+		// A clip authored in the middle of the data's list is inserted at its data index when every clip before it
+		// already matches the data; later clips' trigger frames shift up by one. Build several such clips in ascending
+		// data order.
+		var insert = existing < 0 && index < names.Count && dataNames != null && names.Take(index).SequenceEqual(dataNames.Take(index));
+		if (existing >= 0 && existing != index || existing < 0 && names.Count != index && !insert)
 		{
 			log.AppendLine(label + ": clip order differs from the data (" + clipName + " at " + existing + " of " + names.Count + ", built at " + index + "); skipped");
+			return false;
+		}
+		var rigTriggers = GetList(target, "triggerFrames").Cast<object>().ToList();
+		var oldPositions = Enumerable.Range(0, rigTriggers.Count).Where(i => existing >= 0 && ClipIndex(rigTriggers[i]) == index).ToList();
+		var inPlace = oldPositions.Count > 0 && oldPositions.Count == triggers.Count;
+		var atTail = oldPositions.Count == 0 || oldPositions.First() == rigTriggers.Count - oldPositions.Count && oldPositions.Last() == rigTriggers.Count - 1;
+		if (!inPlace && !atTail)
+		{
+			log.AppendLine(label + ": " + clipName + " now has " + triggers.Count + " trigger frames instead of " + oldPositions.Count + " and isn't the last in the list; replacing them would shift every later clip's AnimationEvent indices; skipped");
 			return false;
 		}
 		if (existing >= 0)
@@ -217,6 +235,15 @@ public static class SmoothMovesClipBuilder
 				SetAt(target, "mAnimationStates", index, state);
 			}
 		}
+		else if (insert)
+		{
+			InsertAt(target, "mAnimationClips", index, liteClip);
+			var states = GetList(target, "mAnimationStates");
+			if (state != null && states != null && states.Count >= index)
+			{
+				InsertAt(target, "mAnimationStates", index, state);
+			}
+		}
 		else
 		{
 			Append(target, "mAnimationClips", liteClip);
@@ -225,9 +252,38 @@ public static class SmoothMovesClipBuilder
 				Append(target, "mAnimationStates", state);
 			}
 		}
-		var kept = GetList(target, "triggerFrames").Cast<object>().Where(t => ClipIndex(t) != index).ToList();
-		kept.AddRange(label.EndsWith("_low.prefab") ? RemapAtlases(target, triggers, log) : triggers);
+		var kept = GetList(target, "triggerFrames").Cast<object>().Where(t => insert || inPlace || ClipIndex(t) != index).ToList();
+		if (insert)
+		{
+			// Shifted on the list that is written back (the entries may be boxed struct copies).
+			foreach (var trigger in kept)
+			{
+				var current = ClipIndex(trigger);
+				if (current >= index)
+				{
+					trigger.GetType().GetField("clipIndex", Fields).SetValue(trigger, current + 1);
+				}
+			}
+		}
+		var placed = label.EndsWith("_low.prefab") ? RemapAtlases(target, triggers, log) : triggers;
+		// A clip's AnimationEvents fire trigger frames by their position in this rig's list (sounds, texture swaps,
+		// depths), not by clip; the built clip's events hold the positions of a full build, so point them at ours.
+		var positions = new List<int>();
+		if (inPlace)
+		{
+			for (var i = 0; i < placed.Count; i++)
+			{
+				kept[oldPositions[i]] = placed[i];
+			}
+			positions.AddRange(oldPositions);
+		}
+		else
+		{
+			positions.AddRange(Enumerable.Range(kept.Count, placed.Count));
+			kept.AddRange(placed);
+		}
 		SetList(target, "triggerFrames", kept);
+		RetargetTriggerEvents(clip, positions, label, log);
 
 		// Reference the saved clip asset (Animation.AddClip would store an unsaved copy)
 		var animation = new SerializedObject(target.GetComponent<Animation>());
@@ -249,7 +305,7 @@ public static class SmoothMovesClipBuilder
 			clips.GetArrayElementAtIndex(clips.arraySize - 1).objectReferenceValue = clip;
 		}
 		animation.ApplyModifiedPropertiesWithoutUndo();
-		log.AppendLine(label + (existing >= 0 ? " replaced " : " added ") + clipName);
+		log.AppendLine(label + (existing >= 0 ? " replaced " : insert ? " inserted at " + index + " " : " added ") + clipName);
 		return true;
 	}
 
@@ -300,6 +356,49 @@ public static class SmoothMovesClipBuilder
 			log.AppendLine("  atlas refs remapped to the rig's atlases: " + remapped + (missing.Count > 0 ? ", no counterpart for " + string.Join(", ", missing.ToArray()) : ""));
 		}
 		return result;
+	}
+
+	// Positions, in the full build's trigger list, of the built clip's trigger frames (what its AnimationEvents hold).
+	private static List<int> s_BuiltTriggerPositions = new List<int>();
+
+	private static bool s_EventsRetargeted;
+
+	private static void RetargetTriggerEvents(AnimationClip clip, List<int> positions, string label, StringBuilder log)
+	{
+		var events = AnimationUtility.GetAnimationEvents(clip);
+		var changed = 0;
+		foreach (var e in events)
+		{
+			if (e.functionName != "AnimationEvent_Triggered")
+			{
+				continue;
+			}
+			var ordinal = s_BuiltTriggerPositions.IndexOf(e.intParameter);
+			if (ordinal < 0 || ordinal >= positions.Count)
+			{
+				log.AppendLine(label + ": WARNING event at " + e.time + " fires trigger " + e.intParameter + ", which isn't one of this clip's; the rigs' trigger lists differ");
+				continue;
+			}
+			if (e.intParameter != positions[ordinal])
+			{
+				e.intParameter = positions[ordinal];
+				changed++;
+			}
+		}
+		if (changed > 0 && s_EventsRetargeted)
+		{
+			log.AppendLine(label + ": WARNING its trigger frames sit at other positions than the previous rig's; the shared clip now only fits this one");
+		}
+		s_EventsRetargeted = true;
+		if (changed > 0)
+		{
+			AnimationUtility.SetAnimationEvents(clip, events);
+			EditorUtility.SetDirty(clip);
+			AssetDatabase.SaveAssets();
+		}
+		// The clip is shared by every patched rig: the next one maps from these positions, and must end up at the same.
+		s_BuiltTriggerPositions = new List<int>(positions);
+		log.AppendLine(label + ": trigger events at " + (positions.Count > 0 ? positions.First() + ".." + positions.Last() : "none") + (changed > 0 ? " (" + changed + " retargeted)" : ""));
 	}
 
 	private static Component FindBoneAnimation(GameObject root)
@@ -354,6 +453,13 @@ public static class SmoothMovesClipBuilder
 		{
 			((IList)value).Add(item);
 		}
+	}
+
+	private static void InsertAt(Component c, string field, int index, object item)
+	{
+		var items = GetList(c, field).Cast<object>().ToList();
+		items.Insert(index, item);
+		SetList(c, field, items);
 	}
 
 	private static void SetList(Component c, string field, List<object> items)

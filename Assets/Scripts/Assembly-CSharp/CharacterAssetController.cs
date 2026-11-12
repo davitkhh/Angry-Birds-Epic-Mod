@@ -158,22 +158,35 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		DeregisterEventHandler();
 	}
 
+	// Pigs whose off-hand (front and back) stays visible in world map / battle preparation previews, where pigs normally
+	// hide their hands.
+	private static readonly HashSet<string> s_OffHandOnWorldMap = new HashSet<string> { "pig_forge_king_dj" };
+
+	private static bool ShowsOffHandOnWorldMap(ICharacter model)
+	{
+		var pig = model as PigGameData;
+		return pig != null && pig.BalancingData != null && s_OffHandOnWorldMap.Contains(pig.BalancingData.NameId) && pig.OffHandItem != null;
+	}
+
 	protected virtual void SetEquipment(bool isWorldMap, bool showItems)
 	{
 		if (base.HasNoBoneAnimation)
 		{
 			return;
 		}
+		HideGearBonesUnderTwins();
 		if (isWorldMap && Model is BirdGameData)
 		{
 			SetBirdHeadgear();
-			m_BoneAnimation.HideBone("MainHand", true);
+			HideGearBone("MainHand");
 			m_BoneAnimation.HideBone("OffHand", true);
 		}
 		else if (Model is PigGameData)
 		{
 			// Pig clips hide the shadow while the pig hops; keep it on the ground instead.
 			AirborneShadow.Attach(this);
+			// Spring drones bounce on a simulated spring instead of hovering.
+			SpringDrone.Attach(this, Model);
 			if (isWorldMap)
 			{
 				if (HeadGearBone && HeadGearBone.name.EndsWith("_A"))
@@ -213,12 +226,22 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
 					SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
-					SetPirateVariants(Model.ClassItem);
+					SetVariantTextures(Model.ClassItem);
 					if (m_BoneAnimation.GetBoneTransform("MainHand") != null)
 					{
-						m_BoneAnimation.HideBone("MainHand", true);
+						HideGearBone("MainHand");
 					}
-					if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
+					if (ShowsOffHandOnWorldMap(Model))
+					{
+						// Part of the pig's look (King DJ's turntable front and the cannon on his back): kept in the
+						// world map / battle preparation previews.
+						SetEquipmentItem(Model.OffHandItem, "OffHand", string.Empty);
+						if (m_BoneAnimation.GetBoneTransform("OffHand_Back") != null)
+						{
+							SetEquipmentItem(Model.OffHandItem, "OffHand_Back", "_Back");
+						}
+					}
+					else if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
 					{
 						m_BoneAnimation.HideBone("OffHand", true);
 					}
@@ -253,7 +276,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					if (m_BoneAnimation.GetBoneTransform("MainHand") != null)
 					{
-						m_BoneAnimation.HideBone("MainHand", true);
+						HideGearBone("MainHand");
 					}
 					if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
 					{
@@ -271,13 +294,13 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					SetEquipmentItem((Model as PigGameData).ClassSkin, "Headgear", string.Empty);
 					SetEquipmentItem((Model as PigGameData).ClassSkin, "Headgear_Back", "_Back");
-					SetPirateVariants((Model as PigGameData).ClassSkin);
+					SetVariantTextures((Model as PigGameData).ClassSkin);
 				}
 				else
 				{
 					SetEquipmentItem(Model.ClassItem, "Headgear", string.Empty);
 					SetEquipmentItem(Model.ClassItem, "Headgear_Back", "_Back");
-					SetPirateVariants(Model.ClassItem);
+					SetVariantTextures(Model.ClassItem);
 				}
 				if (showItems)
 				{
@@ -296,7 +319,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				{
 					if (m_BoneAnimation.GetBoneTransform("MainHand") != null)
 					{
-						m_BoneAnimation.HideBone("MainHand", true);
+						HideGearBone("MainHand");
 					}
 					if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
 					{
@@ -319,7 +342,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			}
 			else
 			{
-				m_BoneAnimation.HideBone("MainHand", true);
+				HideGearBone("MainHand");
 				m_BoneAnimation.HideBone("OffHand", true);
 			}
 		}
@@ -350,6 +373,11 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		{
 			return;
 		}
+		var twin = GearBodyTwin(boneName);
+		if (twin != null)
+		{
+			SetEquipmentItem(itemGameData, twin, suffix);
+		}
 		var animationBone = m_BoneAnimation.mBoneSource.FirstOrDefault(b => b.boneName == boneName);
 		if (animationBone == null)
 		{
@@ -372,6 +400,74 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		if (!SwapBoneToTexture(boneName, triggerFrameBone.originalTextureGUID, itemAssetName + suffix))
 		{
 			m_BoneAnimation.HideBone(boneName, true);
+		}
+	}
+
+	// Body-parented twins of the gear bones. PigPirate's Action_Attack_3 hides Headgear/Headgear_Back/MainHand and draws
+	// the gear on these instead (no other clip gives them a texture), so they wear and hide whatever their gear bone does.
+	private static readonly Dictionary<string, string> GearBodyTwins = new Dictionary<string, string>
+	{
+		{ "Headgear", "HeadgearBody" },
+		{ "Headgear_Back", "HeadgearBody_Back" },
+		{ "MainHand", "MainHandBody" }
+	};
+
+	private string GearBodyTwin(string boneName)
+	{
+		string twin;
+		return GearBodyTwins.TryGetValue(boneName, out twin) && m_BoneAnimation.mBoneSource.Any(b => b.boneName == twin) ? twin : null;
+	}
+
+	// SmoothMoves builds ignore a bone's per-clip "visible" flag, so a clip that draws the gear on the twins (Attack_3)
+	// would draw it on the gear bones too. In every clip where a twin shows a texture, its gear bones' trigger frames
+	// become HideTexture: the twin takes the gear bone's place for that clip. Other clips are untouched. The trigger
+	// frames belong to this instance's BoneAnimation, so the prefab isn't changed. Idempotent; re-run after texture swaps.
+	private void HideGearBonesUnderTwins()
+	{
+		if (m_BoneAnimation == null)
+		{
+			return;
+		}
+		foreach (var twinName in GearBodyTwins.Values.Where(t => !t.EndsWith("_Back")).Distinct())
+		{
+			var twin = m_BoneAnimation.mBoneSource.FirstOrDefault(b => b.boneName == twinName);
+			if (twin == null)
+			{
+				continue;
+			}
+			var clips = new HashSet<int>(m_BoneAnimation.triggerFrames.Where(f =>
+			{
+				var bone = f.GetTriggerFrameBone(twin.boneNodeIndex);
+				return bone != null && !string.IsNullOrEmpty(bone.textureGUID) && bone.triggerEventTypes.Contains(TriggerFrameBone.TRIGGER_EVENT_TYPE.ChangeTexture);
+			}).Select(f => f.clipIndex));
+			if (clips.Count == 0)
+			{
+				continue;
+			}
+			var gearNodes = GearBodyTwins.Where(p => p.Value == twinName || p.Value == twinName + "_Back")
+				.Select(p => m_BoneAnimation.mBoneSource.FirstOrDefault(b => b.boneName == p.Key)).Where(b => b != null).Select(b => b.boneNodeIndex).ToList();
+			foreach (var frame in m_BoneAnimation.triggerFrames.Where(f => clips.Contains(f.clipIndex)))
+			{
+				foreach (var node in gearNodes)
+				{
+					var bone = frame.GetTriggerFrameBone(node);
+					if (bone != null)
+					{
+						bone.triggerEventTypes.Clear();
+						bone.triggerEventTypes.Add(TriggerFrameBone.TRIGGER_EVENT_TYPE.HideTexture);
+					}
+				}
+			}
+		}
+	}
+
+	private void HideGearBone(string boneName)
+	{
+		m_BoneAnimation.HideBone(boneName, true);
+		var twin = GearBodyTwin(boneName);
+		if (twin != null)
+		{
+			m_BoneAnimation.HideBone(twin, true);
 		}
 	}
 
@@ -444,15 +540,36 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			m_BoneAnimation.RestoreBoneTexture(boneName);
 		}
 		m_BoneAnimation.SwapBoneTexture(boneName, textureAtlas3.name, textureAtlas3.textureNames[num], TextureName, textureName);
+		HideGearBonesUnderTwins();
 		return true;
 	}
 
 	private readonly List<string> m_PirateSwappedBones = new List<string>();
 
-	// Pirate-aligned pigs (wearing a pirate hat) swap every texture X their bones use for the rig's "XPirate"
-	// texture, when one of the rig's atlases has it: BodyPirate (MoustachePig, PigBrute), Mouth_KOPirate etc.
-	// (PigBrute). A bone like Mouth changes texture per animation, so each of its textures is swapped on its own.
-	private void SetPirateVariants(IInventoryItemGameData headgear)
+	// The texture variant a headgear selects. Pirate-aligned pigs (a pirate hat) get "Pirate". A Forge class item
+	// (Forge_<lowercase id>[_<Suffix>]) names its variant in its last segment, e.g. Forge_x_Regular -> "Regular".
+	private static string VariantSuffix(string headgearName)
+	{
+		if (headgearName.Contains("Pirate") || headgearName.Contains("RedBeard"))
+		{
+			return "Pirate";
+		}
+		if (headgearName.StartsWith(ForgeAssetPrefix))
+		{
+			var tail = headgearName.Substring(headgearName.LastIndexOf('_') + 1);
+			if (tail.Length > 0 && char.IsUpper(tail[0]))
+			{
+				return tail;
+			}
+		}
+		return null;
+	}
+
+	// Pigs whose headgear selects a variant (see VariantSuffix) swap every texture X their bones use for the rig's
+	// "X<Suffix>" texture, when one of the rig's atlases has it: BodyPirate (MoustachePig, PigBrute), Mouth_KOPirate
+	// etc. (PigBrute), BodyRegular (PigPirate). A bone like Mouth changes texture per animation, so each of its
+	// textures is swapped on its own.
+	private void SetVariantTextures(IInventoryItemGameData headgear)
 	{
 		if (base.HasNoBoneAnimation)
 		{
@@ -464,7 +581,8 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 		m_PirateSwappedBones.Clear();
 		var headgearName = headgear == null || string.IsNullOrEmpty(headgear.ItemAssetName) ? string.Empty : headgear.ItemAssetName;
-		if (!headgearName.Contains("Pirate") && !headgearName.Contains("RedBeard"))
+		var suffix = VariantSuffix(headgearName);
+		if (suffix == null)
 		{
 			return;
 		}
@@ -480,12 +598,12 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 					continue;
 				}
 				var originalName = originalAtlas.textureNames[originalAtlas.GetTextureIndex(guid)];
-				var pirateAtlas = atlases.FirstOrDefault(a => a.textureNames.Contains(originalName + "Pirate"));
-				if (pirateAtlas == null)
+				var variantAtlas = atlases.FirstOrDefault(a => a.textureNames.Contains(originalName + suffix));
+				if (variantAtlas == null)
 				{
 					continue;
 				}
-				m_BoneAnimation.SwapBoneTexture(bone.boneName, originalAtlas.name, originalName, pirateAtlas.name, originalName + "Pirate");
+				m_BoneAnimation.SwapBoneTexture(bone.boneName, originalAtlas.name, originalName, variantAtlas.name, originalName + suffix);
 				if (!m_PirateSwappedBones.Contains(bone.boneName))
 				{
 					m_PirateSwappedBones.Add(bone.boneName);
@@ -564,7 +682,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		var item = owner.Model == null ? null : slot == InventoryItemType.MainHandEquipment ? owner.Model.MainHandItem : owner.Model.OffHandItem;
 		if (!show || item == null || string.IsNullOrEmpty(item.ItemAssetName))
 		{
-			m_BoneAnimation.HideBone(boneName, true);
+			HideGearBone(boneName);
 			return;
 		}
 		var textureName = item.ItemAssetName.Replace("_Ancient", string.Empty);
@@ -577,10 +695,10 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		if (atlas == null)
 		{
 			DebugLog.Warn(GetType(), "ShowHandItem: no atlas has " + textureName);
-			m_BoneAnimation.HideBone(boneName, true);
+			HideGearBone(boneName);
 			return;
 		}
-		m_BoneAnimation.HideBone(boneName, true);
+		HideGearBone(boneName);
 		var hand = m_BoneAnimation.GetBoneTransform(boneName);
 		var visual = hand.Find(boneName + "_Sprite") ?? hand;
 		var carried = new GameObject("Carried_" + boneName + "_" + textureName);
@@ -611,6 +729,28 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				m_CarriedHandItems.RemoveAt(i);
 			}
 		}
+	}
+
+	// Combatant Forge: the rig's clip whose name hashes to this value (ForgeSkillAnimation.Hash), or null.
+	public string FindClipByHash(int hash)
+	{
+		if (base.HasNoBoneAnimation || m_BoneAnimation == null)
+		{
+			return null;
+		}
+		var clips = m_BoneAnimation.GetComponent<Animation>();
+		if (clips == null)
+		{
+			return null;
+		}
+		foreach (AnimationState state in clips)
+		{
+			if (ForgeSkillAnimation.Hash(state.name) == hash)
+			{
+				return state.name;
+			}
+		}
+		return null;
 	}
 
 	// SmoothMoves' clip indexer logs an error for unknown names; the rig's legacy Animation lookup is silent.
@@ -652,6 +792,12 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			base.gameObject.StopAnimationOrAnimatorState(new List<string> { "Idle", "Hit", "Cheer" }, this);
 		}
 		PlayAnimation("Defeated");
+		// King DJ's crown and headphones fall off as heavy objects instead of floating away like PigMage's hat.
+		var pig = Model as PigGameData;
+		if (pig != null && pig.BalancingData != null && pig.BalancingData.NameId == "pig_forge_king_dj")
+		{
+			KingDJHeadgearDrop.Begin(this);
+		}
 	}
 
 	public virtual void PlayKnockoutAnim()
@@ -679,11 +825,38 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		return GetAnimationLength("KnockedOut");
 	}
 
+	// Set by the battle view when a hit drops the combatant below its hurt threshold; the next PlayHitAnim (same
+	// moment) plays Hit_to_Hurt instead of Hit, if the rig has one.
+	private float m_HurtTransitionTime = -1f;
+
+	public void MarkHurtTransition()
+	{
+		m_HurtTransitionTime = Time.time;
+	}
+
+	public override void SetHurt(bool hurt)
+	{
+		if (!hurt)
+		{
+			m_HurtTransitionTime = -1f;
+		}
+		base.SetHurt(hurt);
+	}
+
+	private string TakeHitClip()
+	{
+		var transition = m_HurtTransitionTime >= 0f && Time.time - m_HurtTransitionTime < 1f && IsHurt;
+		m_HurtTransitionTime = -1f;
+		var clip = transition ? FindClipName(HitToHurtClip) : null;
+		return clip ?? "Hit";
+	}
+
 	public virtual void PlayHitAnim()
 	{
+		var hit = TakeHitClip();
 		if (this is BannerAssetController || this is BossAssetController || base.HasNoBoneAnimation || !m_BoneAnimation.IsPlaying("Action_Rage"))
 		{
-			PlayAnimation("Hit");
+			PlayAnimation(hit);
 			PlayAnimationQueued("Idle");
 		}
 	}
@@ -695,6 +868,11 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 
 	public virtual float GetHitAnimationLength()
 	{
+		var transition = IsHurt ? FindClipName(HitToHurtClip) : null;
+		if (transition != null && m_BoneAnimation.IsPlaying(transition))
+		{
+			return GetAnimationLength(transition);
+		}
 		return GetAnimationLength("Hit");
 	}
 

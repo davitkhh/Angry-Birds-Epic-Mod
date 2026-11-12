@@ -71,6 +71,9 @@ public class SwapCrystalDirector : MonoBehaviour
 
 	private readonly List<Crystal> m_Crystals = new List<Crystal>();
 
+	// The difficulty suffix each pig of this wave spawned with; it keeps it through every swap.
+	private readonly Dictionary<PigCombatant, string> m_PigSuffixes = new Dictionary<PigCombatant, string>();
+
 	// Color a crystal had when its wave ended, so the same crystal in the next wave picks up where it left off.
 	private readonly Dictionary<string, bool> m_LastBlue = new Dictionary<string, bool>();
 
@@ -135,21 +138,27 @@ public class SwapCrystalDirector : MonoBehaviour
 	}
 
 	// The regular battle bubble spawner skips non-participating combatants, so the crystal's is set up here.
-	private static CharacterSpeechBubble CreateCounter(SwapCrystalCombatant combatant, int turnsLeft)
+	private static CharacterSpeechBubble CreateCounter(Crystal crystal)
 	{
+		var combatant = crystal.Combatant;
 		var view = combatant.CombatantView;
-		// The timer-only bubble isn't assigned in the visual effects balancing; the charge bubble is.
-		var effects = DIContainerLogic.GetVisualEffectsBalancing();
-		var prefab = effects.OnlyTimerBubble != null ? effects.OnlyTimerBubble : effects.LargeBubble;
+		var prefab = crystal.View.m_CounterBubble;
 		if (prefab == null)
 		{
+			DebugLog.Error("[SwapCrystal] The prefab has no m_CounterBubble.");
 			return null;
 		}
 		var bubble = Instantiate(prefab);
 		UnityHelper.SetLayerRecusively(bubble.gameObject, view.gameObject.layer);
 		view.PositionBubble(view, bubble.gameObject);
 		view.m_SpeechBubbles[CounterBubbleId] = bubble;
-		bubble.SetModel(combatant, string.Empty, turnsLeft);
+		// The bar spans the whole charge, so one turn in of three reads 1/3.
+		bubble.SetModel(combatant, string.Empty, combatant.Config.Turns);
+		bubble.SetChargeProgress(crystal.TurnsLeft);
+		if (combatant.Config.Turns > 3)
+		{
+			bubble.AddChargeDividers(combatant.Config.Turns);
+		}
 		bubble.DisableTargetIcon(true);
 		bubble.ShowAndMinimize();
 		return bubble;
@@ -201,6 +210,7 @@ public class SwapCrystalDirector : MonoBehaviour
 			}
 		}
 		m_Crystals.Clear();
+		m_PigSuffixes.Clear();
 	}
 
 	private void OnPigsTurnStarted(int turn)
@@ -252,7 +262,7 @@ public class SwapCrystalDirector : MonoBehaviour
 		}
 		try
 		{
-			crystal.Counter = CreateCounter(crystal.Combatant, crystal.TurnsLeft);
+			crystal.Counter = CreateCounter(crystal);
 		}
 		catch (Exception e)
 		{
@@ -282,7 +292,17 @@ public class SwapCrystalDirector : MonoBehaviour
 		var pigs = Battle.m_CombatantsPerFaction.ContainsKey(Faction.Pigs) ? Battle.m_CombatantsPerFaction[Faction.Pigs].OfType<PigCombatant>().ToList() : new List<PigCombatant>();
 		foreach (var pig in pigs)
 		{
-			var target = crystal.Config.GetSwapTarget(pig.CombatantNameId);
+			if (crystal.Config.GetTypeIndex(pig.CombatantNameId) < 0)
+			{
+				continue;
+			}
+			string suffix;
+			if (!m_PigSuffixes.TryGetValue(pig, out suffix))
+			{
+				suffix = SwapCrystalConfig.GetSuffix(pig.CombatantNameId);
+				m_PigSuffixes[pig] = suffix;
+			}
+			var target = crystal.Config.GetSwapTarget(pig.CombatantNameId, suffix);
 			if (target != null && pig.IsParticipating && pig.CombatantView != null && pig.CombatantView.m_AssetController != null)
 			{
 				swaps.Add(new KeyValuePair<PigCombatant, string>(pig, target));
@@ -357,7 +377,7 @@ public class SwapCrystalDirector : MonoBehaviour
 		{
 			if (swap.Key.IsParticipating && swap.Key.CombatantView != null)
 			{
-				var fromBlue = swap.Key.CombatantNameId == config.PigNameIds[0];
+				var fromBlue = config.GetTypeIndex(swap.Key.CombatantNameId) == 0;
 				morphs.Add(PigSwapMorph.Begin(swap.Key, swap.Value, m_BattleMgr, material, fromBlue ? blueColors : redColors, fromBlue ? redColors : blueColors));
 			}
 			yield return null;

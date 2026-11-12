@@ -1,0 +1,305 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_brass",
+ "name": "Brass Brute",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BrassBrute",
+     "name": "Headgear_BrassBrute",
+     "item": "Headgear_BrassBrute",
+     "w": 186,
+     "h": 138,
+     "pivot": [
+      -0.16607143,
+      -0.30326086
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:MainHand_BrassBrute",
+     "name": "MainHand_BrassBrute",
+     "item": "MainHand_BrassBrute",
+     "w": 284,
+     "h": 198,
+     "pivot": [
+      -0.41785714,
+      0.007683983
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_22b8a",
+   "origin": "pig_attack_brute_brass",
+   "type": "Attack",
+   "source": "pig_attack_brute_brass",
+   "name": "Out of Tune",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "all": 1,
+    "damage_in_percent": 100,
+    "charge": 2,
+    "chance": 50,
+    "duration": 1,
+    "use_skill_asset": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 380,
+  "attack": 25,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_brass",
+  "fingerprint": "7e01450dbd77a6343513efec4ed8ca40ed7819be",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_brass"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Brass Brute",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BrassBrute",
+       "name": "Headgear_BrassBrute",
+       "item": "Headgear_BrassBrute",
+       "w": 186,
+       "h": 138,
+       "pivot": [
+        -0.16607143,
+        -0.30326086
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:MainHand_BrassBrute",
+       "name": "MainHand_BrassBrute",
+       "item": "MainHand_BrassBrute",
+       "w": 284,
+       "h": 198,
+       "pivot": [
+        -0.41785714,
+        0.007683983
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 380,
+    "attack": 25,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_22b8a",
+     "origin": "pig_attack_brute_brass",
+     "type": "Attack",
+     "source": "pig_attack_brute_brass",
+     "name": "Out of Tune",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "all": 1,
+      "damage_in_percent": 100,
+      "charge": 2,
+      "chance": 50,
+      "duration": 1,
+      "use_skill_asset": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

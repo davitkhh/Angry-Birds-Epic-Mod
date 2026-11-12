@@ -1,0 +1,485 @@
+{
+ "kind": "existing",
+ "id": "pig_forge_gonchacho",
+ "name": "Gonchacho",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho",
+     "name": "Forge_gonchacho",
+     "item": "Forge_gonchacho",
+     "w": 153,
+     "h": 168,
+     "pivot": [
+      -0.3233162,
+      -0.2073621
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho_Back",
+     "name": "Forge_gonchacho_Back",
+     "item": "Forge_gonchacho",
+     "w": 126,
+     "h": 149,
+     "pivot": [
+      -0.0628041,
+      -0.2713147
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho_MainHand",
+     "name": "Forge_gonchacho_MainHand",
+     "item": "Forge_gonchacho_MainHand",
+     "w": 122,
+     "h": 115,
+     "pivot": [
+      -0.1941474,
+      -0.1787321
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho_OffHand",
+     "name": "Forge_gonchacho_OffHand",
+     "item": "Forge_gonchacho_OffHand",
+     "w": 86,
+     "h": 85,
+     "pivot": [
+      -0.2084993,
+      -0.01422822
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_dbf43",
+   "origin": "pig_attack_forge_gonchacho_new_ability",
+   "type": "Attack",
+   "source": "pig_attack_forge_gonchacho_new_ability",
+   "name": "Giggity Grenade",
+   "desc": "All enemies take [ff0000]{value_1}[-] damage. If the attack is a crit the target's most recent status effect is removed.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 90,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"damage_in_percent\")) / 100 * A)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "ThrowMainHandCritPurgeAttack",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_9410d",
+   "origin": "pig_attack_forge_gonchacho_new_ability_2",
+   "type": "Attack",
+   "source": "pig_attack_forge_gonchacho_new_ability_2",
+   "name": "Bitch Slap",
+   "desc": "Target takes [ff0000]{value_1}[-] damage. If the attack is a crit, the crit is [ff0000]{value_7}%[-] more effective",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 150,
+    "crit_effectiveness_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"damage_in_percent\")) / 100 * A)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"crit_effectiveness_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "CritEmpoweredAttack",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_a8cf4",
+   "origin": "pig_support_forge_gonchacho_new_ability",
+   "type": "Support",
+   "source": "pig_support_forge_gonchacho_new_ability",
+   "name": "Scrub-a-dub-dub",
+   "desc": "Clears the newest status effect from a random ally. Gonchacho has a [ff0000]{value_3}%[-] chance to crit for [ff0000]{value_1}%[-] extra damage for [ff0000]3[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "critchance_in_percent": 50,
+    "extra_damage": 20
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"extra_damage\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"critchance_in_percent\"))"
+    }
+   },
+   "template": "RemoveAllyEffectForCrit",
+   "duration": 2,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 460,
+  "attack": 16,
+  "sizeType": "Small",
+  "sizeScale": 1.5,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "lucky_coin": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_forge_gonchacho",
+  "fingerprint": "0d7ca16dfd865795fe781587655a7d03a036dc4d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_gonchacho_new_ability",
+     "pig_attack_forge_gonchacho_new_ability"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_gonchacho_new_ability",
+     "pig_attack_forge_gonchacho_new_ability_2"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Gonchacho",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho",
+       "name": "Forge_gonchacho",
+       "item": "Forge_gonchacho",
+       "w": 153,
+       "h": 168,
+       "pivot": [
+        -0.3233162,
+        -0.2073621
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho_Back",
+       "name": "Forge_gonchacho_Back",
+       "item": "Forge_gonchacho",
+       "w": 126,
+       "h": 149,
+       "pivot": [
+        -0.0628041,
+        -0.2713147
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho_MainHand",
+       "name": "Forge_gonchacho_MainHand",
+       "item": "Forge_gonchacho_MainHand",
+       "w": 122,
+       "h": 115,
+       "pivot": [
+        -0.1941474,
+        -0.1787321
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "5ff91116ec9b436b9be3f99b405da889:Forge_gonchacho_OffHand",
+       "name": "Forge_gonchacho_OffHand",
+       "item": "Forge_gonchacho_OffHand",
+       "w": 86,
+       "h": 85,
+       "pivot": [
+        -0.2084993,
+        -0.01422822
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 460,
+    "attack": 16,
+    "sizeType": "Small",
+    "sizeScale": 1.5,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "lucky_coin": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_dbf43",
+     "origin": "pig_attack_forge_gonchacho_new_ability",
+     "type": "Attack",
+     "source": "pig_attack_forge_gonchacho_new_ability",
+     "name": "Giggity Grenade",
+     "desc": "All enemies take [ff0000]{value_1}[-] damage. If the attack is a crit the target's most recent status effect is removed.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 90,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"damage_in_percent\")) / 100 * A)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "ThrowMainHandCritPurgeAttack",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_9410d",
+     "origin": "pig_attack_forge_gonchacho_new_ability_2",
+     "type": "Attack",
+     "source": "pig_attack_forge_gonchacho_new_ability_2",
+     "name": "Bitch Slap",
+     "desc": "Target takes [ff0000]{value_1}[-] damage. If the attack is a crit, the crit is [ff0000]{value_7}%[-] more effective",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 150,
+      "crit_effectiveness_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"damage_in_percent\")) / 100 * A)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"crit_effectiveness_in_percent\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "CritEmpoweredAttack",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_a8cf4",
+     "origin": "pig_support_forge_gonchacho_new_ability",
+     "type": "Support",
+     "source": "pig_support_forge_gonchacho_new_ability",
+     "name": "Scrub-a-dub-dub",
+     "desc": "Clears the newest status effect from a random ally. Gonchacho has a [ff0000]{value_3}%[-] chance to crit for [ff0000]{value_1}%[-] extra damage for [ff0000]3[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "critchance_in_percent": 50,
+      "extra_damage": 20
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"extra_damage\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"critchance_in_percent\"))"
+      }
+     },
+     "template": "RemoveAllyEffectForCrit",
+     "duration": 2,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

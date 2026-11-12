@@ -34883,6 +34883,7 @@ MonoBehaviour:
       originalPivotOffset: {x: 0, y: 0}
   textureAtlases:
   - {fileID: 11400000, guid: c1363ce0bce06414a9ccf6387f6f95c5, type: 2}
+  - {fileID: 11400000, guid: 7607158e88c342a687e3bcbba568e534, type: 2}
   mAnimationClips:
   - animationName: Idle
     fps: 24

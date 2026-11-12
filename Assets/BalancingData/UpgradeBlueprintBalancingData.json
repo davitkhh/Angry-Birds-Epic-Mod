@@ -23,6 +23,29 @@
     "HealthPercent": 0.0
   },
   {
+    "NameId": "upgrade_offhand_blue_warhorn_start",
+    "LocaBaseId": "upgrade_offhand_blue_warhorn_start",
+    "Uses": 1,
+    "TargetNameIds": [
+      "bird_offhand_blue_warhorn_start"
+    ],
+    "TargetNameIdPrefixes": null,
+    "TargetBirdId": "",
+    "TargetItemType": "",
+    "FlatStat": 0.0,
+    "StatPercent": 0.0,
+    "PerkValuePercent": 0.0,
+    "PerkChanceBonus": 0.0,
+    "SetPerkValue": 15.0,
+    "SetPerkValue2": 2.0,
+    "AddPerkType": "",
+    "AddPerkChance": 0.0,
+    "AddPerkValue": 0.0,
+    "AddPerkValue2": 0.0,
+    "AttackPercent": 0.0,
+    "HealthPercent": 0.0
+  },
+  {
     "NameId": "upgrade_class_knight",
     "LocaBaseId": "upgrade_class_knight",
     "Uses": 2,

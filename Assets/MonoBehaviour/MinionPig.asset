@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: -1545704558, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
   m_Name: MinionPig
   m_EditorClassIdentifier: 
-  buildID: 202610191920452276
+  buildID: 202611102150550230
   needsRebuilt: 1
   boneDataList:
   - active: 1
@@ -208284,6 +208284,5175 @@ MonoBehaviour:
         keyframes: []
     fps: 24
     maxFrame: 1
+    wrapMode: 2
+    mix: 0
+    blendMode: 0
+    layer: 0
+    blendWeight: 1
+    animationNeedsTwoKeyframes: 0
+  - animationName: Spin_Single
+    bones:
+    - boneDataIndex: 0
+      keyframes:
+      - boneDataIndex: 0
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 1
+      keyframes:
+      - boneDataIndex: 1
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: bb81445e7e0c7194d8f9cef639a01c94
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 25
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 30
+      - boneDataIndex: 1
+        frame: 10
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 0
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -83.100784, y: 182.46011, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 0
+        localRotation:
+          val: 90
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 0.9, y: 1.1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 0
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 0
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 0
+        atlas: {fileID: 0}
+        useTextureGUID: 0
+        textureGUID: 
+        usePivotOffset: 0
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 0
+        depth: 0
+        useCollider: 0
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      - boneDataIndex: 1
+        frame: 32
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 0
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -83.100784, y: 182.46011, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 0
+        localRotation:
+          val: 90
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 0.9, y: 1.1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 0
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 0
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 0
+        atlas: {fileID: 0}
+        useTextureGUID: 0
+        textureGUID: 
+        usePivotOffset: 0
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 0
+        depth: 0
+        useCollider: 0
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      - boneDataIndex: 1
+        frame: 36
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 0
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -55.80321, y: 100.32844, z: 0}
+          inTangentX: -4.5387197
+          outTangentX: -4.5387197
+          tangentModeX: 0
+          inTangentY: -34.204166
+          outTangentY: -34.204166
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 0
+        localRotation:
+          val: 181
+          inTangent: -16.87148
+          outTangent: -16.87148
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 0
+          useY: 0
+          useZ: 0
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 0
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 0
+        atlas: {fileID: 0}
+        useTextureGUID: 0
+        textureGUID: 
+        usePivotOffset: 0
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 0
+        depth: 0
+        useCollider: 0
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      - boneDataIndex: 1
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: bb81445e7e0c7194d8f9cef639a01c94
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 25
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 30
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 2
+      keyframes:
+      - boneDataIndex: 2
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -20, y: 42, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      - boneDataIndex: 2
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -20, y: 42, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 3
+      keyframes:
+      - boneDataIndex: 3
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: ca140d974d3ebe143b3c5702f202a04b
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 20
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 1
+      - boneDataIndex: 3
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: ca140d974d3ebe143b3c5702f202a04b
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 20
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 1
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 4
+      keyframes:
+      - boneDataIndex: 4
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -25, y: 9, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 9385217ccba70db4592b01e1b03ec712
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 24
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 17
+      - boneDataIndex: 4
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -25, y: 9, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 9385217ccba70db4592b01e1b03ec712
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 24
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 17
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 5
+      keyframes:
+      - boneDataIndex: 5
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 40, y: 9, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 017edb45556b40040873b89b06ba0ccc
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 24
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 0
+      - boneDataIndex: 5
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 40, y: 9, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 017edb45556b40040873b89b06ba0ccc
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 24
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 0
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 6
+      keyframes:
+      - boneDataIndex: 6
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 1, y: -1, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 0ce83de1de018b845a2f897f7abdc09c
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 23
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 1
+      - boneDataIndex: 6
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 1, y: -1, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 0ce83de1de018b845a2f897f7abdc09c
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 23
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 1
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 7
+      keyframes:
+      - boneDataIndex: 7
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -2, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: d3e30ba30024c894f805abb656e23668
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 23
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 23
+      - boneDataIndex: 7
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -2, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: d3e30ba30024c894f805abb656e23668
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 23
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 23
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 8
+      keyframes:
+      - boneDataIndex: 8
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -32, y: 32, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 35
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: d730a0503499c52409ec3ff1a0bb1310
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 20
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      - boneDataIndex: 8
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -32, y: 32, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 35
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: d730a0503499c52409ec3ff1a0bb1310
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 20
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 9
+      keyframes:
+      - boneDataIndex: 9
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 47, y: 33, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: -35
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: d60f2dff0ca22c44589a9efb5de19a79
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 2
+      - boneDataIndex: 9
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 47, y: 33, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: -35
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: d60f2dff0ca22c44589a9efb5de19a79
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 2
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 10
+      keyframes:
+      - boneDataIndex: 10
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 7, y: -19, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 645599d7ed0daac449194cc90329ffce
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 23
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 11
+      - boneDataIndex: 10
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 7, y: -19, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 645599d7ed0daac449194cc90329ffce
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 23
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 11
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 11
+      keyframes:
+      - boneDataIndex: 11
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 74291139d31bb674ea9cb2578bafab35
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 22
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 28
+      - boneDataIndex: 11
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 74291139d31bb674ea9cb2578bafab35
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 22
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 28
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 12
+      keyframes:
+      - boneDataIndex: 12
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 53, y: 26, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: c2621bef3c70bc44cb30dc465c629d39
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 26
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 31
+      - boneDataIndex: 12
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 53, y: 26, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: c2621bef3c70bc44cb30dc465c629d39
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 26
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 31
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 13
+      keyframes:
+      - boneDataIndex: 13
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 10, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: e550f207728b43d4384e6b3a412e5503
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 30
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 11
+      - boneDataIndex: 13
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 10, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: e550f207728b43d4384e6b3a412e5503
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 30
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 11
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 14
+      keyframes:
+      - boneDataIndex: 14
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -23, y: 40, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 01b4b2f6f63b1d648ad0fadac2394858
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: -0.025}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 21
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 37
+      - boneDataIndex: 14
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -23, y: 40, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 01b4b2f6f63b1d648ad0fadac2394858
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: -0.025}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 21
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 37
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 15
+      keyframes:
+      - boneDataIndex: 15
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -125.76761, y: 108.41928, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 140
+          inTangent: 0
+          outTangent: -11.25
+          tangentMode: 17
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: 746cc2d465946984e9c452df5c98932e
+        usePivotOffset: 1
+        pivotOffset: {x: 0.48760748, y: 0.011712475}
+        useDefaultPivot: 0
+        useDepth: 1
+        depth: 28
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      - boneDataIndex: 15
+        frame: 5
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -125, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 204.40175
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 17
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: 746cc2d465946984e9c452df5c98932e
+        usePivotOffset: 1
+        pivotOffset: {x: 0.48760748, y: 0.011712475}
+        useDefaultPivot: 0
+        useDepth: 1
+        depth: 28
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      - boneDataIndex: 15
+        frame: 10
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -125, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 270
+          inTangent: 0
+          outTangent: 5.1854653
+          tangentMode: 17
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: 746cc2d465946984e9c452df5c98932e
+        usePivotOffset: 1
+        pivotOffset: {x: 0.48760748, y: 0.011712475}
+        useDefaultPivot: 0
+        useDepth: 1
+        depth: 28
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      - boneDataIndex: 15
+        frame: 32
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -148.64868, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 270
+          inTangent: 0
+          outTangent: 5.1854653
+          tangentMode: 17
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: 746cc2d465946984e9c452df5c98932e
+        usePivotOffset: 1
+        pivotOffset: {x: 0.48760748, y: 0.011712475}
+        useDefaultPivot: 0
+        useDepth: 1
+        depth: 28
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      - boneDataIndex: 15
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: -125.76761, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 180
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 17
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 80d97b21d9eda9c439fa14c73a2c78d2, type: 2}
+        useTextureGUID: 1
+        textureGUID: 746cc2d465946984e9c452df5c98932e
+        usePivotOffset: 1
+        pivotOffset: {x: 0.48760748, y: 0.011712475}
+        useDefaultPivot: 0
+        useDepth: 1
+        depth: 28
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 3
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 16
+      keyframes:
+      - boneDataIndex: 16
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 48, y: 28, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: 6abf990304bc41b46af59d30244c7f61
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 15
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 4
+      - boneDataIndex: 16
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 48, y: 28, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 67a1a7ccdaaccc04fb712602534fd40d, type: 2}
+        useTextureGUID: 1
+        textureGUID: 6abf990304bc41b46af59d30244c7f61
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 15
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 4
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 17
+      keyframes:
+      - boneDataIndex: 17
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 74291139d31bb674ea9cb2578bafab35
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 22
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 28
+      - boneDataIndex: 17
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 74291139d31bb674ea9cb2578bafab35
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 22
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 28
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 18
+      keyframes:
+      - boneDataIndex: 18
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 74291139d31bb674ea9cb2578bafab35
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 22
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 28
+      - boneDataIndex: 18
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: 74291139d31bb674ea9cb2578bafab35
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 22
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 28
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 19
+      keyframes:
+      - boneDataIndex: 19
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: e8ac1c6c8effc86468262b9a65bf00dc
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 29
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 40
+      - boneDataIndex: 19
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 1
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 11400000, guid: 0518def0e8eeb544aaa9b87aea6d90db, type: 2}
+        useTextureGUID: 1
+        textureGUID: e8ac1c6c8effc86468262b9a65bf00dc
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 29
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: 40
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 20
+      keyframes:
+      - boneDataIndex: 20
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 45, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      - boneDataIndex: 20
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 45, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    - boneDataIndex: 21
+      keyframes:
+      - boneDataIndex: 21
+        frame: 0
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      - boneDataIndex: 21
+        frame: 40
+        userTriggerCallback: 0
+        userTriggerTag: 
+        useKeyframeType: 1
+        keyframeType: 0
+        localPosition:
+          val: {x: 0, y: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 0
+          useY: 0
+        localPosition3:
+          val: {x: 0, y: 0, z: 0}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        localRotation:
+          val: 0
+          inTangent: 0
+          outTangent: 0
+          tangentMode: 0
+          use: 1
+        localScale3:
+          val: {x: 1, y: 1, z: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          inTangentZ: 0
+          outTangentZ: 0
+          tangentModeZ: 0
+          useX: 1
+          useY: 1
+          useZ: 1
+        imageScale:
+          val: {x: 1, y: 1}
+          inTangentX: 0
+          outTangentX: 0
+          tangentModeX: 0
+          inTangentY: 0
+          outTangentY: 0
+          tangentModeY: 0
+          useX: 1
+          useY: 1
+        color:
+          val: {r: 1, g: 1, b: 1, a: 1}
+          inTangentR: 0
+          outTangentR: 0
+          tangentModeR: 0
+          inTangentG: 0
+          outTangentG: 0
+          tangentModeG: 0
+          inTangentB: 0
+          outTangentB: 0
+          tangentModeB: 0
+          inTangentA: 0
+          outTangentA: 0
+          tangentModeA: 0
+          use: 1
+          blendWeight: 0
+          inTangentBlendWeight: 0
+          outTangentBlendWeight: 0
+          tangentModeBlendWeight: 0
+        useAtlas: 1
+        atlas: {fileID: 0}
+        useTextureGUID: 1
+        textureGUID: 
+        usePivotOffset: 1
+        pivotOffset: {x: 0, y: 0}
+        useDefaultPivot: 1
+        useDepth: 1
+        depth: 0
+        useCollider: 1
+        collider:
+          type: 0
+          center: {x: 0, y: 0, z: 0}
+          boxSize: {x: 0, y: 0, z: 0}
+          sphereRadius: 0
+          useAnimationLayer: 1
+          layer: 0
+          isTrigger: 1
+          tag: 
+        textureIndex: -1
+      mixTransform: 0
+      visible: 1
+      colorRCurveSerialized:
+        keyframes: []
+      colorGCurveSerialized:
+        keyframes: []
+      colorBCurveSerialized:
+        keyframes: []
+      colorACurveSerialized:
+        keyframes: []
+      colorBlendWeightCurveSerialized:
+        keyframes: []
+    fps: 24
+    maxFrame: 40
     wrapMode: 2
     mix: 0
     blendMode: 0

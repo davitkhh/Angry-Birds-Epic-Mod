@@ -1,0 +1,549 @@
+{
+ "kind": "existing",
+ "id": "pig_forge_king_dj",
+ "name": "King DJ",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj",
+     "name": "Forge_king_dj",
+     "item": "Forge_king_dj",
+     "w": 101,
+     "h": 126,
+     "pivot": [
+      -0.3382839,
+      0.4133169
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_Back",
+     "name": "Forge_king_dj_Back",
+     "item": "Forge_king_dj",
+     "w": 177,
+     "h": 265,
+     "pivot": [
+      0.07830967,
+      -0.3263029
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "Beard_Bottom": {
+   "layers": [],
+   "hidden": true
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_MainHand",
+     "name": "Forge_king_dj_MainHand",
+     "item": "Forge_king_dj_MainHand",
+     "w": 196,
+     "h": 196,
+     "pivot": [
+      -0.06844938,
+      0.04776693
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_OffHand",
+     "name": "Forge_king_dj_OffHand",
+     "item": "Forge_king_dj_OffHand",
+     "w": 245,
+     "h": 122,
+     "pivot": [
+      0.02899944,
+      -0.4502384
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "gb6d6e89",
+     "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_OffHand_Back",
+     "name": "Forge_king_dj_OffHand_Back",
+     "item": "Forge_king_dj_OffHand",
+     "w": 349,
+     "h": 121,
+     "pivot": [
+      -0.1367634,
+      -0.539937
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "gb6d6e89"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_0fcc3",
+   "origin": "pig_attack_forge_king_dj",
+   "type": "Attack",
+   "source": "pig_attack_forge_king_dj",
+   "name": "Hit Single",
+   "desc": "Walks up to a single target and clobbers it at close range, dealing [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 150,
+    "no_focus": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "WalkUpMeleeAttack",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_a8c17",
+   "origin": "pig_attack_forge_king_dj_sound",
+   "type": "Attack",
+   "source": "pig_attack_forge_king_dj_sound",
+   "name": "Fog Machine",
+   "desc": "Deals [ff0000]{value_1}[-] damage to a random target. The target can only perform a strict order of moves for [ff0000]{value_2}[-] turns. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 120,
+    "charge": 2,
+    "move_1": 0,
+    "move_2": 1,
+    "move_3": 1,
+    "move_4": 0,
+    "no_focus": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "AttackAndForceMoveOrder",
+   "duration": 4,
+   "design": ""
+  },
+  {
+   "uid": "a2_8ffbc",
+   "origin": "pig_attack_forge_king_dj_shrapnel",
+   "type": "Attack",
+   "source": "pig_attack_forge_king_dj_shrapnel",
+   "name": "Booty Blast",
+   "desc": "Fires a shard at every enemy and [ff0000]{value_4}[-] extra, each dealing [ff0000]{value_1}[-] damage and stunning the target for [ff0000]{value_2}[-] turn. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 55,
+    "duration": 1,
+    "charge": 2,
+    "all": 1,
+    "extra_projectiles": 1,
+    "no_focus": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(Math.max(0, ((p(\"extra_projectiles\")))))"
+    }
+   },
+   "template": "MusicShrapnelVolley",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 1050,
+  "attack": 43,
+  "sizeType": "Large",
+  "sizeScale": 1.7,
+  "strength": 10,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_forge_king_dj",
+  "fingerprint": "a971b81752c3b3cf159933e8629337b831fda8bd",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_attack_forge_king_dj"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_forge_king_dj_sound"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_forge_king_dj_shrapnel"
+    ]
+   }
+  ],
+  "original": {
+   "name": "King DJ",
+   "rig": "PigMage",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj",
+       "name": "Forge_king_dj",
+       "item": "Forge_king_dj",
+       "w": 101,
+       "h": 126,
+       "pivot": [
+        -0.3382839,
+        0.4133169
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_Back",
+       "name": "Forge_king_dj_Back",
+       "item": "Forge_king_dj",
+       "w": 177,
+       "h": 265,
+       "pivot": [
+        0.07830967,
+        -0.3263029
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "Beard_Bottom": {
+     "layers": [],
+     "hidden": true
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_MainHand",
+       "name": "Forge_king_dj_MainHand",
+       "item": "Forge_king_dj_MainHand",
+       "w": 196,
+       "h": 196,
+       "pivot": [
+        -0.06844938,
+        0.04776693
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_OffHand",
+       "name": "Forge_king_dj_OffHand",
+       "item": "Forge_king_dj_OffHand",
+       "w": 245,
+       "h": 122,
+       "pivot": [
+        0.02899944,
+        -0.4502384
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    },
+    "OffHand_Back": {
+     "layers": [
+      {
+       "uid": "gb6d6e89",
+       "src": "b808477a26e04e92a295d2965e305182:Forge_king_dj_OffHand_Back",
+       "name": "Forge_king_dj_OffHand_Back",
+       "item": "Forge_king_dj_OffHand",
+       "w": 349,
+       "h": 121,
+       "pivot": [
+        -0.1367634,
+        -0.539937
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "gb6d6e89"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 1050,
+    "attack": 43,
+    "sizeType": "Large",
+    "sizeScale": 1.7,
+    "strength": 10,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_0fcc3",
+     "origin": "pig_attack_forge_king_dj",
+     "type": "Attack",
+     "source": "pig_attack_forge_king_dj",
+     "name": "Hit Single",
+     "desc": "Walks up to a single target and clobbers it at close range, dealing [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 150,
+      "no_focus": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "WalkUpMeleeAttack",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_a8c17",
+     "origin": "pig_attack_forge_king_dj_sound",
+     "type": "Attack",
+     "source": "pig_attack_forge_king_dj_sound",
+     "name": "Fog Machine",
+     "desc": "Deals [ff0000]{value_1}[-] damage to a random target. The target can only perform a strict order of moves for [ff0000]{value_2}[-] turns. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 120,
+      "charge": 2,
+      "move_1": 0,
+      "move_2": 1,
+      "move_3": 1,
+      "move_4": 0,
+      "no_focus": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "AttackAndForceMoveOrder",
+     "duration": 4,
+     "design": ""
+    },
+    {
+     "uid": "a2_8ffbc",
+     "origin": "pig_attack_forge_king_dj_shrapnel",
+     "type": "Attack",
+     "source": "pig_attack_forge_king_dj_shrapnel",
+     "name": "Booty Blast",
+     "desc": "Fires a shard at every enemy and [ff0000]{value_4}[-] extra, each dealing [ff0000]{value_1}[-] damage and stunning the target for [ff0000]{value_2}[-] turn. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 55,
+      "duration": 1,
+      "charge": 2,
+      "all": 1,
+      "extra_projectiles": 1,
+      "no_focus": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(Math.max(0, ((p(\"extra_projectiles\")))))"
+      }
+     },
+     "template": "MusicShrapnelVolley",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

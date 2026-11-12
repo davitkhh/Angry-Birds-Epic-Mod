@@ -73,6 +73,19 @@ public class ResourceNodeManager : MonoBehaviour, IResourceNodeManager
 			componentInChildren.m_SpriteName = craftingItemGameData.BalancingData.AssetBaseId;
 			componentInChildren.UpdateSprite(true);
 			battleLootVisualization.transform.position = go.transform.position + offset;
+			// A node shown in a shop menu (HotSpotWorldMapViewResource.ShowInMenu) is on the interface layer, above the menu.
+			if (go.layer != battleLootVisualization.gameObject.layer)
+			{
+				var nodeRenderer = go.GetComponentInChildren<Renderer>();
+				foreach (var t in battleLootVisualization.GetComponentsInChildren<Transform>(true))
+				{
+					t.gameObject.layer = go.layer;
+				}
+				foreach (var r in battleLootVisualization.GetComponentsInChildren<Renderer>(true))
+				{
+					r.sortingOrder = nodeRenderer != null ? nodeRenderer.sortingOrder + 1 : 0;
+				}
+			}
 			UnityEngine.Object.Destroy(battleLootVisualization.gameObject, battleLootVisualization.SpawnDelay + battleLootVisualization.MoveTime * 2f);
 		}
 		DebugLog.Log("Spawn Resource");

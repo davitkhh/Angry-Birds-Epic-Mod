@@ -1,0 +1,347 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_bird_catcher",
+ "name": "Bird Catcher",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_BirdCatcher",
+     "name": "Headgear_BirdCatcher",
+     "item": "Headgear_BirdCatcher",
+     "w": 146,
+     "h": 124,
+     "pivot": [
+      -0.16,
+      -0.37
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_BirdCatcher_Back",
+     "name": "Headgear_BirdCatcher_Back",
+     "item": "Headgear_BirdCatcher",
+     "w": 140,
+     "h": 56,
+     "pivot": [
+      -0.17,
+      -0.24
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_BirdCatcher",
+     "name": "MainHand_BirdCatcher",
+     "item": "MainHand_BirdCatcher",
+     "w": 167,
+     "h": 66,
+     "pivot": [
+      -0.35,
+      0.05
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_BirdCatcher",
+     "name": "OffHand_BirdCatcher",
+     "item": "OffHand_BirdCatcher",
+     "w": 124,
+     "h": 88,
+     "pivot": [
+      -0.29,
+      0.01
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_452ed",
+   "origin": "pig_attack_minion_bird_catcher",
+   "type": "Attack",
+   "source": "pig_attack_minion_bird_catcher",
+   "name": "Catch",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 15,
+    "duration": 1,
+    "use_skill_asset": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 68,
+  "attack": 13,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_bird_catcher",
+  "fingerprint": "66a12d0809a85aabd7b0ce6c9aff1b1220b8ec8c",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_bird_catcher"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Bird Catcher",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_BirdCatcher",
+       "name": "Headgear_BirdCatcher",
+       "item": "Headgear_BirdCatcher",
+       "w": 146,
+       "h": 124,
+       "pivot": [
+        -0.16,
+        -0.37
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_BirdCatcher_Back",
+       "name": "Headgear_BirdCatcher_Back",
+       "item": "Headgear_BirdCatcher",
+       "w": 140,
+       "h": 56,
+       "pivot": [
+        -0.17,
+        -0.24
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_BirdCatcher",
+       "name": "MainHand_BirdCatcher",
+       "item": "MainHand_BirdCatcher",
+       "w": 167,
+       "h": 66,
+       "pivot": [
+        -0.35,
+        0.05
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_BirdCatcher",
+       "name": "OffHand_BirdCatcher",
+       "item": "OffHand_BirdCatcher",
+       "w": 124,
+       "h": 88,
+       "pivot": [
+        -0.29,
+        0.01
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 68,
+    "attack": 13,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_452ed",
+     "origin": "pig_attack_minion_bird_catcher",
+     "type": "Attack",
+     "source": "pig_attack_minion_bird_catcher",
+     "name": "Catch",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_2}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 15,
+      "duration": 1,
+      "use_skill_asset": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

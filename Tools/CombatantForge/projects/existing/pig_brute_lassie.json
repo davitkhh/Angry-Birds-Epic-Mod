@@ -1,0 +1,297 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_lassie",
+ "name": "Lassie",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "16f2c9a1fa57555f92923018da3b0081:Headgear_LassieBraids",
+     "name": "Headgear_LassieBraids",
+     "item": "Headgear_LassieBraids",
+     "w": 396,
+     "h": 236,
+     "pivot": [
+      -0.3434343,
+      0.190678
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "16f2c9a1fa57555f92923018da3b0081:Headgear_LassieBraids_Back",
+     "name": "Headgear_LassieBraids_Back",
+     "item": "Headgear_LassieBraids",
+     "w": 400,
+     "h": 291,
+     "pivot": [
+      -0.0145,
+      0.0683849
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "16f2c9a1fa57555f92923018da3b0081:MainHand_LassieRooster",
+     "name": "MainHand_LassieRooster",
+     "item": "MainHand_LassieRooster",
+     "w": 250,
+     "h": 102,
+     "pivot": [
+      -0.6452,
+      -0.1882353
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_985f8",
+   "origin": "pig_attack_brute_lassie",
+   "type": "Attack",
+   "source": "pig_attack_brute_lassie",
+   "name": "Rise n' Shine",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, and up to an additional [ff0000]{value_5}%[-] damage the lower the target's health is.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 300,
+    "charge": 3,
+    "bonus_vs_target_missing_health_in_percent": 20
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"health_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"bonus_vs_target_missing_health_in_percent\"))"
+    }
+   },
+   "template": "AttackAndApplySelfHotSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 320,
+  "attack": 30,
+  "sizeType": "Large",
+  "sizeScale": 0.8,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_lassie",
+  "fingerprint": "b4f1e7a84895e8e4243e10808db3af115e3c6372",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_lassie"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Lassie",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "16f2c9a1fa57555f92923018da3b0081:Headgear_LassieBraids",
+       "name": "Headgear_LassieBraids",
+       "item": "Headgear_LassieBraids",
+       "w": 396,
+       "h": 236,
+       "pivot": [
+        -0.3434343,
+        0.190678
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "16f2c9a1fa57555f92923018da3b0081:Headgear_LassieBraids_Back",
+       "name": "Headgear_LassieBraids_Back",
+       "item": "Headgear_LassieBraids",
+       "w": 400,
+       "h": 291,
+       "pivot": [
+        -0.0145,
+        0.0683849
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "16f2c9a1fa57555f92923018da3b0081:MainHand_LassieRooster",
+       "name": "MainHand_LassieRooster",
+       "item": "MainHand_LassieRooster",
+       "w": 250,
+       "h": 102,
+       "pivot": [
+        -0.6452,
+        -0.1882353
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 320,
+    "attack": 30,
+    "sizeType": "Large",
+    "sizeScale": 0.8,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_985f8",
+     "origin": "pig_attack_brute_lassie",
+     "type": "Attack",
+     "source": "pig_attack_brute_lassie",
+     "name": "Rise n' Shine",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, and up to an additional [ff0000]{value_5}%[-] damage the lower the target's health is.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 300,
+      "charge": 3,
+      "bonus_vs_target_missing_health_in_percent": 20
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"health_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "D"
+      },
+      "{value_5}": {
+       "expr": "(p(\"bonus_vs_target_missing_health_in_percent\"))"
+      }
+     },
+     "template": "AttackAndApplySelfHotSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

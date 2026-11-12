@@ -15,39 +15,69 @@ MonoBehaviour:
   uvs:
   - serializedVersion: 2
     x: 0
-    y: 0.2890625
-    width: 0.8359375
-    height: 0.7109375
+    y: 0.64453125
+    width: 0.41796875
+    height: 0.35546875
+  - serializedVersion: 2
+    x: 0.30078125
+    y: 0.55078125
+    width: 0.07421875
+    height: 0.08984375
+  - serializedVersion: 2
+    x: 0.20703125
+    y: 0.546875
+    width: 0.08984375
+    height: 0.09375
+  - serializedVersion: 2
+    x: 0.6875
+    y: 0.87890625
+    width: 0.24609375
+    height: 0.12109375
   - serializedVersion: 2
     x: 0
-    y: 0.09375
-    width: 0.1484375
-    height: 0.1796875
+    y: 0.5390625
+    width: 0.203125
+    height: 0.1015625
   - serializedVersion: 2
-    x: 0.1640625
-    y: 0.0859375
-    width: 0.1796875
-    height: 0.1875
+    x: 0.421875
+    y: 0.84375
+    width: 0.26171875
+    height: 0.15625
   textureGUIDs:
   - 97622465c606908fca26e25d5581b548
   - 0df23d0d1a674cc28fa048ab22d0aa95
   - bbae8ee7c9b343b98afd3a22f694479d
+  - cbf18d68576b4c1ea5a3bc865a569b79
+  - a5469077822b40fbb9c979689583d436
+  - 9b91a012e626406a81575609e8b4329f
   textureSizes:
   - {x: 214, y: 182}
   - {x: 38, y: 46}
   - {x: 46, y: 48}
+  - {x: 126, y: 62}
+  - {x: 104, y: 52}
+  - {x: 134, y: 80}
   defaultPivotOffsets:
   - {x: 0, y: -0.5}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
+  - {x: -0.14464286, y: -0.21774194}
+  - {x: 0.04285714, y: 0.06428571}
+  - {x: -0.12857142, y: 0.08075893}
   textureNames:
   - BodyPirate
   - Eye_LeftPirate
   - Eye_RightPirate
+  - Mouth_AngryPirate
+  - Mouth_OpenPirate
+  - Mouth_ScreamPirate
   texturePaths:
   - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/BodyPirate.png
   - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Eye_LeftPirate.png
   - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Eye_RightPirate.png
+  - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Mouth_AngryPirate.png
+  - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Mouth_OpenPirate.png
+  - Assets/Content/4_Characters/2_Pigs/9_MoustachePig/BodyParts/Mouth_ScreamPirate.png
   lastBuildID: 20160822143532908
   needsRebuilt: 0
   dataVersion: 4

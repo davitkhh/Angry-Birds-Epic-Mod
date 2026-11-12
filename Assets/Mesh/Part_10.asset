@@ -26,7 +26,7 @@ Mesh:
   m_BoneNameHashes: []
   m_RootBoneNameHash: 0
   m_MeshCompression: 0
-  m_IsReadable: 0
+  m_IsReadable: 1
   m_KeepVertices: 1
   m_KeepIndices: 1
   m_IndexBuffer: 00000100020000000200030001000400020001000500040006000700080006000800090007000a00080007000b000a000c000d000e000c000e000f000d0010000e000d0011001000

@@ -1,0 +1,383 @@
+{
+ "kind": "existing",
+ "id": "pig_shaman_icecave_hard",
+ "name": "Ice Archmage",
+ "rig": "PigShaman",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "8c498735e058742438cc0f869bf1bf96:Headgear_Iceshaman",
+     "name": "Headgear_Iceshaman",
+     "item": "Headgear_Iceshaman",
+     "w": 256,
+     "h": 274,
+     "pivot": [
+      -0.15535714,
+      -0.10260688
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "8324c4af8995ab64a935488a5208eaaf:MainHand_Iceshaman",
+     "name": "MainHand_Iceshaman",
+     "item": "MainHand_Iceshaman",
+     "w": 203,
+     "h": 113,
+     "pivot": [
+      -0.48749998,
+      0.072179206
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_5157c",
+   "origin": "pig_attack_shaman_ice",
+   "type": "Attack",
+   "source": "pig_attack_shaman_ice",
+   "name": "Mimic",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Steals any received healing by the target onto the pig with the lowest health. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 100,
+    "steal_healing_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"steal_healing_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "AttackAndApplyStealHealingSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_84c21",
+   "origin": "pig_support_icecave_shaman_ice",
+   "type": "Support",
+   "source": "pig_support_icecave_shaman_ice",
+   "name": "Frosty Remedy",
+   "desc": "Heals target for [00a800]{value_1}[-] health. Removes all negative effects.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Heal",
+   "params": {
+    "health_in_percent": 40,
+    "cleanse_chance": 100,
+    "invoker": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_7}": {
+     "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+    },
+    "{value_9}": {
+     "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"cleanse_chance\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealAndCleanseSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 360,
+  "attack": 33,
+  "sizeType": "Boss",
+  "sizeScale": 1.5,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_shaman_icecave_hard",
+  "fingerprint": "9f1bc87c7e5f1cc181d8408fe522e8d2256e88e8",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 65,
+    "ComboChain": [
+     "pig_attack_shaman_ice"
+    ]
+   },
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_support_icecave_shaman_ice"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Ice Archmage",
+   "rig": "PigShaman",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "8c498735e058742438cc0f869bf1bf96:Headgear_Iceshaman",
+       "name": "Headgear_Iceshaman",
+       "item": "Headgear_Iceshaman",
+       "w": 256,
+       "h": 274,
+       "pivot": [
+        -0.15535714,
+        -0.10260688
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "8324c4af8995ab64a935488a5208eaaf:MainHand_Iceshaman",
+       "name": "MainHand_Iceshaman",
+       "item": "MainHand_Iceshaman",
+       "w": 203,
+       "h": 113,
+       "pivot": [
+        -0.48749998,
+        0.072179206
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 360,
+    "attack": 33,
+    "sizeType": "Boss",
+    "sizeScale": 1.5,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_5157c",
+     "origin": "pig_attack_shaman_ice",
+     "type": "Attack",
+     "source": "pig_attack_shaman_ice",
+     "name": "Mimic",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Steals any received healing by the target onto the pig with the lowest health. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 100,
+      "steal_healing_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"steal_healing_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "AttackAndApplyStealHealingSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_84c21",
+     "origin": "pig_support_icecave_shaman_ice",
+     "type": "Support",
+     "source": "pig_support_icecave_shaman_ice",
+     "name": "Frosty Remedy",
+     "desc": "Heals target for [00a800]{value_1}[-] health. Removes all negative effects.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Heal",
+     "params": {
+      "health_in_percent": 40,
+      "cleanse_chance": 100,
+      "invoker": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_7}": {
+       "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+      },
+      "{value_9}": {
+       "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"cleanse_chance\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealAndCleanseSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

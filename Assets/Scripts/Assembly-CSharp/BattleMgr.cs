@@ -976,10 +976,10 @@ public class BattleMgr : BattleMgrBase
 		{
 			return;
 		}
-		var list = base.Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.AutoBattleReadyForRage()).ToList();
+		var list = base.Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.AutoBattleReadyForRage() && !ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsRageBlocked(base.Model, b)).ToList();
 		if (list == null || list.Count == 0)
 		{
-			list = base.Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.CurrentHealth > 0f && b.IsRageAvailiable).ToList();
+			list = base.Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.CurrentHealth > 0f && b.IsRageAvailiable && !ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsRageBlocked(base.Model, b)).ToList();
 			if (list != null && list.Count > 0)
 			{
 				(list[0] as BirdCombatant).UseRage = true;
@@ -1001,7 +1001,7 @@ public class BattleMgr : BattleMgrBase
 		{
 			return;
 		}
-		var list = base.Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.AutoBattleReadyForRage()).ToList();
+		var list = base.Model.m_CombatantsPerFaction[Faction.Birds].Where(b => b.AutoBattleReadyForRage() && !ABH.GameDatas.Battle.Skills.AttackAndForceMoveOrder.IsRageBlocked(base.Model, b)).ToList();
 		if (list != null && list.Count != 0)
 		{
 			var num = Mathf.RoundToInt(UnityEngine.Random.Range(0f, list.Count - 1));
@@ -1067,6 +1067,23 @@ public class BattleMgr : BattleMgrBase
 		var notActedBirds = base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Birds && !c.ActedThisTurn).ToList();
 		if (base.Model.CurrentCombatant.CombatantFaction == Faction.Birds)
 		{
+			// The combo moves the pigs played this turn go off together (ComboMoveDirector).
+			var pigCombos = ComboMoveDirector.For(this);
+			if (pigCombos.HasPending(Faction.Pigs))
+			{
+				yield return StartCoroutine(pigCombos.Resolve(Faction.Pigs));
+				if (pigCombos.LastResolveActed)
+				{
+					yield return StartCoroutine(CheckForStageProgressOrBattleEnd());
+					if (WaveEnded)
+					{
+						WaveEnded = false;
+						base.Model.CurrentCombatant = null;
+						actingCharacters.Clear();
+						yield break;
+					}
+				}
+			}
 			// Swap crystals placed after every pig act at the end of the pigs' turn.
 			yield return StartCoroutine(SwapCrystalDirector.For(this).TakeCrystalTurns(null));
 			var pigsCopy2 = base.Model.m_CombatantsByInitiative.Where(c => c.CombatantFaction == Faction.Pigs).ToList();
@@ -1224,6 +1241,23 @@ public class BattleMgr : BattleMgrBase
 					}
 				}
 				yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeFromFocusPosToBasePosInSec);
+			}
+			// The combo moves the birds played this turn go off together (ComboMoveDirector).
+			var birdCombos = ComboMoveDirector.For(this);
+			if (birdCombos.HasPending(Faction.Birds))
+			{
+				yield return StartCoroutine(birdCombos.Resolve(Faction.Birds));
+				if (birdCombos.LastResolveActed)
+				{
+					yield return StartCoroutine(CheckForStageProgressOrBattleEnd());
+					if (WaveEnded)
+					{
+						WaveEnded = false;
+						base.Model.CurrentCombatant = null;
+						actingCharacters.Clear();
+						yield break;
+					}
+				}
 			}
 			base.Model.m_PigsStartTurn = false;
 			DebugLog.Log(GetType(), "DoNextTurn: Pigs Turn started");

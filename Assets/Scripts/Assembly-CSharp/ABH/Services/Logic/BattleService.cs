@@ -1703,6 +1703,8 @@ namespace ABH.Services.Logic
 				target.SummedDamagePerTurn = 0f;
 				return num;
 			}
+			var sharedDamage = SplitDamageAndCounter.ShareWithLinkedAllies(battle, target, source, num);
+			num -= sharedDamage;
 			if (target.CurrentHealth - (float)num <= 0f && !ignoreOnDeathEffect)
 			{
 				num = (int)ApplyEffectsOnTriggerType(num, EffectTriggerType.OnAllHealthLost, target, source);
@@ -1723,6 +1725,7 @@ namespace ABH.Services.Logic
 			}
 			var flag = target.CurrentHealth > 0f;
 			var healthBefore = target.CurrentHealth;
+			var linkDamageMark = AttackAndLinkDamage.GetMark(target);
 			target.CurrentHealth -= (float)num;
 			if (target.CurrentHealth <= 0f && flag)
 			{
@@ -1751,7 +1754,8 @@ namespace ABH.Services.Logic
 					GlassCannon.OnDamageTaken(battle, target);
 				}
 			}
-			return num;
+			AttackAndLinkDamage.OnDamageTaken(battle, target, source, num, healthBefore, linkDamageMark);
+			return num + sharedDamage;
 		}
 
 		// Hands snoutlings stolen from victim to the player. A thief wielding a CashStrike main hand spends PerkValue% of them
@@ -4294,6 +4298,13 @@ namespace ABH.Services.Logic
 				return param;
 			});
 			
+			// SplitDamageAndCounter
+			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.SplitDamageAndCounter, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				SplitDamageAndCounter.CounterWithLinkedAllies(effectGameData, effect.Values[0], attacker);
+				return param;
+			});
+
 			// DealDamageAndSelfDestruct
 			BattleEffectsByTriggerAndByType[EffectTriggerType.OnReceiveDamage].Add(BattleEffectType.DealDamageAndSelfDestruct, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
 			{
@@ -4863,10 +4874,14 @@ namespace ABH.Services.Logic
 						var combatant2 = list3[UnityEngine.Random.Range(0, list3.Count)];
 						var num37 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(num36, EffectTriggerType.OnReceiveDamage, combatant2, target2);
 						var num38 = target2.CurrentSkillAttackValue * num36;
-						combatant2.RaisePerkUsed(PerkType.ChainAttack, combatant2);
-						combatant2.ReceiveDamage(num38, target2);
-						DIContainerLogic.GetBattleService().AddRageForAttack(battle, target2, false);
-						DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant2, battle, effectGameData.m_Source);
+						// With a projectile the hit lands when the ricochet arrives (Ricochet)
+						Ricochet.Hit(target, combatant2, delegate
+						{
+							combatant2.RaisePerkUsed(PerkType.ChainAttack, combatant2);
+							combatant2.ReceiveDamage(num38, target2);
+							DIContainerLogic.GetBattleService().AddRageForAttack(battle, target2, false);
+							DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant2, battle, effectGameData.m_Source);
+						});
 						if (target.ChainedTargets == null)
 						{
 							target.ChainedTargets = new List<ICombatant>();
@@ -5114,6 +5129,7 @@ namespace ABH.Services.Logic
 				if (num7 > 0f)
 				{
 					effectGameData.EvaluateEffect();
+					HypeBonus.MarkUsed(effectGameData);
 					num7 += effect.Values[0] / 100f;
 				}
 				return num7;
@@ -5690,10 +5706,14 @@ namespace ABH.Services.Logic
 					var combatant = list[UnityEngine.Random.Range(0, list.Count)];
 					var num3 = DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(num2, EffectTriggerType.OnReceiveDamage, combatant, invoker);
 					var num4 = invoker.CurrentSkillAttackValue * num2;
-					combatant.RaisePerkUsed(PerkType.ChainAttack, combatant);
-					combatant.ReceiveDamage(num4, invoker);
-					DIContainerLogic.GetBattleService().AddRageForAttack(battle, invoker, false);
-					DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, invoker);
+					// With a projectile the hit lands when the ricochet arrives (Ricochet)
+					Ricochet.Hit(target, combatant, delegate
+					{
+						combatant.RaisePerkUsed(PerkType.ChainAttack, combatant);
+						combatant.ReceiveDamage(num4, invoker);
+						DIContainerLogic.GetBattleService().AddRageForAttack(battle, invoker, false);
+						DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, invoker);
+					});
 					if (target.ChainedTargets == null)
 					{
 						target.ChainedTargets = new List<ICombatant>();
@@ -6010,10 +6030,11 @@ namespace ABH.Services.Logic
 			return false;
 		}
 
-		// Skills the combatant lacks the ammo for are swapped for one it can afford (see Ammo).
+		// Skills the combatant lacks the ammo for are swapped for one it can afford (see Ammo). A forced move order
+		// (AttackAndForceMoveOrder) then picks attack or support.
 		public SkillBattleDataBase GetNextSkill(BattleGameData battle, ICombatant combatant)
 		{
-			return Ammo.GetAffordableSkill(combatant, GetNextSkillIgnoringAmmo(battle, combatant));
+			return AttackAndForceMoveOrder.ForceSkill(battle, combatant, Ammo.GetAffordableSkill(combatant, GetNextSkillIgnoringAmmo(battle, combatant)));
 		}
 
 		private SkillBattleDataBase GetNextSkillIgnoringAmmo(BattleGameData battle, ICombatant combatant)
@@ -6162,6 +6183,10 @@ namespace ABH.Services.Logic
 			case SkillTargetTypes.Support:
 				flag = IsSkillSupportPossible(combatHand, skill, battle) && (!GoadAllyIntoAttack.IsGoadSkill(skill.Model) || GoadAllyIntoAttack.PickAlly(battle, combatHand, skill.Model) != null) && (!RemoveAllyEffectForCrit.IsRemoveAllyEffectSkill(skill.Model) || RemoveAllyEffectForCrit.PickAlly(battle, combatHand) != null);
 				break;
+			case SkillTargetTypes.Combo:
+				// The combo itself picks its targets when the side's combos resolve (ComboMoveDirector).
+				flag = true;
+				break;
 			}
 			if (!flag)
 			{
@@ -6303,6 +6328,10 @@ namespace ABH.Services.Logic
 					combatant.AttackTarget = GoadAllyIntoAttack.IsGoadSkill(skill) ? GoadAllyIntoAttack.PickAlly(battle, combatant, skill) : RemoveAllyEffectForCrit.IsRemoveAllyEffectSkill(skill) ? RemoveAllyEffectForCrit.PickAlly(battle, combatant) : GetNextTargetForSupportSkill(battle, combatant, skill, Faction.Pigs);
 				}
 				break;
+			case SkillTargetTypes.Combo:
+				// A placeholder foe (the turn needs one); the combo picks its real targets when it resolves.
+				combatant.AttackTarget = GetNextTargetForAttackSkill(battle, combatant, skill, ownFaction == Faction.Birds ? Faction.Pigs : Faction.Birds);
+				break;
 			}
 			return combatant.AttackTarget != null;
 		}
@@ -6312,6 +6341,7 @@ namespace ABH.Services.Logic
 			switch (skill.Balancing.TargetType)
 			{
 			case SkillTargetTypes.Attack:
+			case SkillTargetTypes.Combo:
 				if (ownFaction == Faction.Birds)
 				{
 					combatant.AttackTarget = GetRandomCharacterForSupportSkillTarget(battle, combatant, skill, Faction.Pigs);

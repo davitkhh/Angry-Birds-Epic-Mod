@@ -31,7 +31,6 @@ label.grow input { flex: 1; min-width: 80px; }
 #topbar { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--line); }
 .brand { font-size: 14px; color: var(--accent); white-space: nowrap; }
 #idInput { width: 150px; }
-#projectSelect { max-width: 170px; }
 
 main { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--library-width, 330px) 6px minmax(320px, 1fr) 6px var(--side-width, 470px); }
 .panel { background: var(--panel); display: flex; flex-direction: column; min-height: 0; padding: 8px; gap: 8px; }
@@ -178,3 +177,46 @@ dialog.small { width: 330px; }
 .slotRow.off .slotThumb { opacity: .35; }
 .ttLevelBtn { position: absolute; width: 26px; height: 26px; padding: 0; border-radius: 50%; background: #1a2f5a; color: #fff; border: 2px solid #fff; font: 700 15px/1 system-ui, sans-serif; display: grid; place-items: center; }
 .warnNote { color: var(--accent); font-size: 11px; }
+
+.card.combatant { position: relative; cursor: pointer; border-color: transparent; }
+.card.combatant .cIcon { position: absolute; left: 4px; top: 4px; width: calc(100% - 8px); height: calc(100% - 22px); object-fit: contain; pointer-events: none; }
+.card.combatant .cName { position: absolute; left: 3px; right: 3px; bottom: 2px; font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card.combatant .cNoIcon { position: absolute; inset: 4px 4px 22px; display: grid; place-items: center; font-size: 10px; color: var(--dim); text-align: center; overflow-wrap: anywhere; }
+.card.combatant.variant { background: #2e2a22; }
+.card.combatant.current { border-color: var(--accent); }
+.card.combatant.off { opacity: .5; cursor: default; }
+.card.combatant.off:hover { border-color: transparent; }
+.cKids { position: absolute; right: 2px; top: 2px; font-size: 10px; padding: 0 6px; border-radius: 8px; background: #000b; color: var(--accent); border-color: transparent; }
+.cTick { position: absolute; left: 3px; top: 3px; margin: 0; }
+.cDup { position: absolute; top: 2px; left: 2px; font-size: 11px; padding: 0 5px; background: #000b; border-color: transparent; opacity: 0; }
+.card.combatant.variant .cDup { left: auto; right: 2px; }
+.card.combatant:hover .cDup, .cDup:focus-visible { opacity: 1; }
+.cEdited { position: absolute; left: 50%; top: 3px; transform: translateX(-50%); font-size: 9px; background: #000b; color: var(--ok); padding: 0 4px; border-radius: 3px; }
+.variantBox { grid-column: 1 / -1; background: var(--bg); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+#statsForm .variantBox label { flex-direction: row; align-items: center; justify-content: space-between; gap: 8px; color: var(--text); }
+#statsForm .variantBox input { width: auto; }
+.variantBox .vName { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.variantBox .vId, .variantBox .vStats { color: var(--dim); font-size: 11px; }
+.variantBox .vStats { white-space: nowrap; }
+#existingBtn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.animRow label { flex: 1; min-width: 0; }
+.animRow select { flex: 1; min-width: 0; }
+.ability .note { font-size: 11px; }
+.menu { position: relative; }
+.menuPanel { position: absolute; left: 0; top: calc(100% + 6px); z-index: 30; min-width: 230px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 5px; box-shadow: 0 8px 24px #0008; }
+.menuPanel[hidden] { display: none; }
+.menuPanel button { text-align: left; }
+.menuPanel label { flex-direction: column; align-items: stretch; gap: 3px; margin-bottom: 3px; }
+.menuPanel select { max-width: none; width: 100%; }
+#fileBtn.on, #fileBtn[aria-expanded=true] { border-color: var(--accent); }
+.card.projectile { position: relative; cursor: grab; }
+.card.projectile img { position: absolute; left: 6px; top: 6px; width: calc(100% - 12px); height: calc(100% - 26px); object-fit: contain; pointer-events: none; }
+.card.projectile .cName { position: absolute; left: 3px; right: 3px; bottom: 2px; font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ability.target { outline: 2px solid var(--accent); background: #f0b23c22; }
+.projectileDrop { display: flex; align-items: center; gap: 6px; }
+.projectileDrop img { width: 28px; height: 28px; object-fit: contain; }
+.ability input.title { background: transparent; border-color: transparent; padding: 2px 4px; font-weight: 600; }
+.ability input.title:hover, .ability input.title:focus { background: var(--bg); border-color: var(--line); }
+#targetControls[hidden] { display: none; }
+#targetControls { gap: 6px; }
+#targetCount { min-width: 18px; text-align: center; }

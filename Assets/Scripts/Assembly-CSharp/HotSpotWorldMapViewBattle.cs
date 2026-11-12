@@ -307,7 +307,26 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 			}
 		}
 		HandleChains();
+		HideIfGoneFromMap();
 		DIContainerInfrastructure.LocationStateMgr.ResolveCutsceneError();
+	}
+
+	// MerchantStall.GateLeavesMap: a beaten merchant gate leaves the map and is replayed from the merchant's menu. The
+	// object stays active so routes to the merchant still pass through it.
+	private void HideIfGoneFromMap()
+	{
+		if (base.Model == null || !MerchantStall.IsGoneFromMap(base.Model))
+		{
+			return;
+		}
+		foreach (Transform child in base.transform)
+		{
+			child.gameObject.SetActive(false);
+		}
+		foreach (var collider in GetComponents<Collider>())
+		{
+			collider.enabled = false;
+		}
 	}
 
 	private void HandleChains()
@@ -415,7 +434,8 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 				m_CurrentAssetBase.HandleFlagAfterUnlockOnState(base.Model.Data.UnlockState);
 			}
 			m_Performance = base.Model.Data.StarCount;
-		}
+			HideIfGoneFromMap();
+			}
 		else if (DIContainerLogic.WorldMapService.HasHotspotLootChest(base.Model))
 		{
 			var chestId = Model.BalancingData.HotspotContents.FirstOrDefault().Key;

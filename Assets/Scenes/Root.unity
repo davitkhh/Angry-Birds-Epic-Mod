@@ -6577,6 +6577,108 @@ MonoBehaviour:
       EffectTextIdent: 
       HasText: 0
       DoNotMirror: 0
+  - BalancingId: BombExplosionHuge
+    VisualEffects:
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 1
+      PrefabName: SkillFX_Spell_Explosion_Huge
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 5
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: Camera_Shake_Massive
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 1
+      PrefabName: SkillFX_GroundImpact_BurnedEarth
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Burned
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 0
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Single_Ranged_Explosive
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
   - BalancingId: BonusAttack
     VisualEffects:
     - SpawnTiming: 4
@@ -29513,6 +29615,28 @@ MonoBehaviour:
       EffectTextIdent: 
       HasText: 0
       DoNotMirror: 1
+  - BalancingId: SplitDamageAndCounter
+    VisualEffects:
+    - SpawnTiming: 3
+      DelayInSeconds: 0
+      Type: 1
+      TargetCombatant: 1
+      TargetAnchor: 0
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Blessing_SplitDamageLink
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 1
   - BalancingId: SpiritsProtection
     VisualEffects:
     - SpawnTiming: 0
@@ -42170,6 +42294,12 @@ MonoBehaviour:
   - NameId: SkillFX_Blessing_HealingLink
     AssetLoadingType: 0
     Path: Prefabs/5_Skills/8_Blessings/SkillFX_Blessing_HealingLink
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: SkillFX_Blessing_SplitDamageLink
+    AssetLoadingType: 0
+    Path: Prefabs/5_Skills/8_Blessings/SkillFX_Blessing_SplitDamageLink
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab

@@ -32,7 +32,7 @@
       "w": 126,
       "h": 62,
       "out": "Mouth_AngryPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Closed",
@@ -76,7 +76,7 @@
       "w": 104,
       "h": 52,
       "out": "Mouth_OpenPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_PointedLip",
@@ -109,7 +109,7 @@
       "w": 134,
       "h": 80,
       "out": "Mouth_ScreamPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Tongue_ Down",
@@ -252,7 +252,7 @@
       "w": 38,
       "h": 18,
       "out": "Mouth_AngryPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Defeat",
@@ -263,7 +263,7 @@
       "w": 44,
       "h": 38,
       "out": "Mouth_DefeatPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Laughing",
@@ -274,7 +274,7 @@
       "w": 52,
       "h": 44,
       "out": "Mouth_LaughingPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Sad",
@@ -296,7 +296,7 @@
       "w": 50,
       "h": 34,
       "out": "Mouth_ScreamPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Shriek",
@@ -307,7 +307,7 @@
       "w": 50,
       "h": 48,
       "out": "Mouth_ShriekPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Surprised",
@@ -351,7 +351,7 @@
       "w": 96,
       "h": 44,
       "out": "MouthPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Angry",
@@ -362,7 +362,7 @@
       "w": 84,
       "h": 70,
       "out": "Mouth_AngryPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Attack",
@@ -373,7 +373,7 @@
       "w": 146,
       "h": 90,
       "out": "Mouth_AttackPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Closed",
@@ -395,7 +395,7 @@
       "w": 86,
       "h": 78,
       "out": "Mouth_HappyPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Ko",
@@ -417,7 +417,7 @@
       "w": 102,
       "h": 32,
       "out": "Mouth_SadPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Scared",
@@ -428,7 +428,7 @@
       "w": 88,
       "h": 88,
       "out": "Mouth_ScaredPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Mouth_Taunt",
@@ -450,7 +450,7 @@
       "w": 104,
       "h": 104,
       "out": "Mouth_WideOpenPirate.png",
-      "started_from_pirate": false
+      "started_from_pirate": true
     },
     {
       "name": "Tongue",

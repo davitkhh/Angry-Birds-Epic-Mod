@@ -1,0 +1,133 @@
+{
+ "id": "dorky",
+ "name": "Dorky",
+ "rig": "PrincePorky",
+ "variant": "",
+ "slots": {
+  "Body": {
+   "layers": [
+    {
+     "uid": "gu9zl5rm",
+     "src": "e96119f541d54b243afe42090f52bfb9:Body",
+     "name": "Body",
+     "item": "Body",
+     "w": 332,
+     "h": 286,
+     "pivot": [
+      0,
+      -0.5
+     ],
+     "tx": 0,
+     "ty": -93,
+     "rot": 0,
+     "sx": 0.3493975903614458,
+     "sy": 0.3493975903614458,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "gu9zl5rm"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "2i42nisq",
+     "src": "bdef4a6e002e7574ca91373e69a2c846:MainHand_ShipsKobold",
+     "name": "MainHand_ShipsKobold",
+     "item": "MainHand_ShipsKobold",
+     "w": 136,
+     "h": 114,
+     "pivot": [
+      -0.48749998,
+      -0.047932327
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "2i42nisq"
+  },
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "h9hwt8q5",
+     "src": "6844e602e83e90f46b56a961950283a7:MainHand_Blue_Set_05",
+     "name": "MainHand_Blue_Set_05",
+     "item": "MainHand_Blue_Set_05",
+     "w": 150,
+     "h": 178,
+     "pivot": [
+      -0.17678571,
+      -0.038372792
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "h9hwt8q5"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "pa25dqio",
+   "type": "Attack",
+   "name": "",
+   "desc": "",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": ""
+  },
+  {
+   "uid": "znxeii0t",
+   "type": "Support",
+   "source": "bird_support_yellow_lightningbird",
+   "name": "Lightning Fast",
+   "desc": "Target bird immediately attacks a random enemy.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_01",
+   "icon": "LightningFast",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "OrderAttackSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 300,
+  "attack": 7,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ }
+}

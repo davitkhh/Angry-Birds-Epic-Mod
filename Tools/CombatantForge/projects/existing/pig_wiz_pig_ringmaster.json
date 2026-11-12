@@ -1,0 +1,407 @@
+{
+ "kind": "existing",
+ "id": "pig_wiz_pig_ringmaster",
+ "name": "Ringmaster",
+ "rig": "WizPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear_Ringmaster",
+     "name": "Headgear_Ringmaster",
+     "item": "Headgear_Ringmaster",
+     "w": 206,
+     "h": 234,
+     "pivot": [
+      0.10178572,
+      -0.10375458
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Ringmaster_Back",
+     "name": "Headgear_Ringmaster_Back",
+     "item": "Headgear_Ringmaster",
+     "w": 156,
+     "h": 112,
+     "pivot": [
+      0.074999996,
+      0.014923468
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_Ringmaster",
+     "name": "MainHand_Ringmaster",
+     "item": "MainHand_Ringmaster",
+     "w": 154,
+     "h": 126,
+     "pivot": [
+      -0.27321428,
+      -0.23571427
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_3fb04",
+   "origin": "pig_attack_wiz_pig_ringmaster",
+   "type": "Attack",
+   "source": "pig_attack_wiz_pig_ringmaster",
+   "name": "Blocking Commando",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Rage ability of target is blocked for [ff0000]{value_5}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 300,
+    "chance": 100,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "AttackAndApplyRageBlockSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_a10ec",
+   "origin": "pig_support_wiz_pig_ringmaster",
+   "type": "Support",
+   "source": "pig_support_wiz_pig_ringmaster",
+   "name": "Show must go on",
+   "desc": "Target has a [ff0000]{value_3}%[-] chance to deal critical damage. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "critchance_in_percent": 35,
+    "extra_damage": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"extra_damage\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"critchance_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    }
+   },
+   "template": "ApplyCritChanceSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_a9ec2",
+   "origin": "pig_passive_wiz_pig_ringmaster",
+   "type": "Passive",
+   "source": "pig_passive_wiz_pig_ringmaster",
+   "name": "Inner Rage",
+   "desc": "[0000ff]Passive:[-] Ringmaster takes [00a800]{value_1}%[-] less damage for every ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "reduction_per_bird_alive": 10
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"reduction_per_tentacle_alive\"))) || ((p(\"reduction_per_bird_alive\"))))"
+    }
+   },
+   "template": "PassiveResilienceAura",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 750,
+  "attack": 30,
+  "sizeType": "Large",
+  "sizeScale": 1.2,
+  "strength": 8,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_wiz_pig_ringmaster",
+  "fingerprint": "94c8d30414489e19a37e05bccd4a2fef0c288d80",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_attack_wiz_pig_ringmaster"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_support_wiz_pig_ringmaster",
+     "pig_attack_wiz_pig_ringmaster",
+     "pig_attack_wiz_pig_ringmaster"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Ringmaster",
+   "rig": "WizPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear_Ringmaster",
+       "name": "Headgear_Ringmaster",
+       "item": "Headgear_Ringmaster",
+       "w": 206,
+       "h": 234,
+       "pivot": [
+        0.10178572,
+        -0.10375458
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Ringmaster_Back",
+       "name": "Headgear_Ringmaster_Back",
+       "item": "Headgear_Ringmaster",
+       "w": 156,
+       "h": 112,
+       "pivot": [
+        0.074999996,
+        0.014923468
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_Ringmaster",
+       "name": "MainHand_Ringmaster",
+       "item": "MainHand_Ringmaster",
+       "w": 154,
+       "h": 126,
+       "pivot": [
+        -0.27321428,
+        -0.23571427
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 750,
+    "attack": 30,
+    "sizeType": "Large",
+    "sizeScale": 1.2,
+    "strength": 8,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig7_defeated_gold": 1,
+     "loot_pig7_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_3fb04",
+     "origin": "pig_attack_wiz_pig_ringmaster",
+     "type": "Attack",
+     "source": "pig_attack_wiz_pig_ringmaster",
+     "name": "Blocking Commando",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Rage ability of target is blocked for [ff0000]{value_5}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 300,
+      "chance": 100,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "AttackAndApplyRageBlockSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_a10ec",
+     "origin": "pig_support_wiz_pig_ringmaster",
+     "type": "Support",
+     "source": "pig_support_wiz_pig_ringmaster",
+     "name": "Show must go on",
+     "desc": "Target has a [ff0000]{value_3}%[-] chance to deal critical damage. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "critchance_in_percent": 35,
+      "extra_damage": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"extra_damage\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"critchance_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      }
+     },
+     "template": "ApplyCritChanceSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_a9ec2",
+     "origin": "pig_passive_wiz_pig_ringmaster",
+     "type": "Passive",
+     "source": "pig_passive_wiz_pig_ringmaster",
+     "name": "Inner Rage",
+     "desc": "[0000ff]Passive:[-] Ringmaster takes [00a800]{value_1}%[-] less damage for every ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "reduction_per_bird_alive": 10
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(((p(\"reduction_per_tentacle_alive\"))) || ((p(\"reduction_per_bird_alive\"))))"
+      }
+     },
+     "template": "PassiveResilienceAura",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

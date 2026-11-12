@@ -7,6 +7,7 @@ import mimetypes
 import os
 import re
 import threading
+import time
 import traceback
 import urllib.parse
 import uuid
@@ -14,11 +15,13 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import gamedata as g
+import existing
 import portable
 import publish as p
 
 WEB = os.path.join(g.HERE, 'web')
 PROJECTS = os.path.join(g.DATA, 'projects')
+existing.DIR = os.path.join(PROJECTS, 'existing')
 jobs = {}
 controls = {}
 publish_lock = threading.Lock()
@@ -31,6 +34,8 @@ def project_path(pid):
 
 
 def save_project(project):
+    if project.get('kind') == 'existing':
+        return existing.save(project)
     os.makedirs(PROJECTS, exist_ok=True)
     tmp = project_path(project['id']) + '.tmp'
     with open(tmp, 'w', encoding='utf-8') as f:
@@ -38,8 +43,9 @@ def save_project(project):
     os.replace(tmp, project_path(project['id']))
 
 
-def load_project(pid):
-    return p.migrate_project(json.load(open(project_path(pid), encoding='utf-8')))
+def load_project(pid, kind=None):
+    path = existing.project_path(pid) if kind == 'existing' else project_path(pid)
+    return p.migrate_project(json.load(open(path, encoding='utf-8')))
 
 
 def list_projects():
@@ -51,6 +57,18 @@ def list_projects():
             d = json.load(open(os.path.join(PROJECTS, name), encoding='utf-8'))
             out.append({'id': d['id'], 'name': d.get('name', ''), 'rig': d.get('rig', ''), 'publishedAt': d.get('publishedAt')})
     return out
+
+
+def trash_project(pid):
+    """Moves the project file to projects/.trash (named with the time), so a delete can be undone by hand."""
+    path = project_path(pid)
+    if not os.path.exists(path):
+        return None
+    folder = os.path.join(PROJECTS, '.trash')
+    os.makedirs(folder, exist_ok=True)
+    target = os.path.join(folder, '%s-%s.json' % (pid, time.strftime('%Y%m%d-%H%M%S')))
+    os.replace(path, target)
+    return target
 
 
 def start_job(work, stoppable=False):
@@ -67,12 +85,13 @@ def start_job(work, stoppable=False):
                     raise ValueError('Stopped before it started')
                 result = work(job['log'].append, lambda proc: controls[job_id].update(proc=proc))
                 job['project'] = result
-                # Merge into what's on disk: the project may have been edited while this ran.
-                try:
-                    current = load_project(result['id'])
-                    save_project(p.merge_job_result(current, result, texts=stoppable))
-                except FileNotFoundError:
-                    save_project(result)
+                # Merge into what's on disk: the project may have been edited while this ran. A delete returns nothing.
+                if result is not None:
+                    try:
+                        current = load_project(result['id'], result.get('kind'))
+                        save_project(p.merge_job_result(current, result, texts=stoppable))
+                    except FileNotFoundError:
+                        save_project(result)
         except Exception as e:
             job['error'] = str(e)
             job['log'].append('Stopped.' if job['stopped'] else 'FAILED: %s' % e)
@@ -135,6 +154,14 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(g.library())
             if what == 'skills':
                 return self.send(g.skills_catalog())
+            if what == 'existing':
+                return self.send(existing.catalog())
+            if what == 'projectile':
+                return self.send(g.projectile_info(parts[2]))
+            if what == 'projectiles':
+                return self.send(g.projectile_catalog())
+            if what == 'powerlevels':
+                return self.send(g.power_levels())
             if what == 'icons':
                 return self.send(g.icon_catalog())
             if what == 'stats':
@@ -154,6 +181,12 @@ class Handler(BaseHTTPRequestHandler):
             if what == 'job':
                 job = jobs[parts[2]]
                 return self.send(job)
+        if head == 'projectileart':
+            return self.send(g.projectile_art(parts[1]), 'image/png', cache=True)
+        if head == 'projectileicon':
+            return self.send(g.projectile_icon(parts[1]), 'image/png', cache=True)
+        if head == 'pigicon':
+            return self.send(existing.icon(parts[1]), 'image/png')
         if head == 'rigicon':
             return self.send(g.rig_icon(parts[1], parts[2] if len(parts) > 2 else ''), 'image/png', cache=True)
         if head == 'sprite':
@@ -181,11 +214,34 @@ class Handler(BaseHTTPRequestHandler):
             if what == 'save':
                 renamed_from = body.pop('renamedFrom', None)
                 save_project(body)
+                if body.get('kind') == 'existing':
+                    return self.send({'ok': True})
                 if renamed_from and renamed_from != body['id'] and not body.get('publishedAt') and os.path.exists(project_path(renamed_from)):
                     os.remove(project_path(renamed_from))
                 return self.send({'ok': True})
             if what == 'publish':
+                if body.get('kind') == 'existing':
+                    return self.send({'job': start_job(lambda log, register: existing.update(body, log))})
                 return self.send({'job': start_job(lambda log, register: p.publish(body, log))})
+            if what == 'delete':
+                pid = body['id']
+                project = load_project(pid)
+                if body.get('fromGame') and project.get('publishedAt'):
+                    def work(log, register):
+                        p.unpublish(project, log)
+                        log('Moved the project to %s' % os.path.relpath(trash_project(pid), g.DATA))
+                        return None
+                    return self.send({'job': start_job(work)})
+                return self.send({'trashed': trash_project(pid)})
+            if what == 'existing_open':
+                project, note = existing.open_project(body['id'])
+                return self.send({'project': project, 'note': note})
+            if what == 'existing_duplicate':
+                project = existing.duplicate(body['id'], {x['id'] for x in list_projects()})
+                save_project(project)
+                return self.send({'project': p.migrate_project(project)})
+            if what == 'existing_tick':
+                return self.send({'unticked': existing.set_tick(body['parent'], body['variant'], bool(body['on']))})
             if what == 'validate':
                 return self.send({'problems': p.validate(body)})
             if what == 'ability':

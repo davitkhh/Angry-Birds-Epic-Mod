@@ -41,6 +41,9 @@ public class SkillBlind : MonoBehaviour
 	[SerializeField]
 	private Color m_NoneColor = Color.grey;
 
+	// Combo moves' name strip (#CD7936). In code rather than serialized so the existing overlay prefabs pick it up.
+	public static readonly Color ComboColor = new Color32(0xCD, 0x79, 0x36, 0xFF);
+
 	[SerializeField]
 	private GameObject m_ChargeProgressRoot;
 
@@ -156,6 +159,9 @@ public class SkillBlind : MonoBehaviour
 				break;
 			case SkillTargetTypes.Support:
 				m_Background.color = m_SupportColor;
+				break;
+			case SkillTargetTypes.Combo:
+				m_Background.color = ComboColor;
 				break;
 			}
 			// Combatant Forge: a custom strip colour, stored as a 0xRRGGBB number.

@@ -52,6 +52,9 @@ namespace ABH.GameDatas.Battle
 		// When this effect was put on its target, relative to all other effects: higher = more recent
 		public int m_AddedOrder;
 
+		// How many times this effect is stacked (Hype perk); shown as "Nx" on the effect's info row when above 1
+		public int m_Stacks = 1;
+
 		private static int s_LastAddedOrder;
 
 		private bool m_PersistIfDefeated = true;
@@ -121,6 +124,7 @@ namespace ABH.GameDatas.Battle
 			currentTurn = original.currentTurn;
 			m_ChargeTurnsAdded = original.m_ChargeTurnsAdded;
 			m_AddedOrder = original.m_AddedOrder;
+			m_Stacks = original.m_Stacks;
 			InitActions(m_Source, m_Battle);
 		}
 

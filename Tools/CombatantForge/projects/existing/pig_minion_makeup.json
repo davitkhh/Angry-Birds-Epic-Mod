@@ -1,0 +1,367 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_makeup",
+ "name": "Make-Up Artist",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_MakeUpArtist",
+     "name": "Headgear_MakeUpArtist",
+     "item": "Headgear_MakeUpArtist",
+     "w": 92,
+     "h": 124,
+     "pivot": [
+      -0.46607143,
+      -0.4829205
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_MakeUpArtist_Back",
+     "name": "Headgear_MakeUpArtist_Back",
+     "item": "Headgear_MakeUpArtist",
+     "w": 88,
+     "h": 58,
+     "pivot": [
+      -0.4714286,
+      -0.40233994
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_MakeUpArtist",
+     "name": "MainHand_MakeUpArtist",
+     "item": "MainHand_MakeUpArtist",
+     "w": 124,
+     "h": 66,
+     "pivot": [
+      -0.24107142,
+      -0.19626623
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_e0c74",
+   "origin": "pig_attack_minion_makeup",
+   "type": "Attack",
+   "source": "pig_attack_minion_makeup",
+   "name": "Blinding Powder",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Target has a [ff0000]{value_3}%[-] chance to miss for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "miss_chance": 30
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"miss_chance\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackAndApplyMissChanceSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_58773",
+   "origin": "pig_support_minion_makeup",
+   "type": "Support",
+   "source": "pig_support_minion_makeup",
+   "name": "Good Looking",
+   "desc": "Increases attack power and health by [00a800]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_increase": 20,
+    "total_health_bonus": 20,
+    "grow_percent": 20
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"damage_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"total_health_bonus\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"percent_on_banner\"))"
+    }
+   },
+   "template": "BoostHealthAndAttackSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 115,
+  "attack": 21,
+  "sizeType": "Small",
+  "sizeScale": 1.3,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_makeup",
+  "fingerprint": "d741f968bca0f8342b84b0bb8bc90f8dc4654671",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_attack_minion_makeup"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_support_minion_makeup"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Make-Up Artist",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_MakeUpArtist",
+       "name": "Headgear_MakeUpArtist",
+       "item": "Headgear_MakeUpArtist",
+       "w": 92,
+       "h": 124,
+       "pivot": [
+        -0.46607143,
+        -0.4829205
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_MakeUpArtist_Back",
+       "name": "Headgear_MakeUpArtist_Back",
+       "item": "Headgear_MakeUpArtist",
+       "w": 88,
+       "h": 58,
+       "pivot": [
+        -0.4714286,
+        -0.40233994
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_MakeUpArtist",
+       "name": "MainHand_MakeUpArtist",
+       "item": "MainHand_MakeUpArtist",
+       "w": 124,
+       "h": 66,
+       "pivot": [
+        -0.24107142,
+        -0.19626623
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 115,
+    "attack": 21,
+    "sizeType": "Small",
+    "sizeScale": 1.3,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_e0c74",
+     "origin": "pig_attack_minion_makeup",
+     "type": "Attack",
+     "source": "pig_attack_minion_makeup",
+     "name": "Blinding Powder",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Target has a [ff0000]{value_3}%[-] chance to miss for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "miss_chance": 30
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"miss_chance\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackAndApplyMissChanceSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_58773",
+     "origin": "pig_support_minion_makeup",
+     "type": "Support",
+     "source": "pig_support_minion_makeup",
+     "name": "Good Looking",
+     "desc": "Increases attack power and health by [00a800]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_increase": 20,
+      "total_health_bonus": 20,
+      "grow_percent": 20
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"damage_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"total_health_bonus\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"percent_on_banner\"))"
+      }
+     },
+     "template": "BoostHealthAndAttackSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

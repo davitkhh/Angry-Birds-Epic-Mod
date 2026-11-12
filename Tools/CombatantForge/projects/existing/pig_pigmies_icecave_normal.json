@@ -1,0 +1,415 @@
+{
+ "kind": "existing",
+ "id": "pig_pigmies_icecave_normal",
+ "name": "Ice Pigmies",
+ "rig": "Pigmies",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_FrostPigmies",
+     "name": "Headgear_FrostPigmies",
+     "item": "Headgear_FrostPigmies",
+     "w": 150,
+     "h": 111,
+     "pivot": [
+      -0.06964286,
+      -0.15564673
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_FrostPigmies_Back",
+     "name": "Headgear_FrostPigmies_Back",
+     "item": "Headgear_FrostPigmies",
+     "w": 93,
+     "h": 50,
+     "pivot": [
+      0.31607142,
+      0.17437498
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:MainHand_FrostPigmies",
+     "name": "MainHand_FrostPigmies",
+     "item": "MainHand_FrostPigmies",
+     "w": 138,
+     "h": 50,
+     "pivot": [
+      -0.47678575,
+      -0.3770357
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_599a3",
+   "origin": "pig_attack_pigmies_ice",
+   "type": "Attack",
+   "source": "pig_attack_pigmies_ice",
+   "name": "Cold Touch",
+   "desc": "[00a800]{value_3}%[-] chance to immediately remove helpful effects from target. Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 3,
+    "purge_chance": 20
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"purge_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"purge_chance\"))"
+    }
+   },
+   "template": "AttackWithPurgeSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_f9725",
+   "origin": "pig_support_pigmies_ice",
+   "type": "Support",
+   "source": "pig_support_pigmies_ice",
+   "name": "Hoard",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Calls Ice Pigmies as support.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_pigmies_ice": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 160,
+  "attack": 7,
+  "sizeType": "Medium",
+  "sizeScale": 1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_pigmies_icecave_normal",
+  "fingerprint": "e81da68e266eda2347a703e7e1f8cc2083ea4678",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 80,
+    "ComboChain": [
+     "pig_attack_pigmies_ice"
+    ]
+   },
+   {
+    "Percentage": 20,
+    "ComboChain": [
+     "pig_support_pigmies_ice"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Ice Pigmies",
+   "rig": "Pigmies",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_FrostPigmies",
+       "name": "Headgear_FrostPigmies",
+       "item": "Headgear_FrostPigmies",
+       "w": 150,
+       "h": 111,
+       "pivot": [
+        -0.06964286,
+        -0.15564673
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_FrostPigmies_Back",
+       "name": "Headgear_FrostPigmies_Back",
+       "item": "Headgear_FrostPigmies",
+       "w": 93,
+       "h": 50,
+       "pivot": [
+        0.31607142,
+        0.17437498
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:MainHand_FrostPigmies",
+       "name": "MainHand_FrostPigmies",
+       "item": "MainHand_FrostPigmies",
+       "w": 138,
+       "h": 50,
+       "pivot": [
+        -0.47678575,
+        -0.3770357
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 160,
+    "attack": 7,
+    "sizeType": "Medium",
+    "sizeScale": 1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_599a3",
+     "origin": "pig_attack_pigmies_ice",
+     "type": "Attack",
+     "source": "pig_attack_pigmies_ice",
+     "name": "Cold Touch",
+     "desc": "[00a800]{value_3}%[-] chance to immediately remove helpful effects from target. Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 3,
+      "purge_chance": 20
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"purge_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"purge_chance\"))"
+      }
+     },
+     "template": "AttackWithPurgeSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_f9725",
+     "origin": "pig_support_pigmies_ice",
+     "type": "Support",
+     "source": "pig_support_pigmies_ice",
+     "name": "Hoard",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Calls Ice Pigmies as support.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_pigmies_ice": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

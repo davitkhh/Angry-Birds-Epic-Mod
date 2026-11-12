@@ -1,0 +1,587 @@
+{
+ "kind": "existing",
+ "id": "pig_rogue_porky",
+ "name": "Flince Florky",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "bb7a778e25984dafa18999c53c0e4ae4:Headgear_RogueRoyal",
+     "name": "Headgear_RogueRoyal",
+     "item": "Headgear_RogueRoyal",
+     "w": 148,
+     "h": 100,
+     "pivot": [
+      -0.145,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "bb7a778e25984dafa18999c53c0e4ae4:Headgear_RogueRoyal_Back",
+     "name": "Headgear_RogueRoyal_Back",
+     "item": "Headgear_RogueRoyal",
+     "w": 148,
+     "h": 93,
+     "pivot": [
+      -0.15,
+      -0.15
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Rogue",
+     "name": "MainHand_Rogue",
+     "item": "MainHand_Rogue",
+     "w": 137,
+     "h": 41,
+     "pivot": [
+      -0.31,
+      0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_a0282",
+   "origin": "pig_attack_prince_porky",
+   "type": "Attack",
+   "source": "pig_attack_prince_porky",
+   "name": "Vicious Backstab",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_f5d0d",
+   "origin": "pig_attack_prince_porky_quad",
+   "type": "Attack",
+   "source": "pig_attack_prince_porky_quad",
+   "name": "Assault",
+   "desc": "Attacks random targets [ff0000]{value_4}[-] times for [ff0000]{value_1}[-] damage each.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "swing_count": 4
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100) * A)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(Math.max(1, ((p(\"swing_count\")))))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "RepeatedSwingsAttack",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_e4802",
+   "origin": "pig_attack_prince_porky_duel",
+   "type": "Attack",
+   "source": "pig_attack_prince_porky_duel",
+   "name": "Duel",
+   "desc": "Isolates the target for a duel. Lasts [ff0000]{value_1}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "duel_turns": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+    }
+   },
+   "template": "DuelKnockback",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a3_6a8e8",
+   "origin": "pig_support_prince_porky_bombs",
+   "type": "Support",
+   "source": "pig_support_prince_porky_bombs",
+   "name": "Chop Chop!",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Allies charge [00a800]{value_1}[-] turn faster and bombs light their fuse. Porky throws whatever blows up.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "reduce_charge_turns": 1,
+    "charge": 2,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduce_charge_turns\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "ShortenChargesAndThrowBombs",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a4_08a99",
+   "origin": "pig_support_prince_porky",
+   "type": "Support",
+   "source": "pig_support_prince_porky",
+   "name": "Tit for Tat",
+   "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_dealt_increase": 25,
+    "damage_taken_increase": 25,
+    "all": 1
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_dealt_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_taken_increase\"))"
+    }
+   },
+   "template": "IncreaseDamageDealtAndReceived",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a5_4fca1",
+   "origin": "pig_support_prince_porky_goad",
+   "type": "Support",
+   "source": "pig_support_prince_porky_goad",
+   "name": "Get Them!",
+   "desc": "Porky smacks an ally that can take the hit, which then attacks for [ff0000]{value_1}%[-] damage.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "ally_damage_in_percent": 200
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"ally_damage_in_percent\"))"
+    }
+   },
+   "template": "GoadAllyIntoAttack",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 325,
+  "attack": 7,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_porky_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_rogue_porky",
+  "fingerprint": "7d9c3a4da6f61f0effb8a70cdf605736d2c72ef4",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 0,
+    "ComboChain": [
+     "pig_attack_prince_porky"
+    ]
+   },
+   {
+    "Percentage": 10,
+    "ComboChain": [
+     "pig_attack_prince_porky_quad"
+    ]
+   },
+   {
+    "Percentage": 90,
+    "ComboChain": [
+     "pig_attack_prince_porky_duel"
+    ]
+   },
+   {
+    "Percentage": 0,
+    "ComboChain": [
+     "pig_support_prince_porky_bombs"
+    ]
+   },
+   {
+    "Percentage": 0,
+    "ComboChain": [
+     "pig_support_prince_porky"
+    ]
+   },
+   {
+    "Percentage": 0,
+    "ComboChain": [
+     "pig_support_prince_porky_goad"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Flince Florky",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "bb7a778e25984dafa18999c53c0e4ae4:Headgear_RogueRoyal",
+       "name": "Headgear_RogueRoyal",
+       "item": "Headgear_RogueRoyal",
+       "w": 148,
+       "h": 100,
+       "pivot": [
+        -0.145,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "bb7a778e25984dafa18999c53c0e4ae4:Headgear_RogueRoyal_Back",
+       "name": "Headgear_RogueRoyal_Back",
+       "item": "Headgear_RogueRoyal",
+       "w": 148,
+       "h": 93,
+       "pivot": [
+        -0.15,
+        -0.15
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Rogue",
+       "name": "MainHand_Rogue",
+       "item": "MainHand_Rogue",
+       "w": 137,
+       "h": 41,
+       "pivot": [
+        -0.31,
+        0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 325,
+    "attack": 7,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig_porky_defeated_gold": 1,
+     "loot_pig_boss_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_a0282",
+     "origin": "pig_attack_prince_porky",
+     "type": "Attack",
+     "source": "pig_attack_prince_porky",
+     "name": "Vicious Backstab",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_f5d0d",
+     "origin": "pig_attack_prince_porky_quad",
+     "type": "Attack",
+     "source": "pig_attack_prince_porky_quad",
+     "name": "Assault",
+     "desc": "Attacks random targets [ff0000]{value_4}[-] times for [ff0000]{value_1}[-] damage each.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "swing_count": 4
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(((p(\"damage_in_percent\")) / 100) * A)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(Math.max(1, ((p(\"swing_count\")))))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "RepeatedSwingsAttack",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_e4802",
+     "origin": "pig_attack_prince_porky_duel",
+     "type": "Attack",
+     "source": "pig_attack_prince_porky_duel",
+     "name": "Duel",
+     "desc": "Isolates the target for a duel. Lasts [ff0000]{value_1}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "duel_turns": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+      }
+     },
+     "template": "DuelKnockback",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a3_6a8e8",
+     "origin": "pig_support_prince_porky_bombs",
+     "type": "Support",
+     "source": "pig_support_prince_porky_bombs",
+     "name": "Chop Chop!",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Allies charge [00a800]{value_1}[-] turn faster and bombs light their fuse. Porky throws whatever blows up.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "reduce_charge_turns": 1,
+      "charge": 2,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"reduce_charge_turns\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "ShortenChargesAndThrowBombs",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a4_08a99",
+     "origin": "pig_support_prince_porky",
+     "type": "Support",
+     "source": "pig_support_prince_porky",
+     "name": "Tit for Tat",
+     "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_dealt_increase": 25,
+      "damage_taken_increase": 25,
+      "all": 1
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"damage_dealt_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_taken_increase\"))"
+      }
+     },
+     "template": "IncreaseDamageDealtAndReceived",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a5_4fca1",
+     "origin": "pig_support_prince_porky_goad",
+     "type": "Support",
+     "source": "pig_support_prince_porky_goad",
+     "name": "Get Them!",
+     "desc": "Porky smacks an ally that can take the hit, which then attacks for [ff0000]{value_1}%[-] damage.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "ally_damage_in_percent": 200
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"ally_damage_in_percent\"))"
+      }
+     },
+     "template": "GoadAllyIntoAttack",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

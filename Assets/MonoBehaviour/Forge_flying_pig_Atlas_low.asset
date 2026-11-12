@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_flying_pig_Atlas_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: ba58739d66ed46f1a81481af7bf793a2, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.78125
+    width: 0.2421875
+    height: 0.21875
+  - serializedVersion: 2
+    x: 0.92578125
+    y: 0.95703125
+    width: 0.03125
+    height: 0.04296875
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.734375
+    width: 0.04296875
+    height: 0.04296875
+  - serializedVersion: 2
+    x: 0.21875
+    y: 0.74609375
+    width: 0.046875
+    height: 0.03125
+  - serializedVersion: 2
+    x: 0.1484375
+    y: 0.7421875
+    width: 0.06640625
+    height: 0.03515625
+  - serializedVersion: 2
+    x: 0.30859375
+    y: 0.7734375
+    width: 0.00390625
+    height: 0.00390625
+  - serializedVersion: 2
+    x: 0.31640625
+    y: 0.7734375
+    width: 0.00390625
+    height: 0.00390625
+  - serializedVersion: 2
+    x: 0.046875
+    y: 0.7421875
+    width: 0.046875
+    height: 0.03515625
+  - serializedVersion: 2
+    x: 0.32421875
+    y: 0.7734375
+    width: 0.00390625
+    height: 0.00390625
+  - serializedVersion: 2
+    x: 0.09765625
+    y: 0.7421875
+    width: 0.046875
+    height: 0.03515625
+  - serializedVersion: 2
+    x: 0.26953125
+    y: 0.76171875
+    width: 0.015625
+    height: 0.015625
+  - serializedVersion: 2
+    x: 0.2890625
+    y: 0.76171875
+    width: 0.015625
+    height: 0.015625
+  - serializedVersion: 2
+    x: 0.796875
+    y: 0.953125
+    width: 0.125
+    height: 0.046875
+  - serializedVersion: 2
+    x: 0.6953125
+    y: 0.9140625
+    width: 0.09765625
+    height: 0.0859375
+  - serializedVersion: 2
+    x: 0.24609375
+    y: 0.83203125
+    width: 0.4453125
+    height: 0.16796875
+  textureGUIDs:
+  - 972e764fa0a44b8481bc03bb7607a0f3
+  - 3b612c4adce147feb5aae94421f2a8e2
+  - 6ad34b1a5da44c93a09bf38b0ae5926a
+  - b1e93a25cb3c4bf8a668faf09e9152be
+  - c42cfa3886b64599983552cd09c62201
+  - cee4cf9932de4e60b28f59f166129712
+  - 9cc3f77057fd448eb5dd248ba001fac7
+  - f4083fb05b634a4c9ec15d62930efe28
+  - d5066a44fc244cbd8370d964050c6863
+  - d2aa533092084e188d14b309992bcb0f
+  - e011e93d8a75453e9307bde664f89a90
+  - a69db7a3b29c4f87870f337665490d3a
+  - 3beacd6b0bc14faf8fd7d94ba2ca95c7
+  - 5f7913a7722f45bc9d2d04a73bbbe6f4
+  - 563d8c5b0a184147b4197582a77e0cb7
+  textureSizes:
+  - {x: 123, y: 112}
+  - {x: 15, y: 22}
+  - {x: 21, y: 22}
+  - {x: 24, y: 16}
+  - {x: 34, y: 17}
+  - {x: 2, y: 2}
+  - {x: 2, y: 2}
+  - {x: 24, y: 18}
+  - {x: 2, y: 2}
+  - {x: 24, y: 18}
+  - {x: 8, y: 8}
+  - {x: 7, y: 7}
+  - {x: 64, y: 24}
+  - {x: 49, y: 43}
+  - {x: 227, y: 85}
+  defaultPivotOffsets:
+  - {x: -0.02186427, y: -0.5668038}
+  - {x: -0.7329264, y: -2.295909}
+  - {x: -0.4674908, y: -2.369669}
+  - {x: -0.3357666, y: -3.726757}
+  - {x: -0.4848812, y: -3.137306}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: -0.3261839, y: -2.881111}
+  - {x: 0, y: 0}
+  - {x: -2.447435, y: 1.103938}
+  - {x: -1.658236, y: -6.26}
+  - {x: -0.985292, y: -7.47613}
+  - {x: -0, y: -0}
+  - {x: -0.2439513, y: -1.139767}
+  - {x: 0.2097703, y: -0.9367571}
+  textureNames:
+  - Forge_flying_pig__Body
+  - Forge_flying_pig__Eye_Left
+  - Forge_flying_pig__Eye_Right
+  - Forge_flying_pig__Eyebrow_Left
+  - Forge_flying_pig__Eyebrow_Right
+  - Forge_flying_pig__Lid_Left
+  - Forge_flying_pig__Lid_Right
+  - Forge_flying_pig__Mouth
+  - Forge_flying_pig__Propeller
+  - Forge_flying_pig__PropellerShaft
+  - Forge_flying_pig__Pupil_Left
+  - Forge_flying_pig__Pupil_Right
+  - Forge_flying_pig__Shadow
+  - Forge_flying_pig__Snout
+  - Forge_flying_pig__Tail
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Body.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Eye_Left.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Eye_Right.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Eyebrow_Left.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Eyebrow_Right.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Lid_Left.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Lid_Right.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Mouth.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Propeller.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__PropellerShaft.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Pupil_Left.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Pupil_Right.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Shadow.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Snout.png
+  - Assets/content/4_Characters/_Forge/Baked/flying_pig/Forge_flying_pig__Tail.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

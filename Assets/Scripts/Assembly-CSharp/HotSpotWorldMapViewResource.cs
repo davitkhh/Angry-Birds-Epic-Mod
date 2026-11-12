@@ -48,9 +48,93 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 		}
 	}
 
+	// Off the world map: the node lives in the shop menu of the merchant it follows (MerchantStall, WorldMapShopMenuUI),
+	// where it is shown and tapped like on the map. It still unlocks, respawns and harvests as a normal node.
+	public bool m_HiddenOnMap;
+
+	private Transform m_MapParent;
+
+	private Vector3 m_MapLocalPosition;
+
+	private Vector3 m_MapLocalScale;
+
+	private int m_MapLayer;
+
+	private bool m_InMenu;
+
+	private void SetShownOnMap(bool shown)
+	{
+		if (!m_HiddenOnMap)
+		{
+			return;
+		}
+		shown &= m_InMenu;
+		foreach (Transform child in base.transform)
+		{
+			child.gameObject.SetActive(shown);
+		}
+		foreach (var collider in GetComponents<Collider>())
+		{
+			collider.enabled = shown;
+		}
+	}
+
+	// Moves the node into a menu: under parent (so it moves with it), at worldPosition, drawn by the interface camera
+	// (layer) above the menu's NGUI widgets (sortingOrder).
+	public void ShowInMenu(Transform parent, Vector3 worldPosition, float scale, int layer, int sortingOrder)
+	{
+		if (!m_InMenu)
+		{
+			m_MapParent = base.transform.parent;
+			m_MapLocalPosition = base.transform.localPosition;
+			m_MapLocalScale = base.transform.localScale;
+			m_MapLayer = base.gameObject.layer;
+		}
+		m_InMenu = true;
+		base.transform.SetParent(parent, true);
+		base.transform.position = worldPosition;
+		base.transform.localScale = m_MapLocalScale * scale;
+		SetLayer(layer, sortingOrder);
+		SetShownOnMap(true);
+		if (!IsResourceAvaible())
+		{
+			foreach (var resource in m_resourceObjects)
+			{
+				resource.SetActive(false);
+			}
+		}
+	}
+
+	public void ReturnToMap()
+	{
+		if (!m_InMenu)
+		{
+			return;
+		}
+		m_InMenu = false;
+		SetShownOnMap(false);
+		base.transform.SetParent(m_MapParent, false);
+		base.transform.localPosition = m_MapLocalPosition;
+		base.transform.localScale = m_MapLocalScale;
+		SetLayer(m_MapLayer, 0);
+	}
+
+	private void SetLayer(int layer, int sortingOrder)
+	{
+		foreach (var t in GetComponentsInChildren<Transform>(true))
+		{
+			t.gameObject.layer = layer;
+		}
+		foreach (var r in GetComponentsInChildren<Renderer>(true))
+		{
+			r.sortingOrder = sortingOrder;
+		}
+	}
+
 	protected override void InitialSetupHotspot()
 	{
 		base.InitialSetupHotspot();
+		SetShownOnMap(base.Model.Data.UnlockState > HotspotUnlockState.Hidden);
 		if (base.Model.Data.UnlockState != HotspotUnlockState.Hidden && base.Model.Data.UnlockState != 0)
 		{
 			DIContainerLogic.GetResourceNodeManager().AddResourceSpot(this);
@@ -173,7 +257,7 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 		{
 			yield break;
 		}
-		if (!m_active && m_litePath != null && !m_litePath.gameObject.activeInHierarchy)
+		if (!m_active && !m_HiddenOnMap && m_litePath != null && !m_litePath.gameObject.activeInHierarchy)
 		{
 			m_litePath.gameObject.SetActive(true);
 			var timer = 0f;
@@ -185,6 +269,7 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 		}
 		if (!m_active)
 		{
+			SetShownOnMap(true);
 			var activateObjects = m_activateObjects;
 			foreach (var go in activateObjects)
 			{

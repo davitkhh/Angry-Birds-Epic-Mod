@@ -73,6 +73,34 @@ public class CharacterSpeechBubble : MonoBehaviour
 		}
 	}
 
+	// Sets the charge bar to a charge in progress, turnsLeft of the bubble's duration still to go, without animating.
+	public void SetChargeProgress(int turnsLeft)
+	{
+		if (m_ProgressBar)
+		{
+			m_ProgressBar.fillAmount = 1f - (float)turnsLeft / (float)m_Duration;
+		}
+	}
+
+	// The prefab only has dividers for 2 and 3 segments (see SetModel); this adds them for longer charges.
+	public void AddChargeDividers(int segments)
+	{
+		if (!m_ProgressBar || m_ChargeProgressDivider.Count == 0 || m_ChargeProgressDivider[0].transform.childCount == 0)
+		{
+			return;
+		}
+		var root = m_ChargeProgressDivider[0];
+		var template = root.transform.GetChild(0);
+		root.SetActive(true);
+		var barWidth = m_ProgressBar.width;
+		for (var i = 1; i < segments; i++)
+		{
+			var divider = i == 1 ? template : Object.Instantiate(template.gameObject, root.transform).transform;
+			divider.localScale = template.localScale;
+			divider.localPosition = new Vector3(barWidth * ((float)i / segments - 0.5f), template.localPosition.y, template.localPosition.z);
+		}
+	}
+
 	public void SetTargetIcon(string targetIconAssetId)
 	{
 		if (m_BubbleTargetIcon)

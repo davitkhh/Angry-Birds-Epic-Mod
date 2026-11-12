@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: PigPirate_Atlas_05
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 117542049a28410f8bbba7b887cc27a5, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0
+    y: 0.2734375
+    width: 0.8203125
+    height: 0.7265625
+  - serializedVersion: 2
+    x: 0.59375
+    y: 0.2578125
+    width: 0.0078125
+    height: 0.0078125
+  - serializedVersion: 2
+    x: 0.609375
+    y: 0.2578125
+    width: 0.0078125
+    height: 0.0078125
+  - serializedVersion: 2
+    x: 0.625
+    y: 0.2578125
+    width: 0.0078125
+    height: 0.0078125
+  - serializedVersion: 2
+    x: 0.4453125
+    y: 0.109375
+    width: 0.140625
+    height: 0.15625
+  - serializedVersion: 2
+    x: 0.28125
+    y: 0.1015625
+    width: 0.15625
+    height: 0.1640625
+  - serializedVersion: 2
+    x: 0
+    y: 0.03125
+    width: 0.2734375
+    height: 0.234375
+  textureGUIDs:
+  - 4600369e019d4529b3e99a85335129a4
+  - 84db104fba454c4dbb585267e22f831d
+  - 6fb11e9ead8048b5ae57986986fe6143
+  - bd78a4336c5446199e2cdbd21ea2b151
+  - 92281ffa5c3e4990a5d6f1c9da65f8e2
+  - 0493b811394e4236868d2caa4b64e283
+  - 3c732dae9df440db9b22b519668c3948
+  textureSizes:
+  - {x: 210, y: 186}
+  - {x: 144, y: 124}
+  - {x: 160, y: 124}
+  - {x: 166, y: 116}
+  - {x: 36, y: 40}
+  - {x: 40, y: 42}
+  - {x: 70, y: 60}
+  defaultPivotOffsets:
+  - {x: 0, y: -0.5}
+  - {x: 0.4875, y: 0.4790323}
+  - {x: 0.4821429, y: 0.483871}
+  - {x: 0.4767857, y: 0.2223214}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  textureNames:
+  - BodyRegular
+  - EyePatchRegular
+  - EyePatch_HalfOpenRegular
+  - EyePatch_OpenRegular
+  - Eye_LeftRegular
+  - Eye_RightRegular
+  - SnoutRegular
+  texturePaths:
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/BodyRegular.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/EyePatchRegular.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/EyePatch_HalfOpenRegular.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/EyePatch_OpenRegular.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Eye_LeftRegular.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Eye_RightRegular.png
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/SnoutRegular.png
+  lastBuildID: 2013111119195281
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 0

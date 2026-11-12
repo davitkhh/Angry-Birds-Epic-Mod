@@ -37,9 +37,26 @@ def slugify(text):
     return slug or 'unnamed'
 
 
+def art_id(project):
+    """What this combatant's own art, items and abilities are named after. An existing game combatant uses
+    <NameId>__e<revision> (see existing.py), so its copies never collide with a Forge combatant's."""
+    if project.get('kind') == 'existing':
+        return '%s__e%d' % (project['id'], (project.get('existing') or {}).get('rev', 0))
+    return project['id']
+
+
+def combatant_id(project):
+    return project['id'] if project.get('kind') == 'existing' else 'pig_forge_' + project['id']
+
+
 def asset_base(project):
-    # Lowercase slug: only the pirate variant may contain "Pirate", which is what SetPirateVariants looks for.
-    return 'Forge_' + project['id'] + ('_Pirate' if project.get('variant') == 'pirate' else '')
+    # Lowercase slug, then the variant as a capitalised last segment (Forge_x_Pirate, Forge_x_Regular): that is what
+    # CharacterAssetController.VariantSuffix reads to swap X for X<Suffix>.
+    return 'Forge_' + art_id(project) + variant_tag(project.get('variant') or g.DEFAULT_VARIANT.get(project.get('rig'), ''))
+
+
+def variant_tag(variant):
+    return '_' + variant.capitalize() if variant else ''
 
 
 # ------------------------------------------------------------------------------ baking
@@ -126,8 +143,8 @@ def migrate_project(project):
 
 
 # Fields only a job decides; everything else in the project may have been edited while the job ran.
-JOB_FIELDS = ('guids', 'publishedAt', 'publishedRig')
-JOB_ABILITY_FIELDS = ('nameId', 'written', 'template', 'params', 'duration', 'values')
+JOB_FIELDS = ('guids', 'publishedAt', 'publishedRig', 'existing')
+JOB_ABILITY_FIELDS = ('nameId', 'written', 'template', 'params', 'duration', 'values', 'origin')
 
 
 def merge_job_result(current, result, texts=False):
@@ -187,7 +204,7 @@ def gid(project, key):
 
 def write_atlas(project, entries, log):
     """entries: {texture name: (image, pivot)}. Writes source PNGs + metas, atlas textures, materials, atlas assets."""
-    folder = os.path.join(BAKED, project['id'])
+    folder = os.path.join(BAKED, art_id(project))
     os.makedirs(folder, exist_ok=True)
     for old in glob.glob(os.path.join(folder, '*.png')):
         if os.path.basename(old)[:-4] not in entries:
@@ -203,7 +220,7 @@ def write_atlas(project, entries, log):
             f.write(g.new_meta(src_guids[name]))
     sizes = {n: im.size for n, (im, _) in entries.items()}
     side, pos = pack(sizes)
-    atlas = 'Forge_%s_Atlas' % project['id']
+    atlas = 'Forge_%s_Atlas' % art_id(project)
     hr = Image.new('RGBA', (side, side), (0, 0, 0, 0))
     lr = Image.new('RGBa', (side // 2, side // 2), (0, 0, 0, 0))
     for n, (im, _) in entries.items():
@@ -320,11 +337,35 @@ def upsert_loca(texts):
     return path, text
 
 
+def clip_hash(name):
+    """24-bit FNV-1a of a clip name: the skill parameter anim_clip, matched by ForgeSkillAnimation.Hash in the game."""
+    h = 2166136261
+    for c in name:
+        h = ((h ^ ord(c)) * 16777619) & 0xFFFFFFFF
+    return h & 0xFFFFFF
+
+
+# Ability fields the game reads as hashed skill parameters (ForgeSkillAnimation.cs): the clip it plays and the
+# projectile it fires. No key on the ability: keep what the skill row already has; '' : the usual one.
+NAMED_PARAMS = {'anim': 'anim_clip', 'projectile': 'anim_projectile'}
+
+
+RANGED = {'ranged': 1.0, 'melee': 0.0}  # ability 'ranged' -> skill parameter anim_ranged; '' : the weapon decides
+
+
+def _ranged_param(ability):
+    return RANGED.get(ability.get('ranged') or '')
+
+
+def _named_param(ability, field):
+    return float(clip_hash(ability[field])) if ability.get(field) else None
+
+
 def skill_name_id(project, ability):
     if ability.get('nameId'):
         return ability['nameId']
     kind = {'Attack': 'attack', 'Support': 'support', 'Passive': 'passive'}[ability['type']]
-    base = 'pig_%s_forge_%s_%s' % (kind, project['id'], slugify(ability.get('name'))[:32])
+    base = 'pig_%s_forge_%s_%s' % (kind, art_id(project), slugify(ability.get('name'))[:32])
     used = {a.get('nameId') for a in project['abilities']}
     name, n = base, 2
     while name in used:
@@ -344,8 +385,11 @@ def build_skills(project, log):
         default_color = g.SKILL_COLORS[typ]
         custom_color = ability.get('color', default_color).upper().lstrip('#')
         if source and not ability.get('nameId'):
+            # No 'anim' key: the ability keeps whatever clip its skill already names.
+            same_anim = all(f not in ability or _named_param(ability, f) == (source['params'] or {}).get(param) for f, param in NAMED_PARAMS.items())
+            same_anim = same_anim and ('ranged' not in ability or _ranged_param(ability) == (source['params'] or {}).get('anim_ranged'))
             unchanged = (ability.get('name') == source['name'] and ability.get('desc') == source['desc'] and custom_color == source['color']
-                         and ability.get('icon') == source['icon'] and ability.get('atlas') == source['atlas'])
+                         and ability.get('icon') == source['icon'] and ability.get('atlas') == source['atlas'] and same_anim)
             if unchanged:
                 ids.append((source['id'], typ))
                 continue
@@ -353,10 +397,10 @@ def build_skills(project, log):
         existing = read_row('SkillBalancingData', name_id)
         if existing:
             row = dict(existing)
+        elif ability.get('row'):
+            row = dict(ability['row'])  # came from an exported combatant, or an earlier copy of this ability
         elif source:
             row = dict(read_row('SkillBalancingData', source['id']))
-        elif ability.get('row'):
-            row = dict(ability['row'])  # came from an exported combatant
         else:
             row = {'AssetId': '', 'SkillParameters': {}, 'SkillTemplateType': '', 'EffectDuration': 0, 'EffectType': 'Curse', 'TargetingBehavior': 'None',
                    'TargetAlreadyAffectedTargets': True, 'TargetSelfPossible': False, 'EffectIconAtlasId': '', 'EffectIconAssetId': '', 'TargetCulling': None}
@@ -369,6 +413,15 @@ def build_skills(project, log):
         params.pop('ui_color_rgb', None)
         if custom_color != default_color:
             params['ui_color_rgb'] = float(int(custom_color, 16))
+        for f, param in NAMED_PARAMS.items():
+            if f in ability:
+                params.pop(param, None)
+                if ability[f] and (f != 'projectile' or (typ == 'Attack' and ability.get('ranged') != 'melee')):
+                    params[param] = _named_param(ability, f)
+        if 'ranged' in ability:
+            params.pop('anim_ranged', None)
+            if typ == 'Attack' and _ranged_param(ability) is not None:
+                params['anim_ranged'] = _ranged_param(ability)
         row.update({'NameId': name_id, 'LocaId': name_id, 'SkillParameters': params, 'TargetType': typ, 'IconAssetId': ability.get('icon', ''), 'IconAtlasId': ability.get('atlas', '')})
         ordered = {k: row[k] for k in ('NameId', 'AssetId', 'LocaId', 'SkillParameters', 'SkillTemplateType', 'EffectDuration', 'TargetType', 'EffectType', 'TargetingBehavior',
                                        'TargetAlreadyAffectedTargets', 'TargetSelfPossible', 'IconAssetId', 'IconAtlasId', 'EffectIconAtlasId', 'EffectIconAssetId', 'TargetCulling') if k in row}
@@ -433,6 +486,18 @@ def _log_size():
     return os.path.getsize(EDITOR_LOG) if os.path.exists(EDITOR_LOG) else 0
 
 
+def _rejection(since):
+    """What Unity said if it refused a JSON file after this log position, else None."""
+    with open(EDITOR_LOG, 'rb') as f:
+        f.seek(since)
+        text = f.read().decode('utf-8', 'replace')
+    failed = re.search(r'Failed to reimport (?:[\w]+\.)*(\w+)! JSON is invalid!', text)
+    if not failed:
+        return None
+    reason = re.search(r'^\w*Exception: (.*)$', text[failed.end():], re.M)
+    return '%s: %s' % (failed.group(1), reason.group(1).strip() if reason else 'see the Unity console')
+
+
 def _wait_log(pattern, since, timeout):
     end = time.time() + timeout
     while time.time() < end:
@@ -441,6 +506,10 @@ def _wait_log(pattern, since, timeout):
                 f.seek(since)
                 if re.search(pattern.encode(), f.read()):
                     return True
+            rejected = _rejection(since)
+            if rejected:
+                time.sleep(0.5)  # Unity logs the reason just after the failure line
+                raise RuntimeError('Unity refused the balancing data, so the game still has the old version. Click through the dialog in Unity. ' + _rejection(since))
         time.sleep(0.5)
     return False
 
@@ -524,7 +593,7 @@ def validate(project):
         problems.append('The combatant id must use lowercase letters, digits and underscores')
     if not project.get('name', '').strip():
         problems.append('The combatant needs a name')
-    if not any(a['type'] in ('Attack', 'Support') for a in project.get('abilities', [])):
+    if project.get('kind') != 'existing' and not any(a['type'] in ('Attack', 'Support') for a in project.get('abilities', [])):
         problems.append('The combatant needs at least one attack or support ability, or it can\'t act in battle')
     rig = json.loads(g.rig_json(project['rig']))
     known = {s['key'] for s in rig['slots']}
@@ -558,10 +627,23 @@ def publish(project, log):
     pid = 'pig_forge_' + project['id']
     equipment, class_row, inventory = build_items(project, entries)
     stats = project.get('stats') or {}
+    keep = project.get('keepSkills') or []
+    actives = [i for i, t in ids if t != 'Passive'] + [k['id'] for k in keep if not k['passive']]
+    passives = [i for i, t in ids if t == 'Passive'] + [k['id'] for k in keep if k['passive']]
+    combos = combos_for(ids)
+    if project.get('combos'):
+        # A duplicate keeps the turn plan of the pig it was copied from while its abilities still match.
+        import existing
+        mapping = {a['source']: i for a, (i, _) in zip(project['abilities'], ids) if a.get('source')}
+        planned = {i for c in project['combos'] for i in c.get('ComboChain', [])}
+        added = [i for a, (i, t) in zip(project['abilities'], ids) if not a.get('source') and t != 'Passive']
+        kept = existing.remap_combos(project['combos'], mapping, planned - set(mapping), added, actives)
+        if kept is not None:
+            combos = kept
     pig = {'NameId': pid, 'AssetId': project['rig'], 'LocaId': pid, 'DefaultInventoryNameId': inventory['NameId'], 'BaseHealth': int(stats.get('hp', 100)), 'BaseAttack': int(stats.get('attack', 10)),
-           'PerLevelHealth': float(stats.get('perLevelHealth', 0)), 'PerLevelAttack': float(stats.get('perLevelAttack', 0)), 'SkillNameIds': [i for i, t in ids if t != 'Passive'], 'SkillCombos': combos_for(ids), 'SizeType': stats.get('sizeType', 'Medium'),
+           'PerLevelHealth': int(stats.get('perLevelHealth', 0)), 'PerLevelAttack': int(stats.get('perLevelAttack', 0)), 'SkillNameIds': actives, 'SkillCombos': combos, 'SizeType': stats.get('sizeType', 'Medium'),
            'Faction': 'Pigs', 'LootTableDefeatBonus': stats.get('loot') or {}, 'SizeScale': float(stats.get('sizeScale', 1.0)), 'PigStrength': int(stats.get('strength', 5)),
-           'PassiveSkillNameId': ','.join(i for i, t in ids if t == 'Passive'), 'IgnoreDifficulty': False}
+           'PassiveSkillNameId': ','.join(passives), 'IgnoreDifficulty': False}
     texts[pid + '_name'] = project['name'].strip()
 
     stages = [('SkillBalancingData', skill_rows), ('EquipmentBalancingData', equipment), ('ClassItemBalancingData', [class_row]),
@@ -583,6 +665,132 @@ def publish(project, log):
     return project
 
 
+# ------------------------------------------------------------------------------ removing an uploaded combatant
+
+def remove_row(text, name_id):
+    """text without the row with this NameId (the rest byte-identical); unchanged if there is none."""
+    start = re.search(r'^  \{\n    "NameId": %s,' % re.escape(json.dumps(name_id)), text, re.M)
+    if not start:
+        return text
+    begin, end = start.start(), text.index('\n  }', start.start()) + 4
+    if text.startswith(',\n', end):  # rows follow: drop it with its comma
+        new = text[:begin] + text[end + 2:]
+    elif text[:begin].endswith(',\n'):  # the last row: the one before it loses its comma
+        new = text[:begin - 2] + text[end:]
+    else:  # the only row
+        new = text[:begin] + text[end + 1:]
+    json.loads(new)
+    return new
+
+
+def remove_loca(keys):
+    path = os.path.join(g.BALANCING, 'Loca', 'live_English.json')
+    text = open(path, encoding='utf-8', newline='').read()
+    for key in keys:
+        m = re.search(r'^    %s: .*?(,?)\n' % re.escape(json.dumps(key, ensure_ascii=False)), text, re.M)
+        if not m:
+            continue
+        text = text[:m.start()] + text[m.end():]
+        if not m.group(1):  # it was the last entry: the one before it loses its comma
+            before = text[:m.start()]
+            if before.endswith(',\n'):
+                text = before[:-2] + '\n' + text[m.start():]
+    json.loads(text)
+    return path, text
+
+
+def references(name_ids, skip):
+    """{NameId: [file, ...]} for the ids that some balancing data still names, outside the rows in skip."""
+    found = {}
+    files = glob.glob(os.path.join(g.BALANCING, '*.json')) + glob.glob(os.path.join(g.BALANCING, 'EventBalancingData', '*.json'))
+    for path in files:
+        try:
+            rows = json.load(open(path, encoding='utf-8'))
+        except (OSError, ValueError):
+            continue
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict) or row.get('NameId') in skip:
+                continue
+            blob = json.dumps(row, ensure_ascii=False)
+            for name_id in name_ids:
+                if re.search(r'(?<![\w])%s(?![\w])' % re.escape(name_id), blob):
+                    found.setdefault(name_id, []).append('%s (%s)' % (os.path.basename(path)[:-5], row.get('NameId')))
+    return found
+
+
+def unpublish(project, log):
+    """Takes an uploaded Forge combatant out of the game: its pig, inventory, items, own abilities, text and atlas.
+    Refuses when other balancing data (a battle table, another pig) still uses any of it."""
+    if project.get('kind') == 'existing':
+        raise ValueError('The game\'s own combatants can\'t be deleted here')
+    art = art_id(project)
+    pid = 'pig_forge_' + project['id']
+    pig = read_row('PigBalancingData', pid)
+    inventory = (pig or {}).get('DefaultInventoryNameId') or pid + '_01'
+    items = [pid + '_mainhand', pid + '_offhand', pid + '_headgear']
+    skills = [a['nameId'] for a in project.get('abilities', []) if a.get('nameId') and read_row('SkillBalancingData', a['nameId'])]
+    own = {pid, inventory, *items, *skills}
+    used = references([pid, inventory, *items], own)
+    if used:
+        raise ValueError('Not removed: the game still uses it. ' + '; '.join('%s in %s' % (k, ', '.join(v[:4])) for k, v in used.items()))
+    # Abilities another combatant also uses stay.
+    shared = references(skills, own)
+    for sid in shared:
+        log('Keeping ability %s: %s uses it too' % (sid, ', '.join(shared[sid][:3])))
+    skills = [sid for sid in skills if sid not in shared]
+
+    writes = []
+    for file_name, ids in (('SkillBalancingData', skills), ('EquipmentBalancingData', items[:2]), ('ClassItemBalancingData', items[2:]),
+                           ('InventoryBalancingData', [inventory]), ('PigBalancingData', [pid])):
+        path = os.path.join(g.BALANCING, file_name + '.json')
+        text = open(path, encoding='utf-8', newline='').read()
+        new = text
+        for name_id in ids:
+            new = remove_row(new, name_id)
+        if new != text:
+            writes.append((file_name, path, new))
+    texts = [pid + '_name'] + [sid + suffix for sid in skills for suffix in ('_name', '_desc')]
+    loca_path, loca_text = remove_loca(texts)
+    writes.append(('Loca', loca_path, loca_text))
+
+    # The atlas: off the rig prefab first, then its files.
+    guids = project.get('guids') or {}
+    rig_id = project.get('publishedRig') or project.get('rig')
+    if guids.get('atlas:HR') and rig_id:
+        try:
+            rig = g.rig_info(rig_id)
+            changed = _edit_prefab_atlases(rig['path'], guids['atlas:HR'], False)
+            if rig['low'] and guids.get('atlas:LR'):
+                changed = _edit_prefab_atlases(rig['low'], guids['atlas:LR'], False) or changed
+            if changed:
+                log('Took the atlas off the %s prefab' % rig_id)
+        except StopIteration:
+            pass
+    atlas = 'Forge_%s_Atlas' % art
+    removed = 0
+    for folder, names in ((os.path.join(ASSETS, 'MonoBehaviour'), (atlas + '.asset', atlas + '_low.asset')),
+                          (os.path.join(ASSETS, 'Material'), (atlas + '.mat', atlas + '_0.mat')),
+                          (os.path.join(ASSETS, 'Texture2D'), (atlas + '_HR.png', atlas + '_LR.png'))):
+        for name in names:
+            for path in (os.path.join(folder, name), os.path.join(folder, name + '.meta')):
+                if os.path.exists(path):
+                    os.remove(path)
+                    removed += 1
+    baked = os.path.join(BAKED, art)
+    if os.path.isdir(baked):
+        shutil.rmtree(baked)
+        removed += 1
+    if os.path.exists(baked + '.meta'):
+        os.remove(baked + '.meta')
+    if removed:
+        log('Deleted the atlas and baked art (%s)' % atlas)
+    log('Removing %s, its inventory, items, %d abilit%s and its text' % (pid, len(skills), 'y' if len(skills) == 1 else 'ies'))
+    encode(writes, log)
+    log('Removed from the game.')
+
+
 # ------------------------------------------------------------------------------ abilities written by Claude
 
 def claude_binary():
@@ -602,13 +810,13 @@ Type: {ability['type']}
 Display name: {ability.get('name', '')}
 Current tooltip text: {ability.get('desc', '')}
 Starts from existing skill: {ability.get('source') or 'none'} (if set, copy that row under the new NameId; never change the original)
-Combatant: pig_forge_{project['id']} "{project.get('name', '')}" on the {project['rig']} rig, {(project.get('stats') or {}).get('hp', '?')} HP, {(project.get('stats') or {}).get('attack', '?')} attack.
+Combatant: {combatant_id(project)} "{project.get('name', '')}" on the {project['rig']} rig, {(project.get('stats') or {}).get('hp', '?')} HP, {(project.get('stats') or {}).get('attack', '?')} attack.
 
 What the ability must do, in the designer's words:
 {ability.get('design', '').strip()}
 
 Do this:
-1. In Assets/BalancingData/SkillBalancingData.json, add or update the row with NameId {name_id}. Prefer an existing SkillTemplateType in Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/ when one fits; otherwise write a new template there, matching the conventions of its neighbours. Keep LocaId, IconAssetId, IconAtlasId and any ui_color_rgb parameter as they are if the row exists; set LocaId to {name_id} and TargetType to {ability['type']} if not.
+1. In Assets/BalancingData/SkillBalancingData.json, add or update the row with NameId {name_id}. Prefer an existing SkillTemplateType in Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/ when one fits; otherwise write a new template there, matching the conventions of its neighbours. Keep LocaId, IconAssetId, IconAtlasId and any ui_color_rgb, anim_clip, anim_projectile or anim_ranged parameter as they are if the row exists; set LocaId to {name_id} and TargetType to {ability['type']} if not.
 2. Set "{name_id}_desc" in Assets/BalancingData/Loca/live_English.json so the numbers use the template's {{value_N}} placeholders and the game's [ff0000]number[-] style. Keep the designer's wording otherwise. Also set "{name_id}_name".
    The tooltip must show the real number the ability uses. Damage is the computed amount, never a percent: "Deals [ff0000]{{value_1}}[-] damage", where the template's GetLocalizedDescription adds {{value_1}} as Convert.ToInt32(damage_in_percent / 100f * invoker.ModifiedAttack). The same goes for healing or any other amount based on a stat. Keep % only for things that really are percentages, such as a chance.
 3. If you wrote or changed C#, keep the file's CRLF line endings and compile-check it.

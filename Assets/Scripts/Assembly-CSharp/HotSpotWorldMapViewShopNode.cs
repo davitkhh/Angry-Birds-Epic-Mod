@@ -61,7 +61,7 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 
 	private bool HasMcCoolLeft()
 	{
-		return base.Model != null && IsMerchantShop() && McCoolDeparture.HasLeft();
+		return base.Model != null && MerchantStall.IsMcCoolMerchant(this) && McCoolDeparture.HasLeft();
 	}
 
 	public override bool IsCompleted()
@@ -256,6 +256,17 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 	{
 		var wasHidden = base.Model.Data.UnlockState < HotspotUnlockState.Resolved;
 		yield return StartCoroutine(base.ActivateFollowUpStagesAsync(parentHotSpot, activateTo, instant));
+		// Resource nodes after a merchant appear as soon as it is unlocked, even if the base walk stopped here.
+		if (base.Model.Data.UnlockState >= HotspotUnlockState.Active)
+		{
+			foreach (var resource in m_outgoingHotSpots.OfType<HotSpotWorldMapViewResource>())
+			{
+				if (resource != parentHotSpot && resource.Model != null && resource.Model.Data.UnlockState <= HotspotUnlockState.Hidden)
+				{
+					yield return StartCoroutine(resource.ActivateFollowUpStagesAsync(this, activateTo, instant));
+				}
+			}
+		}
 		if (wasHidden && base.Model.Data.UnlockState == HotspotUnlockState.Resolved)
 		{
 			PlayActiveAnimation();

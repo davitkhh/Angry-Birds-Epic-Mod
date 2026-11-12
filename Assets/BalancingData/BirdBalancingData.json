@@ -32,7 +32,7 @@
     "AssetId": "WhiteBird",
     "LocaId": "bird_white",
     "DefaultInventoryNameId": "white_bird_start",
-    "BaseHealth": 28,
+    "BaseHealth": 26,
     "BaseAttack": 7,
     "PerLevelHealth": 20,
     "PerLevelAttack": 20,
