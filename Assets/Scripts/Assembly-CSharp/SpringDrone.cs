@@ -49,8 +49,9 @@ public class SpringDrone : MonoBehaviour
 	// Coils touch: the spring can't get shorter.
 	public float SolidLength = 20f;
 
-	// How far the pod's weight compresses the spring at rest (sets stiffness: k/m = g / StaticSag).
-	public float StaticSag = 12f;
+	// How far the pod's weight compresses the spring at rest (sets stiffness: k/m = g / StaticSag). 6 = twice as stiff
+	// as the first spring (12): shorter, snappier stances.
+	public float StaticSag = 6f;
 
 	public float DampingRatio = 0.07f;
 
@@ -81,6 +82,20 @@ public class SpringDrone : MonoBehaviour
 
 	// Spring mount on the pod, in Body bone space (the flat bottom of the pod's art).
 	public Vector2 MountPoint = new Vector2(0f, -40f);
+
+	// The coil starts this far up inside the pod's flat bottom, so its top end is hidden under the pod (the spring
+	// draws behind the rig). Only the drawing; the spring's physical length is from the mount.
+	public float TuckDepth = 9f;
+
+	public enum SpringFinish
+	{
+		// The drone's own lavender steel.
+		Lavender = 0,
+		// Shiny grey metal, from the game's knight steel.
+		Steel = 1
+	}
+
+	public SpringFinish Finish;
 
 	// Spring draws behind the rig (larger z is further back).
 	public float DepthBehind = 2f;
@@ -196,6 +211,16 @@ public class SpringDrone : MonoBehaviour
 
 	private Mesh m_Mesh;
 
+	// The shadow, redrawn behind the spring: the rig's own shadow is part of the rig mesh, which draws in front of the
+	// spring, so it's hidden and this copy (same atlas sprite, size and place) lies on the ground under the spring.
+	private Mesh m_ShadowMesh;
+
+	private Vector2 m_ShadowSize;
+
+	private Rect m_ShadowUV;
+
+	private readonly Vector3[] m_ShadowCorners = new Vector3[4];
+
 	private Material m_Material;
 
 	private readonly List<Vector3> m_Vertices = new List<Vector3>();
@@ -235,16 +260,24 @@ public class SpringDrone : MonoBehaviour
 
 	private static readonly Band[] BackWire = { new Band(1f, 0f, 85, 69, 101), new Band(0.72f, 0f, 60, 56, 98), new Band(0.34f, 0.1f, 89, 98, 146) };
 
-	// The mounting pad under the pod, in the same steel.
-	private static readonly Band[] PlateBands =
+	// Shiny grey metal, the game's steel (Red's Knight helmet ramp: teal-navy outline 16,33,41 up to 144,168,168; white
+	// glint as on the Royal Guard helmet). Chrome look: a bright top with a hard glint, a dark core line, and the
+	// ground's light reflected back along the bottom edge.
+	private static readonly Band[] SteelFrontWire =
 	{
-		new Band(1f, 0f, 85, 69, 101), new Band(0.6f, -0.05f, 89, 98, 146), new Band(0.45f, 0.1f, 127, 127, 169), new Band(0.18f, 0.22f, 159, 159, 193)
+		new Band(1f, 0f, 16, 33, 41), new Band(0.78f, -0.03f, 72, 90, 92), new Band(0.6f, 0.05f, 144, 168, 168), new Band(0.14f, -0.13f, 64, 84, 88),
+		new Band(0.26f, 0.17f, 200, 216, 216), new Band(0.1f, 0.24f, 248, 248, 248)
 	};
+
+	private static readonly Band[] SteelBackWire = { new Band(1f, 0f, 16, 33, 41), new Band(0.72f, 0f, 48, 66, 70), new Band(0.34f, 0.1f, 96, 116, 118) };
 
 	// Combatant Forge pigs pick the spring as a variant of the drone: their class item is named Forge_<id>_Spring.
 	private const string ForgeVariantPrefix = "Forge_";
 
 	private const string ForgeVariantSuffix = "_Spring";
+
+	// Forge_<id>_Springsteel: the same drone with the shiny grey spring.
+	private const string ForgeSteelSuffix = "_Springsteel";
 
 	public static bool IsSpringDrone(ICharacter model)
 	{
@@ -259,7 +292,19 @@ public class SpringDrone : MonoBehaviour
 	private static bool IsSpringItem(IInventoryItemGameData item)
 	{
 		var name = item == null ? null : item.ItemAssetName;
-		return !string.IsNullOrEmpty(name) && name.StartsWith(ForgeVariantPrefix) && name.EndsWith(ForgeVariantSuffix);
+		return !string.IsNullOrEmpty(name) && name.StartsWith(ForgeVariantPrefix) && (name.EndsWith(ForgeVariantSuffix) || name.EndsWith(ForgeSteelSuffix));
+	}
+
+	private static bool IsSteelItem(IInventoryItemGameData item)
+	{
+		var name = item == null ? null : item.ItemAssetName;
+		return !string.IsNullOrEmpty(name) && name.StartsWith(ForgeVariantPrefix) && name.EndsWith(ForgeSteelSuffix);
+	}
+
+	public static SpringFinish FinishOf(ICharacter model)
+	{
+		var pig = model as PigGameData;
+		return pig != null && (IsSteelItem(pig.ClassItem) || IsSteelItem(pig.ClassSkin)) ? SpringFinish.Steel : SpringFinish.Lavender;
 	}
 
 	public static SpringDrone Attach(CharacterAssetController asset, ICharacter model)
@@ -268,7 +313,12 @@ public class SpringDrone : MonoBehaviour
 		{
 			return null;
 		}
-		return Attach(asset.m_BoneAnimation);
+		var drone = Attach(asset.m_BoneAnimation);
+		if (drone != null)
+		{
+			drone.Finish = FinishOf(model);
+		}
+		return drone;
 	}
 
 	public static SpringDrone Attach(BoneAnimation bones)
@@ -380,6 +430,71 @@ public class SpringDrone : MonoBehaviour
 		renderer.sharedMaterial = m_Material;
 		renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 		renderer.receiveShadows = false;
+		CreateShadow(bones, root);
+	}
+
+	private void CreateShadow(BoneAnimation bones, Transform root)
+	{
+		if (m_ShadowSprite == null || bones.textureAtlases == null)
+		{
+			return;
+		}
+		foreach (var atlas in bones.textureAtlases)
+		{
+			var index = atlas == null ? -1 : atlas.textureNames.IndexOf("Shadow");
+			if (index < 0 || atlas.material == null || index >= atlas.uvs.Count || index >= atlas.textureSizes.Count)
+			{
+				continue;
+			}
+			m_ShadowUV = atlas.uvs[index];
+			m_ShadowSize = atlas.textureSizes[index];
+			var shadow = new GameObject("SpringShadow");
+			shadow.layer = bones.gameObject.layer;
+			shadow.transform.SetParent(root, false);
+			// Behind the spring (larger z is further back).
+			shadow.transform.localPosition = new Vector3(0f, 0f, DepthBehind + 1f);
+			m_ShadowMesh = new Mesh { name = "SpringShadow" };
+			m_ShadowMesh.MarkDynamic();
+			m_ShadowMesh.vertices = new Vector3[4];
+			m_ShadowMesh.uv = new[]
+			{
+				new Vector2(m_ShadowUV.xMin, m_ShadowUV.yMin), new Vector2(m_ShadowUV.xMax, m_ShadowUV.yMin),
+				new Vector2(m_ShadowUV.xMax, m_ShadowUV.yMax), new Vector2(m_ShadowUV.xMin, m_ShadowUV.yMax)
+			};
+			m_ShadowMesh.triangles = new[] { 0, 1, 2, 0, 2, 3 };
+			shadow.AddComponent<MeshFilter>().sharedMesh = m_ShadowMesh;
+			var renderer = shadow.AddComponent<MeshRenderer>();
+			renderer.sharedMaterial = atlas.material;
+			renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+			renderer.receiveShadows = false;
+			return;
+		}
+	}
+
+	// Lays the copy where the rig's shadow sprite is, at the scale it would have, and hides the rig's one.
+	private void PlaceShadow(Vector3 scale)
+	{
+		if (m_ShadowMesh == null)
+		{
+			m_ShadowSprite.localScale = scale;
+			m_ShadowScaleWritten = scale;
+			return;
+		}
+		m_ShadowSprite.localScale = Vector3.zero;
+		m_ShadowScaleWritten = Vector3.zero;
+		var parent = m_ShadowSprite.parent;
+		var centre = m_Root.InverseTransformPoint(m_ShadowSprite.position);
+		var across = m_Root.InverseTransformVector(parent.TransformVector(m_ShadowSprite.localRotation * new Vector3(m_ShadowSize.x * 0.5f * scale.x, 0f, 0f)));
+		var up = m_Root.InverseTransformVector(parent.TransformVector(m_ShadowSprite.localRotation * new Vector3(0f, m_ShadowSize.y * 0.5f * scale.y, 0f)));
+		centre.z = 0f;
+		across.z = 0f;
+		up.z = 0f;
+		m_ShadowCorners[0] = centre - across - up;
+		m_ShadowCorners[1] = centre + across - up;
+		m_ShadowCorners[2] = centre + across + up;
+		m_ShadowCorners[3] = centre - across + up;
+		m_ShadowMesh.vertices = m_ShadowCorners;
+		m_ShadowMesh.RecalculateBounds();
 	}
 
 	private float Gravity
@@ -582,6 +697,14 @@ public class SpringDrone : MonoBehaviour
 				m_InStance = false;
 				m_StanceTime = Mathf.Clamp(m_StanceClock, 0.08f, 1f);
 				m_Swing = -lean;
+				// The push is over: whatever speed change this stance was making is done (a stiff spring can leave
+				// before the planned half stance has passed).
+				if (m_RampLeft > 0f)
+				{
+					m_Ground += m_Settle * (s * m_RampLeft);
+					m_GroundVelocity = m_VelocityOut;
+					m_RampLeft = 0f;
+				}
 			}
 			else
 			{
@@ -602,9 +725,9 @@ public class SpringDrone : MonoBehaviour
 		}
 		else
 		{
-			if (m_Extension > 0f && m_Height > rest)
+			if (m_Extension != 0f && m_Height > RestLength + Mathf.Max(0f, m_Extension))
 			{
-				// In the air the actuator retracts.
+				// In the air the actuator goes back to neutral.
 				m_Extension = 0f;
 			}
 			// Swing the foot to the neutral point: half a stance's travel ahead, as far as the spring can lean.
@@ -674,13 +797,13 @@ public class SpringDrone : MonoBehaviour
 		// Energy per unit mass at the top of the hop: g * (rest length + clearance); now: height, upward speed, spring.
 		var g = Gravity;
 		var k = Stiffness;
-		var need = g * (RestLength + hop + m_HopBias) - g * m_Height - 0.5f * m_Velocity * m_Velocity;
-		if (need > 0f)
-		{
-			var compressed = Mathf.Sqrt(2f * need / k);
-			var current = RestLength + m_Extension - length;
-			m_Extension = Mathf.Clamp(m_Extension + Mathf.Max(0f, compressed - current), 0f, MaxExtension);
-		}
+		// A leaning spring spends part of its push sideways: give it that much more.
+		var leanOut = Mathf.Asin(Mathf.Min(0.9f, v1.magnitude * m_StanceTime * 0.5f / RestLength));
+		var need = (g * (RestLength + hop + m_HopBias) - g * m_Height - 0.5f * m_Velocity * m_Velocity) / Mathf.Max(0.5f, Mathf.Cos(leanOut));
+		var compressed = Mathf.Sqrt(2f * Mathf.Max(0f, need) / k);
+		var current = RestLength + m_Extension - length;
+		// The actuator can also give way (shorten the seat) to soak up a landing that carries more than the next hop needs.
+		m_Extension = Mathf.Clamp(m_Extension + (compressed - current), -0.5f * MaxExtension, MaxExtension);
 	}
 
 	private float HoverWeight()
@@ -766,9 +889,7 @@ public class SpringDrone : MonoBehaviour
 			var restingLift = RestLength - StaticSag - m_RestHeight;
 			var rise = (m_Bottom != null ? m_Bottom.localPosition.y - m_BottomRestY - away.y : m_Height - m_RestHeight) - restingLift;
 			var size = Mathf.Clamp(1f - ShadowShrinkPerUnit * rise, MinShadow, MaxShadow);
-			var scale = new Vector3(shape.x * size, shape.y * size, shape.z);
-			m_ShadowSprite.localScale = scale;
-			m_ShadowScaleWritten = scale;
+			PlaceShadow(new Vector3(shape.x * size, shape.y * size, shape.z));
 		}
 		m_HasWritten = true;
 		foreach (var bone in m_Hidden)
@@ -823,16 +944,15 @@ public class SpringDrone : MonoBehaviour
 		{
 			var t = (float)i / count;
 			var angle = t * turns * Mathf.PI * 2f;
-			var along = Mathf.Lerp(end, Mathf.Max(end, ring), Mathf.Min(1f, t / pitched));
+			var along = Mathf.Lerp(-TuckDepth, Mathf.Max(end, ring), Mathf.Min(1f, t / pitched));
 			var point = top + axis * along + side * (Mathf.Cos(angle) * CoilRadius) + axis * (Mathf.Sin(angle) * CoilRadius * 0.22f);
 			m_Helix.Add(point);
 			m_HelixDepth.Add(Mathf.Sin(angle));
 		}
 		// Back half first so the front half draws over it.
-		AddHelix(false, BackWire);
-		AddHelix(true, FrontWire);
-		// Mounting pad: where the spring meets the pod.
-		AddBar(top, axis, side, CoilRadius + 6f, 5f, PlateBands);
+		var steel = Finish == SpringFinish.Steel;
+		AddHelix(false, steel ? SteelBackWire : BackWire);
+		AddHelix(true, steel ? SteelFrontWire : FrontWire);
 
 		m_Mesh.Clear();
 		m_Mesh.SetVertices(m_Vertices);
@@ -841,57 +961,92 @@ public class SpringDrone : MonoBehaviour
 		m_Mesh.RecalculateBounds();
 	}
 
+	private readonly List<int> m_RunStarts = new List<int>();
+
+	private readonly List<int> m_RunEnds = new List<int>();
+
 	private void AddHelix(bool front, Band[] bands)
 	{
-		// Band by band over the whole half, so a segment's inner bands cover its neighbour's outline at the joints.
+		// The half's continuous runs of wire (between the coil's sides).
+		m_RunStarts.Clear();
+		m_RunEnds.Clear();
+		var open = -1;
+		for (var i = 0; i < m_Helix.Count - 1; i++)
+		{
+			var depth = (m_HelixDepth[i] + m_HelixDepth[i + 1]) * 0.5f;
+			if (depth >= 0f == front)
+			{
+				if (open < 0)
+				{
+					open = i;
+				}
+			}
+			else if (open >= 0)
+			{
+				m_RunStarts.Add(open);
+				m_RunEnds.Add(i);
+				open = -1;
+			}
+		}
+		if (open >= 0)
+		{
+			m_RunStarts.Add(open);
+			m_RunEnds.Add(m_Helix.Count - 1);
+		}
+		// Band by band over the whole half, so inner bands cover the neighbouring run's outline where runs meet.
 		foreach (var band in bands)
 		{
-			for (var i = 0; i < m_Helix.Count - 1; i++)
+			for (var r = 0; r < m_RunStarts.Count; r++)
 			{
-				var depth = (m_HelixDepth[i] + m_HelixDepth[i + 1]) * 0.5f;
-				if (depth >= 0f != front)
-				{
-					continue;
-				}
-				AddSegment(m_Helix[i], m_Helix[i + 1], WireWidth, band);
+				AddStrip(m_RunStarts[r], m_RunEnds[r], WireWidth, band);
 			}
 		}
 	}
 
-	private void AddSegment(Vector3 a, Vector3 b, float thickness, Band band)
+	// The side of the wire facing up gets the light, whichever way the wire runs.
+	private static Vector3 UpNormal(Vector3 a, Vector3 b)
 	{
-		var direction = b - a;
-		var length = direction.magnitude;
-		if (length < 0.0001f)
+		var direction = (b - a).normalized;
+		var up = new Vector3(-direction.y, direction.x, 0f);
+		return up.y < 0f ? -up : up;
+	}
+
+	// One continuous ribbon along helix points first..last: mitred at the joints (no spikes), capped at both ends.
+	private void AddStrip(int first, int last, float thickness, Band band)
+	{
+		if (last <= first)
 		{
 			return;
 		}
-		direction /= length;
-		// The side of the wire facing up gets the light, whichever way the wire runs.
-		var up = new Vector3(-direction.y, direction.x, 0f);
-		if (up.y < 0f)
-		{
-			up = -up;
-		}
 		var width = thickness * band.Width;
-		var shift = up * (thickness * band.Offset);
-		// Overlap the ends by half a width so the joints stay round enough.
-		var extend = direction * (width * 0.5f);
-		var normal = up * (width * 0.5f);
-		AddQuad(a - extend - normal + shift, a - extend + normal + shift, b + extend + normal + shift, b + extend - normal + shift, band.Color);
-	}
-
-	private void AddBar(Vector3 center, Vector3 axis, Vector3 side, float halfLength, float halfThickness, Band[] bands)
-	{
-		// Bands from the outline inward; up is toward the pod.
-		foreach (var band in bands)
+		var previousLow = Vector3.zero;
+		var previousHigh = Vector3.zero;
+		for (var j = first; j <= last; j++)
 		{
-			var half = halfLength - (1f - band.Width) * halfThickness;
-			var thick = halfThickness * band.Width;
-			var c = center - axis * (2f * halfThickness * band.Offset);
-			var w = side * half;
-			var h = axis * thick;
-			AddQuad(c - w - h, c + w - h, c + w + h, c - w + h, band.Color);
+			var before = j > first ? UpNormal(m_Helix[j - 1], m_Helix[j]) : Vector3.zero;
+			var after = j < last ? UpNormal(m_Helix[j], m_Helix[j + 1]) : Vector3.zero;
+			var normal = (before + after).normalized;
+			var reference = j > first ? before : after;
+			var miter = 1f / Mathf.Max(0.5f, Vector3.Dot(normal, reference));
+			var point = m_Helix[j];
+			if (j == first)
+			{
+				point -= (m_Helix[j + 1] - m_Helix[j]).normalized * (width * 0.5f);
+			}
+			else if (j == last)
+			{
+				point += (m_Helix[j] - m_Helix[j - 1]).normalized * (width * 0.5f);
+			}
+			var centre = point + normal * (thickness * band.Offset);
+			var half = normal * (width * 0.5f * miter);
+			var low = centre - half;
+			var high = centre + half;
+			if (j > first)
+			{
+				AddQuad(previousLow, previousHigh, high, low, band.Color);
+			}
+			previousLow = low;
+			previousHigh = high;
 		}
 	}
 
@@ -928,6 +1083,10 @@ public class SpringDrone : MonoBehaviour
 		if (m_Material != null)
 		{
 			Destroy(m_Material);
+		}
+		if (m_ShadowMesh != null)
+		{
+			Destroy(m_ShadowMesh);
 		}
 	}
 }

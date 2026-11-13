@@ -41,11 +41,31 @@
      "rot": 0,
      "sx": 1,
      "sy": 1,
-     "shear": 0
+     "shear": 0,
+     "hidden": true
+    },
+    {
+     "uid": "jufurfio",
+     "src": "upload:Pigs/Headgear/Headgear_Paper.png",
+     "name": "Headgear_Paper",
+     "item": "Headgear_Paper",
+     "w": 114,
+     "h": 222,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": -3.200766128181585,
+     "ty": 120.8170352866087,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "hidden": false
     }
    ],
    "hidden": false,
-   "active": "3wfx0sri"
+   "active": "jufurfio"
   },
   "Headgear": {
    "layers": [
@@ -67,29 +87,10 @@
      "sy": 1.7980999866623801,
      "shear": 0,
      "pair": "0wr395xb"
-    },
-    {
-     "uid": "xx4072zq",
-     "src": "8c498735e058742438cc0f869bf1bf96:Headgear_Iceshaman",
-     "name": "Headgear_Iceshaman",
-     "item": "Headgear_Iceshaman",
-     "w": 256,
-     "h": 274,
-     "pivot": [
-      -0.15535714,
-      -0.10260688
-     ],
-     "tx": -52.27587441803456,
-     "ty": -16.985550413084027,
-     "rot": 0,
-     "sx": 1,
-     "sy": 1,
-     "shear": 0,
-     "hidden": true
     }
    ],
    "hidden": false,
-   "active": "xx4072zq"
+   "active": "6ml46kc0"
   },
   "MainHand": {
    "layers": [
@@ -182,7 +183,7 @@
     }
    ],
    "hidden": false,
-   "active": "zfsa96sk"
+   "active": "gbrv8j3s"
   },
   "Beard_Bottom": {
    "layers": [],

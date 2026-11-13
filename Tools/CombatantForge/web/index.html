@@ -9,18 +9,25 @@
 <body>
 <header id="topbar">
   <strong class="brand">Combatant Forge</strong>
+  <div class="tabs" id="modeTabs" role="tablist" aria-label="Section">
+    <button data-mode="combatant" class="on" role="tab">Combatants</button>
+    <button data-mode="projectile" role="tab">Projectiles</button>
+  </div>
   <div class="menu" id="fileMenu">
     <button id="fileBtn" aria-haspopup="true" aria-expanded="false" aria-controls="filePanel">File ▾</button>
     <div class="menuPanel" id="filePanel" role="menu" hidden>
-      <label>Combatant <select id="projectSelect"></select></label>
+      <label><span id="projectSelectLabel">Combatant</span> <select id="projectSelect"></select></label>
       <button id="newBtn" role="menuitem">New</button>
       <button id="existingBtn" role="menuitem" title="Show the game's own combatants in the left panel; press again for the sprites">View existing</button>
       <button id="importBtn" role="menuitem" title="Open a .forge file">Import</button>
       <button id="exportBtn" role="menuitem" title="Save this combatant and its art as a .forge file">Export</button>
+      <button id="duplicateBtn" role="menuitem" title="Make a new combatant that starts as a copy of this game combatant" hidden>Duplicate</button>
+      <button id="variantBtn" role="menuitem" title="Add a variant of this game combatant (like its bird3 or boss)" hidden>Add variant…</button>
       <button id="deleteBtn" role="menuitem" class="danger">Delete…</button>
     </div>
   </div>
   <input id="importInput" type="file" accept=".forge,application/zip" hidden>
+  <input id="projImportInput" type="file" accept=".forgeprojectile,application/json" hidden>
   <label class="grow">Name <input id="nameInput" placeholder="Shown in battle" maxlength="40"></label>
   <label>Id <input id="idInput" class="mono" placeholder="id" maxlength="40"></label>
   <span id="saveState" class="dim"></span>
@@ -59,26 +66,31 @@
   <div class="resizer" id="resizeLeft" role="separator" aria-orientation="vertical" aria-label="Resize the library"></div>
   <section id="stageWrap">
     <div class="toolbar">
-      <button id="baseBtn" title="Choose the base character"><img id="baseIcon" alt=""><span id="baseName"></span></button>
-      <span class="sep"></span>
-      <label>Animation <select id="clipSelect"></select></label>
-      <button id="playBtn" title="Play or pause (Space)">Pause</button>
-      <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Animation position">
-      <span id="frameLabel" class="mono dim"></span>
+      <button id="baseBtn" class="combatOnly" title="Choose the base character"><img id="baseIcon" alt=""><span id="baseName"></span></button>
+      <span class="sep combatOnly"></span>
+      <label class="combatOnly">Animation <select id="clipSelect"></select></label>
+      <button id="playBtn" class="combatOnly" title="Play or pause (Space)">Pause</button>
+      <input id="scrub" class="combatOnly" type="range" min="0" max="1000" value="0" aria-label="Animation position">
+      <span id="frameLabel" class="mono dim combatOnly"></span>
+      <span class="projOnly row" id="projTools">
+        <button id="fireBtn" class="primary" title="Fire the projectile from the launcher at the targets (Physics tab)">Fire</button>
+        <label class="check"><input type="checkbox" id="fireLoop" checked> Keep firing</label>
+        <span class="dim" id="projHint">Drag the launcher and the targets to aim</span>
+      </span>
     </div>
     <div class="toolbar sub">
       <label>Speed <select id="speedSelect"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
       <label class="check"><input type="checkbox" id="loopCheck" checked> Loop</label>
-      <label class="check"><input type="checkbox" id="showGear" checked> Show equipment</label>
-      <label class="check"><input type="checkbox" id="showFeatures" checked> Show swapped features</label>
-      <label class="check"><input type="checkbox" id="showSlots"> Slot labels</label>
+      <label class="check combatOnly"><input type="checkbox" id="showGear" checked> Show equipment</label>
+      <label class="check combatOnly"><input type="checkbox" id="showFeatures" checked> Show swapped features</label>
+      <label class="check combatOnly"><input type="checkbox" id="showSlots"> Slot labels</label>
       <span id="targetControls" class="row" hidden>
         <span class="sep"></span>
         <span class="dim">Targets</span>
         <button id="targetLess" class="iconBtn" aria-label="One target fewer">−</button>
         <span id="targetCount" class="mono"></span>
         <button id="targetMore" class="iconBtn" aria-label="One more target">+</button>
-        <label class="check" title="Draw the path of every projectile the attack you last played fires, and the damage it passes on"><input type="checkbox" id="showPaths"> Projectile paths</label>
+        <label class="check" title="Draw the path of every projectile (the attack you last played, or every fired component here)"><input type="checkbox" id="showPaths"> Projectile paths</label>
       </span>
       <span class="grow"></span>
       <button id="fitBtn">Fit</button>
@@ -88,12 +100,19 @@
 
   <div class="resizer" id="resizeRight" role="separator" aria-orientation="vertical" aria-label="Resize the slots and abilities panel"></div>
   <section id="side" class="panel">
+    <div id="variantNav" class="row combatOnly" hidden>
+      <button id="variantPrev" class="iconBtn" aria-label="Previous variant">◀</button>
+      <span id="variantLabel" class="grow"></span>
+      <button id="variantNext" class="iconBtn" aria-label="Next variant">▶</button>
+    </div>
     <div class="tabs" id="sideNav">
       <button data-tab="slots" class="on">Slots</button>
-      <button data-tab="abilities">Abilities</button>
-      <button data-tab="stats">Stats</button>
+      <button data-tab="abilities" class="combatOnly">Abilities</button>
+      <button data-tab="stats" class="combatOnly">Stats</button>
+      <button data-tab="pphysics" class="projOnly">Physics</button>
     </div>
     <div class="tab" id="tab-slots">
+      <div id="projComponents" class="projOnly"></div>
       <div id="inspector"></div>
       <div id="slotList"></div>
     </div>
@@ -113,6 +132,9 @@
       </div>
       <div id="abilityList"></div>
     </div>
+    <div class="tab" id="tab-pphysics" hidden>
+      <div id="physicsForm"></div>
+    </div>
     <div class="tab" id="tab-stats" hidden>
       <div id="statsForm"></div>
     </div>
@@ -127,5 +149,6 @@
   <pre id="logBody"></pre>
 </dialog>
 <script src="app.js"></script>
+<script src="projectiles.js"></script>
 </body>
 </html>

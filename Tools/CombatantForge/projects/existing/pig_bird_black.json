@@ -1,0 +1,424 @@
+{
+ "kind": "existing",
+ "id": "pig_bird_black",
+ "name": "Christopher",
+ "rig": "BlackBird",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "55c76ccbbdbfed04a808e27512f85dd4:Headgear_Corsair",
+     "name": "Headgear_Corsair",
+     "item": "Headgear_Corsair",
+     "w": 247,
+     "h": 199,
+     "pivot": [
+      0.147931,
+      -0.05847944
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "d1e2107382721344199b7a9ac576e0da:Headgear_Corsair_Back",
+     "name": "Headgear_Corsair_Back",
+     "item": "Headgear_Corsair",
+     "w": 138,
+     "h": 50,
+     "pivot": [
+      0.01071429,
+      0.0362395
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "d1e2107382721344199b7a9ac576e0da:MainHand_Black_Set_04",
+     "name": "MainHand_Black_Set_04",
+     "item": "MainHand_Black_Set_04",
+     "w": 246,
+     "h": 164,
+     "pivot": [
+      -0.3910714,
+      0.18883929
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "55c76ccbbdbfed04a808e27512f85dd4:OffHand_Black_Set_04",
+     "name": "OffHand_Black_Set_04",
+     "item": "OffHand_Black_Set_04",
+     "w": 136,
+     "h": 168,
+     "pivot": [
+      0.2517857,
+      -0.21033163
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_a0719",
+   "origin": "pig_attack_black_corsair",
+   "type": "Attack",
+   "source": "pig_attack_black_corsair",
+   "name": "Pummel",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "Pummel",
+   "params": {
+    "damage_in_percent": 110
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_604ae",
+   "origin": "pig_support_black_corsair",
+   "type": "Support",
+   "source": "pig_support_black_corsair",
+   "name": "Arrr!",
+   "desc": "All birds' attack power is increased by [00a800]{value_1}%[-]. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_01",
+   "icon": "Arrrr",
+   "params": {
+    "all": 1,
+    "damage_increase": 25
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"damage_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_friend\"))"
+    }
+   },
+   "template": "IncreaseDamageWithEffectsSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 80,
+  "attack": 25,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_bird_black",
+  "fingerprint": "409f81c6543054fe67e6525bbd1d9e04afe83eb4",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_support_black_corsair",
+     "pig_attack_black_corsair",
+     "pig_attack_black_corsair",
+     "pig_attack_black_corsair"
+    ]
+   },
+   {
+    "Percentage": 25,
+    "ComboChain": [
+     "pig_attack_black_corsair"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Christopher",
+   "rig": "BlackBird",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "55c76ccbbdbfed04a808e27512f85dd4:Headgear_Corsair",
+       "name": "Headgear_Corsair",
+       "item": "Headgear_Corsair",
+       "w": 247,
+       "h": 199,
+       "pivot": [
+        0.147931,
+        -0.05847944
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "d1e2107382721344199b7a9ac576e0da:Headgear_Corsair_Back",
+       "name": "Headgear_Corsair_Back",
+       "item": "Headgear_Corsair",
+       "w": 138,
+       "h": 50,
+       "pivot": [
+        0.01071429,
+        0.0362395
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "d1e2107382721344199b7a9ac576e0da:MainHand_Black_Set_04",
+       "name": "MainHand_Black_Set_04",
+       "item": "MainHand_Black_Set_04",
+       "w": 246,
+       "h": 164,
+       "pivot": [
+        -0.3910714,
+        0.18883929
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "55c76ccbbdbfed04a808e27512f85dd4:OffHand_Black_Set_04",
+       "name": "OffHand_Black_Set_04",
+       "item": "OffHand_Black_Set_04",
+       "w": 136,
+       "h": 168,
+       "pivot": [
+        0.2517857,
+        -0.21033163
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 80,
+    "attack": 25,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_a0719",
+     "origin": "pig_attack_black_corsair",
+     "type": "Attack",
+     "source": "pig_attack_black_corsair",
+     "name": "Pummel",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "Pummel",
+     "params": {
+      "damage_in_percent": 110
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_604ae",
+     "origin": "pig_support_black_corsair",
+     "type": "Support",
+     "source": "pig_support_black_corsair",
+     "name": "Arrr!",
+     "desc": "All birds' attack power is increased by [00a800]{value_1}%[-]. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Birds_01",
+     "icon": "Arrrr",
+     "params": {
+      "all": 1,
+      "damage_increase": 25
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"damage_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_friend\"))"
+      }
+     },
+     "template": "IncreaseDamageWithEffectsSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -8,6 +8,7 @@ their own copies, named after the edited pig: <nameId>__e<rev>. The revision goe
 receiving set (say, a variant that was unticked) still uses the current copies, so it keeps them as they are.
 """
 import copy
+import glob
 import hashlib
 import json
 import os
@@ -104,9 +105,25 @@ def icon(name_id):
     if row['AssetId'] not in G.rigs:
         raise ValueError('no Forge rig for ' + row['AssetId'])
     slots, variant = _art(G, row)
-    look = hashlib.sha1(json.dumps([slots, variant], sort_keys=True).encode()).hexdigest()[:10]
+    # Forge art is rebaked under the same texture names, so its atlas's age is part of the look.
+    look = hashlib.sha1(json.dumps([slots, variant, forge_art_stamp(G, row)], sort_keys=True).encode()).hexdigest()[:10]
     path = os.path.join(g.CACHE, 'icons', 'pig_%s_%s_%s.%d.png' % (row['AssetId'], name_id, look, g.CACHE_VERSION))
     return g.rig_icon(row['AssetId'], variant, slots, path)
+
+
+def forge_art_stamp(G, row):
+    """When the pig wears Forge-made art: the newest Forge atlas's time, so a rebake shows. Else 0."""
+    if not any((item or {}).get('AssetBaseId', '').startswith('Forge_') for item in G.items(row).values()):
+        return 0
+    stamps = [os.path.getmtime(p) for p in glob.glob(os.path.join(g.ASSETS, 'Texture2D', 'Forge_*_Atlas_HR.png'))]
+    return round(max(stamps), 1) if stamps else 0
+
+
+def look_version(G, row):
+    """Changes whenever the pig's tile picture can: its rig, its gear rows and the Forge art they use."""
+    inv = G.inventories.get(row.get('DefaultInventoryNameId') or '')
+    items = sorted((G.items(row) or {}).items())
+    return hashlib.sha1(json.dumps([row.get('AssetId'), inv, items, forge_art_stamp(G, row)], sort_keys=True, default=str).encode()).hexdigest()[:10]
 
 
 def parents(pigs):
@@ -295,7 +312,8 @@ def _stats(row):
 
 def _ability(s, uid):
     return {'uid': uid, 'origin': s['id'], 'type': s['type'], 'source': s['id'], 'name': s['name'], 'desc': s['desc'], 'color': s['color'], 'atlas': s['atlas'],
-            'icon': s['icon'], 'params': s['params'], 'values': s['values'], 'template': s['template'], 'duration': s['duration'], 'design': ''}
+            'icon': s['icon'], 'params': s['params'], 'values': s['values'], 'template': s['template'], 'duration': s['duration'], 'design': '',
+            **({'comboId': (s.get('asset') or '').lower()} if s['type'] == 'Combo' else {})}
 
 
 def _abilities(G, row):
@@ -341,6 +359,30 @@ def state(G, name_id):
     return project
 
 
+def _promote_kept(saved, fresh):
+    """Skills saved as kept-as-is because the Forge couldn't show them then (combo moves before the Combo type) become
+    abilities again, at their place in the game's order, in both the edits and the 'as the game has it' snapshot."""
+    ex = saved.get('existing') or {}
+    keep = ex.get('keepSkills') or []
+    known = {a['origin']: a for a in fresh['abilities']}
+    promote = [k['id'] for k in keep if k['id'] in known]
+    if not promote:
+        return saved
+    order = [a['origin'] for a in fresh['abilities']]
+    for target in (saved['abilities'], (ex.get('original') or {}).get('abilities')):
+        if target is None:
+            continue
+        for sid in promote:
+            if any(a.get('origin') == sid for a in target):
+                continue
+            # after the last ability that comes before it in the game's order
+            before = set(order[:order.index(sid)])
+            at = max((i + 1 for i, a in enumerate(target) if a.get('origin') in before), default=0)
+            target.insert(at, copy.deepcopy(known[sid]))
+    ex['keepSkills'] = [k for k in keep if k['id'] not in promote]
+    return saved
+
+
 def open_project(name_id):
     """The saved edits if the game still matches what they were made on, else the pig as the game has it now."""
     G = Game()
@@ -351,7 +393,7 @@ def open_project(name_id):
     saved = load_saved(name_id)
     fresh = state(G, name_id)
     if saved and saved.get('existing', {}).get('fingerprint') == fresh['existing']['fingerprint']:
-        return p.migrate_project(saved), None
+        return p.migrate_project(_promote_kept(saved, fresh)), None
     note = None
     if saved:
         # Keep what names its copies and atlas, so a rebuild reuses them.
@@ -376,6 +418,7 @@ def catalog():
                 except (OSError, ValueError, KeyError):
                     pass
     out = []
+    mine = added()
     for name_id, row in G.pigs.items():
         cls = G.items(row).get('class') or {}
         base = cls.get('AssetBaseId', '')
@@ -386,8 +429,185 @@ def catalog():
             x, depth = G.parent[x], depth + 1
         out.append({'id': name_id, 'name': G.name(row), 'rig': row['AssetId'], 'pirate': 'Pirate' in base or 'RedBeard' in base,
                     'hp': row.get('BaseHealth'), 'attack': row.get('BaseAttack'), 'parent': parent, 'root': root_of(name_id, G.parent), 'depth': depth,
-                    'supported': row['AssetId'] in G.rigs, 'updatedAt': saved.get(name_id)})
+                    'supported': row['AssetId'] in G.rigs, 'updatedAt': saved.get(name_id), 'look': look_version(G, row),
+                    'deletable': name_id in mine})
     return {'pigs': out, 'unticked': unticked()}
+
+
+# ------------------------------------------------------------------------------ adding a variant
+
+def variant_presets():
+    """[{suffix, hp, attack, scale, count}]: the median stat ratios of the game's variants per suffix (bird3 0.83 health,
+    boss 2.17, ...), for suffixes used at least twice, most used first. birdN suffixes are always listed."""
+    import statistics
+    G = game()
+    found = {}
+    for child, parent in G.parent.items():
+        a, b = G.pigs[child], G.pigs[parent]
+        if not (b.get('BaseHealth') and b.get('BaseAttack')):
+            continue
+        r = found.setdefault(child[len(parent) + 1:], ([], [], []))
+        r[0].append(a.get('BaseHealth', 0) / b['BaseHealth'])
+        r[1].append(a.get('BaseAttack', 0) / b['BaseAttack'])
+        r[2].append((a.get('SizeScale') or 1) / (b.get('SizeScale') or 1))
+    out = [{'suffix': s, 'hp': round(statistics.median(h), 2), 'attack': round(statistics.median(at), 2), 'scale': round(statistics.median(sc), 2), 'count': len(h)}
+           for s, (h, at, sc) in found.items() if len(h) >= 2 or re.fullmatch(r'bird\d+', s)]
+    return sorted(out, key=lambda x: (not re.fullmatch(r'bird\d+', x['suffix']), -x['count'], x['suffix']))
+
+
+def add_variant(parent_id, suffix, log, ratios=None):
+    """A new pig <parent>_<suffix>, a copy of the parent's row as the game has it now (same name, inventory and
+    abilities), so it shows as the parent's variant and gets its ticked edits. ratios {hp, attack, scale} scale its
+    stats from the parent's. Returns its NameId."""
+    suffix = (suffix or '').strip().lower()
+    if not re.fullmatch(r'[a-z0-9][a-z0-9_]*', suffix):
+        raise ValueError('Use lowercase letters, digits and underscores for the variant')
+    G = Game()
+    if parent_id not in G.pigs:
+        raise ValueError('The game has no combatant ' + parent_id)
+    name_id = '%s_%s' % (parent_id, suffix)
+    if name_id in G.pigs:
+        raise ValueError(name_id + ' already exists')
+    row = copy.deepcopy(G.pigs[parent_id])
+    row['NameId'] = name_id
+    ratios = ratios or {}
+    for key, column, kind in (('hp', 'BaseHealth', int), ('attack', 'BaseAttack', int), ('scale', 'SizeScale', float)):
+        r = float(ratios.get(key, 1) or 1)
+        if r <= 0:
+            raise ValueError('Ratios must be above 0')
+        if abs(r - 1) > 1e-9 and row.get(column) is not None:
+            value = row[column] * r
+            row[column] = max(1, int(round(value))) if kind is int else round(value, 3)
+            log('%s: %s x %g = %s' % (column, G.pigs[parent_id][column], r, row[column]))
+    path = os.path.join(g.BALANCING, 'PigBalancingData.json')
+    text = p.upsert_row(open(path, encoding='utf-8', newline='').read(), row)
+    log('Adding %s, a copy of %s' % (name_id, parent_id))
+    p.encode([('PigBalancingData', path, text)], log)
+    _set_added(name_id, True)
+    log('Done. Open it to make it different; edits to %s reach it while it is ticked.' % parent_id)
+    return name_id
+
+
+# ------------------------------------------------------------------------------ deleting an added variant
+
+def _added_path():
+    return os.path.join(DIR, '_added.json')
+
+
+def added():
+    """NameIds of the variants the Forge added (only those can be deleted: the game's own pigs stay)."""
+    try:
+        return set(json.load(open(_added_path(), encoding='utf-8')))
+    except (OSError, ValueError):
+        return set()
+
+
+def _set_added(name_id, on):
+    ids = added()
+    (ids.add if on else ids.discard)(name_id)
+    os.makedirs(DIR, exist_ok=True)
+    with open(_added_path(), 'w', encoding='utf-8') as f:
+        json.dump(sorted(ids), f, indent=1)
+
+
+def _code_references(name_id):
+    """C# files that name this pig in a string (scripted battles, registries, ...)."""
+    out = []
+    for path in glob.glob(os.path.join(g.ASSETS, 'Scripts', '**', '*.cs'), recursive=True):
+        try:
+            if '"%s"' % name_id in open(path, encoding='utf-8', errors='replace').read():
+                out.append(os.path.basename(path))
+        except OSError:
+            pass
+    return out
+
+
+def delete_variant(name_id, log):
+    """Takes a variant the Forge added out of the game: its pig row, plus the Forge-made rows only it used (its own
+    inventory, items, abilities and name copies, and its atlas). Refuses while a battle, another row, the code or a
+    variant of its own still uses it."""
+    G = Game()
+    if name_id not in added():
+        raise ValueError('Only variants added in the Forge can be deleted; %s is one of the game\'s own combatants' % name_id)
+    if name_id not in G.pigs:
+        log('%s is not in the game any more' % name_id)
+    else:
+        kids = G.descendants(name_id)
+        if kids:
+            raise ValueError('Not deleted: delete its own variants first (%s)' % ', '.join(kids))
+        used = p.references([name_id], {name_id})
+        code = _code_references(name_id)
+        if used or code:
+            raise ValueError('Not deleted: the game still uses it in ' + ', '.join((used.get(name_id) or [])[:6] + code[:3]))
+        row = G.pigs[name_id]
+        gone = {name_id}
+        forge = lambda i: bool(i) and 'forge_' in i
+        unused = lambda i: not p.references([i], gone).get(i)
+
+        # What only it used, among the Forge-made rows: those go with it.
+        inv = row.get('DefaultInventoryNameId') or ''
+        actives, passives = G.skill_ids(row)
+        skills = [s for s in actives + passives if forge(s) and s in G.skills and unused(s)]
+        gone.update(skills)
+        invs = [inv] if forge(inv) and inv in G.inventories and unused(inv) else []
+        gone.update(invs)
+        items = [i for i in ((G.inventories[inv].get('DefaultInventoryContent') or {}) if invs else {})
+                 if forge(i) and (i in G.equipment or i in G.classes) and unused(i)]
+        gone.update(items)
+        loca = row.get('LocaId') or ''
+        texts = [loca + '_name'] if forge(loca) and not any(r.get('LocaId') == loca for n, r in G.pigs.items() if n != name_id) else []
+        texts += [s + x for s in skills for x in ('_name', '_desc')]
+
+        writes = []
+        for file_name, ids in (('SkillBalancingData', skills), ('EquipmentBalancingData', [i for i in items if i in G.equipment]),
+                               ('ClassItemBalancingData', [i for i in items if i in G.classes]),
+                               ('InventoryBalancingData', invs), ('PigBalancingData', [name_id])):
+            if ids:
+                path = os.path.join(g.BALANCING, file_name + '.json')
+                text = open(path, encoding='utf-8', newline='').read()
+                for i in ids:
+                    text = p.remove_row(text, i)
+                writes.append((file_name, path, text))
+        if texts:
+            loca_path, loca_text = p.remove_loca(texts)
+            writes.append(('Loca', loca_path, loca_text))
+        for what, ids in (('abilities', skills), ('inventory', invs), ('items', items)):
+            if ids:
+                log('Also removing its %s: %s' % (what, ', '.join(ids)))
+        log('Removing %s' % name_id)
+        p.encode(writes, log)
+
+        # Its own art (from updating it on its own): the atlas goes once no item left draws from it.
+        saved = None
+        try:
+            saved = json.load(open(project_path(name_id), encoding='utf-8'))
+        except (OSError, ValueError):
+            pass
+        if saved and (saved.get('guids') or {}).get('atlas:HR'):
+            G = Game()
+            rows = list(G.equipment.values()) + list(G.classes.values())
+            for rev in range(saved.get('existing', {}).get('rev', 0) + 1):
+                art = art_id(name_id, rev)
+                if not any(('Forge_%s_' % art) in (r.get('AssetBaseId') or '') or r.get('AssetBaseId') == 'Forge_' + art for r in rows):
+                    p.remove_atlas(saved, art, log)
+                    forget_art(saved.get('publishedRig') or saved.get('rig'), [x for x in saved['guids'].values() if x])
+
+    # The Forge's own records of it.
+    if os.path.exists(project_path(name_id)):
+        folder = os.path.join(os.path.dirname(DIR), '.trash')
+        os.makedirs(folder, exist_ok=True)
+        os.replace(project_path(name_id), os.path.join(folder, 'existing-%s-%s.json' % (name_id, time.strftime('%Y%m%d-%H%M%S'))))
+        log('Moved its Forge project to projects/.trash')
+    data = unticked()
+    data.pop(name_id, None)
+    for parent in list(data):
+        data[parent] = [v for v in data[parent] if v != name_id]
+        if not data[parent]:
+            data.pop(parent)
+    with open(_ticks_path(), 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=1)
+    _set_added(name_id, False)
+    log('Deleted %s.' % name_id)
 
 
 # ------------------------------------------------------------------------------ duplicating
@@ -758,7 +978,8 @@ def update(project, log):
     skill_rows, equipment_rows = different(skill_rows, G.skills), different(equipment_rows, G.equipment)
     class_rows, inventory_rows = different(class_rows, G.classes), different(inventory_rows, G.inventories)
     texts = {k: v for k, v in texts.items() if G.texts.get(k) != v}
-    if not (changed or skill_rows or equipment_rows or class_rows or inventory_rows or texts or art_dirty):
+    pivots_changed = p.write_bone_pivots(project, log)
+    if not (changed or skill_rows or equipment_rows or class_rows or inventory_rows or texts or art_dirty or pivots_changed):
         log('Nothing to update: this combatant and its ticked variants already match the game')
         return project
     if entries:

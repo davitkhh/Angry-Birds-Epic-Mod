@@ -1,0 +1,275 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_sportsman_e",
+ "name": "Torch Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanE",
+     "name": "Headgear_SportsmanE",
+     "item": "Headgear_SportsmanE",
+     "w": 118,
+     "h": 72,
+     "pivot": [
+      -0.30535716,
+      -0.39069942
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanE_Back",
+     "name": "Headgear_SportsmanE_Back",
+     "item": "Headgear_SportsmanE",
+     "w": 48,
+     "h": 36,
+     "pivot": [
+      0.4830741,
+      -0.7509911
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SportsmanE",
+     "name": "MainHand_SportsmanE",
+     "item": "MainHand_SportsmanE",
+     "w": 138,
+     "h": 114,
+     "pivot": [
+      -0.3,
+      0.1394267
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_48d4d",
+   "origin": "pig_attack_minion_sportsman_e",
+   "type": "Attack",
+   "source": "pig_attack_minion_sportsman_e",
+   "name": "Sportmanship",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"tumble\"))"
+    }
+   },
+   "template": "SimpleAttackWithMissSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 80,
+  "attack": 11,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_sportsman_e",
+  "fingerprint": "3b2ca8b2c5005c526a6a52e2a387dbd2449e0220",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_sportsman_e"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Torch Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanE",
+       "name": "Headgear_SportsmanE",
+       "item": "Headgear_SportsmanE",
+       "w": 118,
+       "h": 72,
+       "pivot": [
+        -0.30535716,
+        -0.39069942
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanE_Back",
+       "name": "Headgear_SportsmanE_Back",
+       "item": "Headgear_SportsmanE",
+       "w": 48,
+       "h": 36,
+       "pivot": [
+        0.4830741,
+        -0.7509911
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SportsmanE",
+       "name": "MainHand_SportsmanE",
+       "item": "MainHand_SportsmanE",
+       "w": 138,
+       "h": 114,
+       "pivot": [
+        -0.3,
+        0.1394267
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 80,
+    "attack": 11,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_48d4d",
+     "origin": "pig_attack_minion_sportsman_e",
+     "type": "Attack",
+     "source": "pig_attack_minion_sportsman_e",
+     "name": "Sportmanship",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"tumble\"))"
+      }
+     },
+     "template": "SimpleAttackWithMissSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

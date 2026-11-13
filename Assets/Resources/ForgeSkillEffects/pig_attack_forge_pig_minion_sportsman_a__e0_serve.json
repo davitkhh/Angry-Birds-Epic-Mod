@@ -1,0 +1,27 @@
+{
+ "BalancingId": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+ "VisualEffects": [
+  {
+   "SpawnTiming": 2,
+   "DelayInSeconds": 0.0,
+   "Type": 0,
+   "TargetCombatant": 1,
+   "TargetAnchor": 1,
+   "SoundId": "",
+   "DoNotParentOnBone": false,
+   "PrefabName": "SkillFX_Hit_Tickle",
+   "OnHitEffect": false,
+   "OnHitPrefix": "",
+   "ShowEffectInvokerIcon": false,
+   "InterpolationTime": 0.0,
+   "SlowMotionDuration": 0.0,
+   "SlowMotionTimeScale": 0.0,
+   "UseTargetBoneScale": false,
+   "UseTargetBoneRotation": false,
+   "IgnoreScaling": false,
+   "EffectTextIdent": "",
+   "HasText": false,
+   "DoNotMirror": false
+  }
+ ]
+}

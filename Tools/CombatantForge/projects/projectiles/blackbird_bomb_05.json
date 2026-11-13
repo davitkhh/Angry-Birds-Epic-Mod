@@ -1,0 +1,145 @@
+{
+ "kind": "projectile",
+ "id": "blackbird_bomb_05",
+ "name": "BlackBird Bomb 05",
+ "rig": "__projectile",
+ "components": [
+  {
+   "uid": "e556e580",
+   "name": "Body",
+   "type": "body",
+   "physics": {
+    "spawn": "fire",
+    "of": "",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.2,
+    "easing": "even",
+    "arc": 0,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": false,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 30,
+    "life": 0.4,
+    "scaleStart": 1,
+    "scaleEnd": 1,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": false,
+    "randomTurn": false,
+    "vary": {}
+   }
+  },
+  {
+   "uid": "81f4e28a",
+   "name": "Air trail (Trail)",
+   "type": "trail",
+   "physics": {
+    "spawn": "trail",
+    "of": "e556e580",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.25,
+    "easing": "even",
+    "arc": 0,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": false,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 60,
+    "life": 0.5,
+    "scaleStart": 1,
+    "scaleEnd": 0.333,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": true,
+    "randomTurn": false,
+    "vary": {}
+   }
+  }
+ ],
+ "slots": {
+  "e556e580": {
+   "layers": [
+    {
+     "uid": "639e0fc3",
+     "src": "d1e2107382721344199b7a9ac576e0da:MainHand_Bomb_05",
+     "name": "Sprite",
+     "item": "Sprite",
+     "w": 130,
+     "h": 112,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "639e0fc3"
+  },
+  "81f4e28a": {
+   "layers": [
+    {
+     "uid": "72a98dd3",
+     "src": "fx:tex:a74a018eb4874ff4eaf5b7c703dd58a9:1x1",
+     "name": "Trail",
+     "item": "Trail",
+     "w": 64,
+     "h": 75,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "72a98dd3"
+  }
+ },
+ "abilities": [],
+ "stats": {},
+ "weapon": {},
+ "variant": "",
+ "source": "Projectile_BlackBird_Bomb_05"
+}

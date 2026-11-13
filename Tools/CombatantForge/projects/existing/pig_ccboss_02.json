@@ -1,0 +1,294 @@
+{
+ "kind": "existing",
+ "id": "pig_ccboss_02",
+ "name": "pig_ccboss_02",
+ "rig": "PigBrute",
+ "variant": "pirate",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BigPirate",
+     "name": "Headgear_BigPirate",
+     "item": "Headgear_BigPirate",
+     "w": 132,
+     "h": 98,
+     "pivot": [
+      0.053571425,
+      -0.21160714
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_Brute",
+     "name": "MainHand_Brute",
+     "item": "MainHand_Brute",
+     "w": 310,
+     "h": 144,
+     "pivot": [
+      -0.35357141,
+      -0.017299106
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a1_48df5",
+   "origin": "pig_support_caster_lightningpig",
+   "type": "Support",
+   "source": "pig_support_caster_lightningpig",
+   "name": "Fully Charged",
+   "desc": "Attackers receive [ff0000]{value_1}[-] damage. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "enemy_damage_retaliated_percent": 75
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+    }
+   },
+   "template": "ThornSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a2_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 500,
+  "attack": 15,
+  "sizeType": "Boss",
+  "sizeScale": 1.25,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "lucky_coin": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_ccboss_02",
+  "fingerprint": "c3ecadef210bfa3c023950ab7b1e2b83d0a6c426",
+  "rev": 0,
+  "keepSkills": [
+   {
+    "id": "pig_attack_knight_shogun_01",
+    "passive": false
+   }
+  ],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_knight_shogun_01"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_caster_lightningpig"
+    ]
+   }
+  ],
+  "original": {
+   "name": "pig_ccboss_02",
+   "rig": "PigBrute",
+   "variant": "pirate",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:Headgear_BigPirate",
+       "name": "Headgear_BigPirate",
+       "item": "Headgear_BigPirate",
+       "w": 132,
+       "h": 98,
+       "pivot": [
+        0.053571425,
+        -0.21160714
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_Brute",
+       "name": "MainHand_Brute",
+       "item": "MainHand_Brute",
+       "w": 310,
+       "h": 144,
+       "pivot": [
+        -0.35357141,
+        -0.017299106
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 500,
+    "attack": 15,
+    "sizeType": "Boss",
+    "sizeScale": 1.25,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "lucky_coin": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a1_48df5",
+     "origin": "pig_support_caster_lightningpig",
+     "type": "Support",
+     "source": "pig_support_caster_lightningpig",
+     "name": "Fully Charged",
+     "desc": "Attackers receive [ff0000]{value_1}[-] damage. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "enemy_damage_retaliated_percent": 75
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+      }
+     },
+     "template": "ThornSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a2_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

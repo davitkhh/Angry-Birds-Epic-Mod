@@ -220,3 +220,107 @@ dialog.small { width: 330px; }
 #targetControls[hidden] { display: none; }
 #targetControls { gap: 6px; }
 #targetCount { min-width: 18px; text-align: center; }
+.motion { background: var(--bg); border-radius: 6px; padding: 4px 7px; }
+.motion > summary { cursor: pointer; font-size: 12px; color: var(--dim); list-style: none; display: flex; gap: 6px; align-items: center; }
+.motion > summary::-webkit-details-marker { display: none; }
+.motion > summary::before { content: '▸'; color: var(--text); }
+.motion[open] > summary::before { content: '▾'; }
+.motion[open] > summary { margin-bottom: 5px; }
+.motion > summary .sumText { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.motion > summary .warnDot { color: var(--accent); }
+.motion > div { display: flex; flex-direction: column; gap: 5px; }
+.comboBox { background: var(--bg); border-radius: 6px; padding: 6px 7px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.comboBox .recipe { border-left: 3px solid #CD7936; padding-left: 6px; }
+.comboBox .recipe strong { color: var(--text); }
+.suffixChips { display: flex; gap: 4px; flex-wrap: wrap; }
+.suffixChips button { font-size: 11px; padding: 1px 8px; border-radius: 10px; }
+.variantRatios { margin-top: 8px; }
+.variantRatios label { color: var(--text); }
+#variantNav { flex: none; background: var(--bg); border-radius: 6px; padding: 3px 4px; }
+#variantNav[hidden] { display: none; }
+#variantLabel { text-align: center; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; }
+#variantLabel .mono { color: var(--dim); }
+.recipes { display: flex; flex-direction: column; gap: 6px; }
+.recipeCard { background: var(--bg); border-radius: 6px; border-left: 3px solid #CD7936; padding: 6px 7px; display: flex; flex-direction: column; gap: 5px; }
+.recipeCard textarea { width: 100%; min-height: 44px; resize: vertical; background: var(--raised); }
+.recipeMoves { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.moveChip { display: inline-flex; align-items: center; gap: 4px; background: var(--raised); border-radius: 12px; padding: 1px 3px 1px 2px; font-size: 12px; }
+.moveChip img { width: 20px; height: 20px; object-fit: contain; }
+.moveChip button { border: 0; background: transparent; padding: 0 4px; color: var(--dim); font-size: 13px; line-height: 1; }
+.moveChip button:hover { color: var(--danger); }
+.moveChip.own { outline: 1px solid #CD7936; }
+.movePick { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 5px; max-height: 60vh; overflow-y: auto; margin-top: 8px; }
+.movePick button { display: flex; align-items: center; gap: 6px; text-align: left; }
+.movePick img { width: 32px; height: 32px; object-fit: contain; }
+.movePick small { display: block; color: var(--dim); font-family: ui-monospace, monospace; }
+.pickBtn { text-align: left; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.movePick button.on { border-color: var(--accent); }
+#targetCount { cursor: text; border-bottom: 1px dashed var(--line); }
+#modeTabs { flex: none; }
+#modeTabs button { padding: 3px 12px; }
+body.projMode .combatOnly { display: none !important; }
+body:not(.projMode) .projOnly { display: none !important; }
+#projTools { gap: 8px; }
+#projComponents { display: flex; flex-direction: column; gap: 6px; }
+#projComponents .addRow { display: flex; flex-wrap: wrap; gap: 4px; }
+.compRow { display: grid; grid-template-columns: 44px 1fr auto; gap: 8px; align-items: center; background: var(--raised); border: 1px solid transparent; border-radius: 6px; padding: 3px 6px 3px 3px; cursor: pointer; }
+.compRow.sel { border-color: var(--accent); }
+.compRow.target { border-color: var(--accent); background: #f0b23c26; }
+.compRow.off { opacity: .55; }
+.compRow input { width: 100%; background: transparent; border-color: transparent; font-weight: 600; padding: 1px 4px; }
+.compRow input:hover, .compRow input:focus { background: var(--bg); border-color: var(--line); }
+.compRow .kind { font-size: 11px; color: var(--dim); padding-left: 4px; }
+.compRow .slotActions button { padding: 1px 6px; font-size: 11px; }
+.physCard { background: var(--raised); border-radius: 6px; padding: 7px; display: flex; flex-direction: column; gap: 6px; border-left: 4px solid var(--accent); }
+.physCard h3 { display: flex; justify-content: space-between; align-items: center; }
+.physCard .fields { grid-template-columns: repeat(3, 1fr); }
+.physCard .fields label.check { flex-direction: row; align-items: center; }
+#physicsForm { display: flex; flex-direction: column; gap: 8px; }
+.card.projectile .openBtn { position: absolute; top: 2px; right: 2px; font-size: 10px; padding: 0 6px; background: #000b; border-color: transparent; }
+.physGroup { margin: 4px 0 -2px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 600; }
+
+.varyRow { display: flex; gap: 3px; align-items: center; }
+.varyRow input[type=number] { min-width: 0; flex: 1 1 auto; }
+.varyRow input.vary { flex: 0 0 58px; width: 58px; color: var(--dim, #999); }
+.varyRow .pm { color: var(--dim, #999); font-size: 11px; }
+.varyRow::after { content: none; }
+.varyRow input.vary:not([value="0"]) { color: inherit; }
+
+.fxRow { display: flex; flex-direction: column; gap: 4px; padding: 6px 0; border-top: 1px solid var(--line, rgba(127,127,127,.2)); }
+.fxRow .fxFields { gap: 6px; align-items: flex-end; }
+.fxRow .fxFields label { display: flex; flex-direction: column; align-items: flex-start; font-size: 11px; gap: 1px; }
+.fxRow .fxFields label.check { flex-direction: row; align-items: center; }
+.fxRow .fxFields input[type=number] { width: 60px; }
+.fxPick { max-height: 60vh; overflow: auto; margin-top: 8px; }
+.fxPick h4 { margin: 10px 0 4px; font-size: 12px; opacity: .7; }
+.fxPickGroup { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 4px; }
+.fxPickGroup button { text-align: left; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fxPickGroup button.on { outline: 2px solid var(--accent); }
+
+.valueGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px 10px; margin-top: 4px; }
+.valueRow { display: flex; flex-direction: column; gap: 2px; font-size: 11px; }
+.valueRow input[type=number] { width: 100%; min-width: 0; }
+.valueRow .row { gap: 4px; flex-wrap: nowrap; }
+.valueRow.edited input { border-color: var(--accent); }
+.valueRow.edited > span:first-child::after { content: ' •'; color: var(--accent); }
+
+.layerRow.target { outline: 2px dashed var(--accent); outline-offset: -2px; }
+.pivotRow { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.pivotRow h4 { margin: 0; font-size: 12px; }
+.pivotRow label { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.pivotRow input[type=number] { width: 64px; }
+.pivotRow button.on { background: var(--accent); color: #16181d; }
+
+.fxRow .fxExtra { padding: 4px 6px; border-left: 2px solid var(--accent); background: rgba(127,127,127,.06); border-radius: 4px; }
+.fxRow .fxExtra input[type=text] { width: 100%; min-width: 120px; }
+.fxRow .fxExtra input[type=color] { width: 36px; height: 22px; padding: 0; border: none; background: none; }
+
+.valueRow.unset > span:first-child { opacity: .65; }
+
+/* section tongues sticking out of the side panel (syncTongues) */
+#tongues { position: fixed; inset: 0; pointer-events: none; z-index: 20; }
+.tongue { position: fixed; pointer-events: auto; min-width: 100px; padding: 0 10px 0 10px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+  border: none; border-radius: 10px 0 0 10px; font-size: 12px; font-weight: 600; color: #16181d; white-space: nowrap; cursor: pointer;
+  background: color-mix(in srgb, var(--tongue) 55%, #2a2f3a); box-shadow: -2px 1px 4px rgba(0,0,0,.35); opacity: .82; }
+.tongue:hover { opacity: 1; }
+.tongue.open { background: var(--tongue); opacity: 1; }

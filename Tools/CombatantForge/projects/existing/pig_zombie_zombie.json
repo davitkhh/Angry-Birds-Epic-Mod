@@ -1,0 +1,235 @@
+{
+ "kind": "existing",
+ "id": "pig_zombie_zombie",
+ "name": "Zombie",
+ "rig": "ZombiePig",
+ "variant": "",
+ "slots": {
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "49698066d17327d46a890eae8ce53c89:MainHand_Zombie",
+     "name": "MainHand_Zombie",
+     "item": "MainHand_Zombie",
+     "w": 222,
+     "h": 104,
+     "pivot": [
+      -0.4339286,
+      0.10863668
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_d5c26",
+   "origin": "pig_attack_zombie_zombie",
+   "type": "Attack",
+   "source": "pig_attack_zombie_zombie",
+   "name": "Smash!",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_b311c",
+   "origin": "pig_passive_undead_02",
+   "type": "Passive",
+   "source": "pig_passive_undead_02",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 3,
+    "pig_support_undead_revive_self_02": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 160,
+  "attack": 18,
+  "sizeType": "Medium",
+  "sizeScale": 0.8,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_zombie_zombie",
+  "fingerprint": "80a1b7661286e1dff9628628301da6ccead18e59",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_zombie_zombie"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Zombie",
+   "rig": "ZombiePig",
+   "variant": "",
+   "slots": {
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "49698066d17327d46a890eae8ce53c89:MainHand_Zombie",
+       "name": "MainHand_Zombie",
+       "item": "MainHand_Zombie",
+       "w": 222,
+       "h": 104,
+       "pivot": [
+        -0.4339286,
+        0.10863668
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 160,
+    "attack": 18,
+    "sizeType": "Medium",
+    "sizeScale": 0.8,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_d5c26",
+     "origin": "pig_attack_zombie_zombie",
+     "type": "Attack",
+     "source": "pig_attack_zombie_zombie",
+     "name": "Smash!",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_b311c",
+     "origin": "pig_passive_undead_02",
+     "type": "Passive",
+     "source": "pig_passive_undead_02",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 3,
+      "pig_support_undead_revive_self_02": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

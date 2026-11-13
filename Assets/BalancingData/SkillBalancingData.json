@@ -17715,6 +17715,28 @@
     "TargetCulling": null
   },
   {
+    "NameId": "pig_attack_forge_pig_brute_lassie__e0_rise_n_shine",
+    "AssetId": "Smash",
+    "LocaId": "pig_attack_forge_pig_brute_lassie__e0_rise_n_shine",
+    "SkillParameters": {
+      "damage_in_percent": 300.0,
+      "charge": 3.0,
+      "bonus_vs_target_current_health_in_percent": 20.0
+    },
+    "SkillTemplateType": "AttackAndApplySelfHotSkill",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "Attack",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
     "NameId": "pig_support_minion_farmer_cultivate",
     "AssetId": "Regrowth",
     "LocaId": "pig_support_minion_farmer_cultivate",
@@ -17846,6 +17868,26 @@
     "NameId": "pig_attack_forge_cactus_new_ability_2",
     "AssetId": "Alarm",
     "LocaId": "pig_attack_forge_cactus_new_ability_2",
+    "SkillParameters": {
+      "reduction_in_percent": 90.0
+    },
+    "SkillTemplateType": "ProvokeAndGuardIfNoBlessings",
+    "EffectDuration": 2,
+    "TargetType": "Attack",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "AttackCurse",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Blessing",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_pig_forge_stringtheory__e0_gravitate",
+    "AssetId": "Alarm",
+    "LocaId": "pig_attack_forge_pig_forge_stringtheory__e0_gravitate",
     "SkillParameters": {
       "reduction_in_percent": 90.0
     },
@@ -18081,12 +18123,12 @@
   },
   {
     "NameId": "pig_attack_forge_slime_dawg_slime_out",
-    "AssetId": "AcidRain",
+    "AssetId": "SlimeOut",
     "LocaId": "pig_attack_forge_slime_dawg_slime_out",
     "SkillParameters": {
-      "damage_in_percent": 40.0,
+      "damage_in_percent": 50.0,
       "dot_chance": 100.0,
-      "dot_damage_in_percent": 80.0,
+      "dot_damage_in_percent": 100.0,
       "chain": 1.0,
       "chain_reduction": 10.0
     },
@@ -18101,6 +18143,147 @@
     "IconAtlasId": "Skills_Birds_02",
     "EffectIconAtlasId": "Skills_Birds_02",
     "EffectIconAssetId": "AcidRain",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_slime_dawg_slime_of_generosity",
+    "AssetId": "SlimeOfGenerosity",
+    "LocaId": "pig_attack_forge_slime_dawg_slime_of_generosity",
+    "SkillParameters": {
+      "damage_in_percent": 50.0,
+      "dot_chance": 100.0,
+      "dot_damage_in_percent": 100.0,
+      "heal_in_percent": 250.0
+    },
+    "SkillTemplateType": "AttackWithDotAndHealOnRemove",
+    "EffectDuration": 3,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "AcidRain",
+    "IconAtlasId": "Skills_Birds_02",
+    "EffectIconAtlasId": "Skills_Birds_02",
+    "EffectIconAssetId": "AcidRain",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help",
+    "AssetId": "Hoard",
+    "LocaId": "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help",
+    "SkillParameters": {
+      "summon_elf": 2.0,
+      "charge": 2.0
+    },
+    "SkillTemplateType": "SummonCombatant",
+    "EffectDuration": 0,
+    "TargetType": "Support",
+    "EffectType": "Blessing",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Reinforcements",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Reinforcements",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_pig_bomb_volleybomb__e0_served",
+    "AssetId": "TickleExplosion",
+    "LocaId": "pig_attack_forge_pig_bomb_volleybomb__e0_served",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "ragereduce": 50.0,
+      "charge": 2.0,
+      "all": 1.0
+    },
+    "SkillTemplateType": "AttackAndSelfDestruct",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "AttackCurse",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+    "AssetId": "Weaken",
+    "LocaId": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+    "SkillParameters": {
+      "increase_in_percent": 30.0,
+      "chance": 100.0,
+      "damage_in_percent": 100.0,
+      "anim_clip": 349662.0,
+      "anim_projectile": 14672436.0,
+      "anim_ranged": 1.0,
+      "anim_impact_on_hit": 1.0
+    },
+    "SkillTemplateType": "AttackWithIncreaseDamageReceived",
+    "EffectDuration": 3,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "AttackCurse",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "AttackCurse",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+    "AssetId": "Smash",
+    "LocaId": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+    "SkillParameters": {
+      "damage_in_percent": 100.0,
+      "chain": 3.0,
+      "chain_reduction": 20.0,
+      "chain_ragereduce": 15.0,
+      "anim_clip": 349662.0,
+      "anim_ranged": 1.0,
+      "anim_projectile": 7391078.0,
+      "anim_impact_on_hit": 1.0
+    },
+    "SkillTemplateType": "AttackWithChainSkill",
+    "EffectDuration": 0,
+    "TargetType": "Attack",
+    "EffectType": "Curse",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": false,
+    "IconAssetId": "AttackCurse",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "",
+    "EffectIconAssetId": "",
+    "TargetCulling": null
+  },
+  {
+    "NameId": "pig_passive_forge_pig_minion_sportsman_a__e0_keep_playing",
+    "AssetId": "CallAid",
+    "LocaId": "pig_passive_forge_pig_minion_sportsman_a__e0_keep_playing",
+    "SkillParameters": {
+      "summon_volleybomb": 1.0,
+      "spawn": 1.0
+    },
+    "SkillTemplateType": "SpawnPigsOnDeath",
+    "EffectDuration": 0,
+    "TargetType": "Passive",
+    "EffectType": "Passive",
+    "TargetingBehavior": "None",
+    "TargetAlreadyAffectedTargets": true,
+    "TargetSelfPossible": true,
+    "IconAssetId": "Reinforcements",
+    "IconAtlasId": "Skills_Pigs_01",
+    "EffectIconAtlasId": "Skills_Pigs_01",
+    "EffectIconAssetId": "Reinforcements",
     "TargetCulling": null
   }
 ]

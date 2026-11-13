@@ -1,0 +1,210 @@
+{
+ "kind": "projectile",
+ "id": "zombiepig_barf",
+ "name": "ZombiePig Barf",
+ "rig": "__projectile",
+ "components": [
+  {
+   "uid": "c9a3469e",
+   "name": "Body",
+   "type": "body",
+   "physics": {
+    "spawn": "fire",
+    "of": "",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.25,
+    "easing": "even",
+    "arc": 75,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": true,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 30,
+    "life": 0.4,
+    "scaleStart": 1,
+    "scaleEnd": 1,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": false,
+    "randomTurn": false,
+    "vary": {}
+   }
+  },
+  {
+   "uid": "502a70c2",
+   "name": "Particles (FX_SlimeDrops)",
+   "type": "trail",
+   "physics": {
+    "spawn": "trail",
+    "of": "c9a3469e",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.25,
+    "easing": "even",
+    "arc": 0,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": false,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 120,
+    "life": 0.3,
+    "scaleStart": 1,
+    "scaleEnd": 1,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": false,
+    "randomTurn": false,
+    "vary": {}
+   }
+  },
+  {
+   "uid": "cc8f056c",
+   "name": "Air trail (Trail)",
+   "type": "trail",
+   "physics": {
+    "spawn": "trail",
+    "of": "c9a3469e",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.25,
+    "easing": "even",
+    "arc": 0,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": false,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 60,
+    "life": 0.5,
+    "scaleStart": 1,
+    "scaleEnd": 0.333,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": true,
+    "randomTurn": false,
+    "vary": {}
+   }
+  }
+ ],
+ "slots": {
+  "c9a3469e": {
+   "layers": [
+    {
+     "uid": "e7266010",
+     "src": "fx:mesh:52515d763a7ce8249af1d3b3ebdd9d35:3842b668cc18a064ca8951c8ccc1561b",
+     "name": "Mesh",
+     "item": "Mesh",
+     "w": 99.792,
+     "h": 65.823,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": -0.011,
+     "ty": -1.16,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "e7266010"
+  },
+  "502a70c2": {
+   "layers": [
+    {
+     "uid": "4717b350",
+     "src": "fx:tex:f6c289180e8ef654987093774a15c768:1x1",
+     "name": "FX_SlimeDrops",
+     "item": "FX_SlimeDrops",
+     "w": 12,
+     "h": 12,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "4717b350"
+  },
+  "cc8f056c": {
+   "layers": [
+    {
+     "uid": "68dd3a36",
+     "src": "fx:tex:17c3c103ddb9a6647bb03a1bece251c9:1x1",
+     "name": "Trail",
+     "item": "Trail",
+     "w": 51.2,
+     "h": 60,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "68dd3a36"
+  }
+ },
+ "abilities": [],
+ "stats": {},
+ "weapon": {},
+ "variant": "",
+ "source": "Projectile_ZombiePig_Barf"
+}

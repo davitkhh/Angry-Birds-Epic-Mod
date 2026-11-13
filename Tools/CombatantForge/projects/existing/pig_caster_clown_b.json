@@ -1,0 +1,480 @@
+{
+ "kind": "existing",
+ "id": "pig_caster_clown_b",
+ "name": "Stapfi",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_ClownB",
+     "name": "Headgear_ClownB",
+     "item": "Headgear_ClownB",
+     "w": 242,
+     "h": 222,
+     "pivot": [
+      -0.13805953,
+      -0.27029318
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_ClownB_Back",
+     "name": "Headgear_ClownB_Back",
+     "item": "Headgear_ClownB",
+     "w": 232,
+     "h": 136,
+     "pivot": [
+      0.17142858,
+      0.031985294
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "7f6e3d7bfb45387428cfb7d745501761:MainHand_ClownB",
+     "name": "MainHand_ClownB",
+     "item": "MainHand_ClownB",
+     "w": 204,
+     "h": 64,
+     "pivot": [
+      -0.45,
+      -0.09391741
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_ClownB",
+     "name": "OffHand_ClownB",
+     "item": "OffHand_ClownB",
+     "w": 106,
+     "h": 86,
+     "pivot": [
+      -0.7446429,
+      -0.51503325
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "gb6d6e89",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_ClownB_Back",
+     "name": "OffHand_ClownB_Back",
+     "item": "OffHand_ClownB",
+     "w": 284,
+     "h": 86,
+     "pivot": [
+      0.04285714,
+      -0.5130399
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "gb6d6e89"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_17c2a",
+   "origin": "pig_attack_caster_clown_b_01",
+   "type": "Attack",
+   "source": "pig_attack_caster_clown_b_01",
+   "name": "Fake Flower",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies. Blocks rage ability. Lasts [ff0000]{value_5}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 100,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "AttackAndApplyRageBlockSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_83602",
+   "origin": "pig_support_caster_clown_b_01",
+   "type": "Support",
+   "source": "pig_support_caster_clown_b_01",
+   "name": "Fake Flower",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals target for [00a800]{value_1}[-] health. Removes all harmful effects from target.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "health_in_percent": 30,
+    "cleanse_chance": 100,
+    "invoker": 1,
+    "charge": 3,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+    },
+    "{value_7}": {
+     "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+    },
+    "{value_9}": {
+     "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"cleanse_chance\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealAndCleanseSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 355,
+  "attack": 22,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 8,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_caster_clown_b",
+  "fingerprint": "7b47c79bd1a7cc3e62282c32b8a59b8849d0b276",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 65,
+    "ComboChain": [
+     "pig_attack_caster_clown_b_01",
+     "pig_support_caster_clown_b_01"
+    ]
+   },
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_support_caster_clown_b_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Stapfi",
+   "rig": "PigMage",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_ClownB",
+       "name": "Headgear_ClownB",
+       "item": "Headgear_ClownB",
+       "w": 242,
+       "h": 222,
+       "pivot": [
+        -0.13805953,
+        -0.27029318
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_ClownB_Back",
+       "name": "Headgear_ClownB_Back",
+       "item": "Headgear_ClownB",
+       "w": 232,
+       "h": 136,
+       "pivot": [
+        0.17142858,
+        0.031985294
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "7f6e3d7bfb45387428cfb7d745501761:MainHand_ClownB",
+       "name": "MainHand_ClownB",
+       "item": "MainHand_ClownB",
+       "w": 204,
+       "h": 64,
+       "pivot": [
+        -0.45,
+        -0.09391741
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_ClownB",
+       "name": "OffHand_ClownB",
+       "item": "OffHand_ClownB",
+       "w": 106,
+       "h": 86,
+       "pivot": [
+        -0.7446429,
+        -0.51503325
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    },
+    "OffHand_Back": {
+     "layers": [
+      {
+       "uid": "gb6d6e89",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_ClownB_Back",
+       "name": "OffHand_ClownB_Back",
+       "item": "OffHand_ClownB",
+       "w": 284,
+       "h": 86,
+       "pivot": [
+        0.04285714,
+        -0.5130399
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "gb6d6e89"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 355,
+    "attack": 22,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 8,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_17c2a",
+     "origin": "pig_attack_caster_clown_b_01",
+     "type": "Attack",
+     "source": "pig_attack_caster_clown_b_01",
+     "name": "Fake Flower",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies. Blocks rage ability. Lasts [ff0000]{value_5}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 100,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "AttackAndApplyRageBlockSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_83602",
+     "origin": "pig_support_caster_clown_b_01",
+     "type": "Support",
+     "source": "pig_support_caster_clown_b_01",
+     "name": "Fake Flower",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Heals target for [00a800]{value_1}[-] health. Removes all harmful effects from target.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "health_in_percent": 30,
+      "cleanse_chance": 100,
+      "invoker": 1,
+      "charge": 3,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"health_in_percent\"))) || ((H * (p(\"health_in_percent\")) / 100))"
+      },
+      "{value_7}": {
+       "expr": "(((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\")))) || ((H * ((p(\"health_in_percent\")) + (p(\"additional_percent_on_target\"))) / 100))"
+      },
+      "{value_9}": {
+       "expr": "((((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\")))) || ((H * (((p(\"health_in_percent\"))) || (p(\"health_in_percent_banner\"))) / 100))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"cleanse_chance\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealAndCleanseSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

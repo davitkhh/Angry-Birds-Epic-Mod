@@ -1,0 +1,275 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_lumberjack",
+ "name": "Lumberjack",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_PigGuard",
+     "name": "Headgear_PigGuard",
+     "item": "Headgear_PigGuard",
+     "w": 117,
+     "h": 94,
+     "pivot": [
+      -0.24107142,
+      -0.116688825
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_PigGuard_Back",
+     "name": "Headgear_PigGuard_Back",
+     "item": "Headgear_PigGuard",
+     "w": 46,
+     "h": 57,
+     "pivot": [
+      0.56,
+      -0.23
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_BirdCatcher",
+     "name": "OffHand_BirdCatcher",
+     "item": "OffHand_BirdCatcher",
+     "w": 124,
+     "h": 88,
+     "pivot": [
+      -0.29,
+      0.01
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_c9f22",
+   "origin": "pig_attack_minion_farmer",
+   "type": "Attack",
+   "source": "pig_attack_minion_farmer",
+   "name": "Headbutt",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"tumble\"))"
+    }
+   },
+   "template": "SimpleAttackWithMissSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 80,
+  "attack": 14,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_lumberjack",
+  "fingerprint": "893446c7739380b273d86dc048509be5f17199cd",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_farmer"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Lumberjack",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_PigGuard",
+       "name": "Headgear_PigGuard",
+       "item": "Headgear_PigGuard",
+       "w": 117,
+       "h": 94,
+       "pivot": [
+        -0.24107142,
+        -0.116688825
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_PigGuard_Back",
+       "name": "Headgear_PigGuard_Back",
+       "item": "Headgear_PigGuard",
+       "w": 46,
+       "h": 57,
+       "pivot": [
+        0.56,
+        -0.23
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_BirdCatcher",
+       "name": "OffHand_BirdCatcher",
+       "item": "OffHand_BirdCatcher",
+       "w": 124,
+       "h": 88,
+       "pivot": [
+        -0.29,
+        0.01
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 80,
+    "attack": 14,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_c9f22",
+     "origin": "pig_attack_minion_farmer",
+     "type": "Attack",
+     "source": "pig_attack_minion_farmer",
+     "name": "Headbutt",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"tumble\"))"
+      }
+     },
+     "template": "SimpleAttackWithMissSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

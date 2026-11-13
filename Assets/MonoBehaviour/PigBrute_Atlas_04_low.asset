@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: PigBrute_Atlas_04_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 842619fa8fb541b88456674679edcb08, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0
+    y: 0.41015625
+    width: 0.6484375
+    height: 0.58984375
+  - serializedVersion: 2
+    x: 0.67578125
+    y: 0.03515625
+    width: 0.296875
+    height: 0.1640625
+  - serializedVersion: 2
+    x: 0.47265625
+    y: 0.22265625
+    width: 0.33984375
+    height: 0.18359375
+  - serializedVersion: 2
+    x: 0.65234375
+    y: 0.76953125
+    width: 0.2890625
+    height: 0.23046875
+  - serializedVersion: 2
+    x: 0
+    y: 0.203125
+    width: 0.46875
+    height: 0.203125
+  - serializedVersion: 2
+    x: 0
+    y: 0.01953125
+    width: 0.34375
+    height: 0.1796875
+  - serializedVersion: 2
+    x: 0.34765625
+    y: 0.0234375
+    width: 0.32421875
+    height: 0.17578125
+  textureGUIDs:
+  - 4a6ddda17ec84fd58947c31727da9a82
+  - 45a1b471f5704d5da2eaa12c9458db97
+  - d34a9611dfc8468e8f3d09cedda59cad
+  - fe1717173fb54da4bbf75c375e62d1c5
+  - 2c4b2fe5f072478194f0f10d3778889f
+  - 59b9f6daeeec4fe4a9cecfd6eb2e7fb1
+  - a3b487b1c19b4fb7953dd82e7b9d6154
+  textureSizes:
+  - {x: 332, y: 302}
+  - {x: 152, y: 84}
+  - {x: 174, y: 94}
+  - {x: 148, y: 118}
+  - {x: 240, y: 104}
+  - {x: 175, y: 92}
+  - {x: 166, y: 90}
+  defaultPivotOffsets:
+  - {x: 0, y: -0.5}
+  - {x: 0, y: -0.1}
+  - {x: 0.037499998, y: 0.19337006}
+  - {x: -0.010714286, y: 0.14782083}
+  - {x: -0.026785713, y: 0.08035714}
+  - {x: -0.05, y: 0.16}
+  - {x: 0.016071428, y: 0.17291667}
+  textureNames:
+  - BodyGangster
+  - MouthGangster
+  - Mouth_DamagedGangster
+  - Mouth_KOGangster
+  - Mouth_LaughingGangster
+  - Mouth_ScreamGangster
+  - Mouth_SurprisedGangster
+  texturePaths:
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/BodyGangster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/MouthGangster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_DamagedGangster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_KOGangster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_LaughingGangster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_ScreamGangster.png
+  - Assets/Content/4_Characters/2_Pigs/3_PigBrute/BodyParts/Mouth_SurprisedGangster.png
+  lastBuildID: 20160822150950841
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

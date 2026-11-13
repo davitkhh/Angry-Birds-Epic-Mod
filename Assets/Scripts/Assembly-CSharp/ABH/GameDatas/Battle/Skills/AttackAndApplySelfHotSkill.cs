@@ -21,6 +21,8 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private float m_TargetHealthBonus;
 
+		private float m_TargetCurrentHealthBonus;
+
 		public override void Init(SkillGameData model)
 		{
 			base.Init(model);
@@ -31,14 +33,16 @@ namespace ABH.GameDatas.Battle.Skills
 			base.Model.SkillParameters.TryGetValue("health_in_percent", out m_Percent);
 			// Optional: up to bonus_vs_target_missing_health_in_percent more damage, scaled by the target's missing health (near death = full bonus)
 			base.Model.SkillParameters.TryGetValue("bonus_vs_target_missing_health_in_percent", out m_TargetHealthBonus);
+			// Optional: up to bonus_vs_target_current_health_in_percent more damage, scaled by the target's remaining health (full health = full bonus)
+			base.Model.SkillParameters.TryGetValue("bonus_vs_target_current_health_in_percent", out m_TargetCurrentHealthBonus);
 			ModificationsOnDamageCalculation.Add(delegate(float damage, BattleGameData battle, ICombatant source, ICombatant target)
 			{
-				if (m_TargetHealthBonus <= 0f || target.ModifiedHealth <= 0f)
+				if ((m_TargetHealthBonus <= 0f && m_TargetCurrentHealthBonus <= 0f) || target.ModifiedHealth <= 0f)
 				{
 					return damage;
 				}
-				var missingFraction = 1f - UnityEngine.Mathf.Clamp01(target.CurrentHealth / target.ModifiedHealth);
-				return damage * (1f + m_TargetHealthBonus / 100f * missingFraction);
+				var healthFraction = UnityEngine.Mathf.Clamp01(target.CurrentHealth / target.ModifiedHealth);
+				return damage * (1f + m_TargetHealthBonus / 100f * (1f - healthFraction) + m_TargetCurrentHealthBonus / 100f * healthFraction);
 			});
 			ActionsOnEnd.Add(delegate(BattleGameData battle, ICombatant source, ICombatant target)
 			{
@@ -72,7 +76,8 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_2}", string.Empty + m_ChargeTurns);
 			dictionary.Add("{value_3}", m_Percent.ToString("0"));
 			dictionary.Add("{value_4}", base.Model.Balancing.EffectDuration.ToString("0"));
-			dictionary.Add("{value_5}", m_TargetHealthBonus.ToString("0"));
+			// {value_5}: whichever health-scaled bonus the row uses
+			dictionary.Add("{value_5}", (m_TargetCurrentHealthBonus > 0f ? m_TargetCurrentHealthBonus : m_TargetHealthBonus).ToString("0"));
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

@@ -12,6 +12,17 @@ public class AfterImageTrail : MonoBehaviour
 
 	public float StartAlpha = 1f;
 
+	// Colour the copies are drawn in (white: as they are)
+	public Color Tint = Color.white;
+
+	// Each copy starts up to this far (world units) from where the rig was, moves at Drift (world units per second)
+	// and scales from 1 to Grow over its fade, around the rig's position (Combatant Forge after-images)
+	public float Spread;
+
+	public Vector2 Drift;
+
+	public float Grow = 1f;
+
 	// Copies sit this far behind the rig (larger z draws further back with the orthographic sort).
 	public float DepthBehind = 1f;
 
@@ -24,6 +35,8 @@ public class AfterImageTrail : MonoBehaviour
 		public List<Mesh> Meshes;
 
 		public float Age;
+
+		public Vector3 Start;
 	}
 
 	private readonly List<Ghost> m_Ghosts = new List<Ghost>();
@@ -74,6 +87,11 @@ public class AfterImageTrail : MonoBehaviour
 		{
 			var ghost = m_Ghosts[i];
 			ghost.Age += dt;
+			if (ghost.Root != null && (Drift != Vector2.zero || Grow != 1f))
+			{
+				ghost.Root.transform.position = ghost.Start + (Vector3)(Drift * ghost.Age);
+				ghost.Root.transform.localScale = Vector3.one * Mathf.Lerp(1f, Grow, Mathf.Clamp01(ghost.Age / FadeTime));
+			}
 			var alpha = StartAlpha * (1f - Mathf.Clamp01(ghost.Age / FadeTime));
 			if (alpha <= 0f || ghost.Root == null)
 			{
@@ -83,7 +101,7 @@ public class AfterImageTrail : MonoBehaviour
 			}
 			foreach (var material in ghost.Materials)
 			{
-				material.color = new Color(1f, 1f, 1f, alpha);
+				material.color = new Color(Tint.r, Tint.g, Tint.b, alpha);
 			}
 		}
 		if (!m_Spawning && m_Ghosts.Count == 0)
@@ -101,11 +119,15 @@ public class AfterImageTrail : MonoBehaviour
 		var ghost = new Ghost { Root = new GameObject("AfterImage"), Materials = new List<Material>(), Meshes = new List<Mesh>() };
 		ghost.Root.layer = m_Rig.gameObject.layer;
 		ghost.Root.transform.SetParent(m_Parent, false);
+		// the copy's own origin at the rig (scaling happens around it), shifted by the spread
+		var offset = Spread > 0f ? (Vector3)(UnityEngine.Random.insideUnitCircle * Spread) : Vector3.zero;
+		ghost.Root.transform.position = new Vector3(m_Rig.position.x, m_Rig.position.y, ghost.Root.transform.position.z) + offset;
+		ghost.Start = ghost.Root.transform.position;
 		foreach (var renderer in m_Rig.GetComponentsInChildren<Renderer>())
 		{
-			if (!renderer.enabled || !renderer.gameObject.activeInHierarchy)
+			if (!renderer.enabled || !renderer.gameObject.activeInHierarchy || renderer.name.IndexOf("Shadow", System.StringComparison.OrdinalIgnoreCase) >= 0)
 			{
-				continue;
+				continue;  // (shadows aren't copied)
 			}
 			Mesh mesh;
 			var skinned = renderer as SkinnedMeshRenderer;
@@ -114,6 +136,7 @@ public class AfterImageTrail : MonoBehaviour
 				// Baked without the renderer's scale; the copy's transform puts it back (pigs face left with -1 x).
 				mesh = new Mesh();
 				skinned.BakeMesh(mesh);
+				DropShadow(skinned, mesh);
 			}
 			else
 			{
@@ -145,7 +168,7 @@ public class AfterImageTrail : MonoBehaviour
 				{
 					material.renderQueue = source.renderQueue;
 				}
-				material.color = new Color(1f, 1f, 1f, StartAlpha);
+				material.color = new Color(Tint.r, Tint.g, Tint.b, StartAlpha);
 				materials[i] = material;
 				ghost.Materials.Add(material);
 			}
@@ -153,6 +176,47 @@ public class AfterImageTrail : MonoBehaviour
 			ghost.Meshes.Add(mesh);
 		}
 		m_Ghosts.Add(ghost);
+	}
+
+	// The rig's shadow is part of its one skinned mesh: take out the triangles whose vertices follow a shadow bone.
+	private static void DropShadow(SkinnedMeshRenderer skinned, Mesh mesh)
+	{
+		var bones = skinned.bones;
+		var source = skinned.sharedMesh;
+		if (bones == null || source == null)
+		{
+			return;
+		}
+		var shadow = new bool[bones.Length];
+		var any = false;
+		for (var i = 0; i < bones.Length; i++)
+		{
+			shadow[i] = bones[i] != null && bones[i].name.IndexOf("Shadow", System.StringComparison.OrdinalIgnoreCase) >= 0;
+			any |= shadow[i];
+		}
+		var weights = source.boneWeights;
+		if (!any || weights == null || weights.Length != mesh.vertexCount)
+		{
+			return;
+		}
+		for (var sub = 0; sub < mesh.subMeshCount; sub++)
+		{
+			var tris = mesh.GetTriangles(sub);
+			var kept = new List<int>(tris.Length);
+			for (var t = 0; t + 2 < tris.Length; t += 3)
+			{
+				var w = weights[tris[t]];
+				var bone = w.boneIndex0;
+				if (bone >= 0 && bone < shadow.Length && shadow[bone] && w.weight0 > 0.5f)
+				{
+					continue;
+				}
+				kept.Add(tris[t]);
+				kept.Add(tris[t + 1]);
+				kept.Add(tris[t + 2]);
+			}
+			mesh.SetTriangles(kept, sub);
+		}
 	}
 
 	private static void DestroyGhost(Ghost ghost)

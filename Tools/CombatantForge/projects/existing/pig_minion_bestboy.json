@@ -1,0 +1,346 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_bestboy",
+ "name": "Best Boy",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+     "name": "Headgear_BestBoy",
+     "item": "Headgear_BestBoy",
+     "w": 56,
+     "h": 70,
+     "pivot": [
+      -1.0488416,
+      -0.062450107
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+     "name": "Headgear_BestBoy_Back",
+     "item": "Headgear_BestBoy",
+     "w": 98,
+     "h": 52,
+     "pivot": [
+      -0.3267857,
+      -0.6512019
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_BestBoy",
+     "name": "MainHand_BestBoy",
+     "item": "MainHand_BestBoy",
+     "w": 130,
+     "h": 78,
+     "pivot": [
+      -0.28928572,
+      -0.12053572
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_db676",
+   "origin": "pig_attack_minion_bestboy_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_bestboy_01",
+   "name": "Focused Light",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Target affected by \"In the Spot Light\" receive [ff0000]{value_3}%[-] more damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "bonus_damage_vs_spotlight": 200
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+    }
+   },
+   "template": "AttackWithBonusDamage",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_01575",
+   "origin": "pig_attack_minion_bestboy_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_bestboy_02",
+   "name": "In the Spot Light",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Commands all pigs to attack the same target. Lasts [ff0000]{value_5}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "charge": 2,
+    "spotlight_enemy": 1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "FocusAttackSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 100,
+  "attack": 22,
+  "sizeType": "Small",
+  "sizeScale": 1.3,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_bestboy",
+  "fingerprint": "c78a0320a8ee68484771e7e3da899b9ffa412adc",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_attack_minion_bestboy_02",
+     "pig_attack_minion_bestboy_01",
+     "pig_attack_minion_bestboy_01"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_minion_bestboy_01",
+     "pig_attack_minion_bestboy_02",
+     "pig_attack_minion_bestboy_01",
+     "pig_attack_minion_bestboy_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Best Boy",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+       "name": "Headgear_BestBoy",
+       "item": "Headgear_BestBoy",
+       "w": 56,
+       "h": 70,
+       "pivot": [
+        -1.0488416,
+        -0.062450107
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+       "name": "Headgear_BestBoy_Back",
+       "item": "Headgear_BestBoy",
+       "w": 98,
+       "h": 52,
+       "pivot": [
+        -0.3267857,
+        -0.6512019
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_BestBoy",
+       "name": "MainHand_BestBoy",
+       "item": "MainHand_BestBoy",
+       "w": 130,
+       "h": 78,
+       "pivot": [
+        -0.28928572,
+        -0.12053572
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 100,
+    "attack": 22,
+    "sizeType": "Small",
+    "sizeScale": 1.3,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_db676",
+     "origin": "pig_attack_minion_bestboy_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_bestboy_01",
+     "name": "Focused Light",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Target affected by \"In the Spot Light\" receive [ff0000]{value_3}%[-] more damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "bonus_damage_vs_spotlight": 200
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+      }
+     },
+     "template": "AttackWithBonusDamage",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_01575",
+     "origin": "pig_attack_minion_bestboy_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_bestboy_02",
+     "name": "In the Spot Light",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Commands all pigs to attack the same target. Lasts [ff0000]{value_5}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "charge": 2,
+      "spotlight_enemy": 1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "FocusAttackSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

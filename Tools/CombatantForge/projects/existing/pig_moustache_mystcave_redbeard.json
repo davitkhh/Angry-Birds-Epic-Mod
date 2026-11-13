@@ -1,0 +1,418 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_mystcave_redbeard",
+ "name": "Snor's first Officier",
+ "rig": "MoustachePig",
+ "variant": "pirate",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_CaptainRedBeard",
+     "name": "Headgear_CaptainRedBeard",
+     "item": "Headgear_CaptainRedBeard",
+     "w": 302,
+     "h": 252,
+     "pivot": [
+      0.10714285,
+      -0.1316114
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_CaptainRedBeard_Back",
+     "name": "Headgear_CaptainRedBeard_Back",
+     "item": "Headgear_CaptainRedBeard",
+     "w": 214,
+     "h": 106,
+     "pivot": [
+      0.26838195,
+      0.4090799
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_CaptainRedBeard",
+     "name": "MainHand_CaptainRedBeard",
+     "item": "MainHand_CaptainRedBeard",
+     "w": 286,
+     "h": 90,
+     "pivot": [
+      -0.3,
+      -0.05107143
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_dabeb",
+   "origin": "pig_attack_moustache_pirate_captain_myst",
+   "type": "Attack",
+   "source": "pig_attack_moustache_pirate_captain_myst",
+   "name": "Touch of chaos",
+   "desc": "Deals [ff0000]{value_1}[-] damage and afflicts a random negative status effect on the target.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "AttackAndApplyRandomDebuff",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_99470",
+   "origin": "pig_support_moustache_pirate_captain_myst",
+   "type": "Support",
+   "source": "pig_support_moustache_pirate_captain_myst",
+   "name": "Mysterious Reinforcement",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Summons a pirate ally that can only be found in the depths of the chronicle cave.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_pirate_myst": 1,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_11cf0",
+   "origin": "pig_passive_dirtytricks",
+   "type": "Passive",
+   "source": "pig_passive_dirtytricks",
+   "name": "Dirty Tricks",
+   "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {},
+   "values": {},
+   "template": "ImmunityToCurses",
+   "duration": -1,
+   "design": ""
+  },
+  {
+   "uid": "a3_67846",
+   "origin": "pig_passive_incompetentminions",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 390,
+  "attack": 20,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_mystcave_redbeard",
+  "fingerprint": "7a5f32e66d748b1acdb54e9dbe79e841b12c432a",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_attack_moustache_pirate_captain_myst",
+     "pig_attack_moustache_pirate_captain_myst",
+     "pig_support_moustache_pirate_captain_myst"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_support_moustache_pirate_captain_myst",
+     "pig_attack_moustache_pirate_captain_myst"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Snor's first Officier",
+   "rig": "MoustachePig",
+   "variant": "pirate",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_CaptainRedBeard",
+       "name": "Headgear_CaptainRedBeard",
+       "item": "Headgear_CaptainRedBeard",
+       "w": 302,
+       "h": 252,
+       "pivot": [
+        0.10714285,
+        -0.1316114
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_CaptainRedBeard_Back",
+       "name": "Headgear_CaptainRedBeard_Back",
+       "item": "Headgear_CaptainRedBeard",
+       "w": 214,
+       "h": 106,
+       "pivot": [
+        0.26838195,
+        0.4090799
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_CaptainRedBeard",
+       "name": "MainHand_CaptainRedBeard",
+       "item": "MainHand_CaptainRedBeard",
+       "w": 286,
+       "h": 90,
+       "pivot": [
+        -0.3,
+        -0.05107143
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 390,
+    "attack": 20,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_dabeb",
+     "origin": "pig_attack_moustache_pirate_captain_myst",
+     "type": "Attack",
+     "source": "pig_attack_moustache_pirate_captain_myst",
+     "name": "Touch of chaos",
+     "desc": "Deals [ff0000]{value_1}[-] damage and afflicts a random negative status effect on the target.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "AttackAndApplyRandomDebuff",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_99470",
+     "origin": "pig_support_moustache_pirate_captain_myst",
+     "type": "Support",
+     "source": "pig_support_moustache_pirate_captain_myst",
+     "name": "Mysterious Reinforcement",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Summons a pirate ally that can only be found in the depths of the chronicle cave.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_pirate_myst": 1,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_11cf0",
+     "origin": "pig_passive_dirtytricks",
+     "type": "Passive",
+     "source": "pig_passive_dirtytricks",
+     "name": "Dirty Tricks",
+     "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {},
+     "values": {},
+     "template": "ImmunityToCurses",
+     "duration": -1,
+     "design": ""
+    },
+    {
+     "uid": "a3_67846",
+     "origin": "pig_passive_incompetentminions",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

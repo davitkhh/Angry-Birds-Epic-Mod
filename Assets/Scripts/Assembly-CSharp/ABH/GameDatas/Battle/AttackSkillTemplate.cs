@@ -140,7 +140,11 @@ namespace ABH.GameDatas.Battle
 			if (triggerEvent.tag == "Impact")
 			{
 				m_Stopped = false;
-				SpawnVisualEffects(VisualEffectSpawnTiming.Impact, m_VisualEffectSetting);
+				// with "projectile hit counts as the Impact event" they play when the projectile arrives instead
+				if (!m_ImpactFromProjectile)
+				{
+					SpawnVisualEffects(VisualEffectSpawnTiming.Impact, m_VisualEffectSetting);
+				}
 			}
 			if (triggerEvent.tag == "Movement" && !m_BlockMovement)
 			{
@@ -211,6 +215,10 @@ namespace ABH.GameDatas.Battle
 				m_SkillProjectileAssetId = m_ForgeProjectile;
 			}
 			m_ProjectileFired = false;
+			m_ProjectileArrival = 0f;
+			m_ImpactFromProjectile = base.Model.SkillParameters.ContainsKey(ForgeSkillAnimation.ImpactOnHitParam) && !IsMeeleAttack(source)
+				&& !string.IsNullOrEmpty(m_SkillProjectileAssetId)
+				&& (DIContainerInfrastructure.ProjectileAssetProvider.ContainsAsset(m_SkillProjectileAssetId) || ForgeProjectiles.Has(m_SkillProjectileAssetId));
 			foreach (var action4 in ActionsBeforeTargetSelection)
 			{
 				yield return new WaitForSeconds(action4(m_Battle, m_Source, m_InitialTarget));
@@ -333,7 +341,7 @@ namespace ABH.GameDatas.Battle
 			{
 				var duration = m_AttackAnimation(source);
 				yield return new WaitForSeconds(duration / 2f);
-				if (DIContainerInfrastructure.ProjectileAssetProvider.ContainsAsset(m_SkillProjectileAssetId))
+				if (DIContainerInfrastructure.ProjectileAssetProvider.ContainsAsset(m_SkillProjectileAssetId) || ForgeProjectiles.Has(m_SkillProjectileAssetId))
 				{
 					SpawnProjectile(m_Battle, m_Source, m_Targets, m_SkillProjectileAssetId, m_UseOffhandAnim);
 				}
@@ -351,9 +359,19 @@ namespace ABH.GameDatas.Battle
 				if (!m_ProjectileFired)
 				{
 					m_ProjectileFired = true;
+					m_ForgeArrival = 0f;
+					m_ForgeRunner = null;
 					SpawnProjectile(m_Battle, m_Source, m_Targets, m_SkillProjectileAssetId, m_UseOffhandAnim);
 				}
 				yield return new WaitForSeconds(length / 2f);
+				// a Forge projectile with a long flight lands before the damage does (at most 3 s more)
+				var waitUntil = Mathf.Min(m_ForgeArrival, Time.time + 3f);
+				var cap = Time.time + 3f;
+				// (and past the plan while a projectile-wide slow motion holds it back)
+				while (Time.time < waitUntil || (m_ForgeRunner != null && !m_ForgeRunner.Landed && Time.time < cap))
+				{
+					yield return null;
+				}
 			}
 			else
 			{
@@ -378,7 +396,7 @@ namespace ABH.GameDatas.Battle
 			var WaitSlices = DIContainerLogic.GetPacingBalancing().DelayForAllMultiAttacks / attackCount;
 			var m_NormalizedDamagePerTarget = new Dictionary<int, int>();
 			// Ranged attacks with a projectile show it flying on to every enemy it ricochets to (Ricochet)
-			var ricochetProjectile = !IsMeeleAttack(source) && !string.IsNullOrEmpty(m_SkillProjectileAssetId) && DIContainerInfrastructure.ProjectileAssetProvider.ContainsAsset(m_SkillProjectileAssetId) ? m_SkillProjectileAssetId : null;
+			var ricochetProjectile = !IsMeeleAttack(source) && !string.IsNullOrEmpty(m_SkillProjectileAssetId) && (DIContainerInfrastructure.ProjectileAssetProvider.ContainsAsset(m_SkillProjectileAssetId) || ForgeProjectiles.Has(m_SkillProjectileAssetId)) ? m_SkillProjectileAssetId : null;
 			for (var i = 0; (float)i < attackCount; i++)
 			{
 				if (i > 0)
@@ -567,12 +585,26 @@ namespace ABH.GameDatas.Battle
 						}
 					}
 					var ricochets = Ricochet.Close();
+					if (ricochets != null)
+					{
+						// The bounce leaves only once the shot has reached this target (at most 3 s more)
+						var shotLands = Mathf.Min(m_ProjectileArrival, Time.time + 3f);
+						while (Time.time < shotLands)
+						{
+							yield return null;
+						}
+					}
 					for (var h = 0; ricochets != null && h < ricochets.Count; h++)
 					{
 						var flight = Ricochet.Launch(m_Source, ricochets[h], ricochetProjectile);
 						if (flight > 0f)
 						{
 							yield return new WaitForSeconds(flight);
+						}
+						// with "projectile hit counts as the Impact event", each hop's arrival is one too, on the enemy it reaches
+						if (m_ImpactFromProjectile && ricochets[h].To != null)
+						{
+							SpawnVisualEffects(VisualEffectSpawnTiming.Impact, m_VisualEffectSetting, new List<ICombatant> { ricochets[h].To });
 						}
 						// A ricochet hit can ricochet again (perks on the bounce)
 						Ricochet.Open();

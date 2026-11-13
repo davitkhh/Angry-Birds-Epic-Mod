@@ -1,0 +1,298 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_pumpkin",
+ "name": "Pumpkin Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_PumpkinPig",
+     "name": "Headgear_PumpkinPig",
+     "item": "Headgear_PumpkinPig",
+     "w": 140,
+     "h": 132,
+     "pivot": [
+      -0.15173025,
+      -0.33369246
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Corporal",
+     "name": "MainHand_Corporal",
+     "item": "MainHand_Corporal",
+     "w": 125,
+     "h": 64,
+     "pivot": [
+      -0.4,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_69913",
+   "origin": "pig_attack_minion_pumpkin_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_pumpkin_01",
+   "name": "Smashing Pumpkins",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target covered in pumpkin receives [ff0000]{value_3}%[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 200,
+    "bonus_damage_vs_pumpkin": 125,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+    }
+   },
+   "template": "AttackWithBonusDamage",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_4ede0",
+   "origin": "pig_attack_minion_pumpkin_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_pumpkin_02",
+   "name": "Sticky Pumpkin",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies and covers them in pumpkin. Lasts [ff0000]{value_2}[-] turns. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 30,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduce_damage_in_percent\"))"
+    }
+   },
+   "template": "ApplyGooOnTargets",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 155,
+  "attack": 18,
+  "sizeType": "Large",
+  "sizeScale": 1.2,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_pumpkin",
+  "fingerprint": "132384ed2910ad190750caf7f080d2f7aef621a8",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_pumpkin_02",
+     "pig_attack_minion_pumpkin_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pumpkin Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_PumpkinPig",
+       "name": "Headgear_PumpkinPig",
+       "item": "Headgear_PumpkinPig",
+       "w": 140,
+       "h": 132,
+       "pivot": [
+        -0.15173025,
+        -0.33369246
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Corporal",
+       "name": "MainHand_Corporal",
+       "item": "MainHand_Corporal",
+       "w": 125,
+       "h": 64,
+       "pivot": [
+        -0.4,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 155,
+    "attack": 18,
+    "sizeType": "Large",
+    "sizeScale": 1.2,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_69913",
+     "origin": "pig_attack_minion_pumpkin_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_pumpkin_01",
+     "name": "Smashing Pumpkins",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target covered in pumpkin receives [ff0000]{value_3}%[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 200,
+      "bonus_damage_vs_pumpkin": 125,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+      }
+     },
+     "template": "AttackWithBonusDamage",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_4ede0",
+     "origin": "pig_attack_minion_pumpkin_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_pumpkin_02",
+     "name": "Sticky Pumpkin",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies and covers them in pumpkin. Lasts [ff0000]{value_2}[-] turns. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 30,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduce_damage_in_percent\"))"
+      }
+     },
+     "template": "ApplyGooOnTargets",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

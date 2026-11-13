@@ -10607,5 +10607,63 @@
     "ShowAsNew": false,
     "HideInPreview": false,
     "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "pig_forge_pig_minion_rogue_shield__e0_mainhand",
+    "ItemType": "MainHandEquipment",
+    "AssetBaseId": "Forge_pig_minion_rogue_shield__e0_MainHand",
+    "LocaBaseId": "bird_weapon_red_sword",
+    "SortPriority": 0,
+    "BaseStat": 0,
+    "StatPerLevel": 0,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0
+    ],
+    "AnimationIndex": 2,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": null,
+    "RestrictedBirdId": "",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 1,
+    "HitEffectSuffix": "_Melee_Smash",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
+  },
+  {
+    "NameId": "pig_forge_pig_minion_rogue_shield__e0_offhand",
+    "ItemType": "OffHandEquipment",
+    "AssetBaseId": "Forge_pig_minion_rogue_shield__e0_OffHand",
+    "LocaBaseId": "bird_weapon_red_sword",
+    "SortPriority": 0,
+    "BaseStat": 0,
+    "StatPerLevel": 0,
+    "StatPerQuality": 0,
+    "StatPerQualityPercent": [
+      0
+    ],
+    "AnimationIndex": 1,
+    "IsRanged": false,
+    "ProjectileAssetId": "",
+    "Perk": null,
+    "RestrictedBirdId": "",
+    "DirectAssetAndLoca": true,
+    "CorrespondingSetItemId": "",
+    "AssetLevelOffset": 0,
+    "AssetCycleCount": 1,
+    "HitEffectSuffix": "_Melee_Smash",
+    "SetItemSkill": "",
+    "DirectProjectileAssetAndLoca": false,
+    "Mainsource": "Crafting",
+    "ShowAsNew": false,
+    "HideInPreview": false,
+    "PvpSetItemSkill": ""
   }
 ]

@@ -1,0 +1,98 @@
+{
+ "kind": "projectile",
+ "id": "mcpig_helmet",
+ "name": "McPig Helmet",
+ "rig": "__projectile",
+ "components": [
+  {
+   "uid": "50e46ece",
+   "name": "Body",
+   "type": "body",
+   "physics": {
+    "spawn": "fire",
+    "of": "",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.3,
+    "easing": "even",
+    "arc": 50,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": true,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 30,
+    "life": 0.4,
+    "scaleStart": 1,
+    "scaleEnd": 1,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": false,
+    "randomTurn": false,
+    "vary": {}
+   }
+  }
+ ],
+ "slots": {
+  "50e46ece": {
+   "layers": [
+    {
+     "uid": "56fc94e9",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Corporal",
+     "name": "Helmet_Front",
+     "item": "Helmet_Front",
+     "w": 148,
+     "h": 126,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 1,
+     "ty": 12,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    },
+    {
+     "uid": "78862ab9",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Corporal_Back",
+     "name": "Helmet_Back",
+     "item": "Helmet_Back",
+     "w": 148,
+     "h": 50,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": -1,
+     "ty": -12.6,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "78862ab9"
+  }
+ },
+ "abilities": [],
+ "stats": {},
+ "weapon": {},
+ "variant": "",
+ "source": "Projectile_McPig_Helmet"
+}

@@ -2,7 +2,7 @@
  "id": "slime_dawg",
  "name": "Slime Dawg",
  "rig": "PigPirate",
- "variant": "",
+ "variant": "gangster",
  "slots": {
   "Headgear": {
    "layers": [
@@ -126,15 +126,15 @@
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "Attack",
-   "design": "Deals 40% damage and ricochets once for 10% less damage. Target takes 80% damage for the next 3 turns. ",
-   "projectile": "Projectile_ZombiePig_Barf",
+   "design": "Deals 50% damage and ricochets once for 10% less damage. Target takes 100% damage for the next 3 turns. ",
+   "projectile": "Projectile_SlimeDawg_Slime",
    "nameId": "pig_attack_forge_slime_dawg_slime_out",
    "written": true,
    "template": "AttackWithChainAndDotSkill",
    "params": {
-    "damage_in_percent": 40,
+    "damage_in_percent": 50,
     "dot_chance": 100,
-    "dot_damage_in_percent": 80,
+    "dot_damage_in_percent": 100,
     "chain": 1,
     "chain_reduction": 10
    },
@@ -172,6 +172,76 @@
     }
    },
    "anim": ""
+  },
+  {
+   "uid": "lsht4cu6",
+   "type": "Attack",
+   "name": "Slime of Generosity",
+   "desc": "Deals [ff0000]{value_1}[-] damage and the target takes [ff0000]{value_7}[-] damage every turn for the next [ff0000]{value_2}[-] turns. When the slime is removed the target is healed for [00a800]{value_8}[-] HP.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "Deals 50% damage and the target takes 100% damage every turn for the next 3 turns. When the effect is removed (ex. turn limit ends or it's cleansed) the target is healed for 250% (damage)  hp",
+   "nameId": "pig_attack_forge_slime_dawg_slime_of_generosity",
+   "written": true,
+   "template": "AttackWithDotAndHealOnRemove",
+   "params": {
+    "damage_in_percent": 50,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 100,
+    "heal_in_percent": 250
+   },
+   "duration": 3,
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100) * A)"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_8}": {
+     "expr": "((p(\"heal_in_percent\")) / 100 * A)"
+    }
+   },
+   "projectile": "Projectile_SlimeDawg_Slime",
+   "effects": [
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_Hit_Single_Ranged_Projectile",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Affected",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Curse_DamageOverTime",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "Type": "1"
+     }
+    }
+   ]
   }
  ],
  "weapon": {

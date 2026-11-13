@@ -87,14 +87,14 @@
    "type": "Attack",
    "source": "pig_attack_brute_lassie",
    "name": "Rise n' Shine",
-   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, and up to an additional [ff0000]{value_5}%[-] damage the lower the target's health is.",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, and up to an additional [ff0000]{value_5}%[-] damage the higher the target's health is.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "Attack",
    "params": {
     "damage_in_percent": 300,
     "charge": 3,
-    "bonus_vs_target_missing_health_in_percent": 20
+    "bonus_vs_target_current_health_in_percent": 20
    },
    "values": {
     "{value_1}": {
@@ -110,12 +110,14 @@
      "expr": "D"
     },
     "{value_5}": {
-     "expr": "(p(\"bonus_vs_target_missing_health_in_percent\"))"
+     "expr": "((p(\"bonus_vs_target_current_health_in_percent\")) > 0 ? (p(\"bonus_vs_target_current_health_in_percent\")) : (p(\"bonus_vs_target_missing_health_in_percent\")))"
     }
    },
    "template": "AttackAndApplySelfHotSkill",
    "duration": 0,
-   "design": ""
+   "design": "How high target's health is instead of how low",
+   "nameId": "pig_attack_forge_pig_brute_lassie__e0_rise_n_shine",
+   "written": true
   }
  ],
  "weapon": {

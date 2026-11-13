@@ -30,7 +30,14 @@ def rd(p):
         return f.read().decode('utf-8')
 
 
-def wr(p, t):
+def nl_of(t):
+    return '\r\n' if '\r\n' in t else '\n'
+
+
+def wr(p, t, nl=None):
+    """Writes t with the given line endings (default: as written). Unity re-saves YAML with LF, so files differ."""
+    if nl:
+        t = t.replace('\r\n', '\n').replace('\n', nl)
     with open(p, 'wb') as f:
         f.write(t.encode('utf-8'))
 
@@ -129,9 +136,10 @@ def ensure_atlas(rig, atlas):
         text = rd(prefab)
         ref = '  - {fileID: 11400000, guid: %s, type: 2}' % guid_of(asset)
         if ref not in text:
-            i = text.index('  textureAtlases:\r\n')
+            nl = nl_of(text)
+            i = text.index('  textureAtlases:' + nl)
             j = text.index('  mAnimationClips:', i)
-            wr(prefab, text[:j] + ref + '\r\n' + text[j:])
+            wr(prefab, text[:j] + ref + nl + text[j:])
             print('added to', os.path.relpath(prefab, ROOT))
     return out
 
@@ -182,7 +190,7 @@ def build(rig, atlas, parts, sfx, names=None):
         tail = t[t.index('  lastBuildID:'):]
         body = ('  uvs:\r\n' + ''.join(uvs) + '  textureGUIDs:\r\n' + ''.join(gu) + '  textureSizes:\r\n' + ''.join(sz)
                 + '  defaultPivotOffsets:\r\n' + ''.join(pv) + '  textureNames:\r\n' + ''.join(nm) + '  texturePaths:\r\n' + ''.join(pa))
-        wr(asset, head + body + tail)
+        wr(asset, head + body + tail, nl_of(t))
     print('%s: %d sprites, %dx%d HR' % (atlas, len(entries), side, side), [e[0] for e in entries])
 
 

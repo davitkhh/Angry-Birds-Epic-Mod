@@ -1,0 +1,145 @@
+{
+ "kind": "projectile",
+ "id": "pigdrone_gunshot",
+ "name": "PigDrone Gunshot",
+ "rig": "__projectile",
+ "components": [
+  {
+   "uid": "e0fdd6e1",
+   "name": "Body",
+   "type": "body",
+   "physics": {
+    "spawn": "fire",
+    "of": "",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.2,
+    "easing": "even",
+    "arc": 0,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": true,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 30,
+    "life": 0.4,
+    "scaleStart": 1,
+    "scaleEnd": 1,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": false,
+    "randomTurn": false,
+    "vary": {}
+   }
+  },
+  {
+   "uid": "c27f111e",
+   "name": "Air trail (Trail)",
+   "type": "trail",
+   "physics": {
+    "spawn": "trail",
+    "of": "e0fdd6e1",
+    "count": 1,
+    "interval": 0.08,
+    "spread": 0,
+    "flightTime": 0.25,
+    "easing": "even",
+    "arc": 0,
+    "hops": 0,
+    "hopHeight": 30,
+    "align": false,
+    "spin": 0,
+    "fadeFrom": 0,
+    "fadeTo": 0,
+    "bounces": 0,
+    "bounceArc": 60,
+    "bounceDistance": 140,
+    "bounceDecay": 0.6,
+    "afterSpeed": 1,
+    "afterDirection": "onward",
+    "afterAlign": false,
+    "afterSpin": 0,
+    "linger": 0,
+    "rate": 60,
+    "life": 0.2,
+    "scaleStart": 1,
+    "scaleEnd": 5,
+    "fade": true,
+    "squash": 0,
+    "scatter": 0,
+    "gravity": 0,
+    "trailAlign": true,
+    "randomTurn": false,
+    "vary": {}
+   }
+  }
+ ],
+ "slots": {
+  "e0fdd6e1": {
+   "layers": [
+    {
+     "uid": "01adb122",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:MainHand_AdvYellowHunter_Projectile",
+     "name": "Sprite",
+     "item": "Sprite",
+     "w": 66,
+     "h": 22,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "01adb122"
+  },
+  "c27f111e": {
+   "layers": [
+    {
+     "uid": "d464a124",
+     "src": "fx:tex:e239a448a883d4742b9cf49010f83ce1:1x1",
+     "name": "Trail",
+     "item": "Trail",
+     "w": 64,
+     "h": 25,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "d464a124"
+  }
+ },
+ "abilities": [],
+ "stats": {},
+ "weapon": {},
+ "variant": "",
+ "source": "Projectile_PigDrone_Gunshot"
+}

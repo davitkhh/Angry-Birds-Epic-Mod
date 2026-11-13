@@ -1,0 +1,476 @@
+{
+ "kind": "existing",
+ "id": "pig_caster_clown_a",
+ "name": "Stapsi",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "7f6e3d7bfb45387428cfb7d745501761:Headgear_ClownA",
+     "name": "Headgear_ClownA",
+     "item": "Headgear_ClownA",
+     "w": 242,
+     "h": 220,
+     "pivot": [
+      -0.12857144,
+      -0.038303573
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "7f6e3d7bfb45387428cfb7d745501761:Headgear_ClownA_Back",
+     "name": "Headgear_ClownA_Back",
+     "item": "Headgear_ClownA",
+     "w": 232,
+     "h": 136,
+     "pivot": [
+      0.20892859,
+      -0.004569328
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "7f6e3d7bfb45387428cfb7d745501761:MainHand_ClownA",
+     "name": "MainHand_ClownA",
+     "item": "MainHand_ClownA",
+     "w": 226,
+     "h": 130,
+     "pivot": [
+      -0.28928572,
+      -0.07450549
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_ClownA",
+     "name": "OffHand_ClownA",
+     "item": "OffHand_ClownA",
+     "w": 106,
+     "h": 86,
+     "pivot": [
+      -0.7446429,
+      -0.5150332
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "gb6d6e89",
+     "src": "7f6e3d7bfb45387428cfb7d745501761:OffHand_ClownA_Back",
+     "name": "OffHand_ClownA_Back",
+     "item": "OffHand_ClownA",
+     "w": 284,
+     "h": 86,
+     "pivot": [
+      0.04285714,
+      -0.5130399
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "gb6d6e89"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_45768",
+   "origin": "pig_attack_caster_clown_a_01",
+   "type": "Attack",
+   "source": "pig_attack_caster_clown_a_01",
+   "name": "Balloon Strike",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_99cbf",
+   "origin": "pig_attack_caster_clown_a_02",
+   "type": "Attack",
+   "source": "pig_attack_caster_clown_a_02",
+   "name": "Conniption",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "reduction_in_percent": 33,
+    "chance": 100,
+    "charge": 2,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 2,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 345,
+  "attack": 22,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_caster_clown_a",
+  "fingerprint": "05ed388dfcca638736ddc7c99c9fe5a670cb258b",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_attack_caster_clown_a_02",
+     "pig_attack_caster_clown_a_01"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_attack_caster_clown_a_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Stapsi",
+   "rig": "PigMage",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "7f6e3d7bfb45387428cfb7d745501761:Headgear_ClownA",
+       "name": "Headgear_ClownA",
+       "item": "Headgear_ClownA",
+       "w": 242,
+       "h": 220,
+       "pivot": [
+        -0.12857144,
+        -0.038303573
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "7f6e3d7bfb45387428cfb7d745501761:Headgear_ClownA_Back",
+       "name": "Headgear_ClownA_Back",
+       "item": "Headgear_ClownA",
+       "w": 232,
+       "h": 136,
+       "pivot": [
+        0.20892859,
+        -0.004569328
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "7f6e3d7bfb45387428cfb7d745501761:MainHand_ClownA",
+       "name": "MainHand_ClownA",
+       "item": "MainHand_ClownA",
+       "w": 226,
+       "h": 130,
+       "pivot": [
+        -0.28928572,
+        -0.07450549
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_ClownA",
+       "name": "OffHand_ClownA",
+       "item": "OffHand_ClownA",
+       "w": 106,
+       "h": 86,
+       "pivot": [
+        -0.7446429,
+        -0.5150332
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    },
+    "OffHand_Back": {
+     "layers": [
+      {
+       "uid": "gb6d6e89",
+       "src": "7f6e3d7bfb45387428cfb7d745501761:OffHand_ClownA_Back",
+       "name": "OffHand_ClownA_Back",
+       "item": "OffHand_ClownA",
+       "w": 284,
+       "h": 86,
+       "pivot": [
+        0.04285714,
+        -0.5130399
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "gb6d6e89"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 345,
+    "attack": 22,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_45768",
+     "origin": "pig_attack_caster_clown_a_01",
+     "type": "Attack",
+     "source": "pig_attack_caster_clown_a_01",
+     "name": "Balloon Strike",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_99cbf",
+     "origin": "pig_attack_caster_clown_a_02",
+     "type": "Attack",
+     "source": "pig_attack_caster_clown_a_02",
+     "name": "Conniption",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "reduction_in_percent": 33,
+      "chance": 100,
+      "charge": 2,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 2,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

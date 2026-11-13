@@ -6409,25 +6409,33 @@
     "NameId": "pig_minion_rogue_shield",
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_rogue_shield",
-    "DefaultInventoryNameId": "",
-    "BaseHealth": 140,
+    "DefaultInventoryNameId": "pig_forge_pig_minion_rogue_shield__e0_inv1",
+    "BaseHealth": 180,
     "BaseAttack": 10,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
+      "pig_attack_minion_rogue_01",
+      "pig_attack_minion_rogue_02",
       "pig_attack_minion_rogue"
     ],
     "SkillCombos": [
       {
-        "Percentage": 70.0,
+        "Percentage": 33.33,
         "ComboChain": [
-          "pig_attack_minion_rogue_01_intro"
+          "pig_attack_minion_rogue_01"
         ]
       },
       {
-        "Percentage": 30.0,
+        "Percentage": 33.33,
         "ComboChain": [
           "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 33.33,
+        "ComboChain": [
+          "pig_attack_minion_rogue"
         ]
       }
     ],
@@ -6583,23 +6591,23 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_rogue",
     "DefaultInventoryNameId": "pig_minion_rogue_01",
-    "BaseHealth": 99,
+    "BaseHealth": 100,
     "BaseAttack": 8,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_rogue_01_intro",
+      "pig_attack_minion_rogue_01",
       "pig_attack_minion_rogue_02"
     ],
     "SkillCombos": [
       {
-        "Percentage": 70.0,
+        "Percentage": 50.0,
         "ComboChain": [
-          "pig_attack_minion_rogue_01_intro"
+          "pig_attack_minion_rogue_01"
         ]
       },
       {
-        "Percentage": 30.0,
+        "Percentage": 50.0,
         "ComboChain": [
           "pig_attack_minion_rogue_02"
         ]
@@ -8128,7 +8136,7 @@
     },
     "SizeScale": 0.9,
     "PigStrength": 5,
-    "PassiveSkillNameId": "pig_passive_moustache_tinker",
+    "PassiveSkillNameId": "pig_passive_moustache_tinker,pig_passive_incompetentminions",
     "IgnoreDifficulty": false
   },
   {
@@ -8163,7 +8171,7 @@
     },
     "SizeScale": 1.3,
     "PigStrength": 5,
-    "PassiveSkillNameId": "pig_passive_moustache_tinker",
+    "PassiveSkillNameId": "pig_passive_moustache_tinker,pig_passive_incompetentminions",
     "IgnoreDifficulty": false
   },
   {
@@ -8198,7 +8206,7 @@
     },
     "SizeScale": 1.3,
     "PigStrength": 5,
-    "PassiveSkillNameId": "pig_passive_moustache_tinker",
+    "PassiveSkillNameId": "pig_passive_moustache_tinker,pig_passive_incompetentminions",
     "IgnoreDifficulty": false
   },
   {
@@ -14016,7 +14024,7 @@
     "PerLevelAttack": 0,
     "SkillNameIds": [
       "pig_attack_caster_santa",
-      "pig_support_caster_santa"
+      "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help"
     ],
     "SkillCombos": [
       {
@@ -14028,7 +14036,7 @@
       {
         "Percentage": 50.0,
         "ComboChain": [
-          "pig_support_caster_santa"
+          "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help"
         ]
       }
     ],
@@ -17075,13 +17083,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_sportsman_a"
+      "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+      "pig_attack_forge_pig_minion_sportsman_a__e0_serve"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 50.0,
         "ComboChain": [
-          "pig_attack_minion_sportsman_a"
+          "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_sportsman_a__e0_serve"
         ]
       }
     ],
@@ -17257,13 +17272,13 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_bomb_volleybomb"
+      "pig_attack_forge_pig_bomb_volleybomb__e0_served"
     ],
     "SkillCombos": [
       {
         "Percentage": 100.0,
         "ComboChain": [
-          "pig_attack_bomb_volleybomb"
+          "pig_attack_forge_pig_bomb_volleybomb__e0_served"
         ]
       }
     ],

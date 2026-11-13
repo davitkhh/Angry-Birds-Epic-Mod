@@ -14,6 +14,9 @@ public static class ForgeSkillAnimation
 
 	public const string RangedParam = "anim_ranged";
 
+	// 1: the skill's Impact effects play when its projectile reaches the target, not on the clip's Impact event
+	public const string ImpactOnHitParam = "anim_impact_on_hit";
+
 	public static int Hash(string name)
 	{
 		unchecked
@@ -59,6 +62,7 @@ public static class ForgeSkillAnimation
 				return info.NameId;
 			}
 		}
-		return null;
+		// or one uploaded from the Forge's Projectiles section
+		return ForgeProjectiles.FindByHash((int)value);
 	}
 }

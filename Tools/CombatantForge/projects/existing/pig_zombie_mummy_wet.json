@@ -1,0 +1,297 @@
+{
+ "kind": "existing",
+ "id": "pig_zombie_mummy_wet",
+ "name": "Wet Mummy",
+ "rig": "ZombiePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "38e015fe9220a0b44860f75e33f20f1c:Headgear_Mummy",
+     "name": "Headgear_Mummy",
+     "item": "Headgear_Mummy",
+     "w": 222,
+     "h": 147,
+     "pivot": [
+      -0.021428572,
+      -0.036406707
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "49698066d17327d46a890eae8ce53c89:Headgear_Mummy_Back",
+     "name": "Headgear_Mummy_Back",
+     "item": "Headgear_Mummy",
+     "w": 174,
+     "h": 56,
+     "pivot": [
+      -0.06964286,
+      0.674139
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_5ac25",
+   "origin": "pig_attack_zombie_mummy_01",
+   "type": "Attack",
+   "source": "pig_attack_zombie_mummy_01",
+   "name": "Wet Sand Blast",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun for [ff0000]{value_2}[-] turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 10,
+    "duration": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "AttackWithStunChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_b311c",
+   "origin": "pig_passive_undead_02",
+   "type": "Passive",
+   "source": "pig_passive_undead_02",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 3,
+    "pig_support_undead_revive_self_02": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 80,
+  "attack": 10,
+  "sizeType": "Medium",
+  "sizeScale": 0.8,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_zombie_mummy_wet",
+  "fingerprint": "09fc83ea57d3055193835994c8bd06625351b888",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_zombie_mummy_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Wet Mummy",
+   "rig": "ZombiePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "38e015fe9220a0b44860f75e33f20f1c:Headgear_Mummy",
+       "name": "Headgear_Mummy",
+       "item": "Headgear_Mummy",
+       "w": 222,
+       "h": 147,
+       "pivot": [
+        -0.021428572,
+        -0.036406707
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "49698066d17327d46a890eae8ce53c89:Headgear_Mummy_Back",
+       "name": "Headgear_Mummy_Back",
+       "item": "Headgear_Mummy",
+       "w": 174,
+       "h": 56,
+       "pivot": [
+        -0.06964286,
+        0.674139
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 80,
+    "attack": 10,
+    "sizeType": "Medium",
+    "sizeScale": 0.8,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_5ac25",
+     "origin": "pig_attack_zombie_mummy_01",
+     "type": "Attack",
+     "source": "pig_attack_zombie_mummy_01",
+     "name": "Wet Sand Blast",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]{value_3}%[-] chance to stun for [ff0000]{value_2}[-] turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 10,
+      "duration": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(((p(\"chance_to_stun_vs_wet\"))) || (p(\"chance\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "AttackWithStunChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_b311c",
+     "origin": "pig_passive_undead_02",
+     "type": "Passive",
+     "source": "pig_passive_undead_02",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 3,
+      "pig_support_undead_revive_self_02": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

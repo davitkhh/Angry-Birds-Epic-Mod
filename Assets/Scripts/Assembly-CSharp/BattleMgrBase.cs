@@ -1198,6 +1198,38 @@ public abstract class BattleMgrBase : MonoBehaviour
 		return actingCharacters != null && actingCharacters.Count > 0;
 	}
 
+	// Combatant Forge "At the projectile": an effect where a projectile event happened (SkillBattleDataBase.ForgeEvent)
+	public void SpawnEffectAt(ICombatant invoker, VisualEffect effect, VisualEffectSetting setting, Vector3 position)
+	{
+		StartCoroutine(SpawnEffectAtLater(invoker, effect, position));
+	}
+
+	private IEnumerator SpawnEffectAtLater(ICombatant invoker, VisualEffect effect, Vector3 position)
+	{
+		if (effect.DelayInSeconds > 0f)
+		{
+			yield return new WaitForSeconds(effect.DelayInSeconds);
+		}
+		if (string.IsNullOrEmpty(effect.PrefabName) || ForgeEffectExtras.IsAfterImages(effect))
+		{
+			yield break;
+		}
+		var gameObject = DIContainerInfrastructure.GetBattleEffectAssetProvider().InstantiateObject(effect.PrefabName, m_BattleArea, position, Quaternion.identity);
+		if (gameObject == null)
+		{
+			yield break;
+		}
+		gameObject.transform.position = position;
+		var pigs = invoker != null && invoker.CombatantFaction == Faction.Pigs;
+		gameObject.transform.localScale = new Vector3(pigs && !effect.DoNotMirror ? -1f : 1f, 1f, 1f);
+		var settings = ForgeEffectExtras.Parse(effect);
+		ForgeEffectExtras.ApplyTurn(gameObject, invoker != null ? invoker.CombatantView : null, settings);
+		if (settings != null && settings.isText)
+		{
+			ForgeEffectExtras.ApplyText(gameObject, settings);
+		}
+	}
+
 	public void InstantiateEffect(ICombatant invoker, VisualEffect effect, VisualEffectSetting setting, List<ICombatant> targets, bool isCurse)
 	{
 		StartCoroutine(InstantiateEffects(invoker, effect, setting, targets, isCurse));
@@ -1228,10 +1260,13 @@ public abstract class BattleMgrBase : MonoBehaviour
 		yield return new WaitForSeconds(effect.SlowMotionDuration * Time.timeScale);
 		elapsedTime2 = 0f;
 		startValue2 = Time.timeScale;
+		// Combatant Forge: its own ease back (else the same as the ease in)
+		var forgeSlow = ForgeEffectExtras.Parse(effect);
+		var easeOut = forgeSlow != null && forgeSlow.easeOut >= 0f ? forgeSlow.easeOut : effect.InterpolationTime;
 		endValue2 = 1f;
-		while (elapsedTime2 < effect.InterpolationTime)
+		while (elapsedTime2 < easeOut)
 		{
-			var timePercent = elapsedTime2 / effect.InterpolationTime;
+			var timePercent = elapsedTime2 / easeOut;
 			var newScale = startValue2 + timePercent * (endValue2 - startValue2);
 			while (DIContainerInfrastructure.GetCoreStateMgr().m_GameIsPaused)
 			{
@@ -1291,6 +1326,17 @@ public abstract class BattleMgrBase : MonoBehaviour
 			yield break;
 		case VisualEffectTargetCombatant.SlowMotion:
 			StartCoroutine(ChangeTimeScale(invoker, effect, setting));
+			// Combatant Forge: the skill's effects timed "when slow motion starts"
+			if (setting != null && setting.VisualEffects != null)
+			{
+				foreach (var other in setting.VisualEffects)
+				{
+					if ((int)other.SpawnTiming == ForgeEffectExtras.TimingSlowMotion && other.TargetCombatant != VisualEffectTargetCombatant.SlowMotion && (int)other.TargetCombatant != ForgeEffectExtras.TargetProjectile)
+					{
+						InstantiateEffect(invoker, other, setting, targets, isCurse);
+					}
+				}
+			}
 			yield break;
 		}
 		for (var i = 0; i < targetedCharacters.Count; i++)
@@ -1372,6 +1418,12 @@ public abstract class BattleMgrBase : MonoBehaviour
 
 	private void InstantiateEffectOnCharacter(ICombatant invoker, VisualEffect effect, VisualEffectSetting setting, CharacterControllerBattleGroundBase character)
 	{
+		// Combatant Forge after-images: copies of the character, no prefab
+		if (ForgeEffectExtras.IsAfterImages(effect))
+		{
+			ForgeEffectExtras.AfterImages(this, character, m_BattleArea, ForgeEffectExtras.Parse(effect));
+			return;
+		}
 		Transform transform;
 		switch (effect.TargetAnchor)
 		{
@@ -1461,10 +1513,18 @@ public abstract class BattleMgrBase : MonoBehaviour
 		{
 			gameObject.transform.localScale = Vector3.Scale(gameObject.transform.localScale, transform.localScale);
 		}
+		// Combatant Forge: the effect's own turn, and what it turns with
+		ForgeEffectExtras.ApplyTurn(gameObject, character, ForgeEffectExtras.Parse(effect));
 		var componentInChildren = gameObject.GetComponentInChildren<BattleFXController>();
 		if (componentInChildren)
 		{
-			if (effect.HasText)
+			var forgeText = ForgeEffectExtras.Parse(effect);
+			if (forgeText != null && forgeText.isText)
+			{
+				// Combatant Forge text: its own words, colour, outline, size, rotation and arc
+				ForgeEffectExtras.ApplyText(gameObject, forgeText);
+			}
+			else if (effect.HasText)
 			{
 				componentInChildren.SetText(DIContainerInfrastructure.GetLocaService().Tr(effect.EffectTextIdent));
 			}

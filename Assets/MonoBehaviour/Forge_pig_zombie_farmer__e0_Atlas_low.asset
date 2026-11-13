@@ -15,15 +15,15 @@ MonoBehaviour:
   uvs:
   - serializedVersion: 2
     x: 0.0
-    y: 0.66796875
-    width: 0.50390625
-    height: 0.33203125
+    y: 0.625
+    width: 0.5703125
+    height: 0.375
   textureGUIDs:
   - 6e89fb5ffcc347aebfc1fbc83f8a4d48
   textureSizes:
-  - {x: 257, y: 169}
+  - {x: 291, y: 191}
   defaultPivotOffsets:
-  - {x: 0.03589483, y: -0.133487}
+  - {x: 0.01216976, y: -0.1166835}
   textureNames:
   - Forge_pig_zombie_farmer__e0
   texturePaths:

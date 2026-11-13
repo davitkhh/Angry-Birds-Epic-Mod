@@ -15,13 +15,16 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import gamedata as g
+import effects
 import existing
+import projectiles
 import portable
 import publish as p
 
 WEB = os.path.join(g.HERE, 'web')
 PROJECTS = os.path.join(g.DATA, 'projects')
 existing.DIR = os.path.join(PROJECTS, 'existing')
+projectiles.DIR = os.path.join(PROJECTS, 'projectiles')
 jobs = {}
 controls = {}
 publish_lock = threading.Lock()
@@ -36,6 +39,8 @@ def project_path(pid):
 def save_project(project):
     if project.get('kind') == 'existing':
         return existing.save(project)
+    if project.get('kind') == 'projectile':
+        return projectiles.save(project)
     os.makedirs(PROJECTS, exist_ok=True)
     tmp = project_path(project['id']) + '.tmp'
     with open(tmp, 'w', encoding='utf-8') as f:
@@ -156,10 +161,53 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(g.skills_catalog())
             if what == 'existing':
                 return self.send(existing.catalog())
+            if what == 'variant_presets':
+                return self.send(existing.variant_presets())
+            if what == 'projectile_new':
+                return self.send(projectiles.blank())
+            if what == 'projectiles_list':
+                return self.send(projectiles.listing())
+            if what == 'projectile_project':
+                return self.send(projectiles.load(parts[2]))
+            if what == 'projectile_uploaded':
+                return self.send(projectiles.from_uploaded(parts[2]))
+            if what == 'projectile_from_game':
+                return self.send(projectiles.from_game(parts[2]))
+            if what == 'projectile_layers':
+                return self.send(projectiles.game_layers(parts[2]))
+            if what == 'projectile_export':
+                data = projectiles.export_bytes(projectiles.load(parts[2]))
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Disposition', 'attachment; filename="%s.forgeprojectile"' % parts[2])
+                self.send_header('Content-Length', str(len(data)))
+                self.send_header('Cache-Control', 'no-store')
+                self.end_headers()
+                self.wfile.write(data)
+                return
+            if what == 'fx_library':
+                return self.send(effects.library_items())
+            if what == 'fx':
+                if parts[2].startswith(projectiles.PREFIX):
+                    return self.send(None)
+                return self.send(effects.info(parts[2]))
+            if what == 'allfx':
+                return self.send(p.all_skill_effects())
+            if what == 'abilityfx':
+                # a skill's effects as the game plays them: its own Forge list, else its AssetId's
+                skill_id, asset = parts[2], (parts[3] if len(parts) > 3 else '')
+                return self.send(p.skill_fx_of(skill_id, asset))
+            if what == 'fx_names':
+                return self.send(effects.effect_names())
+            if what == 'skillfx':
+                return self.send(effects.skill_effects(parts[2]))
             if what == 'projectile':
+                if parts[2].startswith(projectiles.PREFIX):
+                    return self.send(projectiles.published_info(parts[2]))
                 return self.send(g.projectile_info(parts[2]))
             if what == 'projectiles':
-                return self.send(g.projectile_catalog())
+                # the game's projectiles and the ones uploaded from the Projectiles section
+                return self.send(projectiles.published_names() + g.projectile_catalog())
             if what == 'powerlevels':
                 return self.send(g.power_levels())
             if what == 'icons':
@@ -181,6 +229,10 @@ class Handler(BaseHTTPRequestHandler):
             if what == 'job':
                 job = jobs[parts[2]]
                 return self.send(job)
+        if head == 'fximage':
+            return self.send(effects.image_png(parts[1]), 'image/png', cache=True)
+        if head in ('projectileart', 'projectileicon') and parts[1].startswith(projectiles.PREFIX):
+            return self.send(projectiles.published_art(parts[1])[0], 'image/png')
         if head == 'projectileart':
             return self.send(g.projectile_art(parts[1]), 'image/png', cache=True)
         if head == 'projectileicon':
@@ -216,6 +268,10 @@ class Handler(BaseHTTPRequestHandler):
                 save_project(body)
                 if body.get('kind') == 'existing':
                     return self.send({'ok': True})
+                if body.get('kind') == 'projectile':
+                    if renamed_from and renamed_from != body['id'] and os.path.exists(projectiles.path(renamed_from)):
+                        os.remove(projectiles.path(renamed_from))
+                    return self.send({'ok': True})
                 if renamed_from and renamed_from != body['id'] and not body.get('publishedAt') and os.path.exists(project_path(renamed_from)):
                     os.remove(project_path(renamed_from))
                 return self.send({'ok': True})
@@ -233,6 +289,19 @@ class Handler(BaseHTTPRequestHandler):
                         return None
                     return self.send({'job': start_job(work)})
                 return self.send({'trashed': trash_project(pid)})
+            if what == 'projectile_duplicate':
+                copy_ = projectiles.duplicate(body)
+                projectiles.save(copy_)
+                return self.send(copy_)
+            if what == 'projectile_publish':
+                project = projectiles.load(body['id'])
+                return self.send({'name': projectiles.publish(project), 'project': project})
+            if what == 'projectile_delete':
+                return self.send({'trashed': projectiles.trash(body['id'])})
+            if what == 'projectile_import':
+                project = projectiles.import_bytes(base64.b64decode(body['data'].split(',', 1)[-1]))
+                projectiles.save(project)
+                return self.send({'project': project, 'library': g.library()})
             if what == 'existing_open':
                 project, note = existing.open_project(body['id'])
                 return self.send({'project': project, 'note': note})
@@ -240,6 +309,19 @@ class Handler(BaseHTTPRequestHandler):
                 project = existing.duplicate(body['id'], {x['id'] for x in list_projects()})
                 save_project(project)
                 return self.send({'project': p.migrate_project(project)})
+            if what == 'existing_variant':
+                parent, suffix, ratios = body['parent'], body['suffix'], body.get('ratios') or {}
+
+                def work(log, register):
+                    job_result['nameId'] = existing.add_variant(parent, suffix, log, ratios)
+                    return None
+                job_result = {}
+                job_id = start_job(work)
+                jobs[job_id]['variant'] = job_result
+                return self.send({'job': job_id})
+            if what == 'existing_delete':
+                name_id = body['id']
+                return self.send({'job': start_job(lambda log, register: existing.delete_variant(name_id, log))})
             if what == 'existing_tick':
                 return self.send({'unticked': existing.set_tick(body['parent'], body['variant'], bool(body['on']))})
             if what == 'validate':
@@ -251,6 +333,15 @@ class Handler(BaseHTTPRequestHandler):
                 def work(log, register):
                     ability = next(a for a in project['abilities'] if a['uid'] == uid)
                     return p.run_claude_ability(project, ability, log, register)
+                return self.send({'job': start_job(work, stoppable=True)})
+            if what == 'recipe':
+                uid, ruid = body['uid'], body['recipe']
+                project = body['project']
+
+                def work(log, register):
+                    ability = next(a for a in project['abilities'] if a['uid'] == uid)
+                    recipe = next(r for r in ability.get('recipes') or [] if r['uid'] == ruid)
+                    return p.run_claude_recipe(project, ability, recipe, log, register)
                 return self.send({'job': start_job(work, stoppable=True)})
             if what == 'job_stop':
                 stop_job(body['job'])
@@ -267,6 +358,8 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def make_server(port):
+    # The library's Effects category reads every effect prefab once (~20 s), then a cache: start it now.
+    threading.Thread(target=lambda: effects.library_items(), daemon=True).start()
     # Local tool: it writes into the game's files, so it only listens on this machine.
     return ThreadingHTTPServer(('127.0.0.1', port), Handler)
 

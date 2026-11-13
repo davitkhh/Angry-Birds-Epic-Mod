@@ -21,6 +21,9 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private float m_ChainChance = 100f;
 
+		// Optional: rage taken from the bounced target's faction per bounce that lands
+		private float m_RageReducePerChain;
+
 		private string m_AddtionalEffectInfo = string.Empty;
 
 		public override void Init(SkillGameData model)
@@ -33,6 +36,7 @@ namespace ABH.GameDatas.Battle.Skills
 			base.Model.SkillParameters.TryGetValue("attack_count", out m_AttackCount);
 			base.Model.SkillParameters.TryGetValue("chain", out m_ChainCount);
 			base.Model.SkillParameters.TryGetValue("chain_reduction", out m_ReductionPerChain);
+			base.Model.SkillParameters.TryGetValue("chain_ragereduce", out m_RageReducePerChain);
 			if (base.Model.SkillParameters.ContainsKey("chain_chance"))
 			{
 				base.Model.SkillParameters.TryGetValue("chain_chance", out m_ChainChance);
@@ -84,6 +88,10 @@ namespace ABH.GameDatas.Battle.Skills
 						combatant.ReceiveDamage(num2, source);
 						battle.m_DamageLastTurn += DIContainerLogic.GetBattleService().DealDamageFromCurrentTurn(combatant, battle, source);
 						m_Source.CurrentSkillAttackValue = currentSkillAttackValue;
+						if (m_RageReducePerChain > 0f)
+						{
+							DIContainerLogic.GetBattleService().ReduceRageFromAttack(m_RageReducePerChain, battle, combatant);
+						}
 					});
 					if (target.ChainedTargets == null)
 					{
@@ -100,6 +108,8 @@ namespace ABH.GameDatas.Battle.Skills
 			var num = Convert.ToInt32(m_DamageMod * invoker.ModifiedAttack);
 			dictionary.Add("{value_1}", string.Empty + num);
 			dictionary.Add("{value_2}", string.Empty + m_ChargeTurns);
+			dictionary.Add("{value_3}", string.Empty + Mathf.RoundToInt(m_RageReducePerChain));
+			dictionary.Add("{value_5}", string.Empty + Mathf.RoundToInt(m_ReductionPerChain));
 			dictionary.Add("{value_4}", string.Empty + m_AttackCount);
 			dictionary.Add("{value_7}", string.Empty + m_ChainCount);
 			dictionary.Add("{value_8}", string.Empty + m_ChainChance);

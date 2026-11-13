@@ -1,0 +1,408 @@
+{
+ "kind": "existing",
+ "id": "pig_bird_white",
+ "name": "Sigrid",
+ "rig": "WhiteBird",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "de971724533406249a0a3df9fad0d808:Headgear_MoonPriest",
+     "name": "Headgear_MoonPriest",
+     "item": "Headgear_MoonPriest",
+     "w": 182,
+     "h": 210,
+     "pivot": [
+      0.16,
+      0.27
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "ac6ca873b1730d74cb7984707f1b5937:Headgear_MoonPriest_Back",
+     "name": "Headgear_MoonPriest_Back",
+     "item": "Headgear_MoonPriest",
+     "w": 138,
+     "h": 112,
+     "pivot": [
+      -0.09,
+      0.88
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "ac6ca873b1730d74cb7984707f1b5937:MainHand_White_Set_01",
+     "name": "MainHand_White_Set_01",
+     "item": "MainHand_White_Set_01",
+     "w": 163,
+     "h": 219,
+     "pivot": [
+      -0.48,
+      -0.14
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "de971724533406249a0a3df9fad0d808:OffHand_White_Set_01",
+     "name": "OffHand_White_Set_01",
+     "item": "OffHand_White_Set_01",
+     "w": 165,
+     "h": 186,
+     "pivot": [
+      0.05,
+      -0.12
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_c902a",
+   "origin": "pig_attack_white_moonpriest",
+   "type": "Attack",
+   "source": "pig_attack_white_moonpriest",
+   "name": "Healing Strike",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Heals all birds by [00a800]{value_3}%[-] of the dealt damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "HealingStrike",
+   "params": {
+    "damage_in_percent": 110,
+    "heal_ally": 20,
+    "intensity": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal_ally\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithHealAlly",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_be2d1",
+   "origin": "pig_support_white_moonpriest",
+   "type": "Support",
+   "source": "pig_support_white_moonpriest",
+   "name": "Healing Shield",
+   "desc": "If any bird takes damage, all birds are healed by [00a800]{value_3}%[-] of the taken damage. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_02",
+   "icon": "RoyalAid",
+   "params": {
+    "health_in_percent": 15,
+    "chance": 100,
+    "all": 1,
+    "effect_all": 1
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"health_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_6}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "HealCounterSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Strike",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 75,
+  "attack": 20,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_bird_white",
+  "fingerprint": "4d5ef2269a8f2af41369434eceea3d807d6fa66e",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_support_white_moonpriest",
+     "pig_attack_white_moonpriest",
+     "pig_attack_white_moonpriest",
+     "pig_attack_white_moonpriest"
+    ]
+   },
+   {
+    "Percentage": 25,
+    "ComboChain": [
+     "pig_attack_white_moonpriest"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Sigrid",
+   "rig": "WhiteBird",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "de971724533406249a0a3df9fad0d808:Headgear_MoonPriest",
+       "name": "Headgear_MoonPriest",
+       "item": "Headgear_MoonPriest",
+       "w": 182,
+       "h": 210,
+       "pivot": [
+        0.16,
+        0.27
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "ac6ca873b1730d74cb7984707f1b5937:Headgear_MoonPriest_Back",
+       "name": "Headgear_MoonPriest_Back",
+       "item": "Headgear_MoonPriest",
+       "w": 138,
+       "h": 112,
+       "pivot": [
+        -0.09,
+        0.88
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "ac6ca873b1730d74cb7984707f1b5937:MainHand_White_Set_01",
+       "name": "MainHand_White_Set_01",
+       "item": "MainHand_White_Set_01",
+       "w": 163,
+       "h": 219,
+       "pivot": [
+        -0.48,
+        -0.14
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "de971724533406249a0a3df9fad0d808:OffHand_White_Set_01",
+       "name": "OffHand_White_Set_01",
+       "item": "OffHand_White_Set_01",
+       "w": 165,
+       "h": 186,
+       "pivot": [
+        0.05,
+        -0.12
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Strike",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 75,
+    "attack": 20,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_c902a",
+     "origin": "pig_attack_white_moonpriest",
+     "type": "Attack",
+     "source": "pig_attack_white_moonpriest",
+     "name": "Healing Strike",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Heals all birds by [00a800]{value_3}%[-] of the dealt damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "HealingStrike",
+     "params": {
+      "damage_in_percent": 110,
+      "heal_ally": 20,
+      "intensity": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal_ally\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithHealAlly",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_be2d1",
+     "origin": "pig_support_white_moonpriest",
+     "type": "Support",
+     "source": "pig_support_white_moonpriest",
+     "name": "Healing Shield",
+     "desc": "If any bird takes damage, all birds are healed by [00a800]{value_3}%[-] of the taken damage. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Birds_02",
+     "icon": "RoyalAid",
+     "params": {
+      "health_in_percent": 15,
+      "chance": 100,
+      "all": 1,
+      "effect_all": 1
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"health_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_6}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "HealCounterSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

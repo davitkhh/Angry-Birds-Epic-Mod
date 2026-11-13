@@ -1,0 +1,430 @@
+{
+ "kind": "existing",
+ "id": "pig_bird_red",
+ "name": "Sword Spirit",
+ "rig": "RedBird",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "6ae5ffd30ec2f0b4585a7dd105f79e9e:Headgear_Avenger",
+     "name": "Headgear_Avenger",
+     "item": "Headgear_Avenger",
+     "w": 204,
+     "h": 176,
+     "pivot": [
+      0.08,
+      -0.3
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "6ae5ffd30ec2f0b4585a7dd105f79e9e:Headgear_Avenger_Back",
+     "name": "Headgear_Avenger_Back",
+     "item": "Headgear_Avenger",
+     "w": 142,
+     "h": 68,
+     "pivot": [
+      0.18,
+      -0.01
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "a00fbe0c95b5a454d918094887f5751c:MainHand_Red_Set_02",
+     "name": "MainHand_Red_Set_02",
+     "item": "MainHand_Red_Set_02",
+     "w": 293,
+     "h": 79,
+     "pivot": [
+      -0.3,
+      0.14901674
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "6ae5ffd30ec2f0b4585a7dd105f79e9e:OffHand_Red_Set_02",
+     "name": "OffHand_Red_Set_02",
+     "item": "OffHand_Red_Set_02",
+     "w": 146,
+     "h": 183,
+     "pivot": [
+      0.15535714,
+      -0.21156323
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_0c1bf",
+   "origin": "pig_attack_red_mirror",
+   "type": "Attack",
+   "source": "pig_attack_red_mirror",
+   "name": "Angry Bird",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 300,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_f1730",
+   "origin": "pig_support_red_mirror",
+   "type": "Support",
+   "source": "pig_support_red_mirror",
+   "name": "Fortify",
+   "desc": "Taken damage reduced by [ff0000]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_01",
+   "icon": "Protect",
+   "params": {
+    "percent": 55
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+    }
+   },
+   "template": "BlockDamageSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_809b1",
+   "origin": "pig_passive_block_consumables",
+   "type": "Passive",
+   "source": "pig_passive_block_consumables",
+   "name": "Duel of Honor",
+   "desc": "Potions are not allowed!",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {},
+   "values": {},
+   "template": "BlockConsumables",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 298,
+  "attack": 27,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig10_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_bird_red",
+  "fingerprint": "a3173489d6649c89d68d1fda6349246e45e5b94f",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_support_red_mirror",
+     "pig_attack_red_mirror"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Sword Spirit",
+   "rig": "RedBird",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "6ae5ffd30ec2f0b4585a7dd105f79e9e:Headgear_Avenger",
+       "name": "Headgear_Avenger",
+       "item": "Headgear_Avenger",
+       "w": 204,
+       "h": 176,
+       "pivot": [
+        0.08,
+        -0.3
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "6ae5ffd30ec2f0b4585a7dd105f79e9e:Headgear_Avenger_Back",
+       "name": "Headgear_Avenger_Back",
+       "item": "Headgear_Avenger",
+       "w": 142,
+       "h": 68,
+       "pivot": [
+        0.18,
+        -0.01
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "a00fbe0c95b5a454d918094887f5751c:MainHand_Red_Set_02",
+       "name": "MainHand_Red_Set_02",
+       "item": "MainHand_Red_Set_02",
+       "w": 293,
+       "h": 79,
+       "pivot": [
+        -0.3,
+        0.14901674
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "6ae5ffd30ec2f0b4585a7dd105f79e9e:OffHand_Red_Set_02",
+       "name": "OffHand_Red_Set_02",
+       "item": "OffHand_Red_Set_02",
+       "w": 146,
+       "h": 183,
+       "pivot": [
+        0.15535714,
+        -0.21156323
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 298,
+    "attack": 27,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig10_defeated_gold": 1,
+     "loot_pig_boss_defeated_exp": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_0c1bf",
+     "origin": "pig_attack_red_mirror",
+     "type": "Attack",
+     "source": "pig_attack_red_mirror",
+     "name": "Angry Bird",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 300,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_f1730",
+     "origin": "pig_support_red_mirror",
+     "type": "Support",
+     "source": "pig_support_red_mirror",
+     "name": "Fortify",
+     "desc": "Taken damage reduced by [ff0000]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Birds_01",
+     "icon": "Protect",
+     "params": {
+      "percent": 55
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+      }
+     },
+     "template": "BlockDamageSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_809b1",
+     "origin": "pig_passive_block_consumables",
+     "type": "Passive",
+     "source": "pig_passive_block_consumables",
+     "name": "Duel of Honor",
+     "desc": "Potions are not allowed!",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {},
+     "values": {},
+     "template": "BlockConsumables",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

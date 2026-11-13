@@ -1,0 +1,341 @@
+{
+ "kind": "existing",
+ "id": "pig_pirate_adventurer_boss_02",
+ "name": "Adventurer",
+ "rig": "PigPirate",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "24737ef5c450b084e84264d632831bbc:Headgear_Adventurer",
+     "name": "Headgear_Adventurer",
+     "item": "Headgear_Adventurer",
+     "w": 273,
+     "h": 157,
+     "pivot": [
+      -0.1071429,
+      -0.1164411
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "03d66405acdb9b940b9c794b5691985a:MainHand_Adventurer",
+     "name": "MainHand_Adventurer",
+     "item": "MainHand_Adventurer",
+     "w": 138,
+     "h": 182,
+     "pivot": [
+      -0.24107145,
+      -0.2985577
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_cbda9",
+   "origin": "pig_attack_pirate_adventurer",
+   "type": "Attack",
+   "source": "pig_attack_pirate_adventurer",
+   "name": "Whiplash",
+   "desc": "Immediately remove helpful effects on the target. Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "purge_chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"purge_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"purge_chance\"))"
+    }
+   },
+   "template": "AttackWithPurgeSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_59234",
+   "origin": "pig_support_pirate_adventurer",
+   "type": "Support",
+   "source": "pig_support_pirate_adventurer",
+   "name": "Counter",
+   "desc": "Target counters enemy attacks with its own attack, dealing [ff0000]{value_7}%[-] damage. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "counter": 100,
+    "damage_in_percent": 200
+   },
+   "values": {
+    "{value_6}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"counter\"))"
+    }
+   },
+   "template": "CounterEnemiesBlessing",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_11cf0",
+   "origin": "pig_passive_dirtytricks",
+   "type": "Passive",
+   "source": "pig_passive_dirtytricks",
+   "name": "Dirty Tricks",
+   "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": null,
+   "values": {},
+   "template": "ImmunityToCurses",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 750,
+  "attack": 55,
+  "sizeType": "Large",
+  "sizeScale": 0.9,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_pirate_adventurer_boss_02",
+  "fingerprint": "2d7255d9dd21fac656c3f37e3adda35944b4a577",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_support_pirate_adventurer",
+     "pig_attack_pirate_adventurer",
+     "pig_attack_pirate_adventurer"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Adventurer",
+   "rig": "PigPirate",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "24737ef5c450b084e84264d632831bbc:Headgear_Adventurer",
+       "name": "Headgear_Adventurer",
+       "item": "Headgear_Adventurer",
+       "w": 273,
+       "h": 157,
+       "pivot": [
+        -0.1071429,
+        -0.1164411
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "03d66405acdb9b940b9c794b5691985a:MainHand_Adventurer",
+       "name": "MainHand_Adventurer",
+       "item": "MainHand_Adventurer",
+       "w": 138,
+       "h": 182,
+       "pivot": [
+        -0.24107145,
+        -0.2985577
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 750,
+    "attack": 55,
+    "sizeType": "Large",
+    "sizeScale": 0.9,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig7_defeated_gold": 1,
+     "loot_pig7_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_cbda9",
+     "origin": "pig_attack_pirate_adventurer",
+     "type": "Attack",
+     "source": "pig_attack_pirate_adventurer",
+     "name": "Whiplash",
+     "desc": "Immediately remove helpful effects on the target. Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "purge_chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"purge_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"purge_chance\"))"
+      }
+     },
+     "template": "AttackWithPurgeSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_59234",
+     "origin": "pig_support_pirate_adventurer",
+     "type": "Support",
+     "source": "pig_support_pirate_adventurer",
+     "name": "Counter",
+     "desc": "Target counters enemy attacks with its own attack, dealing [ff0000]{value_7}%[-] damage. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "counter": 100,
+      "damage_in_percent": 200
+     },
+     "values": {
+      "{value_6}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"counter\"))"
+      }
+     },
+     "template": "CounterEnemiesBlessing",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_11cf0",
+     "origin": "pig_passive_dirtytricks",
+     "type": "Passive",
+     "source": "pig_passive_dirtytricks",
+     "name": "Dirty Tricks",
+     "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {},
+     "values": {},
+     "template": "ImmunityToCurses",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

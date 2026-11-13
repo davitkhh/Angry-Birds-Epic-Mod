@@ -1,0 +1,355 @@
+{
+ "kind": "existing",
+ "id": "pig_zombie_mummy_boss_02",
+ "name": "Pharaoh Pig",
+ "rig": "ZombiePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "38e015fe9220a0b44860f75e33f20f1c:Headgear_Mummy",
+     "name": "Headgear_Mummy",
+     "item": "Headgear_Mummy",
+     "w": 222,
+     "h": 147,
+     "pivot": [
+      -0.021428572,
+      -0.036406707
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "49698066d17327d46a890eae8ce53c89:Headgear_Mummy_Back",
+     "name": "Headgear_Mummy_Back",
+     "item": "Headgear_Mummy",
+     "w": 174,
+     "h": 56,
+     "pivot": [
+      -0.06964286,
+      0.674139
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "49698066d17327d46a890eae8ce53c89:MainHand_ZombieKnight",
+     "name": "MainHand_ZombieKnight",
+     "item": "MainHand_ZombieKnight",
+     "w": 124,
+     "h": 113,
+     "pivot": [
+      -0.57857144,
+      0.038211126
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_c8495",
+   "origin": "pig_attack_zombie_mummy_boss",
+   "type": "Attack",
+   "source": "pig_attack_zombie_mummy_boss",
+   "name": "Blinding Sand",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.\r\nLowers attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 300,
+    "reduction_in_percent": 15,
+    "chance": 100,
+    "all": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_6a28a",
+   "origin": "pig_passive_undead",
+   "type": "Passive",
+   "source": "pig_passive_undead",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 2,
+    "pig_support_undead_revive_self": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": true,
+  "projectile": "Projectile_ZombiePig_SandBlast",
+  "hitEffect": "_Ranged_Projectile",
+  "directProjectile": true
+ },
+ "stats": {
+  "hp": 100,
+  "attack": 35,
+  "sizeType": "Medium",
+  "sizeScale": 1.3,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_zombie_mummy_boss_02",
+  "fingerprint": "b62de75e2325eccb27350515a91618aec7d4ee6c",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_zombie_mummy_boss"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pharaoh Pig",
+   "rig": "ZombiePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "38e015fe9220a0b44860f75e33f20f1c:Headgear_Mummy",
+       "name": "Headgear_Mummy",
+       "item": "Headgear_Mummy",
+       "w": 222,
+       "h": 147,
+       "pivot": [
+        -0.021428572,
+        -0.036406707
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "49698066d17327d46a890eae8ce53c89:Headgear_Mummy_Back",
+       "name": "Headgear_Mummy_Back",
+       "item": "Headgear_Mummy",
+       "w": 174,
+       "h": 56,
+       "pivot": [
+        -0.06964286,
+        0.674139
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "49698066d17327d46a890eae8ce53c89:MainHand_ZombieKnight",
+       "name": "MainHand_ZombieKnight",
+       "item": "MainHand_ZombieKnight",
+       "w": 124,
+       "h": 113,
+       "pivot": [
+        -0.57857144,
+        0.038211126
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": true,
+    "projectile": "Projectile_ZombiePig_SandBlast",
+    "hitEffect": "_Ranged_Projectile",
+    "directProjectile": true
+   },
+   "stats": {
+    "hp": 100,
+    "attack": 35,
+    "sizeType": "Medium",
+    "sizeScale": 1.3,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_c8495",
+     "origin": "pig_attack_zombie_mummy_boss",
+     "type": "Attack",
+     "source": "pig_attack_zombie_mummy_boss",
+     "name": "Blinding Sand",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.\r\nLowers attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 300,
+      "reduction_in_percent": 15,
+      "chance": 100,
+      "all": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_6a28a",
+     "origin": "pig_passive_undead",
+     "type": "Passive",
+     "source": "pig_passive_undead",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 2,
+      "pig_support_undead_revive_self": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

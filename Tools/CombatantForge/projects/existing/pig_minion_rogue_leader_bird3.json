@@ -1,0 +1,341 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_rogue_leader_bird3",
+ "name": "Rogue Leader",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RogueBoss",
+     "name": "Headgear_RogueBoss",
+     "item": "Headgear_RogueBoss",
+     "w": 148,
+     "h": 100,
+     "pivot": [
+      -0.145,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RogueBoss_Back",
+     "name": "Headgear_RogueBoss_Back",
+     "item": "Headgear_RogueBoss",
+     "w": 148,
+     "h": 93,
+     "pivot": [
+      -0.15,
+      -0.15
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Rogue",
+     "name": "MainHand_Rogue",
+     "item": "MainHand_Rogue",
+     "w": 137,
+     "h": 41,
+     "pivot": [
+      -0.31,
+      0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_5e8b8",
+   "origin": "pig_attack_minion_rogue_leader_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_leader_01",
+   "name": "Over There!",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Commands all pigs to attack the same target. Lasts [ff0000]{value_5}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "charge": 2
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "FocusAttackSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_f1c0a",
+   "origin": "pig_attack_minion_rogue_leader_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_leader_02",
+   "name": "Backstab",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 125,
+  "attack": 7,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_rogue_leader_bird3",
+  "fingerprint": "f529edfd575be4a1668103c38f74e3db4d58ca58",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_rogue_leader_01",
+     "pig_attack_minion_rogue_leader_02",
+     "pig_attack_minion_rogue_leader_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Rogue Leader",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RogueBoss",
+       "name": "Headgear_RogueBoss",
+       "item": "Headgear_RogueBoss",
+       "w": 148,
+       "h": 100,
+       "pivot": [
+        -0.145,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_RogueBoss_Back",
+       "name": "Headgear_RogueBoss_Back",
+       "item": "Headgear_RogueBoss",
+       "w": 148,
+       "h": 93,
+       "pivot": [
+        -0.15,
+        -0.15
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Rogue",
+       "name": "MainHand_Rogue",
+       "item": "MainHand_Rogue",
+       "w": 137,
+       "h": 41,
+       "pivot": [
+        -0.31,
+        0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 125,
+    "attack": 7,
+    "sizeType": "Small",
+    "sizeScale": 1.1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_5e8b8",
+     "origin": "pig_attack_minion_rogue_leader_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_leader_01",
+     "name": "Over There!",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Commands all pigs to attack the same target. Lasts [ff0000]{value_5}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "charge": 2
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "FocusAttackSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_f1c0a",
+     "origin": "pig_attack_minion_rogue_leader_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_leader_02",
+     "name": "Backstab",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -25,6 +25,41 @@ Each pixel's blend from edge colour to gold uses how pale that pixel was in the 
 
 It has to read as clearly **more saturated and orange** than the moustache pirates' dirty-yellow teeth (`#FFF492`). A paler gold just looks like another dirty tooth.
 
+## Tusks and engravings (`gild_tusk`, `engrave_dollar`)
+
+Use these for long curved horns like the Brute's tusks. They also suit anything with painted-in shading stripes, which `gild` would leave un-gilded because its tooth test skips mid-tone olive pixels.
+
+- **`gild_tusk(img, seed, clean)`**: same palette and light as above, with three differences:
+  - The mask is the whole tusk inside its dark outline, olive stripes included.
+  - The tusk's own shading is kept: pixel luminance relative to the pale tusk (235) pulls toward `G_DARK`. A tusk drawn in shadow (the Laughing back tusk) comes out as dim gold.
+  - The diagonal light, right-rim shade and shine stripe are measured **per row**, so they follow the horn's curve.
+- **`engrave_dollar(img, inner)`**: a $ with **two vertical strokes**. It's a recessed groove (122,52,0) with a lit lower-right wall (255,236,150), since light comes from the top-left.
+  - It **bends with the tusk** (user request 2026-11-12). The glyph is drawn upright at high resolution, then sampled through `tusk_frame()`:
+    - The tusk is sliced **across its PCA long axis** and one **quadratic arc** is fitted through the slice midpoints. Pixel-row midpoints were rejected: on leaning tusks they snake into an S and bend the $ the wrong way. The user caught that.
+    - The glyph's vertical axis runs along that arc, top toward the tip (the narrow end).
+    - Its horizontal axis is the perpendicular offset from the arc. It's rotated onto the tusk, never mirrored.
+    - Its width follows a straight fit of the tusk's half-width (`fill` 0.72 of it), applied at half strength.
+  - Don't go back to stamping a rotated, flat glyph.
+  - Things that made it read as "8" or "B", now avoided:
+    - the full taper (it bloats the lower bowl);
+    - S ends that curl back toward the middle (they now run from -55° to 125°, stroke 0.085 of the height);
+    - measuring along rows instead of the centre line (it shears the glyph on leaning tusks).
+  - Placement: the inscribed-circle centre, moved 6% of the glyph height toward the tip (`lift`), because the lip often covers the tusk's base. Height is about 2.6 × the inscribed radius, min 11 px.
+  - Below about 10 px across, it only reads as a $ shape.
+- **Every pixel of the tusk must be gilded** (the user caught un-gilded pale pixels in the transparent exports, 2026-11-12).
+  - `tusk_mask` lets very pale pixels lean up to 25 toward green, because the lip tints them; for example (239,255,151) is tusk body.
+  - Edge pixels where the tusk meets the **green lip** (not the dark outline) are included through `lip_blend`. That projects the pixel onto the line from its outside neighbour's colour to the pale tusk colour. `gild_tusk` then paints `lerp(neighbour, gold, fraction)` instead of the brown fade.
+  - A second pass picks up slivers that run under the lip and only touch the rim.
+  - Check after any mask change: count pixels within 1 px outside the mask with luminance > 110 and red > 120. It must be 0 for every tusk.
+- **Broken ("defeated") tusks get a ¢, not a $** (user request 2026-11-12), and it must **not go over the flat cut face**.
+  - `tusk_cap(img, inner, seed)` floods the dark olive cut-face ellipse (luminance < 160) from a seed on it.
+  - Exclude it plus a 2 px margin and pass the rest as `region` to `engrave(..., cent_glyph(), region=side, up=cap_centre, axis=side_centre - cap_centre)`. The glyph is sized, placed and clipped inside the side only.
+  - The `axis` override matters: a stump's visible side is wider than it is long, so the default long-axis estimate would lay the ¢ sideways across the stump.
+  - `cent_glyph()` is an open c with one vertical stroke running past it.
+  - Only `Mouth_KO` has a broken tusk (stump seed 113,62; cut-face seed 112,56). Verified: 0 engraved pixels on the face or its margin.
+- **Brute tusk seeds** (pirate mouths, `3_PigBrute/BodyParts`): Mouth 14,30 + 132,45 · Damaged 152,55 · KO 113,62 (broken stump) · Laughing 198,48 + 129,61 (back tusk in shadow) · Scream 156,45 · Surprised 15,30 + 130,55.
+- Previews and paste-ready files (2026-11-12, **not in the game yet**) are in `out/PigBrute_tusks_plain/` and `out/PigBrute_tusks_dollar/`.
+
 ## What was rejected (don't do this)
 
 - Sampling a colour ramp **column by column** from an existing gold tooth and stretching it across another tooth. The other session did this on 2026-11-11 and the user said it "wasn't accurate to [the] style." It loses the diagonal light, the shine stripe and the glint, and gives smeared orange edges.
@@ -55,5 +90,7 @@ It has to read as clearly **more saturated and orange** than the moustache pirat
   - `Mouth_AngryPirate`: rightmost upper (≈98–110, 15–25), bottom-left lower (≈22–31, 36–40), lower front tooth (seed 80,38)
   - `Mouth_OpenPirate`: bottom-left (≈23–29, 23–26), first lower tooth under the tongue (seed 61,30)
 - **PrincePorky** (`4_PrincePorky/BodyParts`): the tooth right of the top-left one, in all 5 pirate mouths. Seeds: Angry 24,3 · Defeat 9,7 · Laughing 9,12 · Scream 9,7 · Shriek 10,5.
+- **PigPirate** (`6_PigPirate/BodyParts`, swap atlas `PigPirate_Atlas_04`, added 2026-11-12): the bottom-right tooth, meaning the rightmost tooth on the lower jaw (often on the jaw's right-hand curve rather than in the flat bottom row). Seeds: Mouth 79,23 · Angry 67,39 · Attack 126,55 · Happy 67,57 · Scared 66,66 · WideOpen 87,70. `Mouth_SadPirate` shows only upper teeth, so it has none. The base `X.png` teeth are white, so use them as `--clean`. When rebuilding Atlas_04, **pass the 7 mouth names explicitly**: the folder also has `Headgear_Pirate.png`, `MainHand_AirPirate.png` etc. (gear, not variants), which the default run would pack in.
+- The Brute's regular teeth all hang from the upper lip, and his only lower teeth are the tusks. A "bottom" tooth on the Brute means a tusk, so ask before gilding one.
 
 The last tooth in each Moustache mouth and all of Porky's were redone with `gold_tooth.py` on 2026-11-11. The others are the user's GIMP pastes of the same recipe.

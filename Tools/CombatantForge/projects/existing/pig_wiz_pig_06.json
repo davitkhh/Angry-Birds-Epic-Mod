@@ -1,0 +1,402 @@
+{
+ "kind": "existing",
+ "id": "pig_wiz_pig_06",
+ "name": "Wizpig",
+ "rig": "WizPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear",
+     "name": "Headgear",
+     "item": "Headgear",
+     "w": 248,
+     "h": 170,
+     "pivot": [
+      0.04,
+      -0.28
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Back",
+     "name": "Headgear_Back",
+     "item": "Headgear",
+     "w": 246,
+     "h": 96,
+     "pivot": [
+      -0.0066320812,
+      -0.0028324514
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_Wand",
+     "name": "MainHand_Wand",
+     "item": "MainHand_Wand",
+     "w": 194,
+     "h": 72,
+     "pivot": [
+      -0.3267857,
+      0.13712798
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_91842",
+   "origin": "pig_attack_wizpig_01",
+   "type": "Attack",
+   "source": "pig_attack_wizpig_01",
+   "name": "Black Storm",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies. Heals by [00a800]{value_3}%[-] of dealt damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 200,
+    "heal": 50,
+    "all": 1,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithLeech",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_73264",
+   "origin": "pig_support_wizpig_01",
+   "type": "Support",
+   "source": "pig_support_wizpig_01",
+   "name": "Power Up Shroom",
+   "desc": "Increases attack power of target by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_increase": 100,
+    "self": 1
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_6}": {
+     "expr": "(p(\"cleanse_chance\"))"
+    }
+   },
+   "template": "IncreaseDamageAndCleanse",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_db10b",
+   "origin": "pig_passive_drainlife",
+   "type": "Passive",
+   "source": "pig_passive_drainlife",
+   "name": "Drain Life",
+   "desc": "Increases received healing by [ff0000]{value_3}%[-].",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "increase_in_percent": 100
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "IncreaseHealingReceivedPassive",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 450,
+  "attack": 20,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_wiz_pig_06",
+  "fingerprint": "d922298e239a07e51c4bd897fd6ba169a6492cbb",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_support_wizpig_01",
+     "pig_attack_wizpig_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Wizpig",
+   "rig": "WizPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear",
+       "name": "Headgear",
+       "item": "Headgear",
+       "w": 248,
+       "h": 170,
+       "pivot": [
+        0.04,
+        -0.28
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Back",
+       "name": "Headgear_Back",
+       "item": "Headgear",
+       "w": 246,
+       "h": 96,
+       "pivot": [
+        -0.0066320812,
+        -0.0028324514
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_Wand",
+       "name": "MainHand_Wand",
+       "item": "MainHand_Wand",
+       "w": 194,
+       "h": 72,
+       "pivot": [
+        -0.3267857,
+        0.13712798
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 450,
+    "attack": 20,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig_boss_defeated_gold": 1,
+     "loot_pig_boss_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_91842",
+     "origin": "pig_attack_wizpig_01",
+     "type": "Attack",
+     "source": "pig_attack_wizpig_01",
+     "name": "Black Storm",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies. Heals by [00a800]{value_3}%[-] of dealt damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 200,
+      "heal": 50,
+      "all": 1,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithLeech",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_73264",
+     "origin": "pig_support_wizpig_01",
+     "type": "Support",
+     "source": "pig_support_wizpig_01",
+     "name": "Power Up Shroom",
+     "desc": "Increases attack power of target by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_increase": 100,
+      "self": 1
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"damage_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_6}": {
+       "expr": "(p(\"cleanse_chance\"))"
+      }
+     },
+     "template": "IncreaseDamageAndCleanse",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_db10b",
+     "origin": "pig_passive_drainlife",
+     "type": "Passive",
+     "source": "pig_passive_drainlife",
+     "name": "Drain Life",
+     "desc": "Increases received healing by [ff0000]{value_3}%[-].",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "increase_in_percent": 100
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "IncreaseHealingReceivedPassive",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

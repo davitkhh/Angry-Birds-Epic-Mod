@@ -1,0 +1,507 @@
+{
+ "kind": "existing",
+ "id": "pig_forge_stringtheory",
+ "name": "String Theory",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory",
+     "name": "Forge_stringtheory",
+     "item": "Forge_stringtheory",
+     "w": 189,
+     "h": 129,
+     "pivot": [
+      0.01597308,
+      -0.01198761
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_Back",
+     "name": "Forge_stringtheory_Back",
+     "item": "Forge_stringtheory",
+     "w": 223,
+     "h": 195,
+     "pivot": [
+      -0.006498159,
+      -0.2965155
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_MainHand",
+     "name": "Forge_stringtheory_MainHand",
+     "item": "Forge_stringtheory_MainHand",
+     "w": 172,
+     "h": 93,
+     "pivot": [
+      -0.3589286,
+      0.2031106
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_OffHand",
+     "name": "Forge_stringtheory_OffHand",
+     "item": "Forge_stringtheory_OffHand",
+     "w": 188,
+     "h": 127,
+     "pivot": [
+      -0.4804263,
+      -0.3417862
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "gb6d6e89",
+     "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_OffHand_Back",
+     "name": "Forge_stringtheory_OffHand_Back",
+     "item": "Forge_stringtheory_OffHand",
+     "w": 143,
+     "h": 193,
+     "pivot": [
+      0.4371696,
+      -0.9223839
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "gb6d6e89"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_0c319",
+   "origin": "pig_attack_forge_cactus_new_ability",
+   "type": "Attack",
+   "source": "pig_attack_forge_cactus_new_ability",
+   "name": "Vibrate",
+   "desc": "Deals [ff0000]{value_1}[-] damage. The bird with either the least or highest health takes [ff0000]{value_2}%[-] of the damage the target takes. Lasts [ff0000]{value_3}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "shared_damage_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"shared_damage_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "D"
+    }
+   },
+   "template": "AttackAndLinkDamage",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_36ae4",
+   "origin": "pig_attack_forge_cactus_new_ability_2",
+   "type": "Attack",
+   "source": "pig_attack_forge_cactus_new_ability_2",
+   "name": "Gravitate",
+   "desc": "Forces a random bird to attack String Theory. If String Theory has no positive effects he takes [ff0000]{value_1}%[-] less damage for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "reduction_in_percent": 90
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "ProvokeAndGuardIfNoBlessings",
+   "duration": 2,
+   "design": "The forced attack should be an immediate attak from the bird instead of a taunt for the bird's turn",
+   "nameId": "pig_attack_forge_pig_forge_stringtheory__e0_gravitate",
+   "written": true
+  },
+  {
+   "uid": "a2_6dad7",
+   "origin": "pig_support_forge_cactus_new_ability",
+   "type": "Support",
+   "source": "pig_support_forge_cactus_new_ability",
+   "name": "Oscillate",
+   "desc": "Up to [ff0000]{value_1}[-] random pigs split all taken damage evenly. If one of them is attacked the other [ff0000]{value_2}[-] counter for [ff0000]{value_3}%[-] damage. Lasts [ff0000]{value_4}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "link_count": 3,
+    "counter_damage_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"link_count\"))"
+    },
+    "{value_2}": {
+     "expr": "((p(\"link_count\")) - 1)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"counter_damage_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "D"
+    }
+   },
+   "template": "SplitDamageAndCounter",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 240,
+  "attack": 18,
+  "sizeType": "Medium",
+  "sizeScale": 1.5,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "lucky_coin": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_forge_stringtheory",
+  "fingerprint": "d79afe74103ca7bf952789dc6c1ea4821c880680",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_cactus_new_ability",
+     "pig_attack_forge_cactus_new_ability"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_cactus_new_ability",
+     "pig_attack_forge_cactus_new_ability_2"
+    ]
+   }
+  ],
+  "original": {
+   "name": "String Theory",
+   "rig": "PigMage",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory",
+       "name": "Forge_stringtheory",
+       "item": "Forge_stringtheory",
+       "w": 189,
+       "h": 129,
+       "pivot": [
+        0.01597308,
+        -0.01198761
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_Back",
+       "name": "Forge_stringtheory_Back",
+       "item": "Forge_stringtheory",
+       "w": 223,
+       "h": 195,
+       "pivot": [
+        -0.006498159,
+        -0.2965155
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_MainHand",
+       "name": "Forge_stringtheory_MainHand",
+       "item": "Forge_stringtheory_MainHand",
+       "w": 172,
+       "h": 93,
+       "pivot": [
+        -0.3589286,
+        0.2031106
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_OffHand",
+       "name": "Forge_stringtheory_OffHand",
+       "item": "Forge_stringtheory_OffHand",
+       "w": 188,
+       "h": 127,
+       "pivot": [
+        -0.4804263,
+        -0.3417862
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    },
+    "OffHand_Back": {
+     "layers": [
+      {
+       "uid": "gb6d6e89",
+       "src": "bc65950c5e5a4b258b7246bc4a8ab2a1:Forge_stringtheory_OffHand_Back",
+       "name": "Forge_stringtheory_OffHand_Back",
+       "item": "Forge_stringtheory_OffHand",
+       "w": 143,
+       "h": 193,
+       "pivot": [
+        0.4371696,
+        -0.9223839
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "gb6d6e89"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 240,
+    "attack": 18,
+    "sizeType": "Medium",
+    "sizeScale": 1.5,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "lucky_coin": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_pigboss_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_0c319",
+     "origin": "pig_attack_forge_cactus_new_ability",
+     "type": "Attack",
+     "source": "pig_attack_forge_cactus_new_ability",
+     "name": "Vibrate",
+     "desc": "Deals [ff0000]{value_1}[-] damage. The bird with either the least or highest health takes [ff0000]{value_2}%[-] of the damage the target takes. Lasts [ff0000]{value_3}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "shared_damage_in_percent": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"shared_damage_in_percent\"))"
+      },
+      "{value_3}": {
+       "expr": "D"
+      }
+     },
+     "template": "AttackAndLinkDamage",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_36ae4",
+     "origin": "pig_attack_forge_cactus_new_ability_2",
+     "type": "Attack",
+     "source": "pig_attack_forge_cactus_new_ability_2",
+     "name": "Gravitate",
+     "desc": "Forces a random bird to attack String Theory. If String Theory has no positive effects he takes [ff0000]{value_1}%[-] less damage for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "reduction_in_percent": 90
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "ProvokeAndGuardIfNoBlessings",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a2_6dad7",
+     "origin": "pig_support_forge_cactus_new_ability",
+     "type": "Support",
+     "source": "pig_support_forge_cactus_new_ability",
+     "name": "Oscillate",
+     "desc": "Up to [ff0000]{value_1}[-] random pigs split all taken damage evenly. If one of them is attacked the other [ff0000]{value_2}[-] counter for [ff0000]{value_3}%[-] damage. Lasts [ff0000]{value_4}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "link_count": 3,
+      "counter_damage_in_percent": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"link_count\"))"
+      },
+      "{value_2}": {
+       "expr": "((p(\"link_count\")) - 1)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"counter_damage_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "D"
+      }
+     },
+     "template": "SplitDamageAndCounter",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

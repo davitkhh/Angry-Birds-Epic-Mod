@@ -179,7 +179,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		{
 			SetBirdHeadgear();
 			HideGearBone("MainHand");
-			m_BoneAnimation.HideBone("OffHand", true);
+			HideGearBone("OffHand");
 		}
 		else if (Model is PigGameData)
 		{
@@ -243,7 +243,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 					}
 					else if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
 					{
-						m_BoneAnimation.HideBone("OffHand", true);
+						HideGearBone("OffHand");
 					}
 				}
 			}
@@ -280,7 +280,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 					}
 					if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
 					{
-						m_BoneAnimation.HideBone("OffHand", true);
+						HideGearBone("OffHand");
 					}
 				}
 				SetEquipmentItem(Model.ClassItem, "Headgear_B", string.Empty);
@@ -323,7 +323,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 					}
 					if (m_BoneAnimation.GetBoneTransform("OffHand") != null)
 					{
-						m_BoneAnimation.HideBone("OffHand", true);
+						HideGearBone("OffHand");
 					}
 				}
 			}
@@ -343,7 +343,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			else
 			{
 				HideGearBone("MainHand");
-				m_BoneAnimation.HideBone("OffHand", true);
+				HideGearBone("OffHand");
 			}
 		}
 		if (Model is PigGameData)
@@ -403,13 +403,14 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 	}
 
-	// Body-parented twins of the gear bones. PigPirate's Action_Attack_3 hides Headgear/Headgear_Back/MainHand and draws
+	// Body-parented twins of the gear bones. PigPirate's and MinionPig's Action_Attack_3 hide the gear bones and draw
 	// the gear on these instead (no other clip gives them a texture), so they wear and hide whatever their gear bone does.
 	private static readonly Dictionary<string, string> GearBodyTwins = new Dictionary<string, string>
 	{
 		{ "Headgear", "HeadgearBody" },
 		{ "Headgear_Back", "HeadgearBody_Back" },
-		{ "MainHand", "MainHandBody" }
+		{ "MainHand", "MainHandBody" },
+		{ "OffHand", "OffHandBody" }
 	};
 
 	private string GearBodyTwin(string boneName)
@@ -631,6 +632,8 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		}
 		m_ForgeSwappedBones.Clear();
 		var assetName = classItem == null || string.IsNullOrEmpty(classItem.ItemAssetName) ? string.Empty : classItem.ItemAssetName;
+		// bones that turn around another point than their origin (the Forge's slot "Rotation pivot")
+		ForgeBonePivots.Apply(m_BoneAnimation, assetName.StartsWith(ForgeAssetPrefix) ? assetName : null);
 		if (!assetName.StartsWith(ForgeAssetPrefix))
 		{
 			return;

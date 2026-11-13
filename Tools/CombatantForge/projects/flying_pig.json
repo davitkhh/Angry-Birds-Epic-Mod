@@ -370,11 +370,11 @@
    "uid": "qzwm47j9",
    "type": "Attack",
    "source": "bird_attack_white_priest",
-   "name": "Angelic Side-Eye",
+   "name": "Holy Side-Eye",
    "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Pigs attacking this target regain [00a800]{value_7}%[-] of their maximum health. Lasts [ff0000]{value_2}[-] turns.",
    "color": "E55B5B",
-   "atlas": "Skills_Birds_01",
-   "icon": "AngelicTouch",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
    "params": {
     "damage_in_percent": 70,
     "health_in_percent": 10,
@@ -404,7 +404,121 @@
    "template": "AttackAndApplyHealOnAttackSkill",
    "duration": 3,
    "design": "",
-   "nameId": "pig_attack_forge_flying_pig_angelic_side_eye"
+   "nameId": "pig_attack_forge_flying_pig_angelic_side_eye",
+   "effects": [
+    {
+     "timing": "Affected",
+     "delay": 0.25,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Curse_HealAttacker",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "Type": "1"
+     }
+    },
+    {
+     "timing": "Movement",
+     "delay": 0.1,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_WeaponEffect_Strike_Medium",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "UseTargetBoneScale": "1",
+      "UseTargetBoneRotation": "1"
+     }
+    },
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_BodyAirflow_Weak",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {},
+     "turnWith": "bone",
+     "bone": "Body",
+     "offsetY": 40,
+     "offsetX": -5
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Hit_Impact_Top",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Aura_Curse",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {},
+     "turnWith": "upright"
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Bottom",
+     "prefab": "Camera_Shake_Weak",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "SlowMotion",
+     "anchor": "Center",
+     "prefab": "",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {},
+     "slow": {
+      "scale": 0.3,
+      "duration": 0.3,
+      "ease": 0,
+      "easeOut": 0.1
+     }
+    },
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "Forge_AfterImages",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {},
+     "after": {
+      "duration": 0.6,
+      "interval": 0.2,
+      "life": 0.35,
+      "opacity": 0.6,
+      "tint": "e1dd7c",
+      "behind": true
+     }
+    }
+   ]
   },
   {
    "uid": "3rtpji9e",
@@ -491,6 +605,16 @@
   "atlas:HR": "02ba9cfaa96945c689444bad20a5c37f",
   "atlas:LR": "54282f295c7e4280983271b3ea4c2751"
  },
- "publishedAt": "2026-11-06 19:55",
- "publishedRig": "PigDrone"
+ "publishedAt": "2026-11-13 14:03",
+ "publishedRig": "PigDrone",
+ "bonePivots": {
+  "Eyebrow_Left": [
+   7.5,
+   60.6
+  ],
+  "Eyebrow_Right": [
+   16.1,
+   44.8
+  ]
+ }
 }

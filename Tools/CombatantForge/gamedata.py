@@ -23,16 +23,17 @@ CHARACTERS = os.path.join(ASSETS, 'Resources', 'Prefabs', '4_Characters')
 UPLOADS = os.path.join(ASSETS, 'content', '4_Characters', '_Forge')
 BALANCING = os.path.join(ASSETS, 'BalancingData')
 META_TEMPLATE = os.path.join(ASSETS, 'content', '4_Characters', '2_Pigs', '1_MinionPig', 'BodyParts', 'Headgear_RogueRoyal.png.meta')
-CACHE_VERSION = 11
+CACHE_VERSION = 12
 
 RIG_DIRS = (('1_Birds', 'bird'), ('2_Pigs', 'pig'), ('8_Base', 'pig'))
 BIRD_RIGS_ELSEWHERE = {'MightyEagle'}
 GEAR_SLOTS = ('Headgear', 'Headgear_Back', 'MainHand', 'MainHand_Arrow', 'OffHand', 'OffHand_Back')
 # Body-parented twins of gear bones (PigPirate Action_Attack_3 draws the gear on these): they belong to the gear slot and
 # wear its art, like the game's CharacterAssetController.GearBodyTwins.
-GEAR_BODY_TWINS = {'HeadgearBody': 'Headgear', 'HeadgearBody_Back': 'Headgear_Back', 'MainHandBody': 'MainHand'}
+GEAR_BODY_TWINS = {'HeadgearBody': 'Headgear', 'HeadgearBody_Back': 'Headgear_Back', 'MainHandBody': 'MainHand', 'OffHandBody': 'OffHand'}
 ICON_ATLASES = ('Skills_Pigs_01', 'Skills_Birds_01', 'Skills_Birds_02', 'Skills_Passive_01', 'Skills_Banner', 'GenericElements')
-SKILL_COLORS = {'Attack': 'E55B5B', 'Support': '8CCB50', 'Passive': 'BEE8FE'}
+# Combo: a combo move (SkillTargetTypes.Combo), orange like SkillBlind.ComboColor. Its row's AssetId is the combo id.
+SKILL_COLORS = {'Attack': 'E55B5B', 'Support': '8CCB50', 'Passive': 'BEE8FE', 'Combo': 'CD7936'}
 UI_SPRITES = ('InfoOverlay_TL', 'InfoOverlay_T', 'InfoOverlay_TR', 'InfoOverlay_L', 'InfoOverlay_R', 'InfoOverlay_BL', 'InfoOverlay_B',
               'InfoOverlay_BR', 'Resource_XP', 'Character_Health_Small', 'InfoOverlay_HealthBar_Body', 'InfoOverlay_HealthBar_Fill')
 
@@ -155,6 +156,12 @@ def _image(path):
 def sprite_image(key):
     """key = <atlas guid>:<texture name> | upload:<path under the uploads folder>. Returns an RGBA image at game size."""
     source, _, name = key.partition(':')
+    if source == 'fx':  # an effect or projectile part drawn from its mesh (effects.py)
+        import effects
+        return Image.open(io.BytesIO(effects.image_png(name))).convert('RGBA')
+    if source == 'look':
+        rig_id, _, look = name.partition(':')
+        return look_image(rig_id, look)
     if source == 'upload':
         path = os.path.normpath(os.path.join(UPLOADS, name))
         if not path.startswith(UPLOADS + os.sep):
@@ -172,10 +179,11 @@ def sprite_image(key):
 def sprite_png(key):
     safe = re.sub(r'[^\w.-]', '_', key)
     path = os.path.join(CACHE, 'sprites', safe + '.png')
-    if key.startswith('upload:') or not os.path.exists(path):
+    live = key.startswith(('upload:', 'look:'))  # uploads and looks (drawn from SpringDrone.cs) aren't cached
+    if live or not os.path.exists(path):
         buf = io.BytesIO()
         sprite_image(key).save(buf, 'PNG')
-        if key.startswith('upload:'):
+        if live:
             return buf.getvalue()
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'wb') as f:
@@ -415,7 +423,7 @@ def bake_rig(rig_id):
             else:
                 rows.append(row)
 
-    # In a clip where a gear twin (HeadgearBody, MainHandBody) shows art, its gear bones are hidden: the twin takes their
+    # In a clip where a gear twin (HeadgearBody, MainHandBody, OffHandBody) shows art, its gear bones are hidden: the twin takes their
     # place, like CharacterAssetController.HideGearBonesUnderTwins (SmoothMoves ignores the per-clip visible flag).
     node_of = {name: node for node, name in bones.items()}
     for twin in {t for t in GEAR_BODY_TWINS if not t.endswith('_Back')}:
@@ -549,7 +557,8 @@ def rig_json(rig_id):
 def rig_catalog():
     out = []
     for r in rig_list():
-        variants = [s.lower() for s in rig_variant_suffixes(r['id']) if s.lower() != DEFAULT_VARIANT.get(r['id'])] + list(LOOK_RIGS.get(r['id'], ()))
+        # Looks (the drone's springs) are features in the Slots list, not bases of their own.
+        variants = [s.lower() for s in rig_variant_suffixes(r['id']) if s.lower() != DEFAULT_VARIANT.get(r['id'])]
         out.append({'id': r['id'], 'side': r['side'], 'pirate': 'pirate' in variants, 'variants': variants})
     return out
 
@@ -560,12 +569,14 @@ VARIANT_SUFFIX = re.compile(r'[A-Z][a-z]+$')
 DEFAULT_VARIANT = {'PigPirate': 'pirate'}
 # Looks that change how a rig moves rather than its textures. A Forge combatant with one is published as Forge_<id>_<Look>,
 # which the game recognises (SpringDrone.IsSpringDrone); game pigs listed in the look's 'pigs' always have it.
-LOOK_RIGS = {'PigDrone': ('spring',)}
+# springsteel: the same spring in shiny grey metal (SpringDrone.SpringFinish.Steel, Forge_<id>_Springsteel).
+LOOK_RIGS = {'PigDrone': ('spring', 'springsteel')}
 SPRING_SOURCE = os.path.join(ASSETS, 'Scripts', 'Assembly-CSharp', 'SpringDrone.cs')
 
 
-def spring_look():
-    """The spring drone's settings, read from the game's SpringDrone.cs so the preview moves like the game."""
+def spring_look(finish='spring'):
+    """The spring drone's settings, read from the game's SpringDrone.cs so the preview moves like the game. finish
+    'springsteel' takes the Steel band tables (shiny grey) in place of the lavender ones."""
     text = read_text(SPRING_SOURCE)
     look = {m.group(1): float(m.group(2)) for m in re.finditer(r'public (?:float|int) (\w+) = (-?[\d.]+)f?;', text)}
 
@@ -574,20 +585,57 @@ def spring_look():
         return re.findall(r'"([^"]+)"', m.group(1)) if m else []
     mount = re.search(r'MountPoint = new Vector2\((-?[\d.]+)f, (-?[\d.]+)f\)', text)
     ground = re.search(r'const float GroundY = (-?[\d.]+)f', text)
-    look.update({'kind': 'spring', 'pigs': strings('s_PigIds'), 'pod': ['Root/' + b for b in strings('s_PodBones')], 'hide': strings('s_HiddenBones'),
+    look.update({'kind': 'spring', 'pigs': strings('s_PigIds') if finish == 'spring' else [], 'pod': ['Root/' + b for b in strings('s_PodBones')], 'hide': strings('s_HiddenBones'),
                  'hover': strings('s_HoverClips'), 'limp': strings('s_LimpClips'),
                  'mount': [float(mount.group(1)), float(mount.group(2))] if mount else [0.0, -40.0],
                  'ground': float(ground.group(1)) if ground else 5.0, 'bands': {}})
     # Cel-shading bands per part: Band(width, offset, r, g, b), outline first.
-    for name in ('FrontWire', 'BackWire', 'PlateBands'):
-        m = re.search(r'Band\[\] ' + name + r'\s*=\s*\{(.*?)\};', text, re.S)
+    for name in ('FrontWire', 'BackWire'):
+        source = ('Steel' + name) if finish == 'springsteel' else name
+        m = re.search(r'Band\[\] ' + source + r'\s*=\s*\{(.*?)\};', text, re.S)
         rows = re.findall(r'new Band\((-?[\d.]+)f, (-?[\d.]+)f, (\d+), (\d+), (\d+)\)', m.group(1)) if m else []
         look['bands'][name] = [[float(w), float(o), [int(r), int(g_), int(b)]] for w, o, r, g_, b in rows]
     return look
 
 
+# Library names of the looks (Feature tiles in the Spring group).
+LOOK_LABELS = {'spring': 'Spring', 'springsteel': 'Spring_Steel'}
+
+
+def _look_quads(rig_id, name):
+    # the spring at rest on the ground, top at (0, 0)
+    look = spring_look(name)
+    return spring_quads(look, (0.0, 0.0), (0.0, -1.0), look['RestLength'] - look['StaticSag'])
+
+
+def look_image(rig_id, name, supersample=3):
+    """The look's spring as a sprite (1 px per rig unit), for its library tile and the Spring row."""
+    quads = _look_quads(rig_id, name)
+    xs = [x for c, _ in quads for x, _ in c]
+    ys = [y for c, _ in quads for _, y in c]
+    x0, x1, y0, y1 = math.floor(min(xs)) - 1, math.ceil(max(xs)) + 1, math.floor(min(ys)) - 1, math.ceil(max(ys)) + 1
+    k = supersample
+    big = Image.new('RGBA', ((x1 - x0) * k, (y1 - y0) * k), (0, 0, 0, 0))
+    pen = ImageDraw.Draw(big)
+    for corners, color in quads:
+        pen.polygon([((x - x0) * k, (y1 - y) * k) for x, y in corners], fill=tuple(color) + (255,))
+    return big.resize((x1 - x0, y1 - y0), Image.LANCZOS)
+
+
+def look_items():
+    out = []
+    for rig_id, names in LOOK_RIGS.items():
+        side = rig_info(rig_id)['side']
+        for name in names:
+            w, h = look_image(rig_id, name, 1).size
+            label = LOOK_LABELS.get(name, name.capitalize())
+            out.append({'id': '%s/%s/look_%s' % (side, rig_id, name), 'side': side, 'rig': rig_id, 'name': label, 'cat': 'Feature', 'group': 'Spring',
+                        'look': name, 'parts': {'front': {'key': 'look:%s:%s' % (rig_id, name), 'name': label, 'w': w, 'h': h, 'pivot': [0, 0]}}})
+    return out
+
+
 def rig_looks(rig_id):
-    return {name: spring_look() for name in LOOK_RIGS.get(rig_id, ())}
+    return {name: spring_look(name) for name in LOOK_RIGS.get(rig_id, ())}
 
 
 def look_of_pig(rig_id, name_id):
@@ -649,41 +697,60 @@ def spring_quads(look, top, axis, length):
         a = t * turns * math.pi * 2
         # closed last turn: a flat ring on the ground (SpringDrone.BuildMesh)
         ring = max(end, length - end - r * 0.22)
-        along = end + (ring - end) * min(1.0, t / pitched) + math.sin(a) * r * 0.22
+        # the top is tucked up under the pod's flat bottom (TuckDepth)
+        along = -look.get('TuckDepth', 0) + (ring + look.get('TuckDepth', 0)) * min(1.0, t / pitched) + math.sin(a) * r * 0.22
         c = math.cos(a) * r
         pts.append(((top[0] + ax * along + sx * c, top[1] + ay * along + sy * c), math.sin(a)))
     out = []
 
-    def segment(a, b, thickness, band):
+    def up(a, b):
         dx, dy = b[0] - a[0], b[1] - a[1]
-        n = math.hypot(dx, dy)
-        if n < 1e-4:
+        n = math.hypot(dx, dy) or 1e-6
+        ux, uy = -dy / n, dx / n
+        return ((ux, uy) if uy >= 0 else (-ux, -uy)), (dx / n, dy / n)
+
+    def strip(run, thickness, band):
+        # One continuous ribbon along the run, mitred at the joints (no spikes), capped at both ends.
+        P = [pts[i][0] for i in run]
+        segs = [up(P[j], P[j + 1]) for j in range(len(P) - 1)]
+        if not segs:
             return
-        dx, dy = dx / n, dy / n
-        ux, uy = -dy, dx
-        if uy < 0:
-            ux, uy = -ux, -uy
         width = thickness * band[0]
-        shx, shy = ux * thickness * band[1], uy * thickness * band[1]
-        ex, ey = dx * width / 2, dy * width / 2
-        nx, ny = ux * width / 2, uy * width / 2
-        out.append(([(a[0] - ex - nx + shx, a[1] - ey - ny + shy), (a[0] - ex + nx + shx, a[1] - ey + ny + shy),
-                     (b[0] + ex + nx + shx, b[1] + ey + ny + shy), (b[0] + ex - nx + shx, b[1] + ey - ny + shy)], tuple(band[2])))
+        rows = []
+        for j, p in enumerate(P):
+            adj = [segs[q][0] for q in (j - 1, j) if 0 <= q < len(segs)]
+            nx, ny = sum(a[0] for a in adj), sum(a[1] for a in adj)
+            nl = math.hypot(nx, ny) or 1e-6
+            nx, ny = nx / nl, ny / nl
+            miter = 1 / max(0.5, nx * adj[0][0] + ny * adj[0][1])
+            x, y = p
+            if j == 0:
+                d = segs[0][1]
+                x, y = x - d[0] * width * 0.5, y - d[1] * width * 0.5
+            elif j == len(P) - 1:
+                d = segs[-1][1]
+                x, y = x + d[0] * width * 0.5, y + d[1] * width * 0.5
+            cx, cy = x + nx * thickness * band[1], y + ny * thickness * band[1]
+            h = width * 0.5 * miter
+            rows.append(((cx - nx * h, cy - ny * h), (cx + nx * h, cy + ny * h)))
+        for j in range(len(rows) - 1):
+            out.append(([rows[j][0], rows[j][1], rows[j + 1][1], rows[j + 1][0]], tuple(band[2])))
 
     for front, name in ((False, 'BackWire'), (True, 'FrontWire')):
+        runs, cur = [], None
+        for i in range(count):
+            if ((pts[i][1] + pts[i + 1][1]) / 2 >= 0) == front:
+                cur = cur or [i]
+                cur.append(i + 1)
+            elif cur:
+                runs.append(cur)
+                cur = None
+        if cur:
+            runs.append(cur)
+        # band by band over the whole half, so inner bands cover the neighbouring run's outline where runs meet
         for band in look['bands'][name]:
-            for i in range(count):
-                if ((pts[i][1] + pts[i + 1][1]) / 2 >= 0) == front:
-                    segment(pts[i][0], pts[i + 1][0], wire, band)
-
-    # mounting pad under the pod, bands from the outline inward, up toward the pod
-    for w, o, color in look['bands'].get('PlateBands', []):
-        half_len, half_thick = r + 6, 5
-        half = half_len - (1 - w) * half_thick
-        thick = half_thick * w
-        x, y = top[0] - ax * 2 * half_thick * o, top[1] - ay * 2 * half_thick * o
-        out.append(([(x - sx * half - ax * thick, y - sy * half - ay * thick), (x + sx * half - ax * thick, y + sy * half - ay * thick),
-                     (x + sx * half + ax * thick, y + sy * half + ay * thick), (x - sx * half + ax * thick, y - sy * half + ay * thick)], tuple(color)))
+            for run in runs:
+                strip(run, wire, band)
 
     return out
 
@@ -913,6 +980,7 @@ def library():
                 item['weapon'] = w
         result.append(item)
     result.extend(uploaded_items())
+    result.extend(look_items())
     result.sort(key=lambda i: (i['side'], i['cat'], i['name']))
     return result
 
@@ -1126,7 +1194,8 @@ def skills_catalog():
             color = '%06X' % int(params['ui_color_rgb'])
         out.append({'id': r['NameId'], 'name': texts.get(loca + '_name', r['NameId']), 'desc': texts.get(loca + '_desc', ''), 'type': r['TargetType'],
                     'template': r.get('SkillTemplateType', ''), 'params': params, 'atlas': r.get('IconAtlasId', ''), 'icon': r.get('IconAssetId', ''),
-                    'color': color, 'duration': r.get('EffectDuration', 0), 'values': template_values(r.get('SkillTemplateType', ''))})
+                    'color': color, 'duration': r.get('EffectDuration', 0), 'values': template_values(r.get('SkillTemplateType', '')),
+                    'asset': r.get('AssetId', ''), 'recipe': r['NameId'].startswith('combo_')})
     return out
 
 

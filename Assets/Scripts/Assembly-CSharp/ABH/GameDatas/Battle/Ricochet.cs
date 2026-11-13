@@ -23,7 +23,8 @@ namespace ABH.GameDatas.Battle
 			public Action Land;
 		}
 
-		private const float MaxFlightSeconds = 1f;
+		// Longest a hop is waited for; the next hop leaves only once this one has arrived
+		private const float MaxFlightSeconds = 3f;
 
 		private static List<Hop> s_Pending;
 
@@ -111,6 +112,11 @@ namespace ABH.GameDatas.Battle
 				if (start == null || end == null)
 				{
 					return 0f;
+				}
+				if (ForgeProjectiles.Has(projectileAssetId))
+				{
+					var arrival = ForgeProjectiles.Spawn(projectileAssetId, source.CombatantView.m_BattleMgr.m_BattleArea, start.position, new List<Vector3> { end.position }, end.position, source.CombatantView.m_AssetController.transform.localScale, source.CombatantView.m_AssetController.gameObject.layer, true);
+					return Mathf.Clamp(arrival, 0f, MaxFlightSeconds);
 				}
 				var gameObject = DIContainerInfrastructure.ProjectileAssetProvider.InstantiateObject(projectileAssetId, source.CombatantView.m_BattleMgr.m_BattleArea, start.position, Quaternion.identity);
 				if (gameObject == null)

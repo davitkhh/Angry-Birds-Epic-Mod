@@ -1,0 +1,311 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_phat_loot_bird3",
+ "name": "Wealthy Rogue",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue",
+     "name": "Headgear_Rogue",
+     "item": "Headgear_Rogue",
+     "w": 148,
+     "h": 99,
+     "pivot": [
+      -0.145,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue_Back",
+     "name": "Headgear_Rogue_Back",
+     "item": "Headgear_Rogue",
+     "w": 148,
+     "h": 93,
+     "pivot": [
+      -0.15,
+      -0.15
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_PhatLootRogue",
+     "name": "OffHand_PhatLootRogue",
+     "item": "OffHand_PhatLootRogue",
+     "w": 148,
+     "h": 110,
+     "pivot": [
+      -0.17,
+      -0.17
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_2461a",
+   "origin": "pig_attack_minion_phat_loot",
+   "type": "Attack",
+   "source": "pig_attack_minion_phat_loot",
+   "name": "Run Away",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Runs away, never to be seen again!",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Run",
+   "params": {
+    "charge": 2
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "RunawaySkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_16208",
+   "origin": "pig_passive_fullpockets",
+   "type": "Passive",
+   "source": "pig_passive_fullpockets",
+   "name": "Full Pockets",
+   "desc": "[0000ff]Passive:[-] Spills up to [0000ff]{value_1}[-] Snoutlings as it takes damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "total_amount": 15
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"max_amount\")) || (p(\"total_amount\")))"
+    }
+   },
+   "template": "FullPockets",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 88,
+  "attack": 1,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 1,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "gold": 7,
+   "loot_pig3_defeated_exp": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_phat_loot_bird3",
+  "fingerprint": "0c6a15f6de60107b06ed26a76883164fe16b5dc1",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_phat_loot"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Wealthy Rogue",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue",
+       "name": "Headgear_Rogue",
+       "item": "Headgear_Rogue",
+       "w": 148,
+       "h": 99,
+       "pivot": [
+        -0.145,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue_Back",
+       "name": "Headgear_Rogue_Back",
+       "item": "Headgear_Rogue",
+       "w": 148,
+       "h": 93,
+       "pivot": [
+        -0.15,
+        -0.15
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_PhatLootRogue",
+       "name": "OffHand_PhatLootRogue",
+       "item": "OffHand_PhatLootRogue",
+       "w": 148,
+       "h": 110,
+       "pivot": [
+        -0.17,
+        -0.17
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 88,
+    "attack": 1,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 1,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "gold": 7,
+     "loot_pig3_defeated_exp": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_2461a",
+     "origin": "pig_attack_minion_phat_loot",
+     "type": "Attack",
+     "source": "pig_attack_minion_phat_loot",
+     "name": "Run Away",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Runs away, never to be seen again!",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Run",
+     "params": {
+      "charge": 2
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "RunawaySkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_16208",
+     "origin": "pig_passive_fullpockets",
+     "type": "Passive",
+     "source": "pig_passive_fullpockets",
+     "name": "Full Pockets",
+     "desc": "[0000ff]Passive:[-] Spills up to [0000ff]{value_1}[-] Snoutlings as it takes damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "total_amount": 15
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"max_amount\")) || (p(\"total_amount\")))"
+      }
+     },
+     "template": "FullPockets",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

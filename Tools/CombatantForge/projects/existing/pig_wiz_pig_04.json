@@ -1,0 +1,399 @@
+{
+ "kind": "existing",
+ "id": "pig_wiz_pig_04",
+ "name": "Wizpig",
+ "rig": "WizPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear",
+     "name": "Headgear",
+     "item": "Headgear",
+     "w": 248,
+     "h": 170,
+     "pivot": [
+      0.04,
+      -0.28
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Back",
+     "name": "Headgear_Back",
+     "item": "Headgear",
+     "w": 246,
+     "h": 96,
+     "pivot": [
+      -0.0066320812,
+      -0.0028324514
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_Wand",
+     "name": "MainHand_Wand",
+     "item": "MainHand_Wand",
+     "w": 194,
+     "h": 72,
+     "pivot": [
+      -0.3267857,
+      0.13712798
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_b1cd2",
+   "origin": "pig_attack_wizpig_02",
+   "type": "Attack",
+   "source": "pig_attack_wizpig_02",
+   "name": "Black Curse",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies. \r\nTargets are cursed: If they take damage, their attackers are healed. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 60,
+    "all": 1,
+    "health_in_percent": 75,
+    "chance": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"health_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    }
+   },
+   "template": "AttackAndApplyHealOnAttackSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_4c595",
+   "origin": "pig_support_wizpig_03",
+   "type": "Support",
+   "source": "pig_support_wizpig_03",
+   "name": "Zombie Master",
+   "desc": "Target ally immediately attacks.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_in_percent": 200
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "OrderAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_db10b",
+   "origin": "pig_passive_drainlife",
+   "type": "Passive",
+   "source": "pig_passive_drainlife",
+   "name": "Drain Life",
+   "desc": "Increases received healing by [ff0000]{value_3}%[-].",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "increase_in_percent": 100
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "IncreaseHealingReceivedPassive",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 750,
+  "attack": 15,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_wiz_pig_04",
+  "fingerprint": "108412f9a3e5fedf280b9a45f245e387718d7b08",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_wizpig_02",
+     "pig_support_wizpig_03",
+     "pig_support_wizpig_03"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Wizpig",
+   "rig": "WizPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c4d62c2c8c8524043be8c45d440d9ff4:Headgear",
+       "name": "Headgear",
+       "item": "Headgear",
+       "w": 248,
+       "h": 170,
+       "pivot": [
+        0.04,
+        -0.28
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Back",
+       "name": "Headgear_Back",
+       "item": "Headgear",
+       "w": 246,
+       "h": 96,
+       "pivot": [
+        -0.0066320812,
+        -0.0028324514
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c0d17167a2dc3e04081b6969e8a85ba3:MainHand_Wand",
+       "name": "MainHand_Wand",
+       "item": "MainHand_Wand",
+       "w": 194,
+       "h": 72,
+       "pivot": [
+        -0.3267857,
+        0.13712798
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 750,
+    "attack": 15,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {}
+   },
+   "abilities": [
+    {
+     "uid": "a0_b1cd2",
+     "origin": "pig_attack_wizpig_02",
+     "type": "Attack",
+     "source": "pig_attack_wizpig_02",
+     "name": "Black Curse",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies. \r\nTargets are cursed: If they take damage, their attackers are healed. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 60,
+      "all": 1,
+      "health_in_percent": 75,
+      "chance": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"health_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      }
+     },
+     "template": "AttackAndApplyHealOnAttackSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_4c595",
+     "origin": "pig_support_wizpig_03",
+     "type": "Support",
+     "source": "pig_support_wizpig_03",
+     "name": "Zombie Master",
+     "desc": "Target ally immediately attacks.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_in_percent": 200
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "OrderAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_db10b",
+     "origin": "pig_passive_drainlife",
+     "type": "Passive",
+     "source": "pig_passive_drainlife",
+     "name": "Drain Life",
+     "desc": "Increases received healing by [ff0000]{value_3}%[-].",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "increase_in_percent": 100
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "IncreaseHealingReceivedPassive",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

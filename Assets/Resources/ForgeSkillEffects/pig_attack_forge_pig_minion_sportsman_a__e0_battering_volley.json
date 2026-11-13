@@ -1,0 +1,49 @@
+{
+ "BalancingId": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+ "VisualEffects": [
+  {
+   "SpawnTiming": 2,
+   "DelayInSeconds": 0.5,
+   "Type": 0,
+   "TargetCombatant": 1,
+   "TargetAnchor": 0,
+   "SoundId": "",
+   "DoNotParentOnBone": false,
+   "PrefabName": "SkillFX_Generic_Aura_Curse",
+   "OnHitEffect": false,
+   "OnHitPrefix": "",
+   "ShowEffectInvokerIcon": false,
+   "InterpolationTime": 0.0,
+   "SlowMotionDuration": 0.0,
+   "SlowMotionTimeScale": 0.0,
+   "UseTargetBoneScale": false,
+   "UseTargetBoneRotation": false,
+   "IgnoreScaling": false,
+   "EffectTextIdent": "",
+   "HasText": false,
+   "DoNotMirror": false
+  },
+  {
+   "SpawnTiming": 3,
+   "DelayInSeconds": 0.5,
+   "Type": 1,
+   "TargetCombatant": 1,
+   "TargetAnchor": 0,
+   "SoundId": "",
+   "DoNotParentOnBone": false,
+   "PrefabName": "SkillFX_Curse_LowerDefense",
+   "OnHitEffect": false,
+   "OnHitPrefix": "",
+   "ShowEffectInvokerIcon": false,
+   "InterpolationTime": 0.0,
+   "SlowMotionDuration": 0.0,
+   "SlowMotionTimeScale": 0.0,
+   "UseTargetBoneScale": false,
+   "UseTargetBoneRotation": false,
+   "IgnoreScaling": false,
+   "EffectTextIdent": "",
+   "HasText": false,
+   "DoNotMirror": false
+  }
+ ]
+}

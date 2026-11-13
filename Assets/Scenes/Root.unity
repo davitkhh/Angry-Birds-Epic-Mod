@@ -2509,6 +2509,132 @@ MonoBehaviour:
       EffectTextIdent: 
       HasText: 0
       DoNotMirror: 0
+  - BalancingId: SlimeOut
+    VisualEffects:
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 2
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Single_Ranged_Projectile
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 3
+      DelayInSeconds: 0
+      Type: 1
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Curse_DamageOverTime
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+  - BalancingId: SlimeOfGenerosity
+    VisualEffects:
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 0
+      TargetAnchor: 2
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Single_Ranged_Projectile
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 3
+      DelayInSeconds: 0
+      Type: 1
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Curse_DamageOverTime
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+  - BalancingId: SlimeDawgSlimeHit
+    VisualEffects:
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Spell_Barf_Target
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
+    - SpawnTiming: 2
+      DelayInSeconds: 0
+      Type: 0
+      TargetCombatant: 1
+      TargetAnchor: 1
+      SoundId: 
+      DoNotParentOnBone: 0
+      PrefabName: SkillFX_Hit_Single_Ranged_Projectile
+      OnHitEffect: 0
+      OnHitPrefix: 
+      ShowEffectInvokerIcon: 0
+      InterpolationTime: 0
+      SlowMotionDuration: 0
+      SlowMotionTimeScale: 0
+      UseTargetBoneScale: 0
+      UseTargetBoneRotation: 0
+      IgnoreScaling: 0
+      EffectTextIdent: 
+      HasText: 0
+      DoNotMirror: 0
   - BalancingId: Action
     VisualEffects:
     - SpawnTiming: 1
@@ -49530,6 +49656,12 @@ MonoBehaviour:
   - NameId: Projectile_ZombiePig_Barf
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/4_Projectiles/Projectile_ZombiePig_Barf
+    AssetLink: {fileID: 0}
+    DeleteOnBuild: 0
+    Extension: prefab
+  - NameId: Projectile_SlimeDawg_Slime
+    AssetLoadingType: 0
+    Path: Prefabs/4_Characters/4_Projectiles/Projectile_SlimeDawg_Slime
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab

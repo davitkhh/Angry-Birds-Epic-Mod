@@ -1,0 +1,353 @@
+{
+ "kind": "existing",
+ "id": "pig_pigmies_spectators_a",
+ "name": "Pig Spectators",
+ "rig": "Pigmies",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsA",
+     "name": "Headgear_SpectatorsA",
+     "item": "Headgear_SpectatorsA",
+     "w": 100,
+     "h": 56,
+     "pivot": [
+      -0.01807229,
+      -0.248494
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsA_Back",
+     "name": "Headgear_SpectatorsA_Back",
+     "item": "Headgear_SpectatorsA",
+     "w": 68,
+     "h": 18,
+     "pivot": [
+      0.5707895,
+      -0.50204307
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:MainHand_SpectatorsA",
+     "name": "MainHand_SpectatorsA",
+     "item": "MainHand_SpectatorsA",
+     "w": 104,
+     "h": 62,
+     "pivot": [
+      -0.3857143,
+      -0.4377551
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_14851",
+   "origin": "pig_attack_pigmies_spectators_a",
+   "type": "Attack",
+   "source": "pig_attack_pigmies_spectators_a",
+   "name": "Riot",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 35,
+    "attack_count": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_8380f",
+   "origin": "pig_support_pigmies_spectators_a",
+   "type": "Support",
+   "source": "pig_support_pigmies_spectators_a",
+   "name": "Fan Club",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Calls Spectator Pigs as support. ",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_pigmies_spectators": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 150,
+  "attack": 16,
+  "sizeType": "Medium",
+  "sizeScale": 1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_pigmies_spectators_a",
+  "fingerprint": "a2f0db4e749969d886fbd7459ae27b9a6b7243ca",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 80,
+    "ComboChain": [
+     "pig_attack_pigmies_spectators_a"
+    ]
+   },
+   {
+    "Percentage": 20,
+    "ComboChain": [
+     "pig_support_pigmies_spectators_a"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pig Spectators",
+   "rig": "Pigmies",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsA",
+       "name": "Headgear_SpectatorsA",
+       "item": "Headgear_SpectatorsA",
+       "w": 100,
+       "h": 56,
+       "pivot": [
+        -0.01807229,
+        -0.248494
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsA_Back",
+       "name": "Headgear_SpectatorsA_Back",
+       "item": "Headgear_SpectatorsA",
+       "w": 68,
+       "h": 18,
+       "pivot": [
+        0.5707895,
+        -0.50204307
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:MainHand_SpectatorsA",
+       "name": "MainHand_SpectatorsA",
+       "item": "MainHand_SpectatorsA",
+       "w": 104,
+       "h": 62,
+       "pivot": [
+        -0.3857143,
+        -0.4377551
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 150,
+    "attack": 16,
+    "sizeType": "Medium",
+    "sizeScale": 1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_14851",
+     "origin": "pig_attack_pigmies_spectators_a",
+     "type": "Attack",
+     "source": "pig_attack_pigmies_spectators_a",
+     "name": "Riot",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 35,
+      "attack_count": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_8380f",
+     "origin": "pig_support_pigmies_spectators_a",
+     "type": "Support",
+     "source": "pig_support_pigmies_spectators_a",
+     "name": "Fan Club",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Calls Spectator Pigs as support. ",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_pigmies_spectators": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

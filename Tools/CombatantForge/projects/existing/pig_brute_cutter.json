@@ -1,0 +1,367 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_cutter",
+ "name": "Cutter",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Cutter",
+     "name": "Headgear_Cutter",
+     "item": "Headgear_Cutter",
+     "w": 334,
+     "h": 198,
+     "pivot": [
+      -0.2142857,
+      0.040665586
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Cutter_Back",
+     "name": "Headgear_Cutter_Back",
+     "item": "Headgear_Cutter",
+     "w": 332,
+     "h": 122,
+     "pivot": [
+      -0.15535714,
+      0.5029567
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c7d2dd58f32d7fa41901a887bacb4301:MainHand_Cutter",
+     "name": "MainHand_Cutter",
+     "item": "MainHand_Cutter",
+     "w": 249,
+     "h": 171,
+     "pivot": [
+      -0.4125,
+      -0.14431392
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_61279",
+   "origin": "pig_attack_brute_cutter",
+   "type": "Attack",
+   "source": "pig_attack_brute_cutter",
+   "name": "Matter of Opinion",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 300,
+    "charge": 3,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 50,
+    "additional_enemies_affected": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_6}": {
+     "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+    }
+   },
+   "template": "AttackAndApplyDotSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_40bc8",
+   "origin": "pig_passive_wildling",
+   "type": "Passive",
+   "source": "pig_passive_wildling",
+   "name": "Wildling",
+   "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_delta": 0.2,
+    "lower_or_higher": 1,
+    "min_max_value": 0
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"percent_per_delta\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"min_max_value\"))"
+    }
+   },
+   "template": "ModifyDamageByRageMeter",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Strike",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 380,
+  "attack": 25,
+  "sizeType": "Large",
+  "sizeScale": 0.8,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_cutter",
+  "fingerprint": "339423d76accd8a47dc757ba47ce192d19466ae7",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_brute_cutter"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Cutter",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Cutter",
+       "name": "Headgear_Cutter",
+       "item": "Headgear_Cutter",
+       "w": 334,
+       "h": 198,
+       "pivot": [
+        -0.2142857,
+        0.040665586
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:Headgear_Cutter_Back",
+       "name": "Headgear_Cutter_Back",
+       "item": "Headgear_Cutter",
+       "w": 332,
+       "h": 122,
+       "pivot": [
+        -0.15535714,
+        0.5029567
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c7d2dd58f32d7fa41901a887bacb4301:MainHand_Cutter",
+       "name": "MainHand_Cutter",
+       "item": "MainHand_Cutter",
+       "w": 249,
+       "h": 171,
+       "pivot": [
+        -0.4125,
+        -0.14431392
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Strike",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 380,
+    "attack": 25,
+    "sizeType": "Large",
+    "sizeScale": 0.8,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_61279",
+     "origin": "pig_attack_brute_cutter",
+     "type": "Attack",
+     "source": "pig_attack_brute_cutter",
+     "name": "Matter of Opinion",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 300,
+      "charge": 3,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 50,
+      "additional_enemies_affected": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_6}": {
+       "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+      }
+     },
+     "template": "AttackAndApplyDotSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_40bc8",
+     "origin": "pig_passive_wildling",
+     "type": "Passive",
+     "source": "pig_passive_wildling",
+     "name": "Wildling",
+     "desc": "[0000ff]Passive:[-] Gains bonus attack power while the Rage Chili fills up.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_delta": 0.2,
+      "lower_or_higher": 1,
+      "min_max_value": 0
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"percent_per_delta\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"min_max_value\"))"
+      }
+     },
+     "template": "ModifyDamageByRageMeter",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

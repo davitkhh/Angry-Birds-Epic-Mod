@@ -72,6 +72,76 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		// When the last Forge projectile this skill fired reaches its first target (Time.time); 0 for none
+		public float m_ForgeArrival;
+
+		// When the last projectile (any kind) this skill fired reaches its target (Time.time); 0 for none. Ricochet
+		// hops wait for it so the bounce only leaves after the shot has landed
+		public float m_ProjectileArrival;
+
+		// Combatant Forge "projectile hit counts as the Impact event": set when the skill fires a projectile with
+		// anim_impact_on_hit; its Impact effects then play when the projectile arrives (SpawnProjectile)
+		public bool m_ImpactFromProjectile;
+
+		// the Forge projectile this skill fired last (it can land later than m_ForgeArrival when slowed on its way)
+		public ForgeProjectileRunner m_ForgeRunner;
+
+		// Combatant Forge timings: a projectile was fired / hit / bounced / stopped, or a slow motion started, at pos
+		// (ForgeEffectExtras.Timing*). Plays the skill's effects with that timing: "At the projectile" ones at pos.
+		public void ForgeEvent(int timing, Vector3 pos)
+		{
+			if (m_VisualEffectSetting == null || m_VisualEffectSetting.VisualEffects == null || m_Source == null || m_Source.CombatantView == null)
+			{
+				return;
+			}
+			var mgr = m_Source.CombatantView.m_BattleMgr;
+			foreach (var effect in m_VisualEffectSetting.VisualEffects)
+			{
+				if ((int)effect.SpawnTiming != timing || (timing == ForgeEffectExtras.TimingSlowMotion && effect.TargetCombatant == VisualEffectTargetCombatant.SlowMotion))
+				{
+					continue;
+				}
+				if ((int)effect.TargetCombatant == ForgeEffectExtras.TargetProjectile)
+				{
+					mgr.SpawnEffectAt(m_Source, effect, m_VisualEffectSetting, pos);
+				}
+				else
+				{
+					mgr.InstantiateEffect(m_Source, effect, m_VisualEffectSetting, m_Targets ?? new List<ICombatant>(), false);
+				}
+			}
+		}
+
+		private IEnumerator ForgeEventLater(int timing, float delay, Transform at)
+		{
+			yield return new WaitForSeconds(delay);
+			if (at != null)
+			{
+				ForgeEvent(timing, at.position);
+			}
+		}
+
+		private IEnumerator ImpactWhenArrived(float delay, ForgeProjectileRunner runner = null)
+		{
+			if (delay > 0f)
+			{
+				yield return new WaitForSeconds(delay);
+			}
+			for (var waited = 0f; runner != null && !runner.Landed && waited < 3f; waited += Time.deltaTime)
+			{
+				yield return null;
+			}
+			SpawnVisualEffects(VisualEffectSpawnTiming.Impact, m_VisualEffectSetting);
+		}
+
+		private void ImpactOnArrival(ICombatant source, float delay, ForgeProjectileRunner runner = null)
+		{
+			if (m_ImpactFromProjectile && source != null && source.CombatantView != null)
+			{
+				source.CombatantView.StartCoroutine(ImpactWhenArrived(delay, runner));
+			}
+		}
+
 		public void SpawnProjectile(BattleGameData battle, ICombatant source, List<ICombatant> targets, string skillProjectileAssetId, bool useOffhand = false)
 		{
 			if (string.IsNullOrEmpty(skillProjectileAssetId))
@@ -81,6 +151,34 @@ namespace ABH.GameDatas.Battle
 			}
 			Ammo.OnProjectileFired(source, skillProjectileAssetId);
 			var transform = !useOffhand || !(source.CombatantView.m_AssetController.OffHandBone != null) ? source.CombatantView.m_AssetController.MainHandBone : source.CombatantView.m_AssetController.OffHandBone;
+			if (ForgeProjectiles.Has(skillProjectileAssetId))
+			{
+				// a Forge projectile flies itself (ForgeProjectiles), at each target's body centre
+				var ends = new List<Vector3>();
+				if (targets != null)
+				{
+					foreach (var target in targets)
+					{
+						if (target != null && target.CombatantView && target.CombatantView.m_AssetController.BodyCenter)
+						{
+							ends.Add(target.CombatantView.m_AssetController.BodyCenter.position);
+						}
+					}
+				}
+				if (ends.Count == 0)
+				{
+					return;
+				}
+				var mgr = source.CombatantView.m_BattleMgr;
+				var centreTransform = source.CombatantFaction != 0 ? mgr.m_BirdCenterPosition : mgr.m_PigCenterPosition;
+				var centre = ends.Count > 1 && centreTransform ? centreTransform.position : ends[0];
+				var arrival = ForgeProjectiles.Spawn(skillProjectileAssetId, mgr.m_BattleArea, transform.position, ends, centre, source.CombatantView.m_AssetController.transform.localScale, source.CombatantView.m_AssetController.gameObject.layer, false, ForgeEvent);
+				m_ForgeArrival = Time.time + arrival;
+				m_ProjectileArrival = m_ForgeArrival;
+				m_ForgeRunner = ForgeProjectiles.LastRunner;
+				ImpactOnArrival(source, arrival, m_ForgeRunner);
+				return;
+			}
 			if (targets != null && targets.Count == 1)
 			{
 				var combatant = targets[0];
@@ -110,6 +208,10 @@ namespace ABH.GameDatas.Battle
 					componentInChildren.InvertCurves(true);
 				}
 				componentInChildren.Play();
+				ForgeEvent(ForgeEffectExtras.TimingProjectileLaunch, transform.position);
+				source.CombatantView.StartCoroutine(ForgeEventLater(ForgeEffectExtras.TimingProjectileHit, componentInChildren.MovementDuration, componentInChildren.m_EndTransform));
+				m_ProjectileArrival = Time.time + componentInChildren.MovementDuration;
+				ImpactOnArrival(source, componentInChildren.MovementDuration);
 				Object.Destroy(gameObject, componentInChildren.m_DurationInSeconds);
 			}
 			else
@@ -134,6 +236,10 @@ namespace ABH.GameDatas.Battle
 					componentInChildren2.InvertCurves(true);
 				}
 				componentInChildren2.Play();
+				ForgeEvent(ForgeEffectExtras.TimingProjectileLaunch, transform.position);
+				source.CombatantView.StartCoroutine(ForgeEventLater(ForgeEffectExtras.TimingProjectileHit, componentInChildren2.MovementDuration, componentInChildren2.m_EndTransform));
+				m_ProjectileArrival = Time.time + componentInChildren2.MovementDuration;
+				ImpactOnArrival(source, componentInChildren2.MovementDuration);
 				Object.Destroy(gameObject2, componentInChildren2.m_DurationInSeconds);
 			}
 		}
@@ -196,7 +302,11 @@ namespace ABH.GameDatas.Battle
 		public virtual void Init(SkillGameData model)
 		{
 			m_Model = model;
-			DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(m_Model.Balancing.AssetId, out m_VisualEffectSetting);
+			// an ability edited in the Combatant Forge has its own effects; others use the ones listed for the AssetId
+			if (!ForgeSkillEffects.TryGet(m_Model.Balancing.NameId, out m_VisualEffectSetting))
+			{
+				DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(m_Model.Balancing.AssetId, out m_VisualEffectSetting);
+			}
 			DIContainerLogic.GetVisualEffectsBalancing().TryGetBubbleSetting(m_Model.Balancing.AssetId, out m_BubbleSetting);
 		}
 

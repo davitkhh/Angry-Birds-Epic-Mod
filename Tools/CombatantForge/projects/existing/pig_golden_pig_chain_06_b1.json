@@ -1,0 +1,141 @@
+{
+ "kind": "existing",
+ "id": "pig_golden_pig_chain_06_b1",
+ "name": "Golden Pig",
+ "rig": "GoldenPig",
+ "variant": "",
+ "slots": {},
+ "abilities": [
+  {
+   "uid": "a0_1575c",
+   "origin": "pig_attack_golden_pig_01",
+   "type": "Attack",
+   "source": "pig_attack_golden_pig_01",
+   "name": "Headbutt",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-]. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "ragereduce": 30,
+    "falloff": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"ragereduce\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "ReduceRageAttackSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 100,
+  "attack": 12,
+  "sizeType": "Medium",
+  "sizeScale": 1.5,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig_goldenpig_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_golden_pig_chain_06_b1",
+  "fingerprint": "76c7687609710dfd2aaf8f4358cb5144acd3f89d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_golden_pig_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Golden Pig",
+   "rig": "GoldenPig",
+   "variant": "",
+   "slots": {},
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 100,
+    "attack": 12,
+    "sizeType": "Medium",
+    "sizeScale": 1.5,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig_goldenpig_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_1575c",
+     "origin": "pig_attack_golden_pig_01",
+     "type": "Attack",
+     "source": "pig_attack_golden_pig_01",
+     "name": "Headbutt",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-]. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "ragereduce": 30,
+      "falloff": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"ragereduce\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "ReduceRageAttackSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -2256,5 +2256,14 @@
       "pig_forge_pig_zombie_farmer__e0_headgear": 1
     },
     "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_minion_rogue_shield__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_forge_pig_minion_rogue_shield__e0_headgear": 1,
+      "pig_forge_pig_minion_rogue_shield__e0_mainhand": 1,
+      "pig_forge_pig_minion_rogue_shield__e0_offhand": 1
+    },
+    "InitializingLevel": 0
   }
 ]

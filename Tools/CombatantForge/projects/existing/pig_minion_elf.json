@@ -1,0 +1,291 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_elf",
+ "name": "Santa's Little Helper",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Elf",
+     "name": "Headgear_Elf",
+     "item": "Headgear_Elf",
+     "w": 161,
+     "h": 114,
+     "pivot": [
+      -0.26785716,
+      -0.503125
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Elf_Back",
+     "name": "Headgear_Elf_Back",
+     "item": "Headgear_Elf",
+     "w": 128,
+     "h": 54,
+     "pivot": [
+      -0.026785713,
+      -0.5650794
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Elf",
+     "name": "MainHand_Elf",
+     "item": "MainHand_Elf",
+     "w": 148,
+     "h": 76,
+     "pivot": [
+      -0.35357144,
+      -0.07824249
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_108d1",
+   "origin": "pig_attack_minion_elf",
+   "type": "Attack",
+   "source": "pig_attack_minion_elf",
+   "name": "Tickling Tickler",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-].",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "ragereduce": 5,
+    "falloff": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"ragereduce\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "ReduceRageAttackSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 135,
+  "attack": 18,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_elf",
+  "fingerprint": "95aa7c384bcb80d6a734fb8de940f3e4c0796494",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_elf"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Santa's Little Helper",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Elf",
+       "name": "Headgear_Elf",
+       "item": "Headgear_Elf",
+       "w": 161,
+       "h": 114,
+       "pivot": [
+        -0.26785716,
+        -0.503125
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Elf_Back",
+       "name": "Headgear_Elf_Back",
+       "item": "Headgear_Elf",
+       "w": 128,
+       "h": 54,
+       "pivot": [
+        -0.026785713,
+        -0.5650794
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Elf",
+       "name": "MainHand_Elf",
+       "item": "MainHand_Elf",
+       "w": 148,
+       "h": 76,
+       "pivot": [
+        -0.35357144,
+        -0.07824249
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 135,
+    "attack": 18,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_108d1",
+     "origin": "pig_attack_minion_elf",
+     "type": "Attack",
+     "source": "pig_attack_minion_elf",
+     "name": "Tickling Tickler",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-].",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "ragereduce": 5,
+      "falloff": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"ragereduce\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "ReduceRageAttackSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

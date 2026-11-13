@@ -23,6 +23,9 @@ BAKED = os.path.join(g.UPLOADS, 'Baked')
 GEAR_TEXTURE = {'Headgear': '', 'Headgear_Back': '_Back', 'MainHand': '_MainHand', 'MainHand_Arrow': '_MainHand_Arrow',
                 'OffHand': '_OffHand', 'OffHand_Back': '_OffHand_Back'}
 PLACEHOLDER = {
+    # A combo move only signs up with ComboMoveDirector; its combo recipes (combo_<ids> rows) do the work.
+    'Combo': {'SkillParameters': {'no_focus': 1.0}, 'SkillTemplateType': 'ComboMove', 'AssetId': '', 'EffectDuration': 0, 'EffectType': 'None',
+              'TargetAlreadyAffectedTargets': True, 'TargetSelfPossible': False},
     'Attack': {'SkillParameters': {'damage_in_percent': 100.0}, 'SkillTemplateType': 'SimpleAttackSkill', 'AssetId': 'Smash', 'EffectDuration': 0, 'EffectType': 'Curse',
                'TargetAlreadyAffectedTargets': True, 'TargetSelfPossible': False},
     'Support': {'SkillParameters': {'percent': 0.0}, 'SkillTemplateType': 'BlockDamageSkill', 'AssetId': 'Protect', 'EffectDuration': 1, 'EffectType': 'Blessing',
@@ -129,6 +132,19 @@ def migrate_project(project):
             layers.append(slot)
         slots[key] = {'layers': layers, 'hidden': hidden}
     project['slots'] = slots
+    # A duplicate's skills the Forge couldn't show when it was made (combo moves before the Combo type) become abilities.
+    keep = project.get('keepSkills') or []
+    if keep and project.get('kind') != 'existing':
+        catalog = {s['id']: s for s in g.skills_catalog()}
+        for k in [k for k in keep if k['id'] in catalog]:
+            s = catalog[k['id']]
+            ability = {'uid': uuid.uuid4().hex[:8], 'type': s['type'], 'source': s['id'], 'name': s['name'], 'desc': s['desc'], 'color': s['color'],
+                       'atlas': s['atlas'], 'icon': s['icon'], 'params': s['params'], 'values': s['values'], 'template': s['template'],
+                       'duration': s['duration'], 'design': ''}
+            if s['type'] == 'Combo':
+                ability['comboId'] = (s.get('asset') or '').lower()
+            project.setdefault('abilities', []).append(ability)
+        project['keepSkills'] = [k for k in keep if k['id'] not in catalog]
     stats = project.setdefault('stats', {})
     stats.setdefault('perLevelHealth', 0)
     stats.setdefault('perLevelAttack', 0)
@@ -139,6 +155,14 @@ def migrate_project(project):
             ability['params'] = row.get('SkillParameters')
             ability['duration'] = row.get('EffectDuration', 0)
             ability['values'] = g.template_values(row.get('SkillTemplateType', ''))
+        # edited values (the Values section) that the game's row already has are no longer edits
+        edits = {k: v for k, v in (ability.get('paramEdits') or {}).items() if (ability.get('params') or {}).get(k) != v}
+        if edits:
+            ability['paramEdits'] = edits
+        else:
+            ability.pop('paramEdits', None)
+        if ability.get('durationEdit') is not None and ability.get('durationEdit') == ability.get('duration'):
+            ability.pop('durationEdit', None)
     return project
 
 
@@ -158,6 +182,13 @@ def merge_job_result(current, result, texts=False):
             for key in JOB_ABILITY_FIELDS + (('name', 'desc') if texts else ()):
                 if key in ability:
                     target[key] = ability[key]
+            # A recipe job decides only whether each recipe is written; its moves and wording stay as edited meanwhile.
+            mine = {r.get('uid'): r for r in target.get('recipes') or []}
+            for r in ability.get('recipes') or []:
+                if r.get('uid') in mine:
+                    for key in ('written', 'source'):
+                        if key in r:
+                            mine[r['uid']][key] = r[key]
     return current
 
 
@@ -364,7 +395,7 @@ def _named_param(ability, field):
 def skill_name_id(project, ability):
     if ability.get('nameId'):
         return ability['nameId']
-    kind = {'Attack': 'attack', 'Support': 'support', 'Passive': 'passive'}[ability['type']]
+    kind = {'Attack': 'attack', 'Support': 'support', 'Passive': 'passive', 'Combo': 'combo'}[ability['type']]
     base = 'pig_%s_forge_%s_%s' % (kind, art_id(project), slugify(ability.get('name'))[:32])
     used = {a.get('nameId') for a in project['abilities']}
     name, n = base, 2
@@ -373,12 +404,201 @@ def skill_name_id(project, ability):
     return name
 
 
+# ------------------------------------------------------------------------------ an ability's own attack effects
+
+EFFECT_FIELDS = [('SpawnTiming', int), ('DelayInSeconds', float), ('Type', int), ('TargetCombatant', int), ('TargetAnchor', int), ('SoundId', str),
+                 ('DoNotParentOnBone', bool), ('PrefabName', str), ('OnHitEffect', bool), ('OnHitPrefix', str), ('ShowEffectInvokerIcon', bool),
+                 ('InterpolationTime', float), ('SlowMotionDuration', float), ('SlowMotionTimeScale', float), ('UseTargetBoneScale', bool),
+                 ('UseTargetBoneRotation', bool), ('IgnoreScaling', bool), ('EffectTextIdent', str), ('HasText', bool), ('DoNotMirror', bool)]
+
+
+def _effect_entry(e):
+    """One forge effect ({timing, delay, target, anchor, prefab, doNotMirror, onHit, onHitPrefix, raw}) as a VisualEffect."""
+    import effects
+    raw = dict(e.get('raw') or {})
+    inv = lambda table, v, d: next((k for k, name in table.items() if name == v), d)
+    raw.update({'SpawnTiming': inv(effects.TIMINGS, e.get('timing'), 0), 'DelayInSeconds': e.get('delay', 0) or 0,
+                'TargetCombatant': inv(effects.TARGETS, e.get('target'), 0), 'TargetAnchor': inv(effects.ANCHORS, e.get('anchor'), 0),
+                'PrefabName': e.get('prefab', '') or '', 'DoNotMirror': bool(e.get('doNotMirror')), 'OnHitEffect': bool(e.get('onHit')),
+                'OnHitPrefix': e.get('onHitPrefix', '') or ''})
+    # the Forge's extras (ForgeEffectExtras.cs): text settings and after-images ride in EffectTextIdent, slow motion
+    # is the game's own SlowMotion target
+    turn = {}
+    if e.get('turn'):
+        turn['turn'] = float(e['turn'])
+    for k in ('offsetX', 'offsetY'):
+        if e.get(k):
+            turn[k] = float(e[k])
+    if e.get('turnWith') and e.get('turnWith') != 'anchor':
+        turn['turnWith'] = e['turnWith']
+        if e['turnWith'] == 'bone':
+            turn['bone'] = e.get('bone') or ''
+    if e.get('text') is not None and raw.get('PrefabName') != 'Forge_AfterImages':
+        raw['HasText'] = True
+        raw['EffectTextIdent'] = 'forge:' + json.dumps(dict(e['text'], **turn), separators=(',', ':'))
+    elif turn and raw.get('PrefabName') != 'Forge_AfterImages':
+        if str(raw.get('EffectTextIdent') or '').strip() and not str(raw.get('EffectTextIdent')).startswith('forge:'):
+            pass  # a game word (txt_...) stays: the turn can't ride along
+        else:
+            raw['EffectTextIdent'] = 'forge:' + json.dumps(turn, separators=(',', ':'))
+            raw['HasText'] = False
+    if raw.get('PrefabName') == 'Forge_AfterImages':
+        raw['EffectTextIdent'] = 'forge:' + json.dumps(e.get('after') or {}, separators=(',', ':'))
+        raw['HasText'] = False
+    if e.get('slow') is not None or e.get('target') == 'SlowMotion':
+        sl = e.get('slow') or {}
+        raw.update({'TargetCombatant': 7, 'SlowMotionTimeScale': sl.get('scale', 0.3), 'SlowMotionDuration': sl.get('duration', 0.5),
+                    'InterpolationTime': sl.get('ease', 0.1), 'PrefabName': ''})
+        # its own ease back to normal speed (BattleMgrBase.ChangeTimeScale reads it from the forge settings)
+        if sl.get('easeOut') is not None and sl.get('easeOut') != sl.get('ease', 0.1):
+            raw['EffectTextIdent'] = 'forge:' + json.dumps({'easeOut': float(sl['easeOut'])}, separators=(',', ':'))
+        elif not str(raw.get('EffectTextIdent') or '').startswith('forge:{"text'):
+            raw['EffectTextIdent'] = ''
+    out = {}
+    for key, kind in EFFECT_FIELDS:
+        v = raw.get(key, '')
+        if kind is bool:
+            out[key] = v if isinstance(v, bool) else str(v).strip() in ('1', 'true', 'True')
+        elif kind is str:
+            out[key] = '' if v is None else str(v)
+        else:
+            try:
+                out[key] = kind(float(v or 0))
+            except ValueError:
+                out[key] = kind(0)
+    return out
+
+
+def skill_effects_dir():
+    return os.path.join(g.ASSETS, 'Resources', 'ForgeSkillEffects')
+
+
+def _same_effects(a, b):
+    return [_effect_entry(x) for x in a or []] == [_effect_entry(x) for x in b or []]
+
+
+def write_skill_effects(name_id, effect_list, log):
+    """Resources/ForgeSkillEffects/<name_id>.json (ForgeSkillEffects.cs), or removes it when effect_list is None."""
+    folder = skill_effects_dir()
+    path = os.path.join(folder, name_id + '.json')
+    if effect_list is None:
+        if os.path.exists(path):
+            os.remove(path)
+            if os.path.exists(path + '.meta'):
+                os.remove(path + '.meta')
+            log('Ability %s uses its skill\'s usual effects again' % name_id)
+        return
+    os.makedirs(folder, exist_ok=True)
+    meta = folder + '.meta'
+    if not os.path.exists(meta):
+        open(meta, 'w').write('fileFormatVersion: 2\nguid: %s\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n' % uuid.uuid4().hex)
+    json.dump({'BalancingId': name_id, 'VisualEffects': [_effect_entry(e) for e in effect_list]}, open(path, 'w', encoding='utf-8'), indent=1)
+    if not os.path.exists(path + '.meta'):
+        open(path + '.meta', 'w').write('fileFormatVersion: 2\nguid: %s\nTextScriptImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n' % uuid.uuid4().hex)
+    log('Wrote %d effect%s for %s' % (len(effect_list), '' if len(effect_list) == 1 else 's', name_id))
+
+
+def skill_fx_of(skill_id, asset):
+    """The effects a skill plays in the game: its own Forge list (ForgeSkillEffects.cs), else its AssetId's in Root.unity."""
+    import effects
+    own = os.path.join(skill_effects_dir(), skill_id + '.json') if skill_id else None
+    if own and os.path.exists(own):
+        return [dict({'raw': dict(e), 'timing': effects.TIMINGS.get(e['SpawnTiming'], 'Start'), 'delay': e['DelayInSeconds'],
+                      'target': effects.TARGETS.get(e['TargetCombatant'], 'Origin'), 'anchor': effects.ANCHORS.get(e['TargetAnchor'], 'Bottom'),
+                      'prefab': e['PrefabName'], 'doNotMirror': e['DoNotMirror'], 'onHit': e['OnHitEffect'], 'onHitPrefix': e['OnHitPrefix']},
+                     **effects.extras({k: (int(v) if isinstance(v, bool) else v) for k, v in e.items()}))
+                for e in json.load(open(own, encoding='utf-8'))['VisualEffects']]
+    return effects.skill_effects(asset or '')
+
+
+_PLACED = ('SpawnTiming', 'DelayInSeconds', 'TargetCombatant', 'TargetAnchor', 'PrefabName', 'OnHitEffect', 'OnHitPrefix', 'DoNotMirror')
+
+
+def _compact(e):
+    # only the raw fields the editor doesn't show and that aren't at their default (_effect_entry fills the rest)
+    return dict(e, raw={k: v for k, v in (e.get('raw') or {}).items() if k not in _PLACED and str(v) not in ('', '0', 'False', '0.0')})
+
+
+def all_skill_effects():
+    """Every effect list, for the Abilities tab in one request: {'assets': {AssetId: [...]}, 'skills': {skill NameId: [...]}}
+    (skills with their own Forge list)."""
+    import effects
+    effects.skill_effects('')
+    assets = {k: [_compact(e) for e in v] for k, v in effects._settings[1].items()}
+    own = {}
+    folder = skill_effects_dir()
+    if os.path.isdir(folder):
+        for f in os.listdir(folder):
+            if f.endswith('.json'):
+                own[f[:-5]] = [_compact(e) for e in skill_fx_of(f[:-5], '')]
+    return {'assets': assets, 'skills': own}
+
+
+# ------------------------------------------------------------------------------ bones turning around another point
+
+def _rest_local(clip, i):
+    tr = (clip['tracks'][i] if i < len(clip['tracks']) else None) or {}
+    first = lambda v, d: (v[0] if v and isinstance(v[0], list) else v) if v is not None else d
+    pos, ang, sc = first(tr.get('p'), [0.0, 0.0]), tr.get('r', 0.0), first(tr.get('s'), [1.0, 1.0])
+    ang = ang[0] if isinstance(ang, list) else ang
+    return pos, ang, sc
+
+
+def bone_pivots_dir():
+    return os.path.join(g.ASSETS, 'Resources', 'ForgeBonePivots')
+
+
+def write_bone_pivots(project, log):
+    """Resources/ForgeBonePivots/Forge_<art id>.json for ForgeBonePivots.cs: each slot's rotation pivot (the Forge's
+    S.project.bonePivots, in the slot's art space) as a point in its bone's space, with the bone's rest rotation and
+    scale (Idle's first frame, as the preview). Removes the file when there are none. Returns whether it changed."""
+    folder = bone_pivots_dir()
+    path = os.path.join(folder, 'Forge_%s.json' % art_id(project))
+    pivots = project.get('bonePivots') or {}
+    entries = []
+    if pivots:
+        rig = g.bake_rig(project['rig'])
+        rest = next((c for c in rig['clips'] if c['name'] == 'Idle'), rig['clips'][0])
+        for b in rig['bones']:
+            pv = pivots.get(b.get('slot') or '')
+            if not pv or b.get('bone') is None or b['bone'] < 0:
+                continue
+            x, y = float(pv[0]), float(pv[1])
+            sprite = b.get('sprite')
+            if sprite is not None and rig['parents'][sprite] == b['bone']:
+                (px, py), ang, (sx, sy) = _rest_local(rest, sprite)
+                c, s = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+                x, y = c * sx * x - s * sy * y + px, s * sx * x + c * sy * y + py
+            _, ang, (sx, sy) = _rest_local(rest, b['bone'])
+            entries.append({'bone': b['name'], 'x': round(x, 4), 'y': round(y, 4), 'restAngle': float(ang), 'restSx': float(sx), 'restSy': float(sy)})
+    old = open(path, encoding='utf-8').read() if os.path.exists(path) else None
+    if not entries:
+        if old is not None:
+            os.remove(path)
+            if os.path.exists(path + '.meta'):
+                os.remove(path + '.meta')
+            log('Bones turn around their own origins again')
+        return old is not None
+    text = json.dumps({'bones': entries}, indent=1)
+    if text == old:
+        return False
+    os.makedirs(folder, exist_ok=True)
+    if not os.path.exists(folder + '.meta'):
+        open(folder + '.meta', 'w').write('fileFormatVersion: 2\nguid: %s\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n' % uuid.uuid4().hex)
+    open(path, 'w', encoding='utf-8').write(text)
+    if not os.path.exists(path + '.meta'):
+        open(path + '.meta', 'w').write('fileFormatVersion: 2\nguid: %s\nTextScriptImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n' % uuid.uuid4().hex)
+    log('Rotation pivots: %s' % ', '.join(e['bone'] for e in entries))
+    return True
+
+
 def build_skills(project, log):
     """Decides each ability's skill row. An untouched existing skill is referenced as is; a changed one becomes this
     combatant's own copy, so other pigs using the skill aren't affected. New abilities start as a stand-in until Claude
     has written them."""
     rows, texts, ids = [], {}, []
     catalog = {s['id']: s for s in g.skills_catalog()}
+    fx_of = lambda skill: skill_fx_of(skill['id'], skill.get('asset') or '')
     for ability in project['abilities']:
         typ = ability['type']
         source = catalog.get(ability.get('source')) if ability.get('source') else None
@@ -388,8 +608,15 @@ def build_skills(project, log):
             # No 'anim' key: the ability keeps whatever clip its skill already names.
             same_anim = all(f not in ability or _named_param(ability, f) == (source['params'] or {}).get(param) for f, param in NAMED_PARAMS.items())
             same_anim = same_anim and ('ranged' not in ability or _ranged_param(ability) == (source['params'] or {}).get('anim_ranged'))
-            unchanged = (ability.get('name') == source['name'] and ability.get('desc') == source['desc'] and custom_color == source['color']
-                         and ability.get('icon') == source['icon'] and ability.get('atlas') == source['atlas'] and same_anim)
+            same_anim = same_anim and ('impactOnHit' not in ability or bool(ability['impactOnHit']) == ('anim_impact_on_hit' in (source['params'] or {})))
+            # its own effects make it this combatant's copy too (the effects belong to the copy's NameId)
+            same_fx = 'effects' not in ability or _same_effects(ability['effects'], fx_of(source))
+            # edited values (damage %, turns...) make it this combatant's copy as well
+            same_fx = same_fx and all((source['params'] or {}).get(k) == v for k, v in (ability.get('paramEdits') or {}).items())
+            same_fx = same_fx and (ability.get('durationEdit') is None or ability['durationEdit'] == source.get('duration'))
+            unchanged = same_fx and (ability.get('name') == source['name'] and ability.get('desc') == source['desc'] and custom_color == source['color']
+                         and ability.get('icon') == source['icon'] and ability.get('atlas') == source['atlas'] and same_anim
+                         and (typ != 'Combo' or (ability.get('comboId') or '') == (source.get('asset') or '').lower()))
             if unchanged:
                 ids.append((source['id'], typ))
                 continue
@@ -410,6 +637,13 @@ def build_skills(project, log):
             else:
                 log('Ability "%s" is a stand-in with no effect until Claude has written it' % ability.get('name'))
         params = dict(row.get('SkillParameters') or {})
+        for k, v in (ability.get('paramEdits') or {}).items():
+            if v is None:
+                params.pop(k, None)  # taken off (a basic value set back to 0)
+            else:
+                params[k] = float(v)
+        if ability.get('durationEdit') is not None:
+            row['EffectDuration'] = int(round(float(ability['durationEdit'])))
         params.pop('ui_color_rgb', None)
         if custom_color != default_color:
             params['ui_color_rgb'] = float(int(custom_color, 16))
@@ -418,14 +652,23 @@ def build_skills(project, log):
                 params.pop(param, None)
                 if ability[f] and (f != 'projectile' or (typ == 'Attack' and ability.get('ranged') != 'melee')):
                     params[param] = _named_param(ability, f)
+        if 'impactOnHit' in ability:
+            # the projectile's hit plays the Impact effects (AttackSkillTemplate / SkillBattleDataBase.SpawnProjectile)
+            params.pop('anim_impact_on_hit', None)
+            if ability['impactOnHit'] and typ == 'Attack':
+                params['anim_impact_on_hit'] = 1.0
         if 'ranged' in ability:
             params.pop('anim_ranged', None)
             if typ == 'Attack' and _ranged_param(ability) is not None:
                 params['anim_ranged'] = _ranged_param(ability)
+        if typ == 'Combo':
+            # the combo id ComboMoveDirector matches recipes on
+            row['AssetId'] = (ability.get('comboId') or slugify(ability.get('name'))).lower()
         row.update({'NameId': name_id, 'LocaId': name_id, 'SkillParameters': params, 'TargetType': typ, 'IconAssetId': ability.get('icon', ''), 'IconAtlasId': ability.get('atlas', '')})
         ordered = {k: row[k] for k in ('NameId', 'AssetId', 'LocaId', 'SkillParameters', 'SkillTemplateType', 'EffectDuration', 'TargetType', 'EffectType', 'TargetingBehavior',
                                        'TargetAlreadyAffectedTargets', 'TargetSelfPossible', 'IconAssetId', 'IconAtlasId', 'EffectIconAtlasId', 'EffectIconAssetId', 'TargetCulling') if k in row}
         rows.append(ordered)
+        write_skill_effects(name_id, ability['effects'] if 'effects' in ability else None, log)
         texts[name_id + '_name'] = ability.get('name', '')
         texts[name_id + '_desc'] = ability.get('desc', '')
         ids.append((name_id, typ))
@@ -434,7 +677,7 @@ def build_skills(project, log):
 
 def combos_for(ids):
     supports = [i for i, t in ids if t == 'Support']
-    attacks = [i for i, t in ids if t == 'Attack']
+    attacks = [i for i, t in ids if t in ('Attack', 'Combo')]  # a combo move is picked like an attack
     if attacks:
         share = round(100.0 / len(attacks), 2)
         return [{'Percentage': share, 'ComboChain': supports + [a]} for a in attacks]
@@ -622,6 +865,7 @@ def publish(project, log):
         entries[base + '__Unused'] = (Image.new('RGBA', (2, 2), (0, 0, 0, 0)), (0.0, 0.0))
     write_atlas(project, entries, log)
     register_atlas(project, log)
+    write_bone_pivots(project, log)
 
     skill_rows, texts, ids = build_skills(project, log)
     pid = 'pig_forge_' + project['id']
@@ -755,7 +999,14 @@ def unpublish(project, log):
     loca_path, loca_text = remove_loca(texts)
     writes.append(('Loca', loca_path, loca_text))
 
-    # The atlas: off the rig prefab first, then its files.
+    remove_atlas(project, art, log)
+    log('Removing %s, its inventory, items, %d abilit%s and its text' % (pid, len(skills), 'y' if len(skills) == 1 else 'ies'))
+    encode(writes, log)
+    log('Removed from the game.')
+
+
+def remove_atlas(project, art, log):
+    """Takes the project's Forge_<art>_Atlas off its rig prefab, then deletes its files and baked art."""
     guids = project.get('guids') or {}
     rig_id = project.get('publishedRig') or project.get('rig')
     if guids.get('atlas:HR') and rig_id:
@@ -786,9 +1037,6 @@ def unpublish(project, log):
         os.remove(baked + '.meta')
     if removed:
         log('Deleted the atlas and baked art (%s)' % atlas)
-    log('Removing %s, its inventory, items, %d abilit%s and its text' % (pid, len(skills), 'y' if len(skills) == 1 else 'ies'))
-    encode(writes, log)
-    log('Removed from the game.')
 
 
 # ------------------------------------------------------------------------------ abilities written by Claude
@@ -799,6 +1047,15 @@ def claude_binary():
         return found
     candidates = sorted(glob.glob(os.path.expanduser('~/.vscode/extensions/anthropic.claude-code-*/resources/native-binary/claude')))
     return candidates[-1] if candidates else None
+
+
+def combo_note(ability):
+    if ability.get('type') != 'Combo':
+        return ''
+    cid = ability.get('comboId') or slugify(ability.get('name'))
+    return f"""This is a COMBO MOVE (TargetType Combo). Keep its row on template ComboMove with AssetId "{cid}" (the combo id) and the no_focus parameter: in battle it only signs up, and at the end of the side's turn ComboMoveDirector resolves everyone who signed up into recipe rows named combo_<sorted combo ids joined with _> (combo_{cid} alone, combo_{cid}_<other id> with partners). Recipes are SkillBalancingData rows with TargetType Combo whose template subclasses ComboRecipe (read ComboRecipe.cs, ComboMove.cs and ComboSpin.cs first). Build the recipes the designer describes, with loca combo_<ids>_name and _desc. The move's own tooltip may use {{<recipe ids>.<param>}} and {{<recipe ids>.damage}}.
+
+"""
 
 
 def ability_prompt(project, ability):
@@ -812,7 +1069,7 @@ Current tooltip text: {ability.get('desc', '')}
 Starts from existing skill: {ability.get('source') or 'none'} (if set, copy that row under the new NameId; never change the original)
 Combatant: {combatant_id(project)} "{project.get('name', '')}" on the {project['rig']} rig, {(project.get('stats') or {}).get('hp', '?')} HP, {(project.get('stats') or {}).get('attack', '?')} attack.
 
-What the ability must do, in the designer's words:
+{combo_note(ability)}What the ability must do, in the designer's words:
 {ability.get('design', '').strip()}
 
 Do this:
@@ -832,6 +1089,15 @@ def run_claude_ability(project, ability, log, register=None):
     command = [binary, '-p', ability_prompt(project, ability), '--output-format', 'stream-json', '--verbose', '--permission-mode', 'acceptEdits',
                '--allowedTools', 'Read,Edit,Write,Grep,Glob,Bash(ls:*),Bash(grep:*),Bash(file:*)']
     log('Claude is writing "%s" (%s)' % (ability.get('name'), ability['nameId']))
+    returncode, final = _stream_claude(command, log, register)
+    row = read_row('SkillBalancingData', ability['nameId'])
+    if returncode != 0 or not row or (final and final.get('is_error')):
+        raise ValueError('Claude did not finish the ability (exit %s). Nothing was marked as written.' % returncode)
+    return _finish_ability(project, ability, row, log)
+
+
+def _stream_claude(command, log, register=None):
+    """Runs Claude Code, logging what it says and which files it touches. Returns (exit code, final result event)."""
     proc = subprocess.Popen(command, cwd=g.ROOT, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     if register:
         register(proc)
@@ -851,9 +1117,10 @@ def run_claude_ability(project, ability, log, register=None):
         elif event.get('type') == 'result':
             final = event
     proc.wait()
-    row = read_row('SkillBalancingData', ability['nameId'])
-    if proc.returncode != 0 or not row or (final and final.get('is_error')):
-        raise ValueError('Claude did not finish the ability (exit %s). Nothing was marked as written.' % proc.returncode)
+    return proc.returncode, final
+
+
+def _finish_ability(project, ability, row, log):
     ability['written'] = True
     texts = g.loca_texts()
     ability['desc'] = texts.get(ability['nameId'] + '_desc', ability.get('desc', ''))
@@ -862,5 +1129,56 @@ def run_claude_ability(project, ability, log, register=None):
     ability['params'] = row.get('SkillParameters')
     ability['duration'] = row.get('EffectDuration', 0)
     ability['values'] = g.template_values(row.get('SkillTemplateType', ''))
+    ability.pop('paramEdits', None)  # Claude wrote its numbers anew
+    ability.pop('durationEdit', None)
     log('Ability written with template %s. Press Upload to push it into the game.' % row.get('SkillTemplateType'))
     return project
+
+
+# ------------------------------------------------------------------------------ combo recipes written by Claude
+
+def recipe_id(ids):
+    """The recipe row ComboMoveDirector looks for: combo_ + the combo ids sorted and joined with _."""
+    return 'combo_' + '_'.join(sorted(i.lower() for i in ids))
+
+
+def recipe_prompt(project, ability, recipe):
+    rid = recipe_id(recipe['ids'])
+    members = ', '.join(recipe['ids'])
+    return f"""Create or update a COMBO RECIPE for this game (decompiled Unity project, you are in its root).
+
+Recipe row NameId: {rid}
+Combo moves in it (combo ids, a move's SkillBalancingData row has TargetType Combo, template ComboMove and its combo id as AssetId): {members}
+It runs when exactly these moves signed up in the same side's turn ({'one pig on its own' if len(recipe['ids']) == 1 else str(len(recipe['ids'])) + ' pigs together'}). This recipe is for the combo move "{ability.get('name', '')}" (combo id {ability.get('comboId', '')}) of {combatant_id(project)} "{project.get('name', '')}" on the {project['rig']} rig.
+
+What the combination must do, in the designer's words:
+{recipe.get('design', '').strip()}
+
+Do this:
+1. Read Assets/Scripts/Assembly-CSharp/ABH/GameDatas/Battle/Skills/ComboRecipe.cs, ComboMove.cs and ComboSpin.cs first: they show how recipes perform (Perform(battle, comboers, runner)), share damage (damage_in_percent of the comboers' average ModifiedAttack) and stun.
+2. In Assets/BalancingData/SkillBalancingData.json, add or update the row {rid}: TargetType Combo, a SkillTemplateType that subclasses ComboRecipe (write a new one in that folder if none fits, matching ComboSpin.cs), its numbers in SkillParameters, LocaId {rid}. Leave every other recipe and every combo move row as it is.
+3. Set "{rid}_name" and "{rid}_desc" in Assets/BalancingData/Loca/live_English.json; the description may use {{param}} placeholders for the row's parameters.
+4. If you wrote or changed C#, keep the file's CRLF line endings and compile-check it.
+
+Rules: edit the JSON in place with the Edit tool, keeping the rest of the file untouched. Do not encode the balancing container, do not edit prefabs or scenes, and don't commit: Combatant Forge encodes on the next upload. Finish with two sentences saying what you built and what the designer should test."""
+
+
+def run_claude_recipe(project, ability, recipe, log, register=None):
+    binary = claude_binary()
+    if not binary:
+        raise ValueError('Claude Code was not found on PATH or in the VS Code extensions folder')
+    if not recipe.get('ids'):
+        raise ValueError('The recipe has no combo moves in it')
+    rid = recipe_id(recipe['ids'])
+    command = [binary, '-p', recipe_prompt(project, ability, recipe), '--output-format', 'stream-json', '--verbose', '--permission-mode', 'acceptEdits',
+               '--allowedTools', 'Read,Edit,Write,Grep,Glob,Bash(ls:*),Bash(grep:*),Bash(file:*)']
+    log('Claude is writing the recipe %s (%s)' % (rid, ' + '.join(recipe['ids'])))
+    returncode, final = _stream_claude(command, log, register)
+    row = read_row('SkillBalancingData', rid)
+    if returncode != 0 or not row or (final and final.get('is_error')):
+        raise ValueError('Claude did not finish the recipe (exit %s). Nothing was marked as written.' % returncode)
+    recipe['written'] = True
+    recipe['source'] = rid
+    log('Recipe %s written with template %s. Upload or update the combatant to encode it.' % (rid, row.get('SkillTemplateType')))
+    return project
+

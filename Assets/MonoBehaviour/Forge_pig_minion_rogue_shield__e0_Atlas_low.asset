@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_pig_minion_rogue_shield__e0_Atlas_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 8445d64dff154d9bbfc29caf4654bc3a, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.609375
+    width: 0.578125
+    height: 0.390625
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.234375
+    width: 0.578125
+    height: 0.3671875
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.0625
+    width: 0.5390625
+    height: 0.1640625
+  - serializedVersion: 2
+    x: 0.5859375
+    y: 0.296875
+    width: 0.2890625
+    height: 0.3046875
+  textureGUIDs:
+  - 0ded6555e83f443687b68db05389e61e
+  - 2780710ab77b4363bccb867e673adf67
+  - 8d40163fb63c48ed9d839b09ddd81d1d
+  - cd9e205006014b38b3ed611ca1d7f916
+  textureSizes:
+  - {x: 148, y: 99}
+  - {x: 148, y: 93}
+  - {x: 137, y: 41}
+  - {x: 74, y: 78}
+  defaultPivotOffsets:
+  - {x: -0.145, y: -0.4}
+  - {x: -0.15, y: -0.15}
+  - {x: -0.31, y: 0.02}
+  - {x: -0, y: -0}
+  textureNames:
+  - Forge_pig_minion_rogue_shield__e0
+  - Forge_pig_minion_rogue_shield__e0_Back
+  - Forge_pig_minion_rogue_shield__e0_MainHand
+  - Forge_pig_minion_rogue_shield__e0_OffHand
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/pig_minion_rogue_shield__e0/Forge_pig_minion_rogue_shield__e0.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_minion_rogue_shield__e0/Forge_pig_minion_rogue_shield__e0_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_minion_rogue_shield__e0/Forge_pig_minion_rogue_shield__e0_MainHand.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_minion_rogue_shield__e0/Forge_pig_minion_rogue_shield__e0_OffHand.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

@@ -1,0 +1,439 @@
+{
+ "kind": "existing",
+ "id": "pig_bird_blue",
+ "name": "Dominics",
+ "rig": "BlueBirds",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "baa43a5106de30946b77d5e9e719f06c:Headgear_TreasureHunters",
+     "name": "Headgear_TreasureHunters",
+     "item": "Headgear_TreasureHunters",
+     "w": 209,
+     "h": 214,
+     "pivot": [
+      0.039185416,
+      0.14090271
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "baa43a5106de30946b77d5e9e719f06c:Headgear_TreasureHunters_Back",
+     "name": "Headgear_TreasureHunters_Back",
+     "item": "Headgear_TreasureHunters",
+     "w": 137,
+     "h": 97,
+     "pivot": [
+      0.21964285,
+      0.23077135
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "6844e602e83e90f46b56a961950283a7:MainHand_Blue_Set_01",
+     "name": "MainHand_Blue_Set_01",
+     "item": "MainHand_Blue_Set_01",
+     "w": 189,
+     "h": 207,
+     "pivot": [
+      0.074999996,
+      0.03668478
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "MainHand_Arrow": {
+   "layers": [
+    {
+     "uid": "ga173548",
+     "src": "6844e602e83e90f46b56a961950283a7:MainHand_Blue_Set_01_Arrow",
+     "name": "MainHand_Blue_Set_01_Arrow",
+     "item": "MainHand_Blue_Set_01",
+     "w": 221,
+     "h": 166,
+     "pivot": [
+      -0.08035714,
+      -0.14505231
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "ga173548"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "baa43a5106de30946b77d5e9e719f06c:OffHand_Blue_Set_01",
+     "name": "OffHand_Blue_Set_01",
+     "item": "OffHand_Blue_Set_01",
+     "w": 152,
+     "h": 217,
+     "pivot": [
+      0.16788694,
+      -0.23354432
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_30f85",
+   "origin": "pig_attack_blues_explorers",
+   "type": "Attack",
+   "source": "pig_attack_blues_explorers",
+   "name": "Buy Some Time",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_2}%[-] chance to reset the target's charge counter by [ff0000]{value_3}[-].",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "BuySomeTime",
+   "params": {
+    "damage_in_percent": 115,
+    "reduce_charge": 1,
+    "chance": 65
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduce_charge\"))"
+    }
+   },
+   "template": "AttackAndResetCharge",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_6338d",
+   "origin": "pig_support_blues_explorers",
+   "type": "Support",
+   "source": "pig_support_blues_explorers",
+   "name": "Untouchable",
+   "desc": "Target becomes immune to negative effects and reflects them back. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_01",
+   "icon": "Immunization",
+   "params": {
+    "chance": 100,
+    "cleanse_on_cast": 0,
+    "target_immune": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    }
+   },
+   "template": "MirrorDebuffsSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "Projectile_BlueBirds_Set_01",
+  "hitEffect": "_Ranged_Projectile",
+  "directProjectile": true
+ },
+ "stats": {
+  "hp": 50,
+  "attack": 25,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_bird_blue",
+  "fingerprint": "2366c187097d11ff4ab7584b9a4adeb40f5dbca7",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 65,
+    "ComboChain": [
+     "pig_attack_blues_explorers"
+    ]
+   },
+   {
+    "Percentage": 35,
+    "ComboChain": [
+     "pig_support_blues_explorers"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Dominics",
+   "rig": "BlueBirds",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "baa43a5106de30946b77d5e9e719f06c:Headgear_TreasureHunters",
+       "name": "Headgear_TreasureHunters",
+       "item": "Headgear_TreasureHunters",
+       "w": 209,
+       "h": 214,
+       "pivot": [
+        0.039185416,
+        0.14090271
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "baa43a5106de30946b77d5e9e719f06c:Headgear_TreasureHunters_Back",
+       "name": "Headgear_TreasureHunters_Back",
+       "item": "Headgear_TreasureHunters",
+       "w": 137,
+       "h": 97,
+       "pivot": [
+        0.21964285,
+        0.23077135
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "6844e602e83e90f46b56a961950283a7:MainHand_Blue_Set_01",
+       "name": "MainHand_Blue_Set_01",
+       "item": "MainHand_Blue_Set_01",
+       "w": 189,
+       "h": 207,
+       "pivot": [
+        0.074999996,
+        0.03668478
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "MainHand_Arrow": {
+     "layers": [
+      {
+       "uid": "ga173548",
+       "src": "6844e602e83e90f46b56a961950283a7:MainHand_Blue_Set_01_Arrow",
+       "name": "MainHand_Blue_Set_01_Arrow",
+       "item": "MainHand_Blue_Set_01",
+       "w": 221,
+       "h": 166,
+       "pivot": [
+        -0.08035714,
+        -0.14505231
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "ga173548"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "baa43a5106de30946b77d5e9e719f06c:OffHand_Blue_Set_01",
+       "name": "OffHand_Blue_Set_01",
+       "item": "OffHand_Blue_Set_01",
+       "w": 152,
+       "h": 217,
+       "pivot": [
+        0.16788694,
+        -0.23354432
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "Projectile_BlueBirds_Set_01",
+    "hitEffect": "_Ranged_Projectile",
+    "directProjectile": true
+   },
+   "stats": {
+    "hp": 50,
+    "attack": 25,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_30f85",
+     "origin": "pig_attack_blues_explorers",
+     "type": "Attack",
+     "source": "pig_attack_blues_explorers",
+     "name": "Buy Some Time",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_2}%[-] chance to reset the target's charge counter by [ff0000]{value_3}[-].",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "BuySomeTime",
+     "params": {
+      "damage_in_percent": 115,
+      "reduce_charge": 1,
+      "chance": 65
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduce_charge\"))"
+      }
+     },
+     "template": "AttackAndResetCharge",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_6338d",
+     "origin": "pig_support_blues_explorers",
+     "type": "Support",
+     "source": "pig_support_blues_explorers",
+     "name": "Untouchable",
+     "desc": "Target becomes immune to negative effects and reflects them back. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Birds_01",
+     "icon": "Immunization",
+     "params": {
+      "chance": 100,
+      "cleanse_on_cast": 0,
+      "target_immune": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      }
+     },
+     "template": "MirrorDebuffsSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

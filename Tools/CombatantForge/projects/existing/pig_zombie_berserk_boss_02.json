@@ -1,0 +1,287 @@
+{
+ "kind": "existing",
+ "id": "pig_zombie_berserk_boss_02",
+ "name": "Stinky Stanley",
+ "rig": "ZombiePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "38e015fe9220a0b44860f75e33f20f1c:Headgear_ZombieBerserker",
+     "name": "Headgear_ZombieBerserker",
+     "item": "Headgear_ZombieBerserker",
+     "w": 161,
+     "h": 132,
+     "pivot": [
+      0.1607143,
+      -0.08821023
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "49698066d17327d46a890eae8ce53c89:MainHand_ZombieBerserker",
+     "name": "MainHand_ZombieBerserker",
+     "item": "MainHand_ZombieBerserker",
+     "w": 193,
+     "h": 94,
+     "pivot": [
+      -0.50357145,
+      0.14848974
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_6895c",
+   "origin": "pig_attack_zombie_berserk_boss",
+   "type": "Attack",
+   "source": "pig_attack_zombie_berserk_boss",
+   "name": "Om Nom Nom",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 200,
+    "heal": 200,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithLeech",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_b311c",
+   "origin": "pig_passive_undead_02",
+   "type": "Passive",
+   "source": "pig_passive_undead_02",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 3,
+    "pig_support_undead_revive_self_02": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 600,
+  "attack": 60,
+  "sizeType": "Large",
+  "sizeScale": 1.5,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_zombie_berserk_boss_02",
+  "fingerprint": "7e427a86dfc14ba6cfb2d2916116b93b9ee52d0b",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_zombie_berserk_boss"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Stinky Stanley",
+   "rig": "ZombiePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "38e015fe9220a0b44860f75e33f20f1c:Headgear_ZombieBerserker",
+       "name": "Headgear_ZombieBerserker",
+       "item": "Headgear_ZombieBerserker",
+       "w": 161,
+       "h": 132,
+       "pivot": [
+        0.1607143,
+        -0.08821023
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "49698066d17327d46a890eae8ce53c89:MainHand_ZombieBerserker",
+       "name": "MainHand_ZombieBerserker",
+       "item": "MainHand_ZombieBerserker",
+       "w": 193,
+       "h": 94,
+       "pivot": [
+        -0.50357145,
+        0.14848974
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 600,
+    "attack": 60,
+    "sizeType": "Large",
+    "sizeScale": 1.5,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_6895c",
+     "origin": "pig_attack_zombie_berserk_boss",
+     "type": "Attack",
+     "source": "pig_attack_zombie_berserk_boss",
+     "name": "Om Nom Nom",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 200,
+      "heal": 200,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithLeech",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_b311c",
+     "origin": "pig_passive_undead_02",
+     "type": "Passive",
+     "source": "pig_passive_undead_02",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 3,
+      "pig_support_undead_revive_self_02": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

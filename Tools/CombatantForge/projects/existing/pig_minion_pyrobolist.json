@@ -136,7 +136,9 @@
    },
    "template": "SimpleAttackSkill",
    "duration": 0,
-   "design": ""
+   "design": "",
+   "ranged": "",
+   "projectile": ""
   },
   {
    "uid": "a1_8a735",

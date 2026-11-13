@@ -1,0 +1,335 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_rogue_spin",
+ "name": "Rogue",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue",
+     "name": "Headgear_Rogue",
+     "item": "Headgear_Rogue",
+     "w": 148,
+     "h": 99,
+     "pivot": [
+      -0.145,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue_Back",
+     "name": "Headgear_Rogue_Back",
+     "item": "Headgear_Rogue",
+     "w": 148,
+     "h": 93,
+     "pivot": [
+      -0.15,
+      -0.15
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Rogue",
+     "name": "MainHand_Rogue",
+     "item": "MainHand_Rogue",
+     "w": 137,
+     "h": 41,
+     "pivot": [
+      -0.31,
+      0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_c8a73",
+   "origin": "pig_attack_minion_rogue_01_intro",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_01_intro",
+   "name": "Backstab",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 40,
+    "attack_count": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": "",
+   "comboId": "backstab"
+  },
+  {
+   "uid": "a1_c132d",
+   "origin": "pig_combo_rogue_spin",
+   "type": "Combo",
+   "source": "pig_combo_rogue_spin",
+   "name": "Spin",
+   "desc": "[cd7936]Combo:[-] alone, spins on its weapon and gets dizzy (stunned for {spin.stun_duration} turn). With a second Spin, the two stack up and spin into a random bird for [ff0000]{spin_spin.damage}[-] damage, stunning it for {spin_spin.stun_duration} turn.",
+   "color": "CD7936",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "no_focus": 1
+   },
+   "values": {},
+   "template": "ComboMove",
+   "duration": 0,
+   "design": "",
+   "comboId": "spin",
+   "recipes": []
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 110,
+  "attack": 10,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_rogue_spin",
+  "fingerprint": "2501508f789b8cf25feb3f82f56be36698393450",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_minion_rogue_01_intro"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_combo_rogue_spin"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Rogue",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue",
+       "name": "Headgear_Rogue",
+       "item": "Headgear_Rogue",
+       "w": 148,
+       "h": 99,
+       "pivot": [
+        -0.145,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue_Back",
+       "name": "Headgear_Rogue_Back",
+       "item": "Headgear_Rogue",
+       "w": 148,
+       "h": 93,
+       "pivot": [
+        -0.15,
+        -0.15
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Rogue",
+       "name": "MainHand_Rogue",
+       "item": "MainHand_Rogue",
+       "w": 137,
+       "h": 41,
+       "pivot": [
+        -0.31,
+        0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 110,
+    "attack": 10,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_c8a73",
+     "origin": "pig_attack_minion_rogue_01_intro",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_01_intro",
+     "name": "Backstab",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 40,
+      "attack_count": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_c132d",
+     "origin": "pig_combo_rogue_spin",
+     "type": "Combo",
+     "source": "pig_combo_rogue_spin",
+     "name": "Spin",
+     "desc": "[cd7936]Combo:[-] alone, spins on its weapon and gets dizzy (stunned for {spin.stun_duration} turn). With a second Spin, the two stack up and spin into a random bird for [ff0000]{spin_spin.damage}[-] damage, stunning it for {spin_spin.stun_duration} turn.",
+     "color": "CD7936",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "no_focus": 1
+     },
+     "values": {},
+     "template": "ComboMove",
+     "duration": 0,
+     "design": "",
+     "comboId": "spin"
+    }
+   ]
+  }
+ }
+}

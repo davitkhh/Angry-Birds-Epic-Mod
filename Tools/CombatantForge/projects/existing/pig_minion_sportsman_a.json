@@ -1,0 +1,496 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_sportsman_a",
+ "name": "Volleyball Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanA",
+     "name": "Headgear_SportsmanA",
+     "item": "Headgear_SportsmanA",
+     "w": 142,
+     "h": 90,
+     "pivot": [
+      -0.18214285,
+      -0.40994048
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanA_Back",
+     "name": "Headgear_SportsmanA_Back",
+     "item": "Headgear_SportsmanA",
+     "w": 50,
+     "h": 36,
+     "pivot": [
+      0.4830741,
+      -0.7509911
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SportsmanA",
+     "name": "MainHand_SportsmanA",
+     "item": "MainHand_SportsmanA",
+     "w": 82,
+     "h": 78,
+     "pivot": [
+      -0.33214286,
+      -0.26188186
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_3e541",
+   "origin": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+   "name": "Battering Volley",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Target takes [ff0000]+{value_3}%[-] damage for [ff0000]{value_2}[-] turns. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "increase_in_percent": 30,
+    "chance": 100,
+    "damage_in_percent": 100,
+    "anim_clip": 349662,
+    "anim_projectile": 14672436,
+    "anim_ranged": 1,
+    "anim_impact_on_hit": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithIncreaseDamageReceived",
+   "duration": 3,
+   "design": "",
+   "effects": [
+    {
+     "raw": {},
+     "timing": "Impact",
+     "delay": 0.5,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Aura_Curse",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": ""
+    },
+    {
+     "raw": {
+      "Type": 1
+     },
+     "timing": "Affected",
+     "delay": 0.5,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Curse_LowerDefense",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": ""
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Hit_Impact_Top",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    }
+   ]
+  },
+  {
+   "uid": "a1_ca915",
+   "origin": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+   "name": "Serve",
+   "desc": "Deals [ff0000]{value_1}[-] damage, empties the rage chili by [ff0000]{value_3}%[-], and bounces to other targets up to [ff0000]{value_7}[-] times. Every bounce loses [ff0000]{value_5}%[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chain": 3,
+    "chain_reduction": 20,
+    "chain_ragereduce": 15,
+    "anim_clip": 349662,
+    "anim_ranged": 1,
+    "anim_projectile": 7391078,
+    "anim_impact_on_hit": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"chain_ragereduce\")))"
+    },
+    "{value_5}": {
+     "expr": "((p(\"chain_reduction\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"chain\"))"
+    },
+    "{value_8}": {
+     "expr": "(p(\"chain_chance\"))"
+    }
+   },
+   "template": "AttackWithChainSkill",
+   "duration": 0,
+   "design": "",
+   "effects": [
+    {
+     "raw": {},
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Hit_Tickle",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": ""
+    }
+   ]
+  },
+  {
+   "uid": "a2_0f99c",
+   "origin": "pig_passive_minion_sportsman_a",
+   "type": "Passive",
+   "source": "pig_passive_minion_sportsman_a",
+   "name": "Keep Playing",
+   "desc": "[0000ff]Passive:[-] Being defeated leaves [ff0000]{value_1}[-] Volleybomb behind.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_volleybomb": 1,
+    "spawn": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    }
+   },
+   "template": "SpawnPigsOnDeath",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 110,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_sportsman_a",
+  "fingerprint": "88bf2be83da80184e4eca74edc310b0b59d0eae7",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_forge_pig_minion_sportsman_a__e0_serve"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Volleyball Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanA",
+       "name": "Headgear_SportsmanA",
+       "item": "Headgear_SportsmanA",
+       "w": 142,
+       "h": 90,
+       "pivot": [
+        -0.18214285,
+        -0.40994048
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanA_Back",
+       "name": "Headgear_SportsmanA_Back",
+       "item": "Headgear_SportsmanA",
+       "w": 50,
+       "h": 36,
+       "pivot": [
+        0.4830741,
+        -0.7509911
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SportsmanA",
+       "name": "MainHand_SportsmanA",
+       "item": "MainHand_SportsmanA",
+       "w": 82,
+       "h": 78,
+       "pivot": [
+        -0.33214286,
+        -0.26188186
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 110,
+    "attack": 12,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_3e541",
+     "origin": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+     "type": "Attack",
+     "source": "pig_attack_forge_pig_minion_sportsman_a__e0_battering_volley",
+     "name": "Battering Volley",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Target takes [ff0000]+{value_3}%[-] damage for [ff0000]{value_2}[-] turns. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "increase_in_percent": 30,
+      "chance": 100,
+      "damage_in_percent": 100,
+      "anim_clip": 349662,
+      "anim_projectile": 14672436,
+      "anim_ranged": 1,
+      "anim_impact_on_hit": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithIncreaseDamageReceived",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_ca915",
+     "origin": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+     "type": "Attack",
+     "source": "pig_attack_forge_pig_minion_sportsman_a__e0_serve",
+     "name": "Serve",
+     "desc": "Deals [ff0000]{value_1}[-] damage, empties the rage chili by [ff0000]{value_3}%[-], and bounces to other targets up to [ff0000]{value_7}[-] times. Every bounce loses [ff0000]{value_5}%[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chain": 3,
+      "chain_reduction": 20,
+      "chain_ragereduce": 15,
+      "anim_clip": 349662,
+      "anim_ranged": 1,
+      "anim_projectile": 7391078,
+      "anim_impact_on_hit": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"chain_ragereduce\")))"
+      },
+      "{value_5}": {
+       "expr": "((p(\"chain_reduction\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"chain\"))"
+      },
+      "{value_8}": {
+       "expr": "(p(\"chain_chance\"))"
+      }
+     },
+     "template": "AttackWithChainSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_0f99c",
+     "origin": "pig_passive_minion_sportsman_a",
+     "type": "Passive",
+     "source": "pig_passive_minion_sportsman_a",
+     "name": "Keep Playing",
+     "desc": "[0000ff]Passive:[-] Being defeated leaves [ff0000]{value_1}[-] Volleybomb behind.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_volleybomb": 1,
+      "spawn": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      }
+     },
+     "template": "SpawnPigsOnDeath",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ },
+ "publishedAt": "2026-11-13 01:17"
+}
