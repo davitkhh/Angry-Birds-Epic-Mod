@@ -1,0 +1,38 @@
+{
+ "beams": [
+  {
+   "texture": "Headgear_StoneGuard",
+   "slot": "Headgear",
+   "builtin": true,
+   "on": [
+    "Support"
+   ],
+   "eyes": [
+    62.0,
+    -8.0,
+    84.0,
+    -8.0
+   ],
+   "affine": [
+    1,
+    0,
+    0,
+    1,
+    -63.6,
+    66.4393
+   ],
+   "angle": -4.0,
+   "color": "FFD940",
+   "length": 430.0,
+   "spread": 36.0,
+   "duration": 0.75,
+   "delay": 0.1,
+   "intensity": 1.0,
+   "cover": "",
+   "coverPivot": [
+    0,
+    0
+   ]
+  }
+ ]
+}

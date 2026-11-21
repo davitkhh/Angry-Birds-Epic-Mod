@@ -36,7 +36,7 @@ public class UITapHoldTrigger : MonoBehaviour
 	{
 		m_interfaceCamera = DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera;
 		m_UICamera = m_interfaceCamera.GetComponent<UICamera>();
-		m_SceneryCamera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
+		m_SceneryCamera = BirdUnlockSequence.SceneryCamera();
 	}
 
 	private void OnTouchDown()

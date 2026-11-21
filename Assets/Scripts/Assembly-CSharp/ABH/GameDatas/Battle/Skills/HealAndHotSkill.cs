@@ -91,6 +91,22 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			if (ctx.Target.CombatantFaction != ctx.Source.CombatantFaction)
+			{
+				return;
+			}
+			var targets = m_All ? ctx.FactionOf(ctx.Target) : new List<ICombatant> { m_Self ? ctx.Source : ctx.Target };
+			foreach (var skillTarget in targets)
+			{
+				// DoAction always takes the invoker's health here (m_InvokersHealth is never negative)
+				ctx.AddHeal(skillTarget, ctx.Source.ModifiedHealth * m_Percent / 100f);
+				var tickHealth = m_InvokersHealth == 1f ? ctx.Source.ModifiedHealth : skillTarget.ModifiedHealth;
+				ctx.AddHealOverTime(skillTarget, tickHealth * m_HotPercent / 100f, Model.Balancing.EffectDuration, m_HotChance / 100f);
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

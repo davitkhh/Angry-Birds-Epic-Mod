@@ -1,0 +1,386 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_big_cc_boss",
+ "name": "Duke of the Pig Lair",
+ "rig": "MoustachePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_BigBoss",
+     "name": "Headgear_BigBoss",
+     "item": "Headgear_BigBoss",
+     "w": 227,
+     "h": 135,
+     "pivot": [
+      0.03214286,
+      -0.31527779
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_BigBoss_Back",
+     "name": "Headgear_BigBoss_Back",
+     "item": "Headgear_BigBoss",
+     "w": 176,
+     "h": 45,
+     "pivot": [
+      0.1875,
+      0.3562
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_BigBoss",
+     "name": "MainHand_BigBoss",
+     "item": "MainHand_BigBoss",
+     "w": 191,
+     "h": 52,
+     "pivot": [
+      -0.3964286,
+      -0.009838599
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_b87be",
+   "origin": "pig_attack_moustache_big_boss_02",
+   "type": "Attack",
+   "source": "pig_attack_moustache_big_boss_02",
+   "name": "Firm Slap",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 70
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_b3ffb",
+   "origin": "pig_attack_moustache_big_boss_01",
+   "type": "Support",
+   "source": "pig_attack_moustache_big_boss_01",
+   "name": "Charge Command",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Commands all pigs to attack random targets.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 120,
+    "all": 1,
+    "charge": 3
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "OrderAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_67846",
+   "origin": "pig_passive_incompetentminions",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 1380,
+  "attack": 20,
+  "sizeType": "Large",
+  "sizeScale": 1.3,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig10_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_big_cc_boss",
+  "fingerprint": "4a21957aeafdfb43aa0d19764a9e9895a8fc7e88",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_moustache_big_boss_01",
+     "pig_attack_moustache_big_boss_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Duke of the Pig Lair",
+   "rig": "MoustachePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_BigBoss",
+       "name": "Headgear_BigBoss",
+       "item": "Headgear_BigBoss",
+       "w": 227,
+       "h": 135,
+       "pivot": [
+        0.03214286,
+        -0.31527779
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_BigBoss_Back",
+       "name": "Headgear_BigBoss_Back",
+       "item": "Headgear_BigBoss",
+       "w": 176,
+       "h": 45,
+       "pivot": [
+        0.1875,
+        0.3562
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_BigBoss",
+       "name": "MainHand_BigBoss",
+       "item": "MainHand_BigBoss",
+       "w": 191,
+       "h": 52,
+       "pivot": [
+        -0.3964286,
+        -0.009838599
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 1380,
+    "attack": 20,
+    "sizeType": "Large",
+    "sizeScale": 1.3,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig10_defeated_gold": 1,
+     "loot_pig_boss_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_b87be",
+     "origin": "pig_attack_moustache_big_boss_02",
+     "type": "Attack",
+     "source": "pig_attack_moustache_big_boss_02",
+     "name": "Firm Slap",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 70
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_b3ffb",
+     "origin": "pig_attack_moustache_big_boss_01",
+     "type": "Support",
+     "source": "pig_attack_moustache_big_boss_01",
+     "name": "Charge Command",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Commands all pigs to attack random targets.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 120,
+      "all": 1,
+      "charge": 3
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "OrderAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_67846",
+     "origin": "pig_passive_incompetentminions",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

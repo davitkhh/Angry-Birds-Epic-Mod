@@ -206,6 +206,163 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		private static SkillBattleDataBase PreviewAttackSkillOf(ICombatant combatant)
+		{
+			return combatant.GetSkills().FirstOrDefault(s => s.Model.Balancing.TargetType == SkillTargetTypes.Attack);
+		}
+
+		// Health bar preview: DoAction's m_AttackCount attacks, by the target's side in initiative order, each one the
+		// attacker's own attack on a random enemy. Every possible enemy is predicted with weight 1/enemies and equal
+		// changes are merged, so an attack that hits all enemies stays sure and a single-target one is 1/enemies each.
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			var faction = ctx.Target.CombatantFaction;
+			var scale = m_Percent > 0f ? m_Percent / 100f : 1f;
+			// per combatant and change: the change and its chance in each attack that can cause it
+			var outcomes = new Dictionary<ICombatant, Dictionary<string, KeyValuePair<HealthChange, List<float>>>>();
+			for (var i = 0; i < m_AttackCount; i++)
+			{
+				var attackers = ctx.Battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == faction && !c.IsStunned && c.IsParticipating && !c.IsBanner && Ammo.CanAfford(c, PreviewAttackSkillOf(c))).ToList();
+				if (attackers.Count == 0)
+				{
+					break;
+				}
+				var attacker = attackers[i % attackers.Count];
+				var skill = PreviewAttackSkillOf(attacker);
+				var enemies = ctx.Battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction != attacker.CombatantFaction).ToList();
+				if (skill == null || enemies.Count == 0)
+				{
+					continue;
+				}
+				var weight = 1f / enemies.Count;
+				var merged = new Dictionary<ICombatant, Dictionary<string, HealthChange>>();
+				foreach (var enemy in enemies)
+				{
+					var sub = new HealthPreviewContext
+					{
+						Battle = ctx.Battle,
+						Source = attacker,
+						Target = enemy,
+						Skill = skill,
+						IsRage = false
+					};
+					skill.PreviewHealthChanges(sub);
+					foreach (var pair in sub.Forecasts)
+					{
+						ctx.For(pair.Key).MaxHealthDelta += pair.Value.MaxHealthDelta * weight;
+						Dictionary<string, HealthChange> changes;
+						if (!merged.TryGetValue(pair.Key, out changes))
+						{
+							changes = new Dictionary<string, HealthChange>();
+							merged.Add(pair.Key, changes);
+						}
+						var seen = new Dictionary<string, int>();
+						foreach (var change in pair.Value.Changes)
+						{
+							var key = string.Format("{0}|{1}|{2}|{3}|{4:F4}|{5}", change.IsHeal, change.Amount, change.BonusAmount, change.Tick, change.Chance, change.BaseColor);
+							int count;
+							seen.TryGetValue(key, out count);
+							seen[key] = count + 1;
+							key += "#" + count;
+							HealthChange existing;
+							if (changes.TryGetValue(key, out existing))
+							{
+								existing.Chance += change.Chance * weight;
+								continue;
+							}
+							changes.Add(key, new HealthChange
+							{
+								IsHeal = change.IsHeal,
+								Amount = Mathf.RoundToInt(change.Amount * scale),
+								BonusAmount = Mathf.RoundToInt(change.BonusAmount * scale),
+								BonusTint = change.BonusTint,
+								BonusTintAlpha = change.BonusTintAlpha,
+								ReducedTint = change.ReducedTint,
+								ReducedTintAlpha = change.ReducedTintAlpha,
+								BaseColor = change.BaseColor,
+								Tick = change.Tick,
+								Chance = change.Chance * weight
+							});
+						}
+					}
+				}
+				foreach (var pair in merged)
+				{
+					Dictionary<string, KeyValuePair<HealthChange, List<float>>> byKey;
+					if (!outcomes.TryGetValue(pair.Key, out byKey))
+					{
+						byKey = new Dictionary<string, KeyValuePair<HealthChange, List<float>>>();
+						outcomes.Add(pair.Key, byKey);
+					}
+					foreach (var change in pair.Value)
+					{
+						KeyValuePair<HealthChange, List<float>> entry;
+						if (!byKey.TryGetValue(change.Key, out entry))
+						{
+							entry = new KeyValuePair<HealthChange, List<float>>(change.Value, new List<float>());
+							byKey.Add(change.Key, entry);
+						}
+						entry.Value.Add(Mathf.Clamp01(change.Value.Chance));
+					}
+				}
+			}
+			// The same change from several attacks (Red attacking twice, each time a 1/3 pick): the nth copy shows
+			// with the chance that at least n of those attacks cause it (5/9 for one hit, 1/9 for both).
+			foreach (var pair in outcomes)
+			{
+				foreach (var entry in pair.Value.Values)
+				{
+					var atLeast = AtLeastChances(entry.Value);
+					for (var n = 0; n < atLeast.Count; n++)
+					{
+						if (atLeast[n] < 0.005f)
+						{
+							break;
+						}
+						var template = entry.Key;
+						ctx.For(pair.Key).Changes.Add(new HealthChange
+						{
+							IsHeal = template.IsHeal,
+							Amount = template.Amount,
+							BonusAmount = template.BonusAmount,
+							BonusTint = template.BonusTint,
+							BonusTintAlpha = template.BonusTintAlpha,
+							ReducedTint = template.ReducedTint,
+							ReducedTintAlpha = template.ReducedTintAlpha,
+							BaseColor = template.BaseColor,
+							Tick = template.Tick,
+							Chance = atLeast[n] >= 0.999f ? 1f : atLeast[n]
+						});
+					}
+				}
+			}
+		}
+
+		// [n-1] = the chance that at least n of the independent events (with these chances) happen.
+		private static List<float> AtLeastChances(List<float> chances)
+		{
+			var exactly = new List<float> { 1f };
+			foreach (var p in chances)
+			{
+				var next = new List<float>();
+				for (var k = 0; k <= exactly.Count; k++)
+				{
+					var stay = k < exactly.Count ? exactly[k] * (1f - p) : 0f;
+					var hit = k > 0 ? exactly[k - 1] * p : 0f;
+					next.Add(stay + hit);
+				}
+				exactly = next;
+			}
+			var result = new List<float>();
+			var tail = 0f;
+			for (var k = exactly.Count - 1; k >= 1; k--)
+			{
+				tail += exactly[k];
+				result.Insert(0, Mathf.Clamp01(tail));
+			}
+			return result;
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

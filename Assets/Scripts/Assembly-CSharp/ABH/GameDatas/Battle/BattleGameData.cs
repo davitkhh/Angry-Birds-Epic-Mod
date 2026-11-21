@@ -21,6 +21,9 @@ namespace ABH.GameDatas.Battle
 
 		public bool m_ChronicleCaveBattle;
 
+		// Birds the player brought into the battle (friend bird included, banner not); used by star conditions
+		public int m_BirdsEnteredCount;
+
 		public int m_CurrentTurn;
 
 		public int m_CurrentWaveTurn;

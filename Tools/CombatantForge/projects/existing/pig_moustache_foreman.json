@@ -1,0 +1,416 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_foreman",
+ "name": "Foreman",
+ "rig": "MoustachePig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Foreman",
+     "name": "Headgear_Foreman",
+     "item": "Headgear_Foreman",
+     "w": 192,
+     "h": 128,
+     "pivot": [
+      0.1017857,
+      -0.2450893
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Foreman_Back",
+     "name": "Headgear_Foreman_Back",
+     "item": "Headgear_Foreman",
+     "w": 165,
+     "h": 56,
+     "pivot": [
+      0.1928571,
+      -0.02367666
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Foreman",
+     "name": "MainHand_Foreman",
+     "item": "MainHand_Foreman",
+     "w": 195,
+     "h": 121,
+     "pivot": [
+      -0.3375,
+      -0.04748376
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_1393e",
+   "origin": "pig_attack_moustache_foreman",
+   "type": "Attack",
+   "source": "pig_attack_moustache_foreman",
+   "name": "Smack",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_2ba5f",
+   "origin": "pig_support_moustache_foreman",
+   "type": "Support",
+   "source": "pig_support_moustache_foreman",
+   "name": "Power Up",
+   "desc": "Increase attack power of all pigs by [00a800]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "all": 1,
+    "damage_increase": 30
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"damage_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_friend\"))"
+    }
+   },
+   "template": "IncreaseDamageWithEffectsSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_67846",
+   "origin": "pig_passive_incompetentminions",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 250,
+  "attack": 25,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_foreman",
+  "fingerprint": "259c6383d1ee224df9d08384364fdaec2fe626d8",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_support_moustache_foreman",
+     "pig_attack_moustache_foreman",
+     "pig_attack_moustache_foreman",
+     "pig_attack_moustache_foreman"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Foreman",
+   "rig": "MoustachePig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Foreman",
+       "name": "Headgear_Foreman",
+       "item": "Headgear_Foreman",
+       "w": 192,
+       "h": 128,
+       "pivot": [
+        0.1017857,
+        -0.2450893
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Foreman_Back",
+       "name": "Headgear_Foreman_Back",
+       "item": "Headgear_Foreman",
+       "w": 165,
+       "h": 56,
+       "pivot": [
+        0.1928571,
+        -0.02367666
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_Foreman",
+       "name": "MainHand_Foreman",
+       "item": "MainHand_Foreman",
+       "w": 195,
+       "h": 121,
+       "pivot": [
+        -0.3375,
+        -0.04748376
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 250,
+    "attack": 25,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_1393e",
+     "origin": "pig_attack_moustache_foreman",
+     "type": "Attack",
+     "source": "pig_attack_moustache_foreman",
+     "name": "Smack",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_2ba5f",
+     "origin": "pig_support_moustache_foreman",
+     "type": "Support",
+     "source": "pig_support_moustache_foreman",
+     "name": "Power Up",
+     "desc": "Increase attack power of all pigs by [00a800]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "all": 1,
+      "damage_increase": 30
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"damage_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_friend\"))"
+      }
+     },
+     "template": "IncreaseDamageWithEffectsSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_67846",
+     "origin": "pig_passive_incompetentminions",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

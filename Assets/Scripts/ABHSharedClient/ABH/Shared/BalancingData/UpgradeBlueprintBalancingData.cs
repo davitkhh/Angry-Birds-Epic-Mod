@@ -78,5 +78,13 @@ namespace ABH.Shared.BalancingData
 
 		[ProtoMember(21)]
 		public float RageSkillParameterBonus { get; set; }
+
+		// Added to this SkillParameters key of the support skill (PvE and PvP) of the bird using the upgraded class or
+		// item, e.g. "percent" (+10 turns Red's 55% Protect into 65%). Not scaled by stars.
+		[ProtoMember(22)]
+		public string SupportSkillParameter { get; set; }
+
+		[ProtoMember(23)]
+		public float SupportSkillParameterBonus { get; set; }
 	}
 }

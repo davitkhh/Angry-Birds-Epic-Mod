@@ -1,0 +1,74 @@
+{
+ "Headgear_CactusKnightFruit": {
+  "l": 0,
+  "t": 23,
+  "r": 0,
+  "b": 0,
+  "w": 257,
+  "h": 213
+ },
+ "MainHand_CactusKnightFruit": {
+  "l": 0,
+  "t": 0,
+  "r": 24,
+  "b": 11,
+  "w": 227,
+  "h": 120
+ },
+ "OffHand_CactusKnightFruit": {
+  "l": 0,
+  "t": 2,
+  "r": 0,
+  "b": 0,
+  "w": 135,
+  "h": 122
+ },
+ "Headgear_CactusKnightBud": {
+  "l": 0,
+  "t": 65,
+  "r": 0,
+  "b": 0,
+  "w": 257,
+  "h": 255
+ },
+ "MainHand_CactusKnightBud": {
+  "l": 0,
+  "t": 5,
+  "r": 45,
+  "b": 24,
+  "w": 248,
+  "h": 138
+ },
+ "OffHand_CactusKnightBud": {
+  "l": 0,
+  "t": 18,
+  "r": 10,
+  "b": 9,
+  "w": 145,
+  "h": 147
+ },
+ "Headgear_CactusKnightBloom": {
+  "l": 0,
+  "t": 78,
+  "r": 0,
+  "b": 0,
+  "w": 257,
+  "h": 268
+ },
+ "MainHand_CactusKnightBloom": {
+  "l": 0,
+  "t": 10,
+  "r": 47,
+  "b": 25,
+  "w": 250,
+  "h": 144
+ },
+ "OffHand_CactusKnightBloom": {
+  "l": 0,
+  "t": 19,
+  "r": 11,
+  "b": 10,
+  "w": 146,
+  "h": 149
+ }
+}

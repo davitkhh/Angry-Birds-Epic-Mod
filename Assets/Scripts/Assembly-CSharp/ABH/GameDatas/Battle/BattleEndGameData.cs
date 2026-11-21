@@ -24,6 +24,9 @@ namespace ABH.GameDatas.Battle
 
 		public int m_NeededScoreFor3Stars;
 
+		// Which star positions were earned (BattleStars.Evaluate); null = the first m_BattlePerformanceStars
+		public bool[] m_StarsEarned;
+
 		public int m_ThrownWheelIndex;
 
 		public int m_LastWaveIndex;

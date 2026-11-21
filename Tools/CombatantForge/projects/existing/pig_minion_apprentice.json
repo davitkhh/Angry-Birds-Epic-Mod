@@ -57,28 +57,107 @@
  "abilities": [
   {
    "uid": "a0_6f1f5",
-   "origin": "pig_attack_minion_stickpig_01",
+   "origin": "pig_attack_forge_pig_minion_apprentice__e0_poke",
    "type": "Attack",
    "source": "pig_attack_minion_stickpig_01",
    "name": "Poke",
-   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "desc": "Deals [ff0000]{value_1}[-] damage and recieves [ff0000]{value_3}%[-] less damage for [ff0000]{value_4}[-] turns.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "Attack",
    "params": {
-    "damage_in_percent": 100
+    "damage_in_percent": 100,
+    "reduction_in_percent": 30
    },
    "values": {
     "{value_1}": {
      "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
     },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
     "{value_3}": {
-     "expr": "(p(\"tumble\"))"
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "D"
     }
    },
-   "template": "SimpleAttackWithMissSkill",
-   "duration": 0,
-   "design": ""
+   "template": "AttackAndApplySelfDamageReductionSkill",
+   "duration": 3,
+   "design": "Deals 100% damage. The apprentice takes 40% less damage for 3 turns.",
+   "nameId": "pig_attack_forge_pig_minion_apprentice__e0_poke",
+   "written": true,
+   "effects": [
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_WeaponEffect_Blow_Small",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "UseTargetBoneRotation": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "",
+     "onHit": true,
+     "onHitPrefix": "SkillFX_Hit_Single",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Bottom",
+     "prefab": "Camera_Shake_Subtle",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SKillFX_Hit_Impact_Frontal",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_BodyAirstream_Small",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "AnimationEnd",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_Aura_Blessing",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    }
+   ]
   },
   {
    "uid": "a1_5d573",
@@ -136,19 +215,56 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_minion_apprentice",
-  "fingerprint": "ed9f1715b111d6a3de0a45be66c2e0a9bbb638a6",
+  "fingerprint": "7d15ba08f3f9c99065608900079b4ea704dcca38",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 50,
+    "Percentage": 60,
     "ComboChain": [
-     "pig_attack_minion_stickpig_01"
+     "@tree1:40",
+     "pig_attack_forge_pig_minion_apprentice__e0_poke"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "@tree1:40",
+     "pig_support_minion_apprentice"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "@tree2:40",
+     "pig_attack_forge_pig_minion_apprentice__e0_poke"
+    ]
+   },
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "@tree2:40",
+     "pig_support_minion_apprentice"
+    ]
+   },
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "@tree3:10",
+     "pig_support_minion_apprentice"
     ]
    },
    {
     "Percentage": 50,
     "ComboChain": [
+     "@tree4:10",
+     "pig_attack_forge_pig_minion_apprentice__e0_poke"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "@tree4:10",
      "pig_support_minion_apprentice"
     ]
    }
@@ -231,28 +347,107 @@
    "abilities": [
     {
      "uid": "a0_6f1f5",
-     "origin": "pig_attack_minion_stickpig_01",
+     "origin": "pig_attack_forge_pig_minion_apprentice__e0_poke",
      "type": "Attack",
      "source": "pig_attack_minion_stickpig_01",
      "name": "Poke",
-     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "desc": "Deals [ff0000]{value_1}[-] damage and recieves [ff0000]{value_3}%[-] less damage for [ff0000]{value_4}[-] turns.",
      "color": "E55B5B",
      "atlas": "Skills_Pigs_01",
      "icon": "Attack",
      "params": {
-      "damage_in_percent": 100
+      "damage_in_percent": 100,
+      "reduction_in_percent": 30
      },
      "values": {
       "{value_1}": {
        "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
       },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
       "{value_3}": {
-       "expr": "(p(\"tumble\"))"
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "D"
       }
      },
-     "template": "SimpleAttackWithMissSkill",
-     "duration": 0,
-     "design": ""
+     "template": "AttackAndApplySelfDamageReductionSkill",
+     "duration": 3,
+     "design": "Deals 100% damage. The apprentice takes 40% less damage for 3 turns.",
+     "nameId": "pig_attack_forge_pig_minion_apprentice__e0_poke",
+     "written": true,
+     "effects": [
+      {
+       "timing": "Movement",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_WeaponEffect_Blow_Small",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {
+        "UseTargetBoneRotation": "1"
+       }
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "",
+       "onHit": true,
+       "onHitPrefix": "SkillFX_Hit_Single",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "GlobalCamera",
+       "anchor": "Bottom",
+       "prefab": "Camera_Shake_Subtle",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "SKillFX_Hit_Impact_Frontal",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Movement",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "Center",
+       "prefab": "SkillFX_Generic_BodyAirstream_Small",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "AnimationEnd",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "Center",
+       "prefab": "SkillFX_Generic_Aura_Blessing",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {}
+      }
+     ]
     },
     {
      "uid": "a1_5d573",
@@ -287,5 +482,86 @@
     }
    ]
   }
- }
+ },
+ "decisionBalance": false,
+ "decisionOrder": {
+  "trees": [
+   {
+    "id": "auto2",
+    "name": "60/40",
+    "on": true,
+    "pct": 40,
+    "kids": [
+     {
+      "id": "auto0",
+      "ref": "a0_6f1f5",
+      "w": 60,
+      "kids": []
+     },
+     {
+      "id": "auto1",
+      "ref": "a1_5d573",
+      "w": 40,
+      "kids": []
+     }
+    ]
+   },
+   {
+    "id": "ano78mic",
+    "name": "30/70",
+    "on": true,
+    "pct": 40,
+    "kids": [
+     {
+      "id": "z4zqu0mv",
+      "ref": "a0_6f1f5",
+      "w": 30,
+      "kids": []
+     },
+     {
+      "id": "kzaghric",
+      "ref": "a1_5d573",
+      "w": 70,
+      "kids": []
+     }
+    ]
+   },
+   {
+    "id": "mxyuvg73",
+    "name": "0/100",
+    "on": true,
+    "pct": 10,
+    "kids": [
+     {
+      "id": "hf4t3rrf",
+      "ref": "a1_5d573",
+      "w": 100,
+      "kids": []
+     }
+    ]
+   },
+   {
+    "id": "qlu7fkds",
+    "name": "50/50",
+    "on": true,
+    "pct": 10,
+    "kids": [
+     {
+      "id": "3w9vw91y",
+      "ref": "a0_6f1f5",
+      "w": 50,
+      "kids": []
+     },
+     {
+      "id": "g88lmuu9",
+      "ref": "a1_5d573",
+      "w": 50,
+      "kids": []
+     }
+    ]
+   }
+  ],
+  "active": "qlu7fkds"
+ },
+ "publishedAt": "2026-11-14 17:14"
 }

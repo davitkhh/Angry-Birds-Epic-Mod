@@ -18,8 +18,8 @@
       -0.20892857,
       -0.8170408
      ],
-     "tx": -2.4922524817002056,
-     "ty": 3.954089942942389,
+     "tx": -5.796266946275267,
+     "ty": 0.5044515482781691,
      "rot": 0,
      "sx": 1.1509347057136523,
      "sy": 1.1509347057136523,
@@ -135,7 +135,7 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_minion_farmer",
-  "fingerprint": "c7783a8122f07751e74c64210880f2c2636d5171",
+  "fingerprint": "94e144f10bf175d65ed0e668eb1febd8a49cb728",
   "rev": 0,
   "keepSkills": [],
   "combos": [
@@ -170,11 +170,11 @@
         -0.20892857,
         -0.8170408
        ],
-       "tx": 0,
-       "ty": 0,
+       "tx": -4.51524511282426,
+       "ty": 1.2230386676466907,
        "rot": 0,
-       "sx": 1,
-       "sy": 1,
+       "sx": 1.1509347057136523,
+       "sy": 1.1509347057136523,
        "shear": 0
       }
      ],
@@ -285,5 +285,16 @@
     }
    ]
   }
- }
+ },
+ "guids": {
+  "src:Forge_pig_minion_farmer__e0": "755854d3397c4257919f5a48dfb96cc5",
+  "tex:HR": "ce6ea2bbf2d34876851338dd7688ab30",
+  "tex:LR": "1a3373be8427419e97f22a11883ebee2",
+  "mat:HR": "afe600c67d424cb2b104431eb81b6220",
+  "mat:LR": "bc1dfabd3d874f7b91a358cbb61e7865",
+  "atlas:HR": "b3334c3f9aed4e139cf6cdfc963590e8",
+  "atlas:LR": "7e159366c7d34398947796c1572b4a53"
+ },
+ "publishedAt": "2026-11-13 21:37",
+ "publishedRig": "MinionPig"
 }

@@ -1,0 +1,454 @@
+{
+ "kind": "existing",
+ "id": "pig_moustache_pirate_captain",
+ "name": "Pirate Captain",
+ "rig": "MoustachePig",
+ "variant": "pirate",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_PirateCaptain",
+     "name": "Headgear_PirateCaptain",
+     "item": "Headgear_PirateCaptain",
+     "w": 279,
+     "h": 200,
+     "pivot": [
+      0.06521868,
+      -0.1736892
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_PirateCaptain_Back",
+     "name": "Headgear_PirateCaptain_Back",
+     "item": "Headgear_PirateCaptain",
+     "w": 197,
+     "h": 77,
+     "pivot": [
+      0.1821429,
+      0.1918831
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_PirateCaptain",
+     "name": "MainHand_PirateCaptain",
+     "item": "MainHand_PirateCaptain",
+     "w": 235,
+     "h": 78,
+     "pivot": [
+      -0.2785714,
+      -0.008070054
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_6c491",
+   "origin": "pig_attack_moustache_pirate_captain_01",
+   "type": "Attack",
+   "source": "pig_attack_moustache_pirate_captain_01",
+   "name": "Stinkeye",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage and marks the target for [ff0000]{value_2}[-] turns. Pirates with blessings only attack marked targets and deal [ff0000]{value_3}%[-] damage to them. Once every bird is marked, the marks last [ff0000]{value_5}[-] more turns and all pirates deal [ff0000]{value_6}%[-] damage to them. No new marks until then.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 2,
+    "bonus_in_percent": 50,
+    "empowered_bonus_in_percent": 100,
+    "empowered_duration": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(100 + (p(\"bonus_in_percent\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"empowered_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(100 + (p(\"empowered_bonus_in_percent\")))"
+    }
+   },
+   "template": "Stinkeye",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_813c0",
+   "origin": "pig_support_moustache_pirate_captain",
+   "type": "Support",
+   "source": "pig_support_moustache_pirate_captain",
+   "name": "Call Aid",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_3}[-] or [ff0000]{value_2}[-] turns. Summons pirate allies.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "summon_pirate": 1,
+    "charge": 2,
+    "charge_min": 1,
+    "use_amount": 1,
+    "table_by_queued_charge": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(F)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge_min\"))"
+    }
+   },
+   "template": "SummonCombatant",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_11cf0",
+   "origin": "pig_passive_dirtytricks",
+   "type": "Passive",
+   "source": "pig_passive_dirtytricks",
+   "name": "Dirty Tricks",
+   "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": null,
+   "values": {},
+   "template": "ImmunityToCurses",
+   "duration": -1,
+   "design": ""
+  },
+  {
+   "uid": "a3_67846",
+   "origin": "pig_passive_incompetentminions",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 250,
+  "attack": 15,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_moustache_pirate_captain",
+  "fingerprint": "002a22063203885cda9f63f6741f2b32aac671ba",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_attack_moustache_pirate_captain_01"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_support_moustache_pirate_captain",
+     "pig_attack_moustache_pirate_captain_01"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pirate Captain",
+   "rig": "MoustachePig",
+   "variant": "pirate",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_PirateCaptain",
+       "name": "Headgear_PirateCaptain",
+       "item": "Headgear_PirateCaptain",
+       "w": 279,
+       "h": 200,
+       "pivot": [
+        0.06521868,
+        -0.1736892
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_PirateCaptain_Back",
+       "name": "Headgear_PirateCaptain_Back",
+       "item": "Headgear_PirateCaptain",
+       "w": 197,
+       "h": 77,
+       "pivot": [
+        0.1821429,
+        0.1918831
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "81ef008026084a94a881cbb99fcdb71e:MainHand_PirateCaptain",
+       "name": "MainHand_PirateCaptain",
+       "item": "MainHand_PirateCaptain",
+       "w": 235,
+       "h": 78,
+       "pivot": [
+        -0.2785714,
+        -0.008070054
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 250,
+    "attack": 15,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_6c491",
+     "origin": "pig_attack_moustache_pirate_captain_01",
+     "type": "Attack",
+     "source": "pig_attack_moustache_pirate_captain_01",
+     "name": "Stinkeye",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage and marks the target for [ff0000]{value_2}[-] turns. Pirates with blessings only attack marked targets and deal [ff0000]{value_3}%[-] damage to them. Once every bird is marked, the marks last [ff0000]{value_5}[-] more turns and all pirates deal [ff0000]{value_6}%[-] damage to them. No new marks until then.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 2,
+      "bonus_in_percent": 50,
+      "empowered_bonus_in_percent": 100,
+      "empowered_duration": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(100 + (p(\"bonus_in_percent\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"empowered_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(100 + (p(\"empowered_bonus_in_percent\")))"
+      }
+     },
+     "template": "Stinkeye",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_813c0",
+     "origin": "pig_support_moustache_pirate_captain",
+     "type": "Support",
+     "source": "pig_support_moustache_pirate_captain",
+     "name": "Call Aid",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_3}[-] or [ff0000]{value_2}[-] turns. Summons pirate allies.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "summon_pirate": 1,
+      "charge": 2,
+      "charge_min": 1,
+      "use_amount": 1,
+      "table_by_queued_charge": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(F)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge_min\"))"
+      }
+     },
+     "template": "SummonCombatant",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_11cf0",
+     "origin": "pig_passive_dirtytricks",
+     "type": "Passive",
+     "source": "pig_passive_dirtytricks",
+     "name": "Dirty Tricks",
+     "desc": "[0000ff]Passive:[-] Immune to harmful effects.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {},
+     "values": {},
+     "template": "ImmunityToCurses",
+     "duration": -1,
+     "design": ""
+    },
+    {
+     "uid": "a3_67846",
+     "origin": "pig_passive_incompetentminions",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

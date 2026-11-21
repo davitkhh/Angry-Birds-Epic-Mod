@@ -21,7 +21,14 @@ public static class MerchantStall
 	//         Path_008_05) and blocks the merchant; once beaten it leaves the map and is replayed from McCool's shop menu.
 	//         The resource node stands on the map at the end of Path_008_01, where 008_05 stands otherwise.
 	// Applied when the world map loads (ApplyLayout); switch before entering the world map.
+	// OBSOLETE since 2026-11-17: the scene now has 007 -> 008_05 -> merchant, so ApplyLayout's link check fails and
+	// logs an error if this is switched on. Keep it false.
 	public static bool GateLeavesMap = false;
+
+	// McCool's level is hotspot_008_05 (its win opens his stall and plays his cutscene). It is a side branch off 007 in the
+	// scene (007 -> {008 -> 009, 008_05 -> merchant -> resource node}), so it is optional by itself: the player can go
+	// on and beat Prince Porky (010) first, and McCool then keeps his bag (StoryToggles.PorkyStealsMcCoolBag).
+	// (Until 2026-11-17 the cutscene sat on 008 and McCoolLevelOptional made 009 unlock together with 008.)
 
 	public static bool IsMcCoolMerchant(HotSpotWorldMapViewBase hotspot)
 	{

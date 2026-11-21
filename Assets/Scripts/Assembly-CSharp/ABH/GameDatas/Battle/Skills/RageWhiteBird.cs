@@ -47,6 +47,28 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			if (m_Percent == 0f)
+			{
+				return;
+			}
+			var targets = new List<ICombatant>();
+			if (!m_All)
+			{
+				targets.Add(m_Self ? ctx.Source : ctx.Target);
+			}
+			else
+			{
+				targets.AddRange(ctx.FactionOf(ctx.Target).Where(c => c != ctx.Source));
+			}
+			targets.Add(ctx.Source);
+			foreach (var skillTarget in targets)
+			{
+				ctx.AddHeal(skillTarget, skillTarget.ModifiedHealth * (skillTarget.IsBanner ? m_PercentBanner : m_Percent) / 100f);
+			}
+		}
+
 		private void Heal(ICombatant skillTarget, BattleGameData battle, ICombatant source)
 		{
 			if (m_Percent == 0f)

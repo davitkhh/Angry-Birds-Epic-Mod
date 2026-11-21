@@ -1696,7 +1696,7 @@
         "NameId": "pig_minion_rogue_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
-        "Amount": 2.0,
+        "Amount": 3.0,
         "Unique": false,
         "ForcePercent": false
       },
@@ -1704,7 +1704,7 @@
         "NameId": "pig_minion_stickpig_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
-        "Amount": 2.0,
+        "Amount": 1.0,
         "Unique": false,
         "ForcePercent": false
       }
@@ -1817,6 +1817,41 @@
   },
   {
     "NameId": "bpart_008",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_minion_rogue_shield_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 3.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_stickpig_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      },
+      {
+        "NameId": "pig_minion_bird_catcher_bird3",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_008a",
     "Type": "IgnoreStrength",
     "VictoryCondition": {
       "Type": "DefeatAll",
@@ -2097,7 +2132,7 @@
     },
     "BattleParticipants": [
       {
-        "NameId": "pig_minion_guard_bird2_castle",
+        "NameId": "pig_minion_guard_fork_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 2.0,
@@ -2105,7 +2140,7 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_minion_rogue_leader_bird3",
+        "NameId": "pig_minion_bird_catcher_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
@@ -2121,13 +2156,14 @@
         "ForcePercent": false
       },
       {
-        "NameId": "pig_minion_bird_catcher_bird3",
+        "NameId": "pig_minion_rogue_leader_bird3",
         "LevelDifference": 0,
         "Probability": 1.0,
         "Amount": 1.0,
         "Unique": false,
         "ForcePercent": false
       }
+      
     ]
   },
   {
@@ -69155,6 +69191,44 @@
         "LevelDifference": 0,
         "Probability": 100.0,
         "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_birdunlock_bird_black_1",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_pirate_pirate_birdunlock",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 1.0,
+        "Unique": false,
+        "ForcePercent": false
+      }
+    ]
+  },
+  {
+    "NameId": "bpart_birdunlock_bird_black_2",
+    "Type": "IgnoreStrength",
+    "VictoryCondition": {
+      "Type": "DefeatAll",
+      "NameId": "",
+      "Value": 0.0
+    },
+    "BattleParticipants": [
+      {
+        "NameId": "pig_pirate_matey_birdunlock",
+        "LevelDifference": 0,
+        "Probability": 1.0,
+        "Amount": 5.0,
         "Unique": false,
         "ForcePercent": false
       }

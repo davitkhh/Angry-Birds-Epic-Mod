@@ -252,6 +252,13 @@
   // Values that can vary between shots (and between bounces / particles): a ± range beside the value.
   const VARY = new Set(['flightTime', 'arc', 'hops', 'hopHeight', 'spin', 'spread', 'bounces', 'bounceArc', 'bounceDistance', 'bounceDecay',
     'afterSpeed', 'afterSpin', 'linger', 'accel', 'afterAccel', 'life', 'scaleStart', 'scaleEnd', 'scatter', 'gravity', 'count']);
+  // What an air trail can follow: any component with something moving (not a slow motion or a ribbon trail), except
+  // itself and components that already follow it (which would loop).
+  function trailSources(c) {
+    const list = S.project.components, byUid = Object.fromEntries(list.map(o => [o.uid, o]));
+    const follows = (o, uid) => { for (let n = 0, x = o; x && n < 50; n++, x = byUid[x.physics.of]) if (x.uid === uid) return true; return false; };
+    return list.filter(o => o.uid !== c.uid && o.type !== 'slowmo' && !(o.physics.spawn === 'trail' && o.physics.style === 'ribbon') && !follows(o, c.uid));
+  }
   function renderPhysics() {
     if (!isProj()) return;
     const list = S.project.components;
@@ -261,10 +268,18 @@
       ...list.map(c => {
         const p = c.physics;
         const changed = () => { touch(); P.t0 = performance.now(); };
-        const spawnSel = h('select', { 'aria-label': 'Where it comes from', onchange: ev => { p.spawn = ev.target.value; if (p.spawn !== 'fire' && !p.of && fired[0]) p.of = fired[0].uid; changed(); renderPhysics(); } },
+        const spawnSel = h('select', { 'aria-label': 'Where it comes from', onchange: ev => {
+          p.spawn = ev.target.value;
+          // only an air trail can follow a component that isn't fired
+          if (p.spawn !== 'fire' && p.spawn !== 'trail' && p.of && !fired.some(f => f.uid === p.of)) p.of = '';
+          if (p.spawn !== 'fire' && !p.of && fired[0]) p.of = fired[0].uid;
+          changed(); renderPhysics();
+        } },
           ...SPAWNS.filter(([k]) => c.type !== 'slowmo' || (k !== 'fire' && k !== 'trail')).map(([k, label]) => h('option', { value: k, selected: p.spawn === k }, label)));
+        const sources = p.spawn === 'trail' ? trailSources(c) : fired.filter(f => f.uid !== c.uid);
         const ofSel = p.spawn === 'fire' ? null : h('select', { 'aria-label': 'Of which component', onchange: ev => { p.of = ev.target.value; changed(); } },
-          h('option', { value: '' }, '— pick a fired component —'), ...fired.filter(f => f.uid !== c.uid).map(f => h('option', { value: f.uid, selected: p.of === f.uid }, f.name)));
+          h('option', { value: '' }, p.spawn === 'trail' ? '— pick a component —' : '— pick a fired component —'),
+          ...sources.map(f => h('option', { value: f.uid, selected: p.of === f.uid }, f.name + (p.spawn === 'trail' && f.physics.spawn !== 'fire' ? ' (each piece)' : ''))));
         const field = ([key, label, step]) => step === 'check'
           ? h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: !!p[key], onchange: ev => { p[key] = ev.target.checked; changed(); } }), ' ' + label)
           : Array.isArray(step)
@@ -277,7 +292,7 @@
         return h('div', { class: 'physCard' },
           h('h3', {}, c.name, h('span', { class: 'dim' }, KINDS[c.type] || c.type)),
           h('div', { class: 'row wrap' }, spawnSel, ofSel),
-          p.spawn !== 'fire' && !p.of ? h('span', { class: 'warnNote' }, 'Pick which fired component it comes from.') : null,
+          p.spawn !== 'fire' && !p.of ? h('span', { class: 'warnNote' }, p.spawn === 'trail' ? 'Pick which component it trails behind.' : 'Pick which fired component it comes from.') : null,
           ...groups.flatMap(([title, list]) => [title ? h('h4', { class: 'physGroup' }, title) : null, h('div', { class: 'fields' }, ...list.map(field))]));
       }));
   }
@@ -413,6 +428,39 @@
     const rot = p.afterAlign && t <= f.stopT ? Math.atan2(vel[1], vel[0]) - Math.atan2(0, f.dir) + spun : rot0 + spun;
     return { x: pos.x, y: pos.y, rot, sx: 1, sy: 1, alpha };
   }
+  // A trail or effect piece's own value within its ± range.
+  function pickOf(p, key, seed, k, salt) {
+    const vr = p.vary || {};
+    return (p[key] ?? DEFAULT_PHYSICS[key] ?? 0) + (vr[key] ? (rand(seed + P.seed * 0.0137, k, salt) * 2 - 1) * vr[key] : 0);
+  }
+  // Where a piece left at (x, y) is when it is `age` seconds old, and how it looks; null once it is gone.
+  function pieceAt(p, x, y, age, seed, k, turn = 0) {
+    const own = Math.max(0.02, pickOf(p, 'life', seed, k, 5));
+    if (age > own || age < 0) return null;
+    const a = Math.min(1, age / own);
+    const ang = rand(seed, k, 1) * Math.PI * 2, sp = Math.max(0, pickOf(p, 'scatter', seed, k, 6)) * ((p.vary || {}).scatter ? 1 : 0.5 + rand(seed, k, 2));
+    const px = x + Math.cos(ang) * sp * age, py = y + Math.sin(ang) * sp * age - 0.5 * pickOf(p, 'gravity', seed, k, 7) * age * age;
+    const sc = lerp(pickOf(p, 'scaleStart', seed, k, 8), pickOf(p, 'scaleEnd', seed, k, 9), a);
+    // squash: flattened when it lands, then springing back with a wobble
+    const q = (p.squash || 0) * Math.exp(-5 * a) * Math.cos(14 * a);
+    const randomTurn = p.randomTurn ? rand(seed, k, 3) * Math.PI * 2 : 0;
+    return { x: px, y: py, rot: turn + randomTurn + pickOf(p, 'spin', seed, k, 10) * age * Math.PI / 180, sx: sc * (1 + q), sy: sc * (1 - q), alpha: p.fade ? 1 - a : 1 };
+  }
+  // The pieces an air trail leaves behind what it follows between two times: each one's place, index and turn.
+  function eachTrailPiece(p, f, rate, from, to, fn) {
+    const first = Math.ceil(from * rate), last = Math.floor(to * rate);
+    for (let j = first; j <= last; j++) {
+      const s = f.at(j / rate);
+      if (!s) continue;
+      let turn = 0;
+      if (p.trailAlign) {
+        // along the direction it was travelling when this piece was left
+        const s2 = f.at(j / rate + 0.004) || s;
+        turn = Math.atan2(s2.y - s.y, s2.x - s.x || f.dir) - Math.atan2(0, f.dir);
+      }
+      fn(s, j, turn);
+    }
+  }
   // Everything to draw at time t (seconds since the shot), and when the whole shot is over.
   function simulate(t) {
     return simulateWith(S.project, P.origin, targets(), null, t, P.seed);
@@ -435,6 +483,39 @@
       const n = Math.max(1, Math.round(pv(c.physics, 'count', ci, 0)));
       shots[c.uid] = flights(c, ci, centre && n === 1 && list.length > 1 ? [centre] : list, origin);
     });
+    // Anything that moves over time and can leave an air trail: a fired shot, or one piece of another component (an impact
+    // spark flying off, a piece of another trail...). Each has where it is at a time, when it starts and stops, and a seed.
+    const byUid = Object.fromEntries(comps.map((c, ci) => [c.uid, [c, ci]]));
+    const tracksMemo = {}, building = new Set();
+    const flightTrack = f => ({ t0: f.t0, stopT: f.stopT, endT: f.stopT + f.lingerT, dir: f.dir, seed: f.ci * 31 + f.k, at: tt => shotAt(f, tt), f });
+    function tracksOf(uid) {
+      if (tracksMemo[uid]) return tracksMemo[uid];
+      const [c, ci] = byUid[uid] || [];
+      if (!c || building.has(uid) || c.type === 'slowmo') return [];
+      if (c.physics.spawn === 'fire') return tracksMemo[uid] = (shots[uid] || []).map(flightTrack);
+      if (c.physics.spawn === 'trail' && c.physics.style === 'ribbon') return tracksMemo[uid] = [];
+      building.add(uid);
+      try {
+        const p = c.physics, out = [];
+        const add = (x, y, ts, seed, k, turn, dir) => {
+          const own = Math.max(0.02, pickOf(p, 'life', seed, k, 5));
+          const tseed = seed * 1.37 + k * 0.731 + ci * 17.3;
+          out.push({ t0: ts, stopT: ts + own, endT: ts + own, dir, seed: tseed, at: tt => pieceAt(p, x, y, tt - ts, seed, k, turn) });
+        };
+        if (p.spawn === 'trail') {
+          const rate = Math.max(1, p.rate || 30);
+          for (const f of tracksOf(p.of)) eachTrailPiece(p, f, rate, f.t0, f.stopT, (s, j, turn) => add(s.x, s.y, j / rate, f.seed, j, turn, f.dir));
+        } else {
+          for (const f of shots[p.of] || []) for (const ev of f.events) {
+            if (ev.kind !== p.spawn) continue;
+            const seed = f.ci * 31 + f.k + ev.t * 7;
+            const many = Math.max(1, Math.round(pickOf(p, 'count', seed, 0, 11)));
+            for (let k = 0; k < many; k++) add(ev.x, ev.y, ev.t, seed, k, ev.rot || 0, f.dir);
+          }
+        }
+        return tracksMemo[uid] = out;
+      } finally { building.delete(uid); }
+    }
     for (const c of comps) {
       const p = c.physics;
       if (p.spawn === 'fire') {
@@ -456,32 +537,24 @@
       }
       const vr = p.vary || {};
       const life = Math.max(0.02, (p.life || 0.4) + (vr.life || 0));  // the longest a piece can last
-      // a piece's own value within its ± range
-      const pick = (key, seed, k, salt) => (p[key] ?? DEFAULT_PHYSICS[key] ?? 0) + (vr[key] ? (rand(seed + P.seed * 0.0137, k, salt) * 2 - 1) * vr[key] : 0);
       const piece = (x, y, age, seed, k, turn = 0) => {
-        const own = Math.max(0.02, pick('life', seed, k, 5));
-        if (age > own) return;
-        const a = Math.min(1, age / own);
-        const ang = rand(seed, k, 1) * Math.PI * 2, sp = Math.max(0, pick('scatter', seed, k, 6)) * (vr.scatter ? 1 : 0.5 + rand(seed, k, 2));
-        const px = x + Math.cos(ang) * sp * age, py = y + Math.sin(ang) * sp * age - 0.5 * pick('gravity', seed, k, 7) * age * age;
-        const sc = lerp(pick('scaleStart', seed, k, 8), pick('scaleEnd', seed, k, 9), a);
-        // squash: flattened when it lands, then springing back with a wobble
-        const q = (p.squash || 0) * Math.exp(-5 * a) * Math.cos(14 * a);
-        const randomTurn = p.randomTurn ? rand(seed, k, 3) * Math.PI * 2 : 0;
-        draws.push({ c, x: px, y: py, rot: turn + randomTurn + pick('spin', seed, k, 10) * age * Math.PI / 180, sx: sc * (1 + q), sy: sc * (1 - q), alpha: p.fade ? 1 - a : 1 });
+        const s = pieceAt(p, x, y, age, seed, k, turn);
+        if (s) draws.push({ c, ...s });
       };
+      // an air trail follows any component: a fired shot, or each piece of another component
+      const followed = p.spawn === 'trail' ? tracksOf(p.of) : [];
       if (p.spawn === 'trail' && p.style === 'ribbon') {
         // one continuous strip through where the shot was over the last `life` seconds, like Unity's TrailRenderer
         const span = Math.max(0.02, p.life || 0.5);
-        for (const f of parents) {
+        for (const f of followed) {
           over = Math.max(over, f.stopT + span);
           const from = Math.max(f.t0, t - span), to = Math.min(f.stopT, t);
           if (to <= from) continue;
           const pts = [], step = 1 / 90;
           for (let ts = to; ts > from - 1e-6; ts -= step) {
-            const sh = shotAt(f, Math.max(from, ts));
+            const sh = f.at(Math.max(from, ts));
             if (sh) pts.push({ x: sh.x, y: sh.y, age: t - Math.max(from, ts) });
-            if (ts - step < from && ts > from) { const e = shotAt(f, from); if (e) pts.push({ x: e.x, y: e.y, age: t - from }); break; }
+            if (ts - step < from && ts > from) { const e = f.at(from); if (e) pts.push({ x: e.x, y: e.y, age: t - from }); break; }
           }
           if (pts.length > 1) draws.push({ c, ribbon: pts, span, x: 0, y: 0, rot: 0, sx: 1, sy: 1, alpha: 1 });
         }
@@ -489,20 +562,9 @@
       }
       if (p.spawn === 'trail') {
         const rate = Math.max(1, p.rate || 30);
-        for (const f of parents) {
+        for (const f of followed) {
           over = Math.max(over, f.stopT + life);
-          const first = Math.ceil(Math.max(f.t0, t - life) * rate), last = Math.floor(Math.min(f.stopT, t) * rate);
-          for (let j = first; j <= last; j++) {
-            const s = shotAt(f, j / rate);
-            if (!s) continue;
-            let turn = 0;
-            if (p.trailAlign) {
-              // along the direction the shot was travelling when this piece was left
-              const s2 = shotAt(f, j / rate + 0.004) || s;
-              turn = Math.atan2(s2.y - s.y, s2.x - s.x || f.dir) - Math.atan2(0, f.dir);
-            }
-            piece(s.x, s.y, t - j / rate, f.ci * 31 + f.k, j, turn);
-          }
+          eachTrailPiece(p, f, rate, Math.max(f.t0, t - life), Math.min(f.stopT, t), (s, j, turn) => piece(s.x, s.y, t - j / rate, f.seed, j, turn));
         }
         continue;
       }
@@ -512,7 +574,7 @@
           over = Math.max(over, ev.t + life);
           const age = t - ev.t;
           if (age < 0 || age > life) continue;
-          const many = Math.max(1, Math.round(pick('count', f.ci * 31 + f.k + ev.t * 7, 0, 11)));
+          const many = Math.max(1, Math.round(pickOf(p, 'count', f.ci * 31 + f.k + ev.t * 7, 0, 11)));
           for (let k = 0; k < many; k++) piece(ev.x, ev.y, age, f.ci * 31 + f.k + ev.t * 7, k, ev.rot || 0);
         }
       }
@@ -889,6 +951,8 @@
       f.slowDone.add(s.key);
       if (f.onEvent) f.onEvent('slowmo', s.x, s.y);
       const sp = f.speed || 1, slow = { start: real, scale: s.scale, duration: s.duration / sp, ease: s.ease / sp, easeOut: s.easeOut / sp };
+      // its "slow motion ends" event, even after the shot itself is over (app.js updateSkillFx)
+      if (f.onEvent) (S.slowEnds = S.slowEnds || []).push({ at: real + (slow.ease + slow.duration + (slow.easeOut ?? slow.ease)) * 1000, fire: () => f.onEvent('slowmoEnd', s.x, s.y) });
       if (s.scope === 'projectile') f.localSlows.push(slow); else S.slowmo = slow;
     }
     for (const d of draws) { d.slots = project.slots; d.mirror = f.mirror; drawPiece(d, base, W); }

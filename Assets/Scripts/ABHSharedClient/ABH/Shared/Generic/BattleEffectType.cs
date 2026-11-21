@@ -136,6 +136,7 @@
 		ReduceDamageDealtAgainstSource,
 		SummonCombatantHealthGated,
 		Stinkeye,
-		SplitDamageAndCounter
+		SplitDamageAndCounter,
+		SugarRush
 	}
 }

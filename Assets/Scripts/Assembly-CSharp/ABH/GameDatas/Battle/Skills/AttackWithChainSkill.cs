@@ -110,6 +110,8 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_2}", string.Empty + m_ChargeTurns);
 			dictionary.Add("{value_3}", string.Empty + Mathf.RoundToInt(m_RageReducePerChain));
 			dictionary.Add("{value_5}", string.Empty + Mathf.RoundToInt(m_ReductionPerChain));
+			// Damage of the first bounce (after one chain_reduction step)
+			dictionary.Add("{value_6}", string.Empty + Convert.ToInt32(m_DamageMod * invoker.ModifiedAttack * (100f - m_ReductionPerChain) / 100f));
 			dictionary.Add("{value_4}", string.Empty + m_AttackCount);
 			dictionary.Add("{value_7}", string.Empty + m_ChainCount);
 			dictionary.Add("{value_8}", string.Empty + m_ChainChance);

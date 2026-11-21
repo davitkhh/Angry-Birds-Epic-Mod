@@ -1,0 +1,469 @@
+{
+ "kind": "existing",
+ "id": "pig_knight_roseknight",
+ "name": "Rose Knight",
+ "rig": "PigKnight",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoseKnight",
+     "name": "Headgear_RoseKnight",
+     "item": "Headgear_RoseKnight",
+     "w": 224,
+     "h": 262,
+     "pivot": [
+      -0.08035715,
+      -0.12137405
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoseKnight_Back",
+     "name": "Headgear_RoseKnight_Back",
+     "item": "Headgear_RoseKnight",
+     "w": 76,
+     "h": 78,
+     "pivot": [
+      1.082237,
+      0.4313812
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_RoseKnight",
+     "name": "MainHand_RoseKnight",
+     "item": "MainHand_RoseKnight",
+     "w": 287,
+     "h": 83,
+     "pivot": [
+      -0.22500001,
+      -0.009262049
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_RoseKnight",
+     "name": "OffHand_RoseKnight",
+     "item": "OffHand_RoseKnight",
+     "w": 138,
+     "h": 158,
+     "pivot": [
+      -0.112500004,
+      -0.067845844
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_e00bc",
+   "origin": "pig_attack_knight_roseknight",
+   "type": "Attack",
+   "source": "pig_attack_knight_roseknight",
+   "name": "Rose Thrust",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "ThornyVine",
+   "params": {
+    "damage_in_percent": 100,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 25
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_6}": {
+     "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+    }
+   },
+   "template": "AttackAndApplyDotSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_54a56",
+   "origin": "pig_support_knight_roseknight",
+   "type": "Support",
+   "source": "pig_support_knight_roseknight",
+   "name": "Garland of Roses",
+   "desc": "Enemies attacking the target receive [ff0000]{value_1}[-] damage per attack. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "enemy_damage_retaliated_percent": 55
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+    }
+   },
+   "template": "ThornSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_5f17f",
+   "origin": "pig_passive_ironclad",
+   "type": "Passive",
+   "source": "pig_passive_ironclad",
+   "name": "Ironclad",
+   "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 22,
+    "lower_or_higher": -1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 300,
+  "attack": 28,
+  "sizeType": "Large",
+  "sizeScale": 1.1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_knight_roseknight",
+  "fingerprint": "7d63734ab3cfd77c0b3350a1c399463cbdacf79e",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 20,
+    "ComboChain": [
+     "pig_attack_knight_roseknight"
+    ]
+   },
+   {
+    "Percentage": 80,
+    "ComboChain": [
+     "pig_support_knight_roseknight",
+     "pig_attack_knight_roseknight",
+     "pig_attack_knight_roseknight"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Rose Knight",
+   "rig": "PigKnight",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoseKnight",
+       "name": "Headgear_RoseKnight",
+       "item": "Headgear_RoseKnight",
+       "w": 224,
+       "h": 262,
+       "pivot": [
+        -0.08035715,
+        -0.12137405
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_RoseKnight_Back",
+       "name": "Headgear_RoseKnight_Back",
+       "item": "Headgear_RoseKnight",
+       "w": 76,
+       "h": 78,
+       "pivot": [
+        1.082237,
+        0.4313812
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_RoseKnight",
+       "name": "MainHand_RoseKnight",
+       "item": "MainHand_RoseKnight",
+       "w": 287,
+       "h": 83,
+       "pivot": [
+        -0.22500001,
+        -0.009262049
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_RoseKnight",
+       "name": "OffHand_RoseKnight",
+       "item": "OffHand_RoseKnight",
+       "w": 138,
+       "h": 158,
+       "pivot": [
+        -0.112500004,
+        -0.067845844
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 300,
+    "attack": 28,
+    "sizeType": "Large",
+    "sizeScale": 1.1,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_e00bc",
+     "origin": "pig_attack_knight_roseknight",
+     "type": "Attack",
+     "source": "pig_attack_knight_roseknight",
+     "name": "Rose Thrust",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "ThornyVine",
+     "params": {
+      "damage_in_percent": 100,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 25
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_6}": {
+       "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+      }
+     },
+     "template": "AttackAndApplyDotSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_54a56",
+     "origin": "pig_support_knight_roseknight",
+     "type": "Support",
+     "source": "pig_support_knight_roseknight",
+     "name": "Garland of Roses",
+     "desc": "Enemies attacking the target receive [ff0000]{value_1}[-] damage per attack. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "enemy_damage_retaliated_percent": 55
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+      }
+     },
+     "template": "ThornSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_5f17f",
+     "origin": "pig_passive_ironclad",
+     "type": "Passive",
+     "source": "pig_passive_ironclad",
+     "name": "Ironclad",
+     "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 22,
+      "lower_or_higher": -1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -243,7 +243,23 @@ public abstract class BattleMgrBase : MonoBehaviour
 		}
 	}
 
-	public bool IsPausePossible { get; set; }
+	// Set by BattleMgr.Awake when this battle is a bird unlock tutorial (BirdUnlockSequence): no pause, no auto battle.
+	[NonSerialized]
+	public BirdUnlockSequence m_BirdUnlock;
+
+	private bool m_PausePossible;
+
+	public bool IsPausePossible
+	{
+		get
+		{
+			return m_PausePossible && m_BirdUnlock == null;
+		}
+		set
+		{
+			m_PausePossible = value;
+		}
+	}
 
 	public bool IsAutoBattlePossible
 	{
@@ -1235,7 +1251,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 		StartCoroutine(InstantiateEffects(invoker, effect, setting, targets, isCurse));
 	}
 
-	private IEnumerator ChangeTimeScale(ICombatant invoker, VisualEffect effect, VisualEffectSetting setting)
+	private IEnumerator ChangeTimeScale(ICombatant invoker, VisualEffect effect, VisualEffectSetting setting, List<ICombatant> targets = null, bool isCurse = false)
 	{
 		var elapsedTime2 = 0f;
 		var startValue2 = 1f;
@@ -1281,6 +1297,17 @@ public abstract class BattleMgrBase : MonoBehaviour
 			yield return new WaitForEndOfFrame();
 		}
 		DIContainerInfrastructure.TimeScaleMgr.RemoveTimeScale("slowmotion");
+		// Combatant Forge: the skill's effects timed "when slow motion ends"
+		if (setting != null && setting.VisualEffects != null)
+		{
+			foreach (var other in setting.VisualEffects)
+			{
+				if ((int)other.SpawnTiming == ForgeEffectExtras.TimingSlowMotionEnd && other != effect && (int)other.TargetCombatant != ForgeEffectExtras.TargetProjectile)
+				{
+					InstantiateEffect(invoker, other, setting, targets ?? new List<ICombatant>(), isCurse);
+				}
+			}
+		}
 	}
 
 	public IEnumerator InstantiateEffects(ICombatant invoker, VisualEffect effect, VisualEffectSetting setting, List<ICombatant> targets, bool isCurse)
@@ -1325,7 +1352,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			PlayEffectOnObject(invoker, effect, setting, m_ScreenFxRoot);
 			yield break;
 		case VisualEffectTargetCombatant.SlowMotion:
-			StartCoroutine(ChangeTimeScale(invoker, effect, setting));
+			StartCoroutine(ChangeTimeScale(invoker, effect, setting, targets, isCurse));
 			// Combatant Forge: the skill's effects timed "when slow motion starts"
 			if (setting != null && setting.VisualEffects != null)
 			{
@@ -1443,6 +1470,13 @@ public abstract class BattleMgrBase : MonoBehaviour
 			transform = character.m_AssetController.BodyRoot;
 			break;
 		}
+		// Combatant Forge: a point on one of the combatant's bones instead of the anchor
+		var forgeSettings = ForgeEffectExtras.Parse(effect);
+		var forgeBone = ForgeEffectExtras.AttachBone(character, forgeSettings);
+		if (forgeBone != null)
+		{
+			transform = forgeBone;
+		}
 		if (transform == null)
 		{
 			return;
@@ -1513,8 +1547,9 @@ public abstract class BattleMgrBase : MonoBehaviour
 		{
 			gameObject.transform.localScale = Vector3.Scale(gameObject.transform.localScale, transform.localScale);
 		}
+		ForgeEffectExtras.PlaceOnBone(gameObject, forgeBone, forgeSettings, !effect.DoNotParentOnBone);
 		// Combatant Forge: the effect's own turn, and what it turns with
-		ForgeEffectExtras.ApplyTurn(gameObject, character, ForgeEffectExtras.Parse(effect));
+		ForgeEffectExtras.ApplyTurn(gameObject, character, forgeSettings);
 		var componentInChildren = gameObject.GetComponentInChildren<BattleFXController>();
 		if (componentInChildren)
 		{
@@ -1526,7 +1561,7 @@ public abstract class BattleMgrBase : MonoBehaviour
 			}
 			else if (effect.HasText)
 			{
-				componentInChildren.SetText(DIContainerInfrastructure.GetLocaService().Tr(effect.EffectTextIdent));
+				componentInChildren.SetText(DIContainerInfrastructure.GetLocaService().Tr(forgeText != null && !string.IsNullOrEmpty(forgeText.word) ? forgeText.word : effect.EffectTextIdent));
 			}
 			componentInChildren.SetSize(character.GetModel().CharacterModel.CharacterSize, character.GetModel().CharacterModel.Scale);
 			if (effect.ShowEffectInvokerIcon)
@@ -1542,6 +1577,8 @@ public abstract class BattleMgrBase : MonoBehaviour
 				componentInChildren.SetLineRenderer(invoker.CombatantView.m_AssetController.BodyRoot, character.m_AssetController.BodyRoot);
 			}
 		}
+		// Crit texts: Ground Zero's reads BLAST-OFF!, two on the same hit stack
+		PerkHitLabels.OnEffectSpawned(character, gameObject);
 		SetLayerRecusively(gameObject, base.gameObject.layer);
 		if (effect.Type == VisualEffectType.Lasting)
 		{

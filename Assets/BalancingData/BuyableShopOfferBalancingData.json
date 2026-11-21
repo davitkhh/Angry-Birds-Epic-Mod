@@ -9,7 +9,7 @@
       "story_merchant_foolish_wand_bought": 1
     },
     "SortPriority": 1,
-    "SlotId": 5,
+    "SlotId": 6,
     "Category": "merchant_01_weapon_yellow",
     "NameId": "offer_weapon_yellow_wand_01",
     "AssetId": "",
@@ -25183,6 +25183,418 @@
         "RequirementType": "PayItem",
         "NameId": "gold",
         "Value": 60.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "merchant_stock_upgrade_shield_start": 1
+    },
+    "SortPriority": 1,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_upgrade_shield_start_1",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_upgrade_shield_start",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "resource_cobalt_stone",
+        "Value": 3.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "merchant_stock_upgrade_shield_start": 1
+    },
+    "SortPriority": 2,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_upgrade_shield_start_2",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_upgrade_shield_start",
+        "Value": 2.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "resource_cobalt_stone",
+        "Value": 6.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "upgrade_offhand_red_shield_start_protect_last": 1,
+      "story_merchant_shield_start_blueprint_bought": 1
+    },
+    "SortPriority": 3,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_blueprint_shield_start_1",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_merchant_shield_start_blueprint_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 20.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "upgrade_offhand_red_shield_start_protect": 1,
+      "story_merchant_shield_start_blueprint_bought": 1
+    },
+    "SortPriority": 4,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_blueprint_shield_start_2",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_merchant_shield_start_blueprint_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 20.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "merchant_stock_upgrade_shield_introwheel": 1
+    },
+    "SortPriority": 5,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_upgrade_shield_introwheel_1",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_upgrade_shield_introwheel",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "resource_cobalt_stone",
+        "Value": 7.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "merchant_stock_upgrade_shield_introwheel": 1
+    },
+    "SortPriority": 6,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_upgrade_shield_introwheel_2",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "merchant_stock_upgrade_shield_introwheel",
+        "Value": 2.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "resource_cobalt_stone",
+        "Value": 14.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "upgrade_offhand_red_shield_introwheel_protect_last": 1,
+      "story_merchant_shield_introwheel_blueprint_bought": 1
+    },
+    "SortPriority": 7,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_blueprint_shield_introwheel_1",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_merchant_shield_introwheel_blueprint_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 20.0
+      }
+    ],
+    "ShowRequirements": null,
+    "SpecialOfferPrio": 0,
+    "SpeechBubbleLoca": null,
+    "AlwaysShowSpeechBubble": false,
+    "HideUnlessOnSale": false
+  },
+  {
+    "DiscountPrice": 0,
+    "DisplayAfterPurchase": false,
+    "ExclusiveOffer": false,
+    "Level": 1,
+    "OfferContents": {
+      "upgrade_offhand_red_shield_introwheel_protect": 1,
+      "story_merchant_shield_introwheel_blueprint_bought": 1
+    },
+    "SortPriority": 8,
+    "SlotId": 5,
+    "Category": "merchant_01_upgrade_red_shields",
+    "NameId": "offer_merchant_blueprint_shield_introwheel_2",
+    "AssetId": "",
+    "LocaId": "",
+    "DiscountValue": 0,
+    "DiscountRequirements": null,
+    "DiscountStartDate": 0,
+    "DiscountEndDate": 0,
+    "DiscountDuration": 0,
+    "UniqueOffer": false,
+    "AtlasNameId": "",
+    "SpecialOfferBackgroundColor": null,
+    "SpecialOfferLabelColor": null,
+    "SpecialOfferLocaId": null,
+    "DisplayAsLarge": false,
+    "ShowDiscountPopup": false,
+    "PopupLoca": "",
+    "PopupIconId": null,
+    "PopupAtlasId": null,
+    "DiscountCooldown": 0,
+    "Duration": 0,
+    "StartDate": 0,
+    "EndDate": 0,
+    "BuyRequirements": [
+      {
+        "RequirementType": "NotHaveItem",
+        "NameId": "story_merchant_shield_introwheel_blueprint_bought",
+        "Value": 1.0
+      },
+      {
+        "RequirementType": "PayItem",
+        "NameId": "gold",
+        "Value": 20.0
       }
     ],
     "ShowRequirements": null,

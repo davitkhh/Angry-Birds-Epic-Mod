@@ -49,6 +49,9 @@ public class WorldMapAreaMusic : MonoBehaviour
 
 	public static WorldMapAreaMusic Instance { get; private set; }
 
+	// While set (a bird unlock sequence plays the bird's theme), every area theme is cut at once; they fade back in after.
+	public static bool Silenced;
+
 	// World units of extra distance that cut a neighbouring area's share to 1/e.
 	public float m_BlendDistance = 120f;
 
@@ -146,7 +149,7 @@ public class WorldMapAreaMusic : MonoBehaviour
 			}
 			float weight;
 			m_Weights.TryGetValue(theme, out weight);
-			var target = allowed ? weight : 0f;
+			var target = allowed && !Silenced ? weight : 0f;
 			Channel channel;
 			if (!m_Channels.TryGetValue(theme, out channel))
 			{
@@ -161,7 +164,7 @@ public class WorldMapAreaMusic : MonoBehaviour
 			{
 				Load(channel, clipId);
 			}
-			channel.Volume = Mathf.MoveTowards(channel.Volume, target, speed * Time.unscaledDeltaTime);
+			channel.Volume = Silenced ? 0f : Mathf.MoveTowards(channel.Volume, target, speed * Time.unscaledDeltaTime);
 			if (channel.Source == null)
 			{
 				continue;

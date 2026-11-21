@@ -15,8 +15,9 @@ public static class PathMatchProbe
 		EditorApplication.update += Poll;
 	}
 
-	// 2026-11-08, matching the user's drawn paths: 007 -Path_008-> 008 -Path_009-> 009; 008 -Path_008_05-> merchant;
-	// merchant -Path_008_01 (reversed)-> 008_05; merchant -> resource node (off the map).
+	// 2026-11-17: 007 -Path_008-> 008 -Path_009-> 009, and 007 -Path_008-> 008_05 (McCool's level, a side branch at the
+	// junction where Path_008 ends) -Path_008_05-> merchant -> resource node (off the map; Path_008_01 is unowned).
+	// McCool's cutscene trigger (ExecuteActionTree) moves from 008 to 008_05. Never saves; leaves the scene dirty.
 	private static void Apply(System.Collections.Generic.List<HotSpotWorldMapViewBase> hotspots, Transform zone, StringBuilder sb)
 	{
 		System.Func<string, HotSpotWorldMapViewBase> h = n => hotspots.First(x => x.name == n);
@@ -28,30 +29,36 @@ public static class PathMatchProbe
 		var merchant = h("Hotspot_008_02_Merchant");
 		var node = h("Hotspot_008_03_ResourceNode");
 
-		var reversed = p("Path_008_01");
-		var rage = reversed.GetComponents<RageSpline>().First(r => r.GetPointCount() > 0);
-		var points = rage.spline.points;
-		System.Array.Reverse(points);
-		foreach (var point in points)
-		{
-			var inCtrl = point.inCtrl;
-			point.inCtrl = point.outCtrl;
-			point.outCtrl = inCtrl;
-		}
-		rage.spline.points = points;
-		rage.RefreshMeshInEditor(true, true, true);
-		EditorUtility.SetDirty(rage);
+		Link(at007, null, null, at008, gate);
+		Link(at008, at007, p("Path_008"), at009);
+		Link(at009, at008, p("Path_009"), h("Hotspot_010_Battleground"));
+		Link(gate, at007, p("Path_008"), merchant);
+		Link(merchant, gate, p("Path_008_05"), node);
+		var after = new SerializedObject(at009);
+		after.FindProperty("m_unlocksPastPrevious").boolValue = false;
+		after.ApplyModifiedPropertiesWithoutUndo();
 
-		Link(at007, null, null, at008);
-		Link(at008, at007, p("Path_008"), at009, merchant);
-		Link(at009, at008, p("Path_009"), null);
-		Link(merchant, at008, p("Path_008_05"), node, gate);
-		Link(gate, merchant, reversed, null);
-		foreach (var name in new[] { "Path_008", "Path_008_05", "Path_008_01" })
+		var cutscene = at008.GetComponent<ExecuteActionTree>();
+		if (cutscene != null)
 		{
-			var lite = p(name);
-			lite.CreateFromSpline();
-			EditorUtility.SetDirty(lite);
+			if (gate.GetComponent<ExecuteActionTree>() != null)
+			{
+				sb.AppendLine("ERROR 008_05 already has an ExecuteActionTree; cutscene not moved");
+			}
+			else
+			{
+				var moved = gate.gameObject.AddComponent<ExecuteActionTree>();
+				moved.m_ActionTree = cutscene.m_ActionTree;
+				moved.m_executeBeforeUnlock = cutscene.m_executeBeforeUnlock;
+				moved.m_propagateRateAppPopup = cutscene.m_propagateRateAppPopup;
+				EditorUtility.SetDirty(moved);
+				Object.DestroyImmediate(cutscene);
+				sb.AppendLine("cutscene moved: " + (moved.m_ActionTree ? moved.m_ActionTree.name : "null") + " before=" + moved.m_executeBeforeUnlock);
+			}
+		}
+		else
+		{
+			sb.AppendLine("008 has no ExecuteActionTree; 008_05 has " + (gate.GetComponent<ExecuteActionTree>() ? gate.GetComponent<ExecuteActionTree>().m_ActionTree.name : "none"));
 		}
 		foreach (var name in new[] { "Path_008", "Path_008_05", "Path_008_01", "Path_009" })
 		{
@@ -60,7 +67,7 @@ public static class PathMatchProbe
 		sb.AppendLine("applied");
 	}
 
-	// prev/path null = leave as is; outgoing given = replace the list (null entry list = keep).
+	// previous/path null = leave as is; outgoing = the new list (empty = no follow-ups).
 	private static void Link(HotSpotWorldMapViewBase owner, HotSpotWorldMapViewBase previous, RageSplineLite path, params HotSpotWorldMapViewBase[] outgoing)
 	{
 		var data = new SerializedObject(owner);
@@ -72,24 +79,15 @@ public static class PathMatchProbe
 		{
 			data.FindProperty("m_litePath").objectReferenceValue = path;
 		}
-		if (outgoing != null && !(outgoing.Length == 1 && outgoing[0] == null))
+		var list = data.FindProperty("m_outgoingHotSpots");
+		list.ClearArray();
+		foreach (var o in outgoing)
 		{
-			var list = data.FindProperty("m_outgoingHotSpots");
-			if (owner.name == "Hotspot_007_Battleground" || owner.name == "Hotspot_008_Battleground" || owner.name == "Hotspot_008_02_Merchant")
-			{
-				list.ClearArray();
-			}
-			foreach (var o in outgoing)
-			{
-				list.InsertArrayElementAtIndex(list.arraySize);
-				list.GetArrayElementAtIndex(list.arraySize - 1).objectReferenceValue = o;
-			}
-		}
-		else if (owner.name == "Hotspot_008_05_Battleground")
-		{
-			data.FindProperty("m_outgoingHotSpots").ClearArray();
+			list.InsertArrayElementAtIndex(list.arraySize);
+			list.GetArrayElementAtIndex(list.arraySize - 1).objectReferenceValue = o;
 		}
 		data.ApplyModifiedPropertiesWithoutUndo();
+		EditorUtility.SetDirty(owner);
 	}
 
 	private static void Render(Transform zone)

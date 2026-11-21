@@ -21,8 +21,8 @@
      "tx": 0,
      "ty": 0,
      "rot": 0,
-     "sx": 1,
-     "sy": 1,
+     "sx": 1.3698876672310154,
+     "sy": 1.3698876672310154,
      "shear": 0,
      "pair": "g_class"
     }
@@ -46,8 +46,8 @@
      "tx": 0,
      "ty": 0,
      "rot": 0,
-     "sx": 1,
-     "sy": 1,
+     "sx": 1.3698876672310154,
+     "sy": 1.3698876672310154,
      "shear": 0,
      "pair": "g_class"
     }
@@ -122,7 +122,7 @@
    "color": "BEE8FE",
    "atlas": "Skills_Pigs_01",
    "icon": "PassiveEffect",
-   "params": {},
+   "params": null,
    "values": {},
    "template": "ImmunityToCurses",
    "duration": -1,

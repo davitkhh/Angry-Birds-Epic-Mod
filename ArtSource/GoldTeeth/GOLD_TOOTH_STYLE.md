@@ -94,3 +94,16 @@ Use these for long curved horns like the Brute's tusks. They also suit anything 
 - The Brute's regular teeth all hang from the upper lip, and his only lower teeth are the tusks. A "bottom" tooth on the Brute means a tusk, so ask before gilding one.
 
 The last tooth in each Moustache mouth and all of Porky's were redone with `gold_tooth.py` on 2026-11-11. The others are the user's GIMP pastes of the same recipe.
+
+## Standalone gold tooth icon (inventory slot)
+
+- `gold_tooth_icon.py` (drives `gold_tooth_icon.c`, compiled with gcc on the fly; no numpy on this machine) renders a 120×120 molar icon, the same frame as the `Consumables.png` / `Ingredients` atlas icons, to `out/icon/GoldTooth.png`. Preview only, not in an atlas or item yet (2026-11-20).
+- Orientation: the long axis (roots to crown) points 45° NE on screen and is tilted 30° toward the camera (`--angle`, `--tilt`), so the chewing surface (4 cusps, cross fissure) shows.
+- Same gold palette and top-left light as above, plus the `0.55u + 0.45v` diagonal falloff so the bottom-right reads as shade.
+- **Outline, matched to the game's icons:** warm umber `(136,76,0)` on the lit top-left, deepening to `(92,38,0)` bottom-right. Width runs from 1.9 px (lit) to 3.8 px (shadow), `--outline 3.8`. The user said 6 px was too thick on the shadow side. Also a thin pale rim `(255,244,168)` just inside the lit edge, and thinner inner contour lines in the same umber.
+- **Approved version = "v8"** (user's pick, 2026-11-20), now with pointier roots; the hero sparkle is limited to the top cusp (tooth y > 0.62) so it stays where v8 had it:
+  - Stylised, not plain 3D + cel: a chunky cartoon molar with big cusps and roots shaped after the user's reference [root_reference.png](root_reference.png), made a bit shorter: wide where they leave the crown, set at its outer edges, nearly parallel with an open arch between them, tapering to narrow rounded tips (radius 0.045). There's no neck piece: its rounded cap filled the arch. ("v18"; a later version with longer roots and a smooth waist into the crown was rejected and reverted.) Then "less blocky": crown superellipsoid exponent 3.2 -> 2.4 and softer smooth-unions (cusps 0.14, neck 0.14, roots 0.12).
+  - Hard-edged bands whose edges are wobbled by fairly busy noise (9/23 frequency) so they look brushed.
+  - A toon-chrome horizon reflection that includes a dark band under the horizon, crisp crevice shading, hard-edged pale/white highlight shapes, and a pale rim flush with the lit edge.
+  - Sparkles (`sparkle()`): four thin, tapered white rays with a bright core and a faint warm glow, which can extend past the silhouette. There's a hero sparkle (15 px rays plus short diagonals) on the crown shine, smaller ones on the NE cusp and root tip, and two tiny ones. `--glint none` turns them off.
+  - Later tries were rejected in favour of v8: longer roots, calmer bands without the dark horizon band, an inset shine stroke, and bigger 22 px sparkles.

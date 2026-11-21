@@ -356,6 +356,10 @@ def state(G, name_id):
                'weapon': _weapon(G, row), 'stats': _stats(row), 'statsEdited': True,
                'existing': {'nameId': name_id, 'fingerprint': fingerprint(G, name_id), 'rev': 0, 'keepSkills': keep, 'combos': copy.deepcopy(row.get('SkillCombos') or [])}}
     project['existing']['original'] = snapshot(project)
+    import spring_config  # its spring constant, if the Forge set one (else the finish's default)
+    spring = spring_config.get(name_id)
+    if spring:
+        project['spring'] = spring
     return project
 
 
@@ -401,6 +405,11 @@ def open_project(name_id):
             if key in saved:
                 fresh[key] = saved[key]
         fresh['existing']['rev'] = saved.get('existing', {}).get('rev', 0)
+        # Its Turn Plan stays while the game's combos are still the ones it was saved with (or wrote).
+        if (saved.get('existing') or {}).get('combos') == fresh['existing']['combos']:
+            for key in ('decisionOrder', 'decisionBalance'):
+                if key in saved:
+                    fresh[key] = saved[key]
         if snapshot(saved) != saved.get('existing', {}).get('original'):
             note = 'The game\'s data for this combatant changed since you last edited it, so it was reloaded and your unsaved edits were dropped'
     return fresh, note
@@ -436,6 +445,13 @@ def catalog():
 
 # ------------------------------------------------------------------------------ adding a variant
 
+# Templates: suffixes that do more than scale stats. hpAdd is added after the ratio; namePrefix goes in front of the
+# parent's name (the variant gets its own name text for it).
+TEMPLATES = {
+    'shield': {'hpAdd': 70, 'namePrefix': 'Protected ', 'note': '+70 health, named "Protected <name>"'},
+}
+
+
 def variant_presets():
     """[{suffix, hp, attack, scale, count}]: the median stat ratios of the game's variants per suffix (bird3 0.83 health,
     boss 2.17, ...), for suffixes used at least twice, most used first. birdN suffixes are always listed."""
@@ -452,10 +468,12 @@ def variant_presets():
         r[2].append((a.get('SizeScale') or 1) / (b.get('SizeScale') or 1))
     out = [{'suffix': s, 'hp': round(statistics.median(h), 2), 'attack': round(statistics.median(at), 2), 'scale': round(statistics.median(sc), 2), 'count': len(h)}
            for s, (h, at, sc) in found.items() if len(h) >= 2 or re.fullmatch(r'bird\d+', s)]
-    return sorted(out, key=lambda x: (not re.fullmatch(r'bird\d+', x['suffix']), -x['count'], x['suffix']))
+    out = sorted(out, key=lambda x: (not re.fullmatch(r'bird\d+', x['suffix']), -x['count'], x['suffix']))
+    templates = [dict({'suffix': s, 'hp': 1, 'attack': 1, 'scale': 1, 'count': 0, 'template': True}, **t) for s, t in TEMPLATES.items()]
+    return templates + [x for x in out if x['suffix'] not in TEMPLATES]
 
 
-def add_variant(parent_id, suffix, log, ratios=None):
+def add_variant(parent_id, suffix, log, ratios=None, template=None):
     """A new pig <parent>_<suffix>, a copy of the parent's row as the game has it now (same name, inventory and
     abilities), so it shows as the parent's variant and gets its ticked edits. ratios {hp, attack, scale} scale its
     stats from the parent's. Returns its NameId."""
@@ -479,10 +497,27 @@ def add_variant(parent_id, suffix, log, ratios=None):
             value = row[column] * r
             row[column] = max(1, int(round(value))) if kind is int else round(value, 3)
             log('%s: %s x %g = %s' % (column, G.pigs[parent_id][column], r, row[column]))
+    t = TEMPLATES.get(template) if template else None
+    if template and not t:
+        raise ValueError('No variant template ' + template)
+    texts = {}
+    if t:
+        if t.get('hpAdd') and row.get('BaseHealth') is not None:
+            before = row['BaseHealth']
+            row['BaseHealth'] = max(1, int(before + t['hpAdd']))
+            log('BaseHealth: %s + %s = %s' % (before, t['hpAdd'], row['BaseHealth']))
+        if t.get('namePrefix'):
+            name = t['namePrefix'] + G.name(G.pigs[parent_id])
+            row['LocaId'] = 'forge_' + name_id  # forge_: deleting the variant takes the text with it
+            texts[row['LocaId'] + '_name'] = name
+            log('Name: %s' % name)
     path = os.path.join(g.BALANCING, 'PigBalancingData.json')
     text = p.upsert_row(open(path, encoding='utf-8', newline='').read(), row)
     log('Adding %s, a copy of %s' % (name_id, parent_id))
-    p.encode([('PigBalancingData', path, text)], log)
+    writes = [('PigBalancingData', path, text)]
+    if texts:
+        writes.append(('Loca',) + p.upsert_loca(texts))
+    p.encode(writes, log)
     _set_added(name_id, True)
     log('Done. Open it to make it different; edits to %s reach it while it is ticked.' % parent_id)
     return name_id
@@ -704,10 +739,12 @@ def remap_combos(combos, mapping, removed, added, actives):
         return None
     out = []
     for c in combos or []:
+        # a "@tree<n>:<pct>" marker (which Turn Plan tree it's in, ForgeDecisionTrees.cs) stays in front
+        marks = [i for i in c.get('ComboChain', [])[:1] if i.startswith('@tree')]
         chain = [mapping.get(i, i) for i in c.get('ComboChain', []) if i not in removed]
         chain = [i for i in chain if i in actives]
         if chain:
-            out.append({'Percentage': c.get('Percentage', 0), 'ComboChain': chain})
+            out.append({'Percentage': c.get('Percentage', 0), 'ComboChain': marks + chain})
     if not out:
         return None
     total = sum(c['Percentage'] for c in out)
@@ -744,8 +781,18 @@ def _uses(row, art):
 
 
 def receivers_of(G, name_id):
+    """The pig and its ticked variants. A subvariant (a variant of a variant) gets the edits only while it and every
+    variant between it and the edited pig are ticked: unticking the dynamite rogue under the rogue also keeps the
+    dynamite rogue's own bird3 out."""
     off = set(unticked().get(name_id, []))
-    return [name_id] + [v for v in G.descendants(name_id) if v not in off]
+
+    def cut(v):
+        while v and v != name_id:
+            if v in off:
+                return True
+            v = G.parent.get(v)
+        return False
+    return [name_id] + [v for v in G.descendants(name_id) if not cut(v)]
 
 
 def update(project, log):
@@ -812,6 +859,15 @@ def update(project, log):
     # Art: a group (headgear and features, main hand, off hand) gets a new item when its art changed, or when the
     # pig already wears this combatant's copy (those are all rebuilt, so nothing points at a stale texture).
     entries = {}
+    import beams  # eye beams layers: Assets/Resources/HelmetBeams.json
+    beam_entries, beam_bases = [], set()
+
+    import bells  # bells layers: Assets/Resources/ScytheBellsConfig.json
+    bell_entries = []
+
+    def beam_sink(name, key, slot):
+        beam_entries.extend(beams.slot_entries(name, key, slot, project['abilities'], by_uid, log))
+        bell_entries.extend(bells.slot_entries(name, key, slot, project['abilities'], by_uid, log))
     contents = {'class': {}, 'main': {}, 'off': {}}
     equipment_rows, class_rows = [], []
     new_items = {}  # pig -> {group: item NameId}
@@ -874,7 +930,8 @@ def update(project, log):
                                         'HitEffectSuffix': w.get('hitEffect', new_row.get('HitEffectSuffix', ''))})
                     equipment_rows.append(new_row)
                 if art_changed:
-                    _bake_group(source, group, keys, kinds(st['rig']), asset, entries)
+                    _bake_group(source, group, keys, kinds(st['rig']), asset, entries, beam_sink)
+                    beam_bases.add(asset)
                 known = contents[group][key] = item_id
             new_items.setdefault(x, {})[group] = (known, item['NameId'] if item else None)
 
@@ -930,6 +987,8 @@ def update(project, log):
     # Pig rows.
     pig_rows = []
     keep = ex.get('keepSkills') or []
+    plan = p.decision_combos(project['decisionOrder'], by_uid, set(by_uid.values()) | {k['id'] for k in keep}) if project.get('decisionOrder') is not None else None
+    plan_from = G.pigs[name_id].get('SkillCombos') or []
     for x in receivers:
         row = copy.deepcopy(G.pigs[x])
         st = states[x]
@@ -950,6 +1009,12 @@ def update(project, log):
         combos = row.get('SkillCombos') or []
         if new_actives != actives or added_here:
             combos = _combos(combos, mapping, removed, added_here, new_actives, typed)
+        if plan is not None and (x == name_id or (row.get('SkillCombos') or []) == plan_from):
+            # its own Turn Plan (Abilities tab); variants that had the same order get it too, while they
+            # have every ability it uses
+            own = p.decision_combos(project['decisionOrder'], by_uid, set(new_actives))
+            if x == name_id or all(i in new_actives for c in plan for i in c['ComboChain'] if not i.startswith('@tree')):
+                combos = own
         # Only what changed, so untouched fields keep their exact form (null stays null).
         stats, before = st['stats'], fresh[x]['stats']
         fields = {'hp': ('BaseHealth', int), 'attack': ('BaseAttack', int), 'sizeType': ('SizeType', str), 'sizeScale': ('SizeScale', float),
@@ -979,7 +1044,11 @@ def update(project, log):
     class_rows, inventory_rows = different(class_rows, G.classes), different(inventory_rows, G.inventories)
     texts = {k: v for k, v in texts.items() if G.texts.get(k) != v}
     pivots_changed = p.write_bone_pivots(project, log)
-    if not (changed or skill_rows or equipment_rows or class_rows or inventory_rows or texts or art_dirty or pivots_changed):
+    import spring_config  # a spring drone's spring constant: Assets/Resources/SpringDrones.json
+    spring_changed = spring_config.publish(name_id, project, log)
+    beams_changed = bool(beam_bases) and beams.write(sorted(beam_bases), beam_entries, log)
+    beams_changed = (bool(beam_bases) and bells.write(sorted(beam_bases), bell_entries, log)) or beams_changed
+    if not (changed or skill_rows or equipment_rows or class_rows or inventory_rows or texts or art_dirty or pivots_changed or spring_changed or beams_changed):
         log('Nothing to update: this combatant and its ticked variants already match the game')
         return project
     if entries:
@@ -1020,8 +1089,9 @@ def update(project, log):
     return project
 
 
-def _bake_group(st, group, keys, kinds, asset, entries):
-    """Adds the group's textures, named the way CharacterAssetController looks them up."""
+def _bake_group(st, group, keys, kinds, asset, entries, beam_sink=None):
+    """Adds the group's textures, named the way CharacterAssetController looks them up. beam_sink(name, key, slot) gets
+    each slot that may hold eye beams or bells layers (never baked; beams.py, bells.py)."""
     for key in keys:
         slot = st['slots'].get(key)
         if group == 'class':
@@ -1030,7 +1100,9 @@ def _bake_group(st, group, keys, kinds, asset, entries):
             name = asset
         else:
             name = asset + ('_Arrow' if key == 'MainHand_Arrow' else '_Back')
-        layers = [l for l in (slot or {}).get('layers', []) if not l.get('hidden')]
+        layers = [l for l in (slot or {}).get('layers', []) if not l.get('hidden') and l.get('kind') not in ('beams', 'bells')]
+        if beam_sink and slot and layers:
+            beam_sink(name, key, slot)
         if slot and slot.get('hidden'):
             if kinds.get(key) == 'feature':
                 entries[name] = (p.Image.new('RGBA', (2, 2), (0, 0, 0, 0)), (0.0, 0.0))

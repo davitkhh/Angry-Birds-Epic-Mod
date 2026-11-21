@@ -76,6 +76,10 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	[HideInInspector]
 	public PerkType m_CurrentPerkType;
 
+	// Crit/BLAST-OFF! hit texts spawned on this combatant (PerkHitLabels)
+	[System.NonSerialized]
+	public PerkHitLabels.State m_PerkHitLabels = new PerkHitLabels.State();
+
 	[HideInInspector]
 	public CharacterAssetController m_AssetController;
 
@@ -114,6 +118,15 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 
 	[SerializeField]
 	private Vector3 m_BirdFocusPosOffset = new Vector3(300f, 0f, 0f);
+
+	// Where a bird steps to on its turn, relative to its slot.
+	public Vector3 BirdFocusPosOffset
+	{
+		get
+		{
+			return m_BirdFocusPosOffset;
+		}
+	}
 
 	[SerializeField]
 	private BattleFXController m_RankUpEffect;
@@ -680,6 +693,10 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 		if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(GetPerkVisualEffectIdent(type), out setting))
 		{
 			var perkVisualEffectTarget = GetPerkVisualEffectTarget(type, m_Model, target);
+			if (type == PerkType.GroundZero && perkVisualEffectTarget != null)
+			{
+				PerkHitLabels.RequestBlastOff(perkVisualEffectTarget.CombatantView);
+			}
 			for (var i = 0; i < setting.VisualEffects.Count; i++)
 			{
 				var effect = setting.VisualEffects[i];
@@ -1522,15 +1539,34 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 		if (m_AssetController)
 		{
+			HelmetBeams.OnSkillClip(this, HelmetBeams.Attack);
+			ScytheBells.OnSkillClip(this, HelmetBeams.Attack);
 			var own = PlaySkillClip();
 			if (own >= 0f)
 			{
-				return own;
+				return ForgeAnimationEnd(own);
 			}
 			m_AssetController.PlayAttackAnim(useOffhand);
-			return m_AssetController.GetAttackAnimationLength();
+			return ForgeAnimationEnd(m_AssetController.GetAttackAnimationLength());
 		}
 		return 0f;
+	}
+
+	// Combatant Forge "when the animation ends": the skill's effects with that timing once its clip is over
+	private float ForgeAnimationEnd(float length)
+	{
+		var skill = m_ClipSkill;
+		if (skill != null && length > 0f && skill.HasForgeTiming(ForgeEffectExtras.TimingAnimationEnd) && gameObject.activeInHierarchy)
+		{
+			StartCoroutine(ForgeAnimationEndLater(skill, length));
+		}
+		return length;
+	}
+
+	private IEnumerator ForgeAnimationEndLater(SkillBattleDataBase skill, float length)
+	{
+		yield return new WaitForSeconds(length);
+		skill.ForgeEvent(ForgeEffectExtras.TimingAnimationEnd, m_AssetController != null ? m_AssetController.transform.position : transform.position);
 	}
 
 	public float PlaySecondaryAttackAnimation()
@@ -1587,13 +1623,15 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 		if (m_AssetController)
 		{
+			HelmetBeams.OnSkillClip(this, HelmetBeams.Support);
+			ScytheBells.OnSkillClip(this, HelmetBeams.Support);
 			var own = PlaySkillClip();
 			if (own >= 0f)
 			{
-				return own;
+				return ForgeAnimationEnd(own);
 			}
 			m_AssetController.PlaySupportAnim();
-			return m_AssetController.GetSupportAnimationLength();
+			return ForgeAnimationEnd(m_AssetController.GetSupportAnimationLength());
 		}
 		return 0f;
 	}
@@ -1628,6 +1666,8 @@ public abstract class CharacterControllerBattleGroundBase : MonoBehaviour
 	{
 		if (m_AssetController)
 		{
+			HelmetBeams.OnSkillClip(this, HelmetBeams.Rage);
+			ScytheBells.OnSkillClip(this, HelmetBeams.Rage);
 			m_AssetController.PlayRageSkillAnim();
 			return m_AssetController.GetRageSkillAnimationLength();
 		}

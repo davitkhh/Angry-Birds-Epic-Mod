@@ -64,6 +64,10 @@ public class PopupFeatureUnlockedStateMgr : MonoBehaviour
 	[SerializeField]
 	private CharacterControllerCamp m_CampCharacterControllerPrefab;
 
+	// Set while this popup shows a bird with an unlock sequence (BirdUnlockSequence): the checkmark expands it into the
+	// bird's tutorial battle instead of closing it.
+	private bool m_BirdUnlockRunning;
+
 	private void Awake()
 	{
 		base.gameObject.SetActive(false);
@@ -248,6 +252,7 @@ public class PopupFeatureUnlockedStateMgr : MonoBehaviour
 			Depth = 5u,
 			showSnoutlings = false
 		}, true);
+		TryBeginBirdUnlock();
 		GetComponent<Animation>().Play("Popup_FeatureUnlocked_Enter");
 		yield return new WaitForSeconds(GetComponent<Animation>()["Popup_FeatureUnlocked_Enter"].length);
 		if (m_BasicItemGameData.ItemBalancing.NameId.StartsWith("special_offer_rainbow_riot"))
@@ -454,12 +459,21 @@ public class PopupFeatureUnlockedStateMgr : MonoBehaviour
 		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateAllBars();
 		GetComponent<Animation>().Play("Popup_FeatureUnlocked_Leave");
 		yield return new WaitForSeconds(GetComponent<Animation>()["Popup_FeatureUnlocked_Leave"].length);
+		FinishLeave();
+	}
+
+	private void FinishLeave()
+	{
 		if (m_ObjectType == FeatureObjectType.BirdUnlock)
 		{
 			DebugLog.Log("Destroy Character");
 			foreach (var o in m_FeatureObject)
 			{
-				o.GetComponent<CharacterControllerCamp>().DestroyCharacter();
+				if (o != null)
+				{
+					o.SetActive(true);
+					o.GetComponent<CharacterControllerCamp>().DestroyCharacter();
+				}
 			}
 		}
 		else
@@ -471,7 +485,10 @@ public class PopupFeatureUnlockedStateMgr : MonoBehaviour
 			}
 		}
 		m_IsShowing = false;
-		m_AsyncOperation.Abort();
+		if (m_AsyncOperation != null)
+		{
+			m_AsyncOperation.Abort();
+		}
 		m_AsyncOperation = null;
 		if (m_BasicItemGameData != null)
 		{
@@ -493,6 +510,109 @@ public class PopupFeatureUnlockedStateMgr : MonoBehaviour
 	private void m_AbortButton_Clicked()
 	{
 		DeRegisterEventHandlers();
+		if (m_BirdUnlockRunning && BirdUnlockSequence.Active != null && BirdUnlockSequence.Active.Continue())
+		{
+			DIContainerInfrastructure.BackButtonMgr.RegisterBlockReason("popup_unlock_bird_sequence");
+			return;
+		}
+		if (m_BirdUnlockRunning && BirdUnlockSequence.Active != null)
+		{
+			BirdUnlockSequence.Active.Cancel();
+		}
+		CloseAfterBirdUnlockFailed();
+	}
+
+	// The sequence could not run (its battle did not load): the popup closes as usual.
+	public void CloseAfterBirdUnlockFailed()
+	{
+		m_BirdUnlockRunning = false;
+		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("popup_unlock_bird_sequence");
+		var sound = GetComponent<TriggerSoundByAnimation>();
+		if (sound != null)
+		{
+			sound.m_Muted = false;
+		}
 		StartCoroutine("LeaveCoroutine");
+	}
+
+	// A single unlocked bird with a sequence: the bird's theme replaces the popup's jingle and the battle starts
+	// loading in the background.
+	private void TryBeginBirdUnlock()
+	{
+		m_BirdUnlockRunning = false;
+		if (m_ObjectType != FeatureObjectType.BirdUnlock || m_FeatureObject == null || m_FeatureObject.Count != 1 || m_FeatureObjectNameId.Count != 1 || !BirdUnlockSequence.HasDefinition(m_FeatureObjectNameId[0]))
+		{
+			return;
+		}
+		if (!BirdUnlockSequence.TryBegin(m_FeatureObjectNameId[0], this, m_FeatureObject[0]))
+		{
+			return;
+		}
+		m_BirdUnlockRunning = true;
+		// The unlock counts as seen once the sequence starts: quitting halfway must not replay it on the next load.
+		// (BaseLocationStateManager removes it again after the popup closes; that second Remove is a no-op.)
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		if (player != null && player.Data.PendingFeatureUnlocks != null && player.Data.PendingFeatureUnlocks.Remove(m_BasicItemGameData.ItemBalancing.NameId))
+		{
+			player.SavePlayerData();
+		}
+		var sound = GetComponent<TriggerSoundByAnimation>();
+		if (sound != null)
+		{
+			sound.m_Muted = true;
+		}
+	}
+
+	// The sequence takes over: the popup's column, slot, bird and overlay are replaced by the sequence's own, and its
+	// texts and checkmark leave as they would on close.
+	public void BeginBirdUnlockHandover()
+	{
+		foreach (var path in new[] { "1_Body/Column", "1_Body/Overlay", "2_Content/2_Feature" })
+		{
+			var part = transform.Find(path);
+			if (part != null)
+			{
+				part.gameObject.SetActive(false);
+			}
+		}
+		StartCoroutine(BirdUnlockContentLeave());
+	}
+
+	private IEnumerator BirdUnlockContentLeave()
+	{
+		var anim = GetComponent<Animation>();
+		anim.Play("Popup_FeatureUnlocked_Leave");
+		yield return new WaitForSeconds(anim["Popup_FeatureUnlocked_Leave"].length);
+		var content = transform.Find("2_Content");
+		if (content != null)
+		{
+			content.gameObject.SetActive(false);
+		}
+	}
+
+	// The sequence is over: the popup finishes closing (what LeaveCoroutine does after its clip) and puts its parts back.
+	public void CompleteBirdUnlock()
+	{
+		m_BirdUnlockRunning = false;
+		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("popup_unlock_bird_sequence");
+		DIContainerInfrastructure.GetCoreStateMgr().RegisterPopupEntered(false);
+		DeRegisterEventHandlers();
+		SetDragControllerActive(true);
+		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.DeRegisterBar(5u);
+		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateAllBars();
+		var sound = GetComponent<TriggerSoundByAnimation>();
+		if (sound != null)
+		{
+			sound.m_Muted = false;
+		}
+		FinishLeave();
+		foreach (var path in new[] { "1_Body/Column", "1_Body/Overlay", "2_Content", "2_Content/2_Feature" })
+		{
+			var part = transform.Find(path);
+			if (part != null)
+			{
+				part.gameObject.SetActive(true);
+			}
+		}
 	}
 }

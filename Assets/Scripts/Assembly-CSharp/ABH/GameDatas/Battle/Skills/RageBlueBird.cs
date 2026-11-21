@@ -124,6 +124,17 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		// One random participating enemy gets hit
+		protected override List<ICombatant> GetPreviewTargets(HealthPreviewContext ctx)
+		{
+			return ctx.FactionOf(ctx.Target).Where(c => c.IsParticipating).ToList();
+		}
+
+		protected override float GetPreviewTargetChance(HealthPreviewContext ctx, ICombatant target, List<ICombatant> targets)
+		{
+			return targets.Count > 0 ? 1f / targets.Count : 0f;
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

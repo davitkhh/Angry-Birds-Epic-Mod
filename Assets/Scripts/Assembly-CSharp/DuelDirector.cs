@@ -46,6 +46,10 @@ public class DuelDirector : MonoBehaviour
 
 	public bool IsActive { get; private set; }
 
+	// Extra damage the knocked back bird takes while the duel is on, in percent (added to the damage received modifier
+	// in BattleService.ApplyEffectsOnTriggerType). Set by the skill that started the duel ("damage_taken_bonus_in_percent").
+	public float BirdDamageTakenBonusPercent { get; private set; }
+
 	private int m_TurnsLeft;
 
 	// Set by the knockback; the bird's bonus turn is still to come (AfterPigTurn).
@@ -119,6 +123,21 @@ public class DuelDirector : MonoBehaviour
 	public bool IsDuelist(ICombatant combatant)
 	{
 		return IsActive && combatant != null && (combatant == Porky || combatant == Bird);
+	}
+
+	// The damage received modifier bonus (fraction) for this combatant: only the isolated bird, only while the duel is on.
+	public static float DamageTakenBonus(ICombatant combatant)
+	{
+		if (combatant == null || combatant.CombatantView == null)
+		{
+			return 0f;
+		}
+		var director = Find(combatant.CombatantView.m_BattleMgr);
+		if (director == null || !director.IsActive || director.Bird != combatant)
+		{
+			return 0f;
+		}
+		return director.BirdDamageTakenBonusPercent / 100f;
 	}
 
 	// The scenery one battleground to the left of the current one, as an offset from it. Only horizontal neighbors
@@ -333,10 +352,11 @@ public class DuelDirector : MonoBehaviour
 
 	// Called by the skill at the moment of impact: the bird flies back one battleground (the camera with it) and the duel
 	// is on. Porky's own walk there is the skill's (WalkToDuelSpot).
-	public IEnumerator Knockback(ICombatant porky, ICombatant bird, int turns, Vector3 offset)
+	public IEnumerator Knockback(ICombatant porky, ICombatant bird, int turns, Vector3 offset, float birdDamageTakenBonusPercent = 0f)
 	{
 		Porky = porky;
 		Bird = bird;
+		BirdDamageTakenBonusPercent = birdDamageTakenBonusPercent;
 		m_Offset = offset;
 		m_TurnsLeft = Mathf.Max(1, turns);
 		m_JustStarted = true;
@@ -798,6 +818,7 @@ public class DuelDirector : MonoBehaviour
 		IsActive = false;
 		Porky = null;
 		Bird = null;
+		BirdDamageTakenBonusPercent = 0f;
 		if (m_FormationChanged)
 		{
 			m_FormationChanged = false;

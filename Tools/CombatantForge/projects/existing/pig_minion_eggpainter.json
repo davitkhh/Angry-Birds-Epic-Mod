@@ -1,0 +1,281 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_eggpainter",
+ "name": "Egg Painter",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
+     "name": "Headgear_EggPainter",
+     "item": "Headgear_EggPainter",
+     "w": 136,
+     "h": 70,
+     "pivot": [
+      -0.20892857,
+      -0.8170408
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_EggPainter",
+     "name": "MainHand_EggPainter",
+     "item": "MainHand_EggPainter",
+     "w": 139,
+     "h": 35,
+     "pivot": [
+      -0.25714284,
+      -0.37232143
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_fdcaf",
+   "origin": "pig_attack_minion_eggpainter",
+   "type": "Attack",
+   "source": "pig_attack_minion_eggpainter",
+   "name": "Brush Stroke",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies and covers them in paint. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 30,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduce_damage_in_percent\"))"
+    }
+   },
+   "template": "ApplyGooOnTargets",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_58583",
+   "origin": "pig_passive_minion_eggpainter",
+   "type": "Passive",
+   "source": "pig_passive_minion_eggpainter",
+   "name": "Color Rapture",
+   "desc": "[0000ff]Passive:[-] Target covered in paint receive [ff0000]{value_1}%[-] damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "bonus_damage_vs_paint": 200
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+    }
+   },
+   "template": "PassiveBonusAgainstSpecificDebuff",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 155,
+  "attack": 15,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_eggpainter",
+  "fingerprint": "52b7de9eb1811bdae85621834ea2ad28725bc8d2",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_eggpainter"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Egg Painter",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
+       "name": "Headgear_EggPainter",
+       "item": "Headgear_EggPainter",
+       "w": 136,
+       "h": 70,
+       "pivot": [
+        -0.20892857,
+        -0.8170408
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_EggPainter",
+       "name": "MainHand_EggPainter",
+       "item": "MainHand_EggPainter",
+       "w": 139,
+       "h": 35,
+       "pivot": [
+        -0.25714284,
+        -0.37232143
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 155,
+    "attack": 15,
+    "sizeType": "Large",
+    "sizeScale": 1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_fdcaf",
+     "origin": "pig_attack_minion_eggpainter",
+     "type": "Attack",
+     "source": "pig_attack_minion_eggpainter",
+     "name": "Brush Stroke",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies and covers them in paint. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 30,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduce_damage_in_percent\"))"
+      }
+     },
+     "template": "ApplyGooOnTargets",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_58583",
+     "origin": "pig_passive_minion_eggpainter",
+     "type": "Passive",
+     "source": "pig_passive_minion_eggpainter",
+     "name": "Color Rapture",
+     "desc": "[0000ff]Passive:[-] Target covered in paint receive [ff0000]{value_1}%[-] damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "bonus_damage_vs_paint": 200
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+      }
+     },
+     "template": "PassiveBonusAgainstSpecificDebuff",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

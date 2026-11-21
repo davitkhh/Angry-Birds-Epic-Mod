@@ -19,6 +19,8 @@ public static class PirateHeadgearProbe
 
 	private const string RequestFile = "Temp/PirateHeadgearProbe.request";
 
+	private const string HideKey = "PirateHeadgearProbe.Hide";
+
 	private static readonly string[] Headgears = { "", "Headgear_PirateBucket_1", "Headgear_PirateBucket_2", "Headgear_PirateBucket_3", "Headgear_PirateBucket_4" };
 
 	private static int s_Frame;
@@ -59,6 +61,8 @@ public static class PirateHeadgearProbe
 		{
 			if (File.Exists(RequestFile) && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling)
 			{
+				// optional request content: bone names (comma/whitespace separated) to hide on every rig, e.g. "EyePatch"
+				EditorPrefs.SetString(HideKey, File.ReadAllText(RequestFile).Trim());
 				File.Delete(RequestFile);
 				Run();
 			}
@@ -150,6 +154,14 @@ public static class PirateHeadgearProbe
 					{
 						anim.HideBone("Headgear_Back", true);
 						Log(i + " back hidden (frame " + (backFrame != null) + ")");
+					}
+				}
+				foreach (var hide in EditorPrefs.GetString(HideKey, string.Empty).Split(new[] { ',', ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					anim.HideBone(hide, true);
+					if (i == 0)
+					{
+						Log("hidden bone " + hide);
 					}
 				}
 				anim.Play("Idle");

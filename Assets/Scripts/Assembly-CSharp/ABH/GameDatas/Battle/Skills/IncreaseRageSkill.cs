@@ -27,6 +27,12 @@ namespace ABH.GameDatas.Battle.Skills
 			yield break;
 		}
 
+		// Rage chili preview: AddFixRage
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			ctx.AddRage(m_Fixed);
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

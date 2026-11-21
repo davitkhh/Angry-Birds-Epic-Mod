@@ -9,14 +9,14 @@
    "layers": [
     {
      "uid": "g499aa97",
-     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
-     "name": "Headgear_EggPainter",
-     "item": "Headgear_EggPainter",
-     "w": 136,
-     "h": 70,
+     "src": "b3334c3f9aed4e139cf6cdfc963590e8:Forge_pig_minion_farmer__e0",
+     "name": "Forge_pig_minion_farmer__e0",
+     "item": "Forge_pig_minion_farmer__e0",
+     "w": 157,
+     "h": 81,
      "pivot": [
-      -0.20892857,
-      -0.8170408
+      -0.1522232,
+      -0.7211839
      ],
      "tx": 0,
      "ty": 0,
@@ -27,7 +27,7 @@
     }
    ],
    "hidden": false,
-   "active": "g499aa97"
+   "active": "xwjem363"
   },
   "MainHand": {
    "layers": [
@@ -48,10 +48,45 @@
      "sx": 1,
      "sy": 1,
      "shear": 0
+    },
+    {
+     "uid": "i4e04prw",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g1f9cdfc",
+     "ring": [
+      28.5,
+      -63.3
+     ],
+     "ringArt": "Ring",
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     },
+     "materials": [
+      "Brass",
+      "Brass"
+     ]
     }
    ],
    "hidden": false,
-   "active": "g1f9cdfc"
+   "active": "i4e04prw"
   },
   "OffHand": {
    "layers": [
@@ -75,7 +110,7 @@
     }
    ],
    "hidden": false,
-   "active": "g2cc5392"
+   "active": "2kqx0u39"
   }
  },
  "abilities": [
@@ -107,7 +142,8 @@
    },
    "template": "AttackWithHealWeakerAlly",
    "duration": 0,
-   "design": ""
+   "design": "",
+   "anim": "Action_Attack_2"
   },
   {
    "uid": "a1_a806b",
@@ -159,7 +195,7 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_minion_farmer_scythe",
-  "fingerprint": "c9cb6239d5bc861e295e643500bbba1554b6bc51",
+  "fingerprint": "8be4bce01a94ec8f7ff49e30bba7e139e774057b",
   "rev": 0,
   "keepSkills": [],
   "combos": [
@@ -185,14 +221,14 @@
      "layers": [
       {
        "uid": "g499aa97",
-       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_EggPainter",
-       "name": "Headgear_EggPainter",
-       "item": "Headgear_EggPainter",
-       "w": 136,
-       "h": 70,
+       "src": "b3334c3f9aed4e139cf6cdfc963590e8:Forge_pig_minion_farmer__e0",
+       "name": "Forge_pig_minion_farmer__e0",
+       "item": "Forge_pig_minion_farmer__e0",
+       "w": 157,
+       "h": 81,
        "pivot": [
-        -0.20892857,
-        -0.8170408
+        -0.1522232,
+        -0.7211839
        ],
        "tx": 0,
        "ty": 0,

@@ -152,6 +152,9 @@ public class CharacterOverlay : MonoBehaviour
 
 	private float m_ShownMaxHealth;
 
+	// Whose stats are shown (BirdUnlockSequence's tutorial pigs show their bird3 variant's); null = the combatant's own.
+	private ICombatant m_StatsCombatant;
+
 	private const float HealthFillSpeed = 2f;
 
 	private Vector3? m_PowerLevelHome;
@@ -187,6 +190,7 @@ public class CharacterOverlay : MonoBehaviour
 	{
 		var vector = m_InterfaceCamera.ScreenToWorldPoint(interfaceCamera.WorldToScreenPoint(root.position));
 		skinExtraOffset = 0f;
+		m_StatsCombatant = BirdUnlockSequence.StatsStandIn(combatant);
 		if ((combatant is PigCombatant || combatant is BossCombatant) && !pvp)
 		{
 			SetPigOrBossCombatant(combatant);
@@ -226,7 +230,7 @@ public class CharacterOverlay : MonoBehaviour
 		{
 			m_MasteryRoot.gameObject.SetActive(false);
 		}
-		var num = SetSkillInfos(combatant);
+		var num = SetSkillInfos(m_StatsCombatant ?? combatant);
 		ShowAmmoRegen(combatant);
 		var totalOffset = SkillOverlayOffset(num) + skinExtraOffset;
 		totalOffset += CompactSkillBlinds(num, totalOffset);
@@ -259,7 +263,15 @@ public class CharacterOverlay : MonoBehaviour
 	{
 		m_ShownHealth = combatant.CurrentHealth;
 		m_ShownMaxHealth = combatant.ModifiedHealth;
-		m_HealthText.text = DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(m_ShownHealth) + "/" + DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(m_ShownMaxHealth);
+		var shownHealth = m_ShownHealth;
+		var shownMax = m_ShownMaxHealth;
+		if (m_StatsCombatant != null && m_ShownCombatant == combatant)
+		{
+			// The stand-in's maximum, filled to the same share as the real pig's health.
+			shownMax = m_StatsCombatant.ModifiedHealth;
+			shownHealth = m_ShownMaxHealth > 0f ? Mathf.Ceil(shownMax * m_ShownHealth / m_ShownMaxHealth) : 0f;
+		}
+		m_HealthText.text = DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(shownHealth) + "/" + DIContainerInfrastructure.GetFormatProvider().GetBattleStatsFormat(shownMax);
 	}
 
 	private void Update()

@@ -68,7 +68,7 @@ public static class IntroBattleCutsceneBuilder
 		Build();
 	}
 
-	[MenuItem("Tools/Battle/Build Intro Battle Cutscenes")]
+	[MenuItem("Tools/Build/Battle/Build Intro Battle Cutscenes")]
 	public static void Build()
 	{
 		s_Log.Length = 0;

@@ -20,9 +20,10 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private bool m_Self;
 
-		private float m_DamageAndHealingBoost;
+		// Pep Rally: target's other blessings are this much stronger, plus m_BlessingBoostPerStatus each time it applies a status
+		private float m_BlessingBoost;
 
-		private float m_DamageAndHealingBoostPerAttack;
+		private float m_BlessingBoostPerStatus;
 
 		public override void Init(SkillGameData model)
 		{
@@ -32,8 +33,8 @@ namespace ABH.GameDatas.Battle.Skills
 			base.Model.SkillParameters.TryGetValue("chance", out value);
 			m_Percent = value;
 			m_Self = base.Model.SkillParameters.ContainsKey("self");
-			base.Model.SkillParameters.TryGetValue("damage_and_healing_boost", out m_DamageAndHealingBoost);
-			base.Model.SkillParameters.TryGetValue("damage_and_healing_boost_per_attack", out m_DamageAndHealingBoostPerAttack);
+			base.Model.SkillParameters.TryGetValue("blessing_boost_in_percent", out m_BlessingBoost);
+			base.Model.SkillParameters.TryGetValue("blessing_boost_per_status_in_percent", out m_BlessingBoostPerStatus);
 		}
 
 		public override void BoneAnimationUserTrigger(UserTriggerEvent triggerEvent)
@@ -84,45 +85,23 @@ namespace ABH.GameDatas.Battle.Skills
 						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
 					}
 				}, m_BuffDuration, battle, base.Model.Balancing.AssetId, base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
-				effect.AddEffect();
-			}
-			var boostedAllies = battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction == source.CombatantFaction && c != source).ToList();
-			foreach (var ally in boostedAllies)
-			{
-				var boostEffect = new BattleEffectGameData(source, ally, new List<BattleEffect>
+				// Set before AddEffect so the effect doesn't count as a status the target applied (see BlessingAmplifier)
+				effect.m_BlessingAmplifyPercent = m_BlessingBoost;
+				effect.m_BlessingAmplifyStep = m_BlessingBoostPerStatus;
+				// Recasting keeps the built-up stacks; only the duration starts over (the new effect replaces the old one)
+				BattleEffectGameData existing;
+				if (skillTarget.CurrrentEffects != null && skillTarget.CurrrentEffects.TryGetValue(base.Model.Balancing.AssetId, out existing) && existing != null && !existing.m_IsRemoved && existing.m_BlessingAmplifyPercent > 0f)
 				{
-					new BattleEffect
+					effect.m_BlessingAmplifyPercent = Math.Max(existing.m_BlessingAmplifyPercent, m_BlessingBoost);
+					effect.m_Stacks = existing.m_Stacks;
+					// Casting Pep Rally is a status the caster applied: recast on himself, his own copy stacks
+					if (skillTarget == source && m_BlessingBoostPerStatus != 0f)
 					{
-						EffectTrigger = EffectTriggerType.OnDealDamage,
-						EffectType = BattleEffectType.IncreaseDamage,
-						AfflicionType = base.Model.Balancing.EffectType,
-						Values = new List<float> { m_DamageAndHealingBoost },
-						Duration = m_BuffDuration,
-						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
-						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
-					},
-					new BattleEffect
-					{
-						EffectTrigger = EffectTriggerType.OnReceiveHealingConsumablesAlso,
-						EffectType = BattleEffectType.IncreaseHealingReceived,
-						AfflicionType = base.Model.Balancing.EffectType,
-						Values = new List<float> { m_DamageAndHealingBoost },
-						Duration = m_BuffDuration,
-						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
-						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
-					},
-					new BattleEffect
-					{
-						EffectTrigger = EffectTriggerType.AfterAttack,
-						EffectType = BattleEffectType.IncreaseDamageAndHealingOnAttack,
-						AfflicionType = base.Model.Balancing.EffectType,
-						Values = new List<float> { m_DamageAndHealingBoostPerAttack },
-						Duration = m_BuffDuration,
-						EffectAssetId = base.Model.Balancing.EffectIconAssetId,
-						EffectAtlasId = base.Model.Balancing.EffectIconAtlasId
+						effect.m_BlessingAmplifyStep = m_BlessingBoostPerStatus;
+						BlessingAmplifier.AddStack(effect);
 					}
-				}, m_BuffDuration, battle, base.Model.Balancing.AssetId + "_boost", base.Model.Balancing.EffectType, GetLocalizedName(), base.Model.SkillNameId);
-				boostEffect.AddEffect();
+				}
+				effect.AddEffect();
 			}
 		}
 
@@ -133,8 +112,8 @@ namespace ABH.GameDatas.Battle.Skills
 			dictionary.Add("{value_1}", string.Empty + num);
 			dictionary.Add("{value_2}", string.Empty + m_BuffDuration);
 			dictionary.Add("{value_3}", string.Empty + m_Percent);
-			dictionary.Add("{value_4}", string.Empty + m_DamageAndHealingBoost);
-			dictionary.Add("{value_5}", string.Empty + m_DamageAndHealingBoostPerAttack);
+			dictionary.Add("{value_4}", string.Empty + m_BlessingBoost);
+			dictionary.Add("{value_5}", string.Empty + m_BlessingBoostPerStatus);
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

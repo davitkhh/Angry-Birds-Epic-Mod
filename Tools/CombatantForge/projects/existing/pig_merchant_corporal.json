@@ -1,0 +1,376 @@
+{
+ "kind": "existing",
+ "id": "pig_merchant_corporal",
+ "name": "Corporal McPig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Corporal",
+     "name": "Headgear_Corporal",
+     "item": "Headgear_Corporal",
+     "w": 148,
+     "h": 126,
+     "pivot": [
+      -0.17,
+      -0.26
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Corporal_Back",
+     "name": "Headgear_Corporal_Back",
+     "item": "Headgear_Corporal",
+     "w": 148,
+     "h": 50,
+     "pivot": [
+      -0.16,
+      -0.22
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_MerchantPig",
+     "name": "MainHand_MerchantPig",
+     "item": "MainHand_MerchantPig",
+     "w": 212,
+     "h": 84,
+     "pivot": [
+      -0.42,
+      -0.28
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_PhatLootMcool",
+     "name": "OffHand_PhatLootMcool",
+     "item": "OffHand_PhatLootMcool",
+     "w": 148,
+     "h": 110,
+     "pivot": [
+      -0.17,
+      -0.17
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_10bcc",
+   "origin": "pig_attack_merchant_corporal",
+   "type": "Attack",
+   "source": "pig_attack_merchant_corporal",
+   "name": "Pummel",
+   "desc": "Deals [ff0000]{value_1}[-] damage and steals [ff0000]{value_3}[-] snoutlings.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "coins": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"coins\"))"
+    }
+   },
+   "template": "AttackAndStealPlayerCoins",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_c09f4",
+   "origin": "pig_support_merchant_corporal",
+   "type": "Support",
+   "source": "pig_support_merchant_corporal",
+   "name": "Get Reinforcements",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Leaves to get pig reinforcements. Will return eventually.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Run",
+   "params": {
+    "charge": 2,
+    "return_turns": 4,
+    "ambush_damage_in_percent": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "RunawayAndReturnAsAlly",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 205,
+  "attack": 14,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 20,
+  "perLevelAttack": 20,
+  "loot": {
+   "loot_pig6_defeated_gold": 1,
+   "loot_pig6_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_merchant_corporal",
+  "fingerprint": "0d1fe188c2e8d025608dd4ce9f4cdcc01942f774",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_merchant_corporal",
+     "pig_attack_merchant_corporal",
+     "pig_attack_merchant_corporal",
+     "pig_support_merchant_corporal"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Corporal McPig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Corporal",
+       "name": "Headgear_Corporal",
+       "item": "Headgear_Corporal",
+       "w": 148,
+       "h": 126,
+       "pivot": [
+        -0.17,
+        -0.26
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_Corporal_Back",
+       "name": "Headgear_Corporal_Back",
+       "item": "Headgear_Corporal",
+       "w": 148,
+       "h": 50,
+       "pivot": [
+        -0.16,
+        -0.22
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_MerchantPig",
+       "name": "MainHand_MerchantPig",
+       "item": "MainHand_MerchantPig",
+       "w": 212,
+       "h": 84,
+       "pivot": [
+        -0.42,
+        -0.28
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_PhatLootMcool",
+       "name": "OffHand_PhatLootMcool",
+       "item": "OffHand_PhatLootMcool",
+       "w": 148,
+       "h": 110,
+       "pivot": [
+        -0.17,
+        -0.17
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 205,
+    "attack": 14,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 6,
+    "perLevelHealth": 20,
+    "perLevelAttack": 20,
+    "loot": {
+     "loot_pig6_defeated_gold": 1,
+     "loot_pig6_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_10bcc",
+     "origin": "pig_attack_merchant_corporal",
+     "type": "Attack",
+     "source": "pig_attack_merchant_corporal",
+     "name": "Pummel",
+     "desc": "Deals [ff0000]{value_1}[-] damage and steals [ff0000]{value_3}[-] snoutlings.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "coins": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"coins\"))"
+      }
+     },
+     "template": "AttackAndStealPlayerCoins",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_c09f4",
+     "origin": "pig_support_merchant_corporal",
+     "type": "Support",
+     "source": "pig_support_merchant_corporal",
+     "name": "Get Reinforcements",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Leaves to get pig reinforcements. Will return eventually.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Run",
+     "params": {
+      "charge": 2,
+      "return_turns": 4,
+      "ambush_damage_in_percent": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "RunawayAndReturnAsAlly",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

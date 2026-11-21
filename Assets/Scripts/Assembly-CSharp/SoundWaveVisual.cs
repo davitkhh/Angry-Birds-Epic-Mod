@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 // Sound wave projectile built at runtime (King DJ's AttackAndForceMoveOrder): no prefab, texture or material asset.
-// Three styles, picked by Style (editor menu Tools/King DJ/Sound Wave Style; stored in PlayerPrefs): the ribbon below,
+// Three styles, picked by Style (editor menu Tools/Build/King DJ/Sound Wave Style; stored in PlayerPrefs): the ribbon below,
 // and the earlier physically accurate and longitudinal waves (ArcWave). In every style the sound fades with distance
 // (Falloff: narrower lines, smaller swings); everything is fully opaque.
 // Ribbon: a transverse wave along the line from the muzzle to the target: a ribbon that swings from side to side, square to

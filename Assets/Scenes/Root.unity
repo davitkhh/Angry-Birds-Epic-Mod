@@ -45393,48 +45393,6 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
-  - NameId: CorporalMcPig
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/CorporalMcPig
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: MinionGuardFork
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionGuardFork
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: MinionRogueDynamite
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueDynamite
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: MinionRogueShield
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueShield
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigBruteMic
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigBruteMic
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigCharents
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigCharents
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigKnightYellow
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigKnightYellow
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
   - NameId: MoustachePig
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/2_Pigs/MoustachePig_low
@@ -48519,12 +48477,6 @@ MonoBehaviour:
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab
-  - NameId: CorporalMcPig
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/CorporalMcPig
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
   - NameId: MoustachePig
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/2_Pigs/MoustachePig
@@ -49266,48 +49218,6 @@ MonoBehaviour:
   - NameId: PigKnight
     AssetLoadingType: 0
     Path: Prefabs/4_Characters/2_Pigs/PigKnight
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigBruteMic
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigBruteMic
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigCharents
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigCharents
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigPirateBruce
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigPirateBruce
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: MinionRogueShield
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueShield
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: MinionRogueDynamite
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionRogueDynamite
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: PigKnightYellow
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/2_Pigs/MyPrefabs/PigKnightYellow
-    AssetLink: {fileID: 0}
-    DeleteOnBuild: 0
-    Extension: prefab
-  - NameId: MinionGuardFork
-    AssetLoadingType: 0
-    Path: Prefabs/4_Characters/8_Base/MyPrefabs/MinionGuardFork
     AssetLink: {fileID: 0}
     DeleteOnBuild: 0
     Extension: prefab

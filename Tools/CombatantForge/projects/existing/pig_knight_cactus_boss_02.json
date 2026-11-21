@@ -1,0 +1,470 @@
+{
+ "kind": "existing",
+ "id": "pig_knight_cactus_boss_02",
+ "name": "Cactus Knight Captain",
+ "rig": "PigKnight",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_CactusKnight",
+     "name": "Headgear_CactusKnight",
+     "item": "Headgear_CactusKnight",
+     "w": 257,
+     "h": 190,
+     "pivot": [
+      -0.06964286,
+      -0.2282566
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_CactusKnight_Back",
+     "name": "Headgear_CactusKnight_Back",
+     "item": "Headgear_CactusKnight",
+     "w": 145,
+     "h": 49,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_CactusKnight",
+     "name": "MainHand_CactusKnight",
+     "item": "MainHand_CactusKnight",
+     "w": 203,
+     "h": 109,
+     "pivot": [
+      -0.3535714,
+      0.004988533
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_CactusKnight",
+     "name": "OffHand_CactusKnight",
+     "item": "OffHand_CactusKnight",
+     "w": 135,
+     "h": 120,
+     "pivot": [
+      0.075,
+      -0.003013393
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_85f26",
+   "origin": "pig_attack_knight_cactus_boss",
+   "type": "Attack",
+   "source": "pig_attack_knight_cactus_boss",
+   "name": "Huge Spiky Blow",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 200,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 100,
+    "charge": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_6}": {
+     "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+    }
+   },
+   "template": "AttackAndApplyDotSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_95cae",
+   "origin": "pig_support_knight_cactus_boss",
+   "type": "Support",
+   "source": "pig_support_knight_cactus_boss",
+   "name": "Sharp Spikes",
+   "desc": "Enemies attacking the target receive [ff0000]{value_1}[-] damage per attack. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "enemy_damage_retaliated_percent": 65
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+    }
+   },
+   "template": "ThornSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_5f17f",
+   "origin": "pig_passive_ironclad",
+   "type": "Passive",
+   "source": "pig_passive_ironclad",
+   "name": "Ironclad",
+   "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 22,
+    "lower_or_higher": -1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 500,
+  "attack": 30,
+  "sizeType": "Large",
+  "sizeScale": 1.2,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_knight_cactus_boss_02",
+  "fingerprint": "b2ecf323b8bcc70d89171d524d52ebf308c28a0d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_attack_knight_cactus_boss"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_support_knight_cactus_boss",
+     "pig_attack_knight_cactus_boss"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Cactus Knight Captain",
+   "rig": "PigKnight",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_CactusKnight",
+       "name": "Headgear_CactusKnight",
+       "item": "Headgear_CactusKnight",
+       "w": 257,
+       "h": 190,
+       "pivot": [
+        -0.06964286,
+        -0.2282566
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "4142b4c44d580c74cbc982365e4eb077:Headgear_CactusKnight_Back",
+       "name": "Headgear_CactusKnight_Back",
+       "item": "Headgear_CactusKnight",
+       "w": 145,
+       "h": 49,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "4142b4c44d580c74cbc982365e4eb077:MainHand_CactusKnight",
+       "name": "MainHand_CactusKnight",
+       "item": "MainHand_CactusKnight",
+       "w": 203,
+       "h": 109,
+       "pivot": [
+        -0.3535714,
+        0.004988533
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "4142b4c44d580c74cbc982365e4eb077:OffHand_CactusKnight",
+       "name": "OffHand_CactusKnight",
+       "item": "OffHand_CactusKnight",
+       "w": 135,
+       "h": 120,
+       "pivot": [
+        0.075,
+        -0.003013393
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 500,
+    "attack": 30,
+    "sizeType": "Large",
+    "sizeScale": 1.2,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig7_defeated_gold": 1,
+     "loot_pig7_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_85f26",
+     "origin": "pig_attack_knight_cactus_boss",
+     "type": "Attack",
+     "source": "pig_attack_knight_cactus_boss",
+     "name": "Huge Spiky Blow",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_5}[-] turns. Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 200,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 100,
+      "charge": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_6}": {
+       "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+      }
+     },
+     "template": "AttackAndApplyDotSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_95cae",
+     "origin": "pig_support_knight_cactus_boss",
+     "type": "Support",
+     "source": "pig_support_knight_cactus_boss",
+     "name": "Sharp Spikes",
+     "desc": "Enemies attacking the target receive [ff0000]{value_1}[-] damage per attack. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "enemy_damage_retaliated_percent": 65
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+      }
+     },
+     "template": "ThornSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_5f17f",
+     "origin": "pig_passive_ironclad",
+     "type": "Passive",
+     "source": "pig_passive_ironclad",
+     "name": "Ironclad",
+     "desc": "[0000ff]Passive:[-] Damage less than [ff0000]{value_1}[-] deals only half the damage.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 22,
+      "lower_or_higher": -1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

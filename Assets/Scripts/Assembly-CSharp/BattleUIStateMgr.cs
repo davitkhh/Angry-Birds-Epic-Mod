@@ -270,7 +270,10 @@ public class BattleUIStateMgr : MonoBehaviour
 	private void HandleBackButton()
 	{
 		DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.HideAllTooltips();
-		m_BattleMgr.m_BattlePaused.Enter();
+		if (m_BattleMgr.m_BattlePaused != null)
+		{
+			m_BattleMgr.m_BattlePaused.Enter();
+		}
 		if (m_ConsumableBarEntered)
 		{
 			DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("back_button_pressed", string.Empty);
@@ -429,7 +432,8 @@ public class BattleUIStateMgr : MonoBehaviour
 	{
 		get
 		{
-			return m_BattleMgr.Model.Balancing.BattleParticipantsIds.Count > 1 && m_BattleMgr.Model.Balancing.NameId != "battle_000";
+			// Nor do the bird unlock tutorials (BirdUnlockSequence).
+			return m_BattleMgr.Model.Balancing.BattleParticipantsIds.Count > 1 && m_BattleMgr.Model.Balancing.NameId != "battle_000" && !BirdUnlockSequence.IsUnlockBattle(m_BattleMgr.Model.Balancing.NameId);
 		}
 	}
 
@@ -769,7 +773,10 @@ public class BattleUIStateMgr : MonoBehaviour
 
 	public void PauseButtonPressed()
 	{
-		m_BattleMgr.m_BattlePaused.Enter();
+		if (m_BattleMgr.m_BattlePaused != null)
+		{
+			m_BattleMgr.m_BattlePaused.Enter();
+		}
 	}
 
 	public void AutoBattleButtonPressed()
@@ -780,7 +787,10 @@ public class BattleUIStateMgr : MonoBehaviour
 
 	public void EnterPause()
 	{
-		m_BattleMgr.m_BattlePaused.Enter();
+		if (m_BattleMgr.m_BattlePaused != null)
+		{
+			m_BattleMgr.m_BattlePaused.Enter();
+		}
 	}
 
 	public void AutoBattlePressed()

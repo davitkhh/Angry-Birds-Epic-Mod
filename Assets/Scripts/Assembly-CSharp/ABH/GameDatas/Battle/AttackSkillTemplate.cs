@@ -189,6 +189,69 @@ namespace ABH.GameDatas.Battle
 			return num;
 		}
 
+		// Health bar preview: DoAction's hits on each target (see HealthPreviewCalculator for the modifiers).
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			if (ctx.Target.CombatantFaction == ctx.Source.CombatantFaction || PreviewStartsCharge(ctx.Source))
+			{
+				return;
+			}
+			var targets = GetPreviewTargets(ctx).Where(t => t != null && t.IsAlive).ToList();
+			if (IsMeeleAttack(ctx.Source))
+			{
+				targets.RemoveAll(ImmunityToMelee.IsImmune);
+			}
+			var percent = 100f;
+			if (!Model.SkillParameters.TryGetValue("damage_in_percent", out percent))
+			{
+				percent = 100f;
+			}
+			var attackCount = 1f;
+			Model.SkillParameters.TryGetValue("attack_count", out attackCount);
+			var hits = Mathf.Max(1, Mathf.RoundToInt(attackCount));
+			foreach (var skillTarget in targets)
+			{
+				HealthChange hit = null;
+				if (!m_NoDamage)
+				{
+					var modifier = percent;
+					var extra = 0f;
+					if (skillTarget == ctx.Target && Model.SkillParameters.TryGetValue("extra_damage_in_percent_on_target", out extra))
+					{
+						modifier += extra;
+					}
+					hit = ctx.AddHit(skillTarget, ctx.Source.ModifiedAttack * (modifier / 100f), hits, m_ApplyPerks, GetPreviewTargetChance(ctx, skillTarget, targets));
+				}
+				PreviewAfterHit(ctx, skillTarget, hit, GetPreviewTargetChance(ctx, skillTarget, targets));
+			}
+		}
+
+		// Who DoAction would hit (before its per-skill target overrides, which subclasses mirror here).
+		protected virtual List<ICombatant> GetPreviewTargets(HealthPreviewContext ctx)
+		{
+			var targets = new List<ICombatant>();
+			if (!Model.SkillParameters.ContainsKey("all"))
+			{
+				targets.Add(ctx.Target);
+			}
+			else
+			{
+				targets.AddRange(ctx.FactionOf(ctx.Target));
+			}
+			return targets;
+		}
+
+		// The chance a randomly picked target is the one hit.
+		protected virtual float GetPreviewTargetChance(HealthPreviewContext ctx, ICombatant target, List<ICombatant> targets)
+		{
+			return 1f;
+		}
+
+		// What else a hit on target causes (damage over time, heals, ...). hit is null for skills without damage.
+		protected virtual void PreviewAfterHit(HealthPreviewContext ctx, ICombatant target, HealthChange hit, float chance)
+		{
+		}
+
 		public override IEnumerator DoAction(BattleGameData battle, ICombatant source, ICombatant target, bool shared = false, bool illusion = false)
 		{
 			var pigsAliveBeforeSkill = battle.m_CombatantsPerFaction[Faction.Pigs].Where(c => c.IsAlive && !c.IsBanner).Count();

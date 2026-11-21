@@ -1,0 +1,63 @@
+/* Ability Decision Order (decisions.js): a sideways tree, one column per turn */
+#decisionOrder { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+#decisionOrder .note { font-size: 11px; margin: 0; }
+.decPalette { display: flex; flex-wrap: wrap; gap: 4px; }
+.decChip { background: var(--raised); border: 1px solid var(--line); border-left: 4px solid var(--strip, #888); border-radius: 5px; padding: 2px 8px; cursor: grab; user-select: none; }
+.decChip:hover { border-color: var(--accent); border-left-color: var(--strip, #888); }
+.decScroll { overflow: auto; max-height: 480px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+.decCanvas { position: relative; }
+.decLinks { position: absolute; left: 0; top: 0; pointer-events: none; }
+.decLinks path { fill: none; stroke: var(--dim); stroke-width: 2; stroke-linejoin: round; }
+.decScroll.dropAfter { outline: 2px dashed var(--accent); }
+.decLinks path.never { stroke-dasharray: 3 3; opacity: .5; }
+.decTurn { position: absolute; top: 0; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); text-align: center; }
+.decNode { position: absolute; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); border-left: 4px solid var(--strip, #888); border-radius: 6px;
+  padding: 2px 4px 2px 8px; display: flex; align-items: center; gap: 4px; cursor: grab; }
+.decNode .iconBtn { padding: 0 6px; line-height: 18px; flex: none; }
+.decNode:not(:hover):not(:focus-within) .iconBtn { display: none; }
+.decNode .decPct { margin-left: 2px; font-size: 15px; font-weight: 650; flex: none; }
+.decNode .decPct input { width: 62px; font-size: 14px; font-weight: 650; padding: 1px 3px; text-align: right; }
+.decAlways { flex: none; width: 66px; text-align: right; font-size: 11px; color: var(--dim); }
+.decOverall { flex: none; font-size: 10px; color: var(--dim); white-space: nowrap; }
+.decNode:hover { border-color: var(--accent); border-left-color: var(--strip, #888); }
+.decNode.root { cursor: default; border-left-color: var(--accent); background: var(--panel); }
+.decNode.stop { border-style: dashed; border-left: 1px dashed var(--line); background: var(--panel); }
+.decNode.missing .decName { color: var(--danger); }
+.decNode.never { opacity: .6; }
+.decNode.dragging { opacity: .4; }
+.decNode.dropAfter { box-shadow: 0 4px 0 var(--accent); border-color: var(--accent); }
+.decNode.dropBefore { box-shadow: -6px 0 0 var(--accent); border-color: var(--accent); }
+.decNode.root.dropAfter { box-shadow: 0 0 0 2px var(--accent); }
+.decName { flex: 1; min-width: 0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.decAgain { color: var(--dim); font-weight: 400; }
+.decRow { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.decRow .dim { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.decRow .iconBtn { padding: 0 6px; line-height: 16px; }
+.decRow .iconBtn:first-of-type { margin-left: auto; }
+.decPct { display: inline-flex; align-items: center; gap: 1px; }
+.decPct input { width: 46px; padding: 0 3px; font-size: 11px; }
+.decMenu { position: fixed; z-index: 50; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 2px; min-width: 180px; max-height: 300px; overflow: auto; box-shadow: 0 6px 18px #0008; }
+.decMenu button { text-align: left; border-left: 4px solid var(--strip, var(--line)); }
+.decMenu button.stopOpt { border-left: 1px dashed var(--line); }
+.decGame { font-size: 11px; color: var(--dim); }
+.decGame summary { cursor: pointer; }
+.decTabs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+.decTab { display: inline-flex; align-items: center; gap: 4px; background: var(--raised); border: 1px solid var(--line); border-radius: 6px 6px 0 0; padding: 2px 6px; cursor: pointer; }
+.decTab.on { border-color: var(--accent); background: var(--panel); box-shadow: inset 0 -2px 0 var(--accent); }
+.decTab.off > span:not(.dim), .decTab.off .decTabName { opacity: .65; font-style: italic; }
+.decTab.dropAfter { outline: 2px solid var(--accent); }
+.decTab .iconBtn { padding: 0 5px; line-height: 16px; }
+.decTabName { padding: 0 3px; font-weight: 600; background: transparent; border-color: transparent; }
+.decTabName:hover, .decTabName:focus { background: var(--bg); border-color: var(--line); }
+/* nothing is highlighted while something is being dragged (app.js) */
+html.noSelect, html.noSelect * { user-select: none !important; -webkit-user-select: none !important; }
+img { -webkit-user-drag: none; }
+.decTab .decPct input { width: 60px; }
+.decNode.block { background: var(--panel); border-left-color: var(--accent); }
+.decNode.block.branch { border-left-color: #8fb4e8; }
+.decNode.block .decName { font-weight: 650; }
+.decSub { font-weight: 400; font-size: 11px; color: var(--dim); }
+.decNode.move { padding-left: 4px; }
+.decTurnNo { flex: none; min-width: 18px; height: 18px; border-radius: 9px; background: var(--bg); color: var(--dim); font-size: 10px; display: inline-flex; align-items: center; justify-content: center; }
+.decMenuHead { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); padding: 4px 4px 0; }
+.decTotal { flex: none; font-size: 10px; color: var(--accent); white-space: nowrap; }

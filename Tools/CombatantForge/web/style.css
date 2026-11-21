@@ -45,7 +45,7 @@ main { flex: 1; min-height: 0; display: grid; grid-template-columns: var(--libra
 #rigFilter { max-width: 120px; }
 
 #grid { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); grid-auto-rows: var(--tile, 98px); gap: 5px; align-content: start; }
-.card { background: var(--raised); border: 1px solid transparent; border-radius: 6px; cursor: grab; user-select: none; touch-action: none; min-width: 0; overflow: hidden; }
+.card { background: var(--raised); border: 1px solid transparent; border-radius: 6px; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; min-width: 0; overflow: hidden; }
 .card:hover { border-color: var(--accent); }
 .card.split { display: flex; gap: 5px; background: transparent; cursor: default; overflow: visible; }
 .card.split:hover { border-color: transparent; }
@@ -183,6 +183,8 @@ dialog.small { width: 330px; }
 .card.combatant .cName { position: absolute; left: 3px; right: 3px; bottom: 2px; font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card.combatant .cNoIcon { position: absolute; inset: 4px 4px 22px; display: grid; place-items: center; font-size: 10px; color: var(--dim); text-align: center; overflow-wrap: anywhere; }
 .card.combatant.variant { background: #2e2a22; }
+.card.combatant.variant.sub { background: #27241d; box-shadow: inset 3px 0 0 #8a6d3b; }
+.variantBox label.check.blocked { opacity: 0.55; }
 .card.combatant.current { border-color: var(--accent); }
 .card.combatant.off { opacity: .5; cursor: default; }
 .card.combatant.off:hover { border-color: transparent; }
@@ -234,6 +236,7 @@ dialog.small { width: 330px; }
 .comboBox .recipe strong { color: var(--text); }
 .suffixChips { display: flex; gap: 4px; flex-wrap: wrap; }
 .suffixChips button { font-size: 11px; padding: 1px 8px; border-radius: 10px; }
+.suffixChips button.template { border-style: dashed; color: var(--accent); }
 .variantRatios { margin-top: 8px; }
 .variantRatios label { color: var(--text); }
 #variantNav { flex: none; background: var(--bg); border-radius: 6px; padding: 3px 4px; }
@@ -319,8 +322,96 @@ body:not(.projMode) .projOnly { display: none !important; }
 
 /* section tongues sticking out of the side panel (syncTongues) */
 #tongues { position: fixed; inset: 0; pointer-events: none; z-index: 20; }
-.tongue { position: fixed; pointer-events: auto; min-width: 100px; padding: 0 10px 0 10px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;
-  border: none; border-radius: 10px 0 0 10px; font-size: 12px; font-weight: 600; color: #16181d; white-space: nowrap; cursor: pointer;
+.tongue { position: fixed; pointer-events: auto; min-width: 0; padding: 0 6px 0 7px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+  border: none; border-radius: 9px 0 0 9px; font-size: 11px; font-weight: 600; color: #16181d; white-space: nowrap; cursor: pointer;
   background: color-mix(in srgb, var(--tongue) 55%, #2a2f3a); box-shadow: -2px 1px 4px rgba(0,0,0,.35); opacity: .82; }
 .tongue:hover { opacity: 1; }
 .tongue.open { background: var(--tongue); opacity: 1; }
+.tongue[hidden] { display: none; }
+
+/* Turn Plan (decisions.js): a tree growing down from Start */
+/* margin-top auto: at the bottom of the tab while there is room; in the flow once the tab scrolls */
+#decisionOrder { display: flex; flex-direction: column; gap: 6px; flex: none; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
+#decisionOrder .note { font-size: 11px; margin: 0; }
+.decPalette { display: flex; flex-wrap: wrap; gap: 4px; }
+.decChip { background: var(--raised); border: 1px solid var(--line); border-left: 4px solid var(--strip, #888); border-radius: 5px; padding: 2px 8px; cursor: grab; user-select: none; -webkit-user-select: none; }
+.decChip:hover { border-color: var(--accent); border-left-color: var(--strip, #888); }
+/* its own stacking layer: WebKit otherwise paints the absolutely placed steps over its scrollbars */
+.decScroll { position: relative; z-index: 0; isolation: isolate; overflow: auto; max-height: 480px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+.decCanvas { position: relative; }
+.decToggle { cursor: pointer; user-select: none; -webkit-user-select: none; }
+.decToggle:hover { color: var(--accent); }
+.decCaret { display: inline-block; width: 1em; }
+.decLinks { position: absolute; left: 0; top: 0; pointer-events: none; }
+.decLinks path { fill: none; stroke: var(--dim); stroke-width: 1.5; }
+.decScroll.dropAfter { outline: 2px dashed var(--accent); }
+.decLinks path.never { stroke-dasharray: 3 3; opacity: .5; }
+.decNode { position: absolute; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); border-left: 4px solid var(--strip, #888); border-radius: 6px;
+  padding: 3px 4px 3px 6px; display: flex; flex-direction: column; justify-content: space-between; cursor: grab; }
+.decNode:hover { border-color: var(--accent); border-left-color: var(--strip, #888); }
+.decNode.root { cursor: default; border-left-color: var(--accent); background: var(--panel); }
+.decNode.stop { border-style: dashed; border-left: 1px dashed var(--line); background: var(--panel); }
+.decNode.missing .decName { color: var(--danger); }
+.decNode.never { opacity: .6; }
+.decNode.dragging { opacity: .4; }
+.decNode.dropAfter { box-shadow: 0 4px 0 var(--accent); border-color: var(--accent); }
+.decNode.dropBefore { box-shadow: 0 -5px 0 var(--accent); border-color: var(--accent); }
+.decNode.dropOption { outline: 2px dashed var(--accent); outline-offset: -4px; }
+.decNode.root.dropAfter { box-shadow: 0 0 0 2px var(--accent); }
+.decName { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.decAgain { color: var(--dim); font-weight: 400; }
+.decRow { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.decRow .dim { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.decRow .iconBtn { padding: 0 6px; line-height: 16px; }
+.decRow .iconBtn:first-of-type { margin-left: auto; }
+.decPct { display: inline-flex; align-items: center; gap: 1px; }
+.decPct input { width: 54px; padding: 0 3px; font-size: 11px; }
+.decMenu { position: fixed; z-index: 50; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 2px; min-width: 180px; max-height: 300px; overflow: auto; box-shadow: 0 6px 18px #0008; }
+.decMenu button { text-align: left; border-left: 4px solid var(--strip, var(--line)); }
+.decMenu button.stopOpt { border-left: 1px dashed var(--line); }
+.decGame { font-size: 11px; color: var(--dim); }
+.decGame summary { cursor: pointer; }
+.decTabs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+.decTab { display: inline-flex; align-items: center; gap: 4px; background: var(--raised); border: 1px solid var(--line); border-radius: 6px 6px 0 0; padding: 2px 6px; cursor: pointer; }
+.decTab.on { border-color: var(--accent); background: var(--panel); box-shadow: inset 0 -2px 0 var(--accent); }
+.decTab.off > span:not(.dim), .decTab.off .decTabName { opacity: .65; font-style: italic; }
+.decTab.dropAfter { outline: 2px solid var(--accent); }
+.decTab .iconBtn { padding: 0 5px; line-height: 16px; }
+.decTabName { padding: 0 3px; font-weight: 600; background: transparent; border-color: transparent; }
+.decTabName:hover, .decTabName:focus { background: var(--bg); border-color: var(--line); }
+/* nothing is highlighted while something is being dragged (app.js) */
+html.noSelect, html.noSelect * { user-select: none !important; -webkit-user-select: none !important; }
+img { -webkit-user-drag: none; }
+/* things dragged on purpose: dragged whole, and their text never selected (WebKit only reads the prefixed rules) */
+[draggable="true"] { -webkit-user-drag: element; }
+[draggable="true"], [draggable="true"] * { user-select: none; -webkit-user-select: none; }
+[draggable="true"] input, [draggable="true"] textarea { user-select: text; -webkit-user-select: text; }
+.decTab .decPct input { width: 60px; }
+.decTotal { flex: none; font-size: 10px; color: var(--accent); white-space: nowrap; }
+.decNode.decision { background: #f0b23c0a; border: 1px dashed #f0b23c99; border-left: 4px solid var(--accent); justify-content: flex-start; padding: 3px 4px 3px 6px; }
+.decNode.decision .decHead { flex: none; }
+.decNode.decision .decHead .decName { flex: 1; min-width: 0; color: var(--accent); }
+.decNode.decision .decHead .iconBtn:first-of-type { margin-left: 0; }
+.decEmpty { font-size: 11px; text-align: center; margin-top: 6px; }
+.decChip.decisionChip { border-style: dashed; color: var(--accent); }
+.decMenu button.decisionOpt { border-left: 4px solid var(--accent); color: var(--accent); }
+.decNode.decision .decHead .iconBtn, .decNode.decision .decHead .decPct, .decNode.decision .decHead .decTotal { flex: none; }
+.decNode.decision .decHead .iconBtn { font-size: 11px; padding: 0 6px; white-space: nowrap; width: auto; min-width: 26px; }
+/* eye beams layer (app.js beamsPanel) */
+.beamsPanel { display: flex; flex-direction: column; gap: 7px; margin: 8px 0; padding: 8px; border-radius: 6px; background: var(--raised); border-left: 3px solid #ffd940; }
+.beamsPanel h4 { margin: 0; }
+.beamsPanel .fieldRow select { flex: 1; min-width: 0; }
+.beamOn { display: flex; flex-direction: column; gap: 3px; }
+.beamOn label.check { font-size: 12px; color: var(--text); }
+.beamOn label.check.sub { padding-left: 14px; }
+.beamOn label.check input:disabled + .swatch { opacity: .5; }
+.beamOn .swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.beamEyes { display: flex; flex-direction: column; gap: 4px; }
+.beamEyes input[type=number] { width: 64px; }
+.fields input[type=color] { width: 100%; height: 22px; padding: 0; border: none; background: none; }
+.layerName .dim { font-size: 11px; }
+/* bells layer (app.js bellsPanel; shares the beams panel's layout) */
+.bellsPanel { border-left-color: #c4700a; }
+.bellsPanel .row label.check { display: inline-flex; gap: 4px; align-items: center; margin-right: 6px; font-size: 12px; }
+.bellRing { flex-wrap: wrap; gap: 6px; }
+.bellRing input[type=number] { width: 64px; }

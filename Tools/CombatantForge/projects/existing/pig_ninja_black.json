@@ -1,0 +1,247 @@
+{
+ "kind": "existing",
+ "id": "pig_ninja_black",
+ "name": "Black Ninja",
+ "rig": "NinjaPig",
+ "variant": "",
+ "slots": {
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c3d60452515b3ab4c9ccf37f04a85e20:MainHand_BlackNinja",
+     "name": "MainHand_BlackNinja",
+     "item": "MainHand_BlackNinja",
+     "w": 119,
+     "h": 58,
+     "pivot": [
+      -0.35,
+      -0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_d5179",
+   "origin": "pig_attack_ninja_red",
+   "type": "Attack",
+   "source": "pig_attack_ninja_red",
+   "name": "Spike Formation",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Each attack has a [ff0000]{value_3}%[-] chance for a critical hit.\r\n",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 3,
+    "chance": 35,
+    "extra_damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"extra_damage_in_percent\"))"
+    }
+   },
+   "template": "AttackWithCritChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_995b7",
+   "origin": "pig_passive_fastness",
+   "type": "Passive",
+   "source": "pig_passive_fastness",
+   "name": "Dodge",
+   "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 23,
+    "lower_or_higher": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Strike",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 110,
+  "attack": 6,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_ninja_black",
+  "fingerprint": "a689ab126f2b2c52ffa2df79109fce2e5c3bac83",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_ninja_red"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Black Ninja",
+   "rig": "NinjaPig",
+   "variant": "",
+   "slots": {
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c3d60452515b3ab4c9ccf37f04a85e20:MainHand_BlackNinja",
+       "name": "MainHand_BlackNinja",
+       "item": "MainHand_BlackNinja",
+       "w": 119,
+       "h": 58,
+       "pivot": [
+        -0.35,
+        -0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Strike",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 110,
+    "attack": 6,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_d5179",
+     "origin": "pig_attack_ninja_red",
+     "type": "Attack",
+     "source": "pig_attack_ninja_red",
+     "name": "Spike Formation",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Each attack has a [ff0000]{value_3}%[-] chance for a critical hit.\r\n",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 3,
+      "chance": 35,
+      "extra_damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"extra_damage_in_percent\"))"
+      }
+     },
+     "template": "AttackWithCritChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_995b7",
+     "origin": "pig_passive_fastness",
+     "type": "Passive",
+     "source": "pig_passive_fastness",
+     "name": "Dodge",
+     "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 23,
+      "lower_or_higher": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

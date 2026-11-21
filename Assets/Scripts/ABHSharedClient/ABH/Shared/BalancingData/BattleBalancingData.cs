@@ -91,5 +91,10 @@ namespace ABH.Shared.BalancingData
 		
 		[ProtoMember(27)]
 		public float PowerlevelModifier { get; set; }
+
+		// One entry per star (first, second, third). Missing entries / null = Regular (score) star.
+		// Serialized as "Type|Value|NameId" strings in ABHModelSerializer.
+		[ProtoMember(28)]
+		public List<StarCondition> Stars { get; set; }
 	}
 }

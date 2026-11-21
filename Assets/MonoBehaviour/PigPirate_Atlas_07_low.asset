@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: PigPirate_Atlas_07_low
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 00ee4575985e4a54a740f1310838396f, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.6015625
+    width: 0.9921875
+    height: 0.3984375
+  textureGUIDs:
+  - 38fb3561baa44ba2bedbab9b10058440
+  textureSizes:
+  - {x: 254, y: 101}
+  defaultPivotOffsets:
+  - {x: -0.2517857, y: 0.2155587}
+  textureNames:
+  - Headgear_PirateSeafoam
+  texturePaths:
+  - Assets/Content/4_Characters/2_Pigs/6_PigPirate/BodyParts/Headgear_PirateSeafoam.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

@@ -189,6 +189,29 @@
    "template": "HealOverTime",
    "duration": -1,
    "design": ""
+  },
+  {
+   "uid": "hai0x8o3",
+   "type": "Passive",
+   "source": "pig_passive_annoying",
+   "name": "Annoying",
+   "desc": "Increases attack power of all allies by [ff0000]{value_3}%[-].",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "increase_in_percent": 20,
+    "all": 1
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    }
+   },
+   "template": "IncreaseDamage",
+   "duration": -1,
+   "design": "",
+   "origin": "pig_passive_annoying"
   }
  ],
  "weapon": {
@@ -215,12 +238,12 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_king_dracula",
-  "fingerprint": "f6becceccd31661a9a806ad8149e3e870c0ad845",
+  "fingerprint": "1c9bd215c7f3d695104e960a8858eacdc0a0735f",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 100,
+    "Percentage": 100.0,
     "ComboChain": [
      "pig_attack_kingpig_dracula_01",
      "pig_attack_kingpig_dracula_02",
@@ -438,8 +461,32 @@
      "template": "HealOverTime",
      "duration": -1,
      "design": ""
+    },
+    {
+     "uid": "hai0x8o3",
+     "type": "Passive",
+     "source": "pig_passive_annoying",
+     "name": "Annoying",
+     "desc": "Increases attack power of all allies by [ff0000]{value_3}%[-].",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "increase_in_percent": 20,
+      "all": 1
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      }
+     },
+     "template": "IncreaseDamage",
+     "duration": -1,
+     "design": "",
+     "origin": "pig_passive_annoying"
     }
    ]
   }
- }
+ },
+ "publishedAt": "2026-11-13 22:46"
 }

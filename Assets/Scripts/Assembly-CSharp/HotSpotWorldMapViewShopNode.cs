@@ -159,6 +159,8 @@ public class HotSpotWorldMapViewShopNode : HotSpotWorldMapViewBase
 		if (onlyLimitedStock)
 		{
 			MerchantStock.Sync(DIContainerInfrastructure.GetCurrentPlayer(), list);
+			// The shield upgrade pair slot counts as both halves' current offers
+			list = MerchantShieldUpgrades.ExpandPairs(DIContainerInfrastructure.GetCurrentPlayer(), list);
 		}
 		if (m_ShopMenuType != ShopMenuType.Dojo)
 		{

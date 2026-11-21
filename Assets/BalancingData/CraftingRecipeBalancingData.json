@@ -1725,5 +1725,49 @@
       "class_lightningbird": 1
     },
     "RecipeCategoryType": "MainHandEquipment"
+  },
+  {
+    "NameId": "upgrade_offhand_red_shield_start_protect",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_offhand_red_shield_start_protect",
+    "LocaBaseId": "upgrade_offhand_red_shield_start_protect",
+    "SortPriority": 2,
+    "ResultLoot": {
+      "bird_offhand_red_shield_start": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
+    "NameId": "upgrade_offhand_red_shield_start_protect_last",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_offhand_red_shield_start_protect_last",
+    "LocaBaseId": "upgrade_offhand_red_shield_start_protect",
+    "SortPriority": 2,
+    "ResultLoot": {
+      "bird_offhand_red_shield_start": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
+    "NameId": "upgrade_offhand_red_shield_introwheel_protect",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_offhand_red_shield_introwheel_protect",
+    "LocaBaseId": "upgrade_offhand_red_shield_introwheel_protect",
+    "SortPriority": 2,
+    "ResultLoot": {
+      "bird_offhand_red_shield_introwheel": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
+  },
+  {
+    "NameId": "upgrade_offhand_red_shield_introwheel_protect_last",
+    "ItemType": "CraftingRecipes",
+    "AssetBaseId": "upgrade_offhand_red_shield_introwheel_protect_last",
+    "LocaBaseId": "upgrade_offhand_red_shield_introwheel_protect",
+    "SortPriority": 2,
+    "ResultLoot": {
+      "bird_offhand_red_shield_introwheel": 1
+    },
+    "RecipeCategoryType": "OffHandEquipment"
   }
 ]

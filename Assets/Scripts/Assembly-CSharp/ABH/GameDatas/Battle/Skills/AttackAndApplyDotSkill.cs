@@ -66,6 +66,15 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		protected override void PreviewAfterHit(HealthPreviewContext ctx, ICombatant target, HealthChange hit, float chance)
+		{
+			// ShareableActionPart runs after damage was dealt (ActionsAfterDamageDealt skips a 0 damage hit)
+			if (hit != null && hit.Amount > 0)
+			{
+				ctx.AddDamageOverTime(target, ctx.Source.ModifiedAttack * m_DotModifier / 100f, Model.Balancing.EffectDuration, chance * m_DotChance / 100f, Model.Balancing.AssetId);
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

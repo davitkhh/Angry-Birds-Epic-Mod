@@ -77,8 +77,11 @@ namespace ABH.GameDatas.Battle.Skills
 			{
 				return 0f;
 			}
-			return attackers.Average(c => c.ModifiedAttack) * Param("damage_in_percent", fallbackPercent) / 100f;
+			return attackers.Average(c => c.ModifiedAttack) * Param("damage_in_percent", fallbackPercent) / 100f * Effectiveness;
 		}
+
+		// Average ComboMove.Effectiveness of the group, set by ComboMoveDirector before Perform.
+		public float Effectiveness = 1f;
 
 		// Through the regular damage triggers (buffs, shields, dodge, ...), with source as the attacker.
 		protected static float DealDamage(BattleGameData battle, ICombatant source, ICombatant target, float baseDamage)

@@ -1,0 +1,458 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_cupid_dark",
+ "name": "Dark Cupid",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_DarkCupid",
+     "name": "Headgear_DarkCupid",
+     "item": "Headgear_DarkCupid",
+     "w": 8,
+     "h": 8,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DarkCupid_Back",
+     "name": "Headgear_DarkCupid_Back",
+     "item": "Headgear_DarkCupid",
+     "w": 155,
+     "h": 114,
+     "pivot": [
+      -0.6482143,
+      -0.23672462
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DarkCupid",
+     "name": "MainHand_DarkCupid",
+     "item": "MainHand_DarkCupid",
+     "w": 124,
+     "h": 141,
+     "pivot": [
+      -0.27321428,
+      -0.14840426
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_8a719",
+   "origin": "pig_attack_minion_cupid_dark_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_cupid_dark_01",
+   "name": "Reaping Swing",
+   "desc": "Deals [ff0000]{value_1}[-] damage. The Dark Cupid is healed by [00a800]{value_8}[-] health for the next [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 25,
+    "dot_chance": 100,
+    "dot_damage_in_percent": 0,
+    "dot_heal_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+    },
+    "{value_8}": {
+     "expr": "((p(\"dot_heal_in_percent\")) / 100 * A)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"dot_chance\"))"
+    },
+    "{value_9}": {
+     "expr": "(p(\"dot_damage_in_percent\"))"
+    }
+   },
+   "template": "AttackAndApplyDotAndHealSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_595a9",
+   "origin": "pig_attack_minion_cupid_dark_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_cupid_dark_02",
+   "name": "Shattering Smite",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage and [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_5}[-] turn. All other enemies receive [ff0000]{value_7}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 250,
+    "charge": 3,
+    "collateral_damage_in_percent": 125,
+    "additional_enemies_affected": 2,
+    "GenericDamage": -1,
+    "chance": 100,
+    "collateral_stun_chance": 0,
+    "stun_duration": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_7}": {
+     "expr": "(A * ((p(\"collateral_damage_in_percent\")) / 100))"
+    }
+   },
+   "template": "AttackWithCollateralDamageAndStun",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_944e3",
+   "origin": "pig_passive_pig_headed_gen",
+   "type": "Passive",
+   "source": "pig_passive_pig_headed_gen",
+   "name": "Pig Headed",
+   "desc": "[0000ff]Passive:[-] Pig is stunned for [ff0000]{value_2}[-] turn after attacking.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "chance": 100,
+    "duration": 1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"duration\"))"
+    }
+   },
+   "template": "SufferStunOnAttack",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 170,
+  "attack": 25,
+  "sizeType": "Small",
+  "sizeScale": 1.3,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_cupid_dark",
+  "fingerprint": "575b8738891a3cc9c9ffd517566550fdb3e8943f",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_attack_minion_cupid_dark_01",
+     "pig_attack_minion_cupid_dark_02"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_minion_cupid_dark_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Dark Cupid",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_DarkCupid",
+       "name": "Headgear_DarkCupid",
+       "item": "Headgear_DarkCupid",
+       "w": 8,
+       "h": 8,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DarkCupid_Back",
+       "name": "Headgear_DarkCupid_Back",
+       "item": "Headgear_DarkCupid",
+       "w": 155,
+       "h": 114,
+       "pivot": [
+        -0.6482143,
+        -0.23672462
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_DarkCupid",
+       "name": "MainHand_DarkCupid",
+       "item": "MainHand_DarkCupid",
+       "w": 124,
+       "h": 141,
+       "pivot": [
+        -0.27321428,
+        -0.14840426
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 170,
+    "attack": 25,
+    "sizeType": "Small",
+    "sizeScale": 1.3,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_8a719",
+     "origin": "pig_attack_minion_cupid_dark_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_cupid_dark_01",
+     "name": "Reaping Swing",
+     "desc": "Deals [ff0000]{value_1}[-] damage. The Dark Cupid is healed by [00a800]{value_8}[-] health for the next [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 25,
+      "dot_chance": 100,
+      "dot_damage_in_percent": 0,
+      "dot_heal_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
+      },
+      "{value_8}": {
+       "expr": "((p(\"dot_heal_in_percent\")) / 100 * A)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"dot_chance\"))"
+      },
+      "{value_9}": {
+       "expr": "(p(\"dot_damage_in_percent\"))"
+      }
+     },
+     "template": "AttackAndApplyDotAndHealSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_595a9",
+     "origin": "pig_attack_minion_cupid_dark_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_cupid_dark_02",
+     "name": "Shattering Smite",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage and [00a800]{value_3}%[-] chance to stun target for [ff0000]{value_5}[-] turn. All other enemies receive [ff0000]{value_7}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 250,
+      "charge": 3,
+      "collateral_damage_in_percent": 125,
+      "additional_enemies_affected": 2,
+      "GenericDamage": -1,
+      "chance": 100,
+      "collateral_stun_chance": 0,
+      "stun_duration": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_7}": {
+       "expr": "(A * ((p(\"collateral_damage_in_percent\")) / 100))"
+      }
+     },
+     "template": "AttackWithCollateralDamageAndStun",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_944e3",
+     "origin": "pig_passive_pig_headed_gen",
+     "type": "Passive",
+     "source": "pig_passive_pig_headed_gen",
+     "name": "Pig Headed",
+     "desc": "[0000ff]Passive:[-] Pig is stunned for [ff0000]{value_2}[-] turn after attacking.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "chance": 100,
+      "duration": 1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"duration\"))"
+      }
+     },
+     "template": "SufferStunOnAttack",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

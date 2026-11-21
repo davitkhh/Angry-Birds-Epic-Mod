@@ -1,10 +1,10 @@
 using UnityEditor;
 
 // Toggle for the wave King DJ's Fog Machine fires (SoundWaveVisual.Style, stored in PlayerPrefs, so it also switches
-// mid-play): Tools/King DJ/Sound Wave Style/...
+// mid-play): Tools/Build/King DJ/Sound Wave Style/...
 public static class KingDJSoundWaveMenu
 {
-	private const string Root = "Tools/King DJ/Sound Wave Style/";
+	private const string Root = "Tools/Build/King DJ/Sound Wave Style/";
 
 	private const string PhysicallyAccurate = Root + "Physically Accurate";
 

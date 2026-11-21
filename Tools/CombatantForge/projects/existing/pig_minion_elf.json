@@ -113,6 +113,43 @@
    "template": "ReduceRageAttackSkill",
    "duration": 0,
    "design": ""
+  },
+  {
+   "uid": "zq9mgr3q",
+   "type": "Support",
+   "name": "Under the Missletoe",
+   "desc": "Heals [ff0000]{value_1}[-] random allies for [ff0000]{value_2}%[-] of their combined max health. The allies then share a gang-up for [ff0000]{value_3}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "design": "Heals 2 random allies for 20% of their combined HP. The allies then share a gang-up for 2 turns.",
+   "nameId": "pig_support_forge_pig_minion_elf__e0_under_the_missletoe",
+   "written": true,
+   "template": "UnderTheMissletoe",
+   "params": {
+    "target_count": 2,
+    "heal_in_percent": 20,
+    "damage_in_percent": 100,
+    "chance": 100
+   },
+   "duration": 2,
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"target_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"heal_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "D"
+    },
+    "{value_4}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"chance\"))"
+    }
+   }
   }
  ],
  "weapon": {
@@ -287,5 +324,38 @@
     }
    ]
   }
- }
+ },
+ "decisionOrder": {
+  "trees": [
+   {
+    "id": "auto0",
+    "name": "Main",
+    "on": true,
+    "pct": 100,
+    "kids": [
+     {
+      "id": "auto1",
+      "ref": "zq9mgr3q",
+      "w": 35,
+      "kids": []
+     },
+     {
+      "id": "pqhrq2kp",
+      "ref": "a0_108d1",
+      "w": 65,
+      "kids": [
+       {
+        "id": "posdz3fd",
+        "ref": "a0_108d1",
+        "w": 100,
+        "kids": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "active": "auto0"
+ },
+ "decisionBalance": true
 }

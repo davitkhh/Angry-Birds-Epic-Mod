@@ -1,0 +1,237 @@
+{
+ "id": "farquad",
+ "name": "Farquad",
+ "rig": "WizPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "5pl0kr1j",
+     "src": "c1363ce0bce06414a9ccf6387f6f95c5:Hair_Front",
+     "name": "Hair_Front",
+     "item": "Hair_Front",
+     "w": 108,
+     "h": 88,
+     "pivot": [
+      -0.23,
+      0.35
+     ],
+     "tx": -30.40512726431689,
+     "ty": 23.519204983865237,
+     "rot": 35.25844387444117,
+     "sx": 1.411062531387655,
+     "sy": 1.411062531387655,
+     "shear": 0
+    },
+    {
+     "uid": "ojbmhlhs",
+     "src": "b3be99ba2248482e85d4ab091aa7b1f5:Headgear_PirateBucket_1",
+     "name": "Headgear_PirateBucket_1",
+     "item": "Headgear_PirateBucket_1",
+     "w": 163,
+     "h": 166,
+     "pivot": [
+      -0.4619632,
+      -0.1403614
+     ],
+     "tx": -129.50448701980588,
+     "ty": 18.785070464205972,
+     "rot": 55.430700040463876,
+     "sx": 0.9775097492126963,
+     "sy": 0.9775097492126963,
+     "shear": 0,
+     "pair": "5lwoozbc"
+    },
+    {
+     "uid": "5u0tbaot",
+     "src": "b3be99ba2248482e85d4ab091aa7b1f5:Headgear_PirateBucket_2",
+     "name": "Headgear_PirateBucket_2",
+     "item": "Headgear_PirateBucket_2",
+     "w": 148,
+     "h": 149,
+     "pivot": [
+      -0.1756757,
+      -0.2785235
+     ],
+     "tx": -90.07247904617532,
+     "ty": 30.06369958298579,
+     "rot": 26.751801225228842,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "go1y8v6w"
+    }
+   ],
+   "hidden": false,
+   "active": "0pg3mfac"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "ey1x4h60",
+     "src": "c1363ce0bce06414a9ccf6387f6f95c5:Hair_Back",
+     "name": "Hair_Back",
+     "item": "Hair_Back",
+     "w": 46,
+     "h": 78,
+     "pivot": [
+      0.5,
+      0.5
+     ],
+     "tx": -42.855286793866185,
+     "ty": 8.558869173325895,
+     "rot": 35.26,
+     "sx": 1.41,
+     "sy": 1.41,
+     "shear": 0
+    },
+    {
+     "uid": "38xu54zm",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_DarkCupid_Back",
+     "name": "Headgear_DarkCupid_Back",
+     "item": "Headgear_DarkCupid",
+     "w": 155,
+     "h": 114,
+     "pivot": [
+      -0.6482143,
+      -0.23672462
+     ],
+     "tx": -3.288797003735283,
+     "ty": -2.185218334272548,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    },
+    {
+     "uid": "w86wmsz9",
+     "src": "b3be99ba2248482e85d4ab091aa7b1f5:Headgear_PirateBucket_1_Back",
+     "name": "Headgear_PirateBucket_1_Back",
+     "item": "Headgear_PirateBucket_1",
+     "w": 163,
+     "h": 166,
+     "pivot": [
+      -0.4619632,
+      -0.1403614
+     ],
+     "tx": -115.98250128896817,
+     "ty": 65.01276369907643,
+     "rot": 55.430700040463876,
+     "sx": 0.9775097492126963,
+     "sy": 0.9775097492126963,
+     "shear": 0,
+     "pair": "5lwoozbc"
+    },
+    {
+     "uid": "ra8i4ddb",
+     "src": "b3be99ba2248482e85d4ab091aa7b1f5:Headgear_PirateBucket_2_Back",
+     "name": "Headgear_PirateBucket_2_Back",
+     "item": "Headgear_PirateBucket_2",
+     "w": 148,
+     "h": 149,
+     "pivot": [
+      -0.1756757,
+      -0.2785235
+     ],
+     "tx": -80.11009555443528,
+     "ty": 71.33993283247423,
+     "rot": 26.751801225228842,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "go1y8v6w"
+    },
+    {
+     "uid": "utfh9a7w",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig_Back",
+     "name": "Headgear_SecurityPig_Back",
+     "item": "Headgear_SecurityPig",
+     "w": 38,
+     "h": 26,
+     "pivot": [
+      -0.14464286,
+      -0.26229396
+     ],
+     "tx": -33.19551803971953,
+     "ty": -85.63011116401182,
+     "rot": 22.80366454627719,
+     "sx": 1.255666493341008,
+     "sy": 1.255666493341008,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "utfh9a7w"
+  },
+  "Mouth": {
+   "layers": [
+    {
+     "uid": "w3gyb5zi",
+     "src": "4f39df70199f4cd9bd5256b3905eaa3c:MouthGangster",
+     "name": "MouthGangster",
+     "item": "MouthGangster",
+     "w": 152,
+     "h": 84,
+     "pivot": [
+      0,
+      -0.1
+     ],
+     "tx": -13.471730212417384,
+     "ty": 0.6528631127233453,
+     "rot": 0,
+     "sx": 0.7653824430644129,
+     "sy": 0.7653824430644129,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "w3gyb5zi"
+  },
+  "Cloud": {
+   "layers": [],
+   "hidden": true
+  },
+  "Shadow": {
+   "layers": [
+    {
+     "uid": "8obj272n",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:Shadow",
+     "name": "Shadow",
+     "item": "Shadow",
+     "w": 228,
+     "h": 67,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 0.5,
+     "sy": 0.5,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "8obj272n"
+  }
+ },
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 800,
+  "attack": 35,
+  "sizeType": "Large",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ }
+}

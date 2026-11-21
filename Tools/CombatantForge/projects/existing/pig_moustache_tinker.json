@@ -218,7 +218,7 @@
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 100.0,
+    "Percentage": 100,
     "ComboChain": [
      "pig_attack_moustache_tinker",
      "pig_support_moustache_tinker"

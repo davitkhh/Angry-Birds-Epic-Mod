@@ -1,0 +1,156 @@
+{
+ "id": "bucket_master",
+ "name": "Bucket Master",
+ "rig": "PigPirate",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "k80fnt94",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_PirateCaptain",
+     "name": "Headgear_PirateCaptain",
+     "item": "Headgear_PirateCaptain",
+     "w": 279,
+     "h": 200,
+     "pivot": [
+      0.06521868,
+      -0.1736892
+     ],
+     "tx": 47.474388805809895,
+     "ty": -14.115943344059588,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "129f8doj",
+     "hidden": false
+    },
+    {
+     "uid": "o2s6c5bh",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Antler",
+     "name": "Headgear_Antler",
+     "item": "Headgear_Antler",
+     "w": 310,
+     "h": 190,
+     "pivot": [
+      0.05892857,
+      -0.33651313
+     ],
+     "tx": 62.05540692418717,
+     "ty": -2.5593480427932036,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "s6rkgdmo",
+     "hidden": true
+    }
+   ],
+   "hidden": false,
+   "active": "k80fnt94"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "4eho0rsc",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_PirateCaptain_Back",
+     "name": "Headgear_PirateCaptain_Back",
+     "item": "Headgear_PirateCaptain",
+     "w": 197,
+     "h": 77,
+     "pivot": [
+      0.1821429,
+      0.1918831
+     ],
+     "tx": 47.474388805809895,
+     "ty": -14.115943344059588,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "129f8doj"
+    },
+    {
+     "uid": "4kq9cm9u",
+     "src": "81ef008026084a94a881cbb99fcdb71e:Headgear_Antler_Back",
+     "name": "Headgear_Antler_Back",
+     "item": "Headgear_Antler",
+     "w": 62,
+     "h": 68,
+     "pivot": [
+      1.7972546,
+      -0.18373004
+     ],
+     "tx": 62.05540692418717,
+     "ty": -2.5593480427932036,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "s6rkgdmo",
+     "hidden": true
+    }
+   ],
+   "hidden": false,
+   "active": "4kq9cm9u"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "5fr5gni6",
+     "src": "b3be99ba2248482e85d4ab091aa7b1f5:Headgear_PirateBucket_4",
+     "name": "Headgear_PirateBucket_4",
+     "item": "Headgear_PirateBucket_4",
+     "w": 147,
+     "h": 145,
+     "pivot": [
+      -0.1687075,
+      -0.482069
+     ],
+     "tx": 2.4544202406921727,
+     "ty": -29.97582283603967,
+     "rot": -137.04997408001194,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "5fr5gni6"
+  }
+ },
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 250,
+  "attack": 35,
+  "sizeType": "Large",
+  "sizeScale": 0.9,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "decisionOrder": {
+  "trees": [
+   {
+    "id": "auto0",
+    "name": "Main",
+    "on": true,
+    "pct": 100,
+    "kids": []
+   }
+  ],
+  "active": "auto0"
+ }
+}

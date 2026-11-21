@@ -1,8 +1,9 @@
 [ {
     "NameId": "merchant_001",
-    "Slots": 5,
+    "Slots": 6,
     "Categories": [
       "merchant_01_weapon_yellow",
+      "merchant_01_upgrade_red_shields",
       "merchant_01_trade_cobalt",
       "merchant_01_trade_wood",
       "merchant_01_trade_crates"
@@ -540,6 +541,7 @@
     "Categories": [
       "merchant_01_weapon_yellow",
       "merchant_01_emblem",
+      "merchant_01_upgrade_red_shields",
       "merchant_01_trade_cobalt",
       "merchant_01_trade_wood",
       "merchant_01_trade_crates",

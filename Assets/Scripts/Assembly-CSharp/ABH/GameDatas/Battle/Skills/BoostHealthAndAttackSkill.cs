@@ -96,6 +96,33 @@ namespace ABH.GameDatas.Battle.Skills
 			target.CombatantView.UpdateHealthBar();
 		}
 
+		// Maximum health grows by the bonus and the same amount is healed
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			if (ctx.Target.CombatantFaction != ctx.Source.CombatantFaction)
+			{
+				return;
+			}
+			var targets = Model.SkillParameters.ContainsKey("all") ? ctx.FactionOf(ctx.Target) : new List<ICombatant> { ctx.Target };
+			foreach (var skillTarget in targets.Where(t => t.IsAlive))
+			{
+				var bonus = 0;
+				if (m_BannerHealthPercent > 0f && skillTarget.IsBanner)
+				{
+					bonus = (int)(skillTarget.ModifiedHealth * (m_BannerHealthPercent / 100f));
+				}
+				else if (m_HealthPercent > 0f)
+				{
+					bonus = (int)(skillTarget.ModifiedHealth * (m_HealthPercent / 100f));
+				}
+				if (bonus > 0)
+				{
+					ctx.AddMaxHealth(skillTarget, bonus);
+					ctx.AddHeal(skillTarget, bonus);
+				}
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

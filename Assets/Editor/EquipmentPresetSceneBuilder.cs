@@ -116,7 +116,7 @@ public static class EquipmentPresetSceneBuilder
 		Build();
 	}
 
-	[MenuItem("Tools/Equipment Presets/Rebuild Window Scene")]
+	[MenuItem("Tools/Build/Equipment Presets/Rebuild Window Scene")]
 	public static void Build()
 	{
 		s_Log = new StringBuilder();
@@ -227,6 +227,19 @@ public static class EquipmentPresetSceneBuilder
 		for (var i = 0; i < tabList.arraySize; i++)
 		{
 			tabs.Add(tabList.GetArrayElementAtIndex(i).objectReferenceValue as OpenInventoryButton);
+		}
+		// Presets only hold class / main hand / off hand: drop the Trinkets tab and re-space the rest
+		// the way they sat before it was added (170 apart, centred on the tab row).
+		foreach (var trinketTab in tabs.Where(t => t.m_ItemType == ABH.Shared.Generic.InventoryItemType.Trinket).ToList())
+		{
+			tabs.Remove(trinketTab);
+			UnityEngine.Object.DestroyImmediate(trinketTab.gameObject);
+		}
+		var tabsInRow = tabs.OrderBy(t => t.transform.localPosition.x).ToList();
+		for (var i = 0; i < tabsInRow.Count; i++)
+		{
+			var p = tabsInRow[i].transform.localPosition;
+			tabsInRow[i].transform.localPosition = new Vector3((i - (tabsInRow.Count - 1) * 0.5f) * 170f, p.y, p.z);
 		}
 		Log("header anim: " + PathOf(headerAnimation) + ", categories anim: " + PathOf(categoriesAnimation) + ", grid anim: " + PathOf(itemGridAnimation));
 		Log("item panel: " + PathOf(itemPanel) + " clip " + itemPanel.GetComponent<UIPanel>().baseClipRegion + ", grid " + PathOf(itemGrid));

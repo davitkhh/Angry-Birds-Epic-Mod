@@ -1,0 +1,177 @@
+{
+ "kind": "existing",
+ "id": "pig_ghost_spirit",
+ "name": "Spirit",
+ "rig": "GhostPig",
+ "variant": "",
+ "slots": {},
+ "abilities": [
+  {
+   "uid": "a0_cc94c",
+   "origin": "pig_attack_ghost_spirit",
+   "type": "Attack",
+   "source": "pig_attack_ghost_spirit",
+   "name": "Scary Presence",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 30
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_6a28a",
+   "origin": "pig_passive_undead",
+   "type": "Passive",
+   "source": "pig_passive_undead",
+   "name": "Undead",
+   "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "revive_health_percent": 100,
+    "revive_duration": 2,
+    "pig_support_undead_revive_self": -1
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"revive_duration\"))"
+    }
+   },
+   "template": "Undead",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 100,
+  "attack": 10,
+  "sizeType": "Small",
+  "sizeScale": 0.75,
+  "strength": 1,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_ghost_spirit",
+  "fingerprint": "8eefd90c7c21bac7399522e3706783b98a3bb3c4",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_ghost_spirit"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Spirit",
+   "rig": "GhostPig",
+   "variant": "",
+   "slots": {},
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 100,
+    "attack": 10,
+    "sizeType": "Small",
+    "sizeScale": 0.75,
+    "strength": 1,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {}
+   },
+   "abilities": [
+    {
+     "uid": "a0_cc94c",
+     "origin": "pig_attack_ghost_spirit",
+     "type": "Attack",
+     "source": "pig_attack_ghost_spirit",
+     "name": "Scary Presence",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 30
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_6a28a",
+     "origin": "pig_passive_undead",
+     "type": "Passive",
+     "source": "pig_passive_undead",
+     "name": "Undead",
+     "desc": "[0000ff]Passive:[-] Revives [ff0000]{value_2}[-] turns after being knocked out.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "revive_health_percent": 100,
+      "revive_duration": 2,
+      "pig_support_undead_revive_self": -1
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"revive_duration\"))"
+      }
+     },
+     "template": "Undead",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

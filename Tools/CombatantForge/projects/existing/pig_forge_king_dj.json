@@ -136,18 +136,17 @@
  },
  "abilities": [
   {
-   "uid": "a0_0fcc3",
-   "origin": "pig_attack_forge_king_dj",
+   "uid": "a0_0a6a0",
+   "origin": "pig_attack_forge_king_dj_new_ability_2",
    "type": "Attack",
-   "source": "pig_attack_forge_king_dj",
+   "source": "pig_attack_forge_king_dj_new_ability_2",
    "name": "Hit Single",
    "desc": "Walks up to a single target and clobbers it at close range, dealing [ff0000]{value_1}[-] damage.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "Attack",
    "params": {
-    "damage_in_percent": 150,
-    "no_focus": 1
+    "damage_in_percent": 100
    },
    "values": {
     "{value_1}": {
@@ -163,77 +162,75 @@
      "expr": "p(\"charge\")"
     }
    },
-   "template": "WalkUpMeleeAttack",
+   "template": "SimpleAttackSkill",
    "duration": 0,
    "design": ""
   },
   {
-   "uid": "a1_a8c17",
-   "origin": "pig_attack_forge_king_dj_sound",
+   "uid": "a1_d6dd0",
+   "origin": "pig_attack_forge_king_dj_new_ability",
    "type": "Attack",
-   "source": "pig_attack_forge_king_dj_sound",
-   "name": "Fog Machine",
-   "desc": "Deals [ff0000]{value_1}[-] damage to a random target. The target can only perform a strict order of moves for [ff0000]{value_2}[-] turns. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
-   "color": "E55B5B",
-   "atlas": "Skills_Pigs_01",
-   "icon": "Attack",
-   "params": {
-    "damage_in_percent": 120,
-    "charge": 2,
-    "move_1": 0,
-    "move_2": 1,
-    "move_3": 1,
-    "move_4": 0,
-    "no_focus": 1
-   },
-   "values": {
-    "{value_1}": {
-     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
-    },
-    "{value_2}": {
-     "expr": "(D)"
-    },
-    "{value_3}": {
-     "expr": "(p(\"charge\"))"
-    }
-   },
-   "template": "AttackAndForceMoveOrder",
-   "duration": 4,
-   "design": ""
-  },
-  {
-   "uid": "a2_8ffbc",
-   "origin": "pig_attack_forge_king_dj_shrapnel",
-   "type": "Attack",
-   "source": "pig_attack_forge_king_dj_shrapnel",
+   "source": "pig_attack_forge_king_dj_new_ability",
    "name": "Booty Blast",
-   "desc": "Fires a shard at every enemy and [ff0000]{value_4}[-] extra, each dealing [ff0000]{value_1}[-] damage and stunning the target for [ff0000]{value_2}[-] turn. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
+   "desc": "Every enemy and an additional enemy take 130% damage and get stunned for 1 turn. Charge: 2 turns.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "Attack",
    "params": {
-    "damage_in_percent": 55,
-    "duration": 1,
-    "charge": 2,
-    "all": 1,
-    "extra_projectiles": 1,
-    "no_focus": 1
+    "damage_in_percent": 100,
+    "anim_clip": 6115402,
+    "anim_projectile": 662892,
+    "anim_ranged": 1
    },
    "values": {
     "{value_1}": {
      "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
     },
     "{value_2}": {
-     "expr": "(p(\"duration\"))"
-    },
-    "{value_3}": {
      "expr": "(p(\"charge\"))"
     },
     "{value_4}": {
-     "expr": "(Math.max(0, ((p(\"extra_projectiles\")))))"
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
     }
    },
-   "template": "MusicShrapnelVolley",
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_d6dd0",
+   "origin": "pig_attack_forge_king_dj_new_ability",
+   "type": "Attack",
+   "source": "pig_attack_forge_king_dj_new_ability",
+   "name": "Booty Blast",
+   "desc": "Every enemy and an additional enemy take 130% damage and get stunned for 1 turn. Charge: 2 turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "anim_clip": 6115402,
+    "anim_projectile": 662892,
+    "anim_ranged": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
    "duration": 0,
    "design": ""
   }
@@ -246,10 +243,10 @@
   "directProjectile": false
  },
  "stats": {
-  "hp": 1050,
-  "attack": 43,
+  "hp": 420,
+  "attack": 14,
   "sizeType": "Large",
-  "sizeScale": 1.7,
+  "sizeScale": 1,
   "strength": 10,
   "perLevelHealth": 0,
   "perLevelAttack": 0,
@@ -262,26 +259,26 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_forge_king_dj",
-  "fingerprint": "a971b81752c3b3cf159933e8629337b831fda8bd",
+  "fingerprint": "6617958f60896d3a23a8799704fdb16872f7bf8a",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 35,
+    "Percentage": 33.33,
     "ComboChain": [
-     "pig_attack_forge_king_dj"
+     "pig_attack_forge_king_dj_new_ability_2"
     ]
    },
    {
-    "Percentage": 30,
+    "Percentage": 33.33,
     "ComboChain": [
-     "pig_attack_forge_king_dj_sound"
+     "pig_attack_forge_king_dj_new_ability"
     ]
    },
    {
-    "Percentage": 30,
+    "Percentage": 33.33,
     "ComboChain": [
-     "pig_attack_forge_king_dj_shrapnel"
+     "pig_attack_forge_king_dj_new_ability"
     ]
    }
   ],
@@ -427,10 +424,10 @@
     "directProjectile": false
    },
    "stats": {
-    "hp": 1050,
-    "attack": 43,
+    "hp": 420,
+    "attack": 14,
     "sizeType": "Large",
-    "sizeScale": 1.7,
+    "sizeScale": 1,
     "strength": 10,
     "perLevelHealth": 0,
     "perLevelAttack": 0,
@@ -442,18 +439,17 @@
    },
    "abilities": [
     {
-     "uid": "a0_0fcc3",
-     "origin": "pig_attack_forge_king_dj",
+     "uid": "a0_0a6a0",
+     "origin": "pig_attack_forge_king_dj_new_ability_2",
      "type": "Attack",
-     "source": "pig_attack_forge_king_dj",
+     "source": "pig_attack_forge_king_dj_new_ability_2",
      "name": "Hit Single",
      "desc": "Walks up to a single target and clobbers it at close range, dealing [ff0000]{value_1}[-] damage.",
      "color": "E55B5B",
      "atlas": "Skills_Pigs_01",
      "icon": "Attack",
      "params": {
-      "damage_in_percent": 150,
-      "no_focus": 1
+      "damage_in_percent": 100
      },
      "values": {
       "{value_1}": {
@@ -469,77 +465,75 @@
        "expr": "p(\"charge\")"
       }
      },
-     "template": "WalkUpMeleeAttack",
+     "template": "SimpleAttackSkill",
      "duration": 0,
      "design": ""
     },
     {
-     "uid": "a1_a8c17",
-     "origin": "pig_attack_forge_king_dj_sound",
+     "uid": "a1_d6dd0",
+     "origin": "pig_attack_forge_king_dj_new_ability",
      "type": "Attack",
-     "source": "pig_attack_forge_king_dj_sound",
-     "name": "Fog Machine",
-     "desc": "Deals [ff0000]{value_1}[-] damage to a random target. The target can only perform a strict order of moves for [ff0000]{value_2}[-] turns. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
-     "color": "E55B5B",
-     "atlas": "Skills_Pigs_01",
-     "icon": "Attack",
-     "params": {
-      "damage_in_percent": 120,
-      "charge": 2,
-      "move_1": 0,
-      "move_2": 1,
-      "move_3": 1,
-      "move_4": 0,
-      "no_focus": 1
-     },
-     "values": {
-      "{value_1}": {
-       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
-      },
-      "{value_2}": {
-       "expr": "(D)"
-      },
-      "{value_3}": {
-       "expr": "(p(\"charge\"))"
-      }
-     },
-     "template": "AttackAndForceMoveOrder",
-     "duration": 4,
-     "design": ""
-    },
-    {
-     "uid": "a2_8ffbc",
-     "origin": "pig_attack_forge_king_dj_shrapnel",
-     "type": "Attack",
-     "source": "pig_attack_forge_king_dj_shrapnel",
+     "source": "pig_attack_forge_king_dj_new_ability",
      "name": "Booty Blast",
-     "desc": "Fires a shard at every enemy and [ff0000]{value_4}[-] extra, each dealing [ff0000]{value_1}[-] damage and stunning the target for [ff0000]{value_2}[-] turn. [0000ff]Charge:[-] [ff0000]{value_3}[-] turns.",
+     "desc": "Every enemy and an additional enemy take 130% damage and get stunned for 1 turn. Charge: 2 turns.",
      "color": "E55B5B",
      "atlas": "Skills_Pigs_01",
      "icon": "Attack",
      "params": {
-      "damage_in_percent": 55,
-      "duration": 1,
-      "charge": 2,
-      "all": 1,
-      "extra_projectiles": 1,
-      "no_focus": 1
+      "damage_in_percent": 100,
+      "anim_clip": 6115402,
+      "anim_projectile": 662892,
+      "anim_ranged": 1
      },
      "values": {
       "{value_1}": {
        "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
       },
       "{value_2}": {
-       "expr": "(p(\"duration\"))"
-      },
-      "{value_3}": {
        "expr": "(p(\"charge\"))"
       },
       "{value_4}": {
-       "expr": "(Math.max(0, ((p(\"extra_projectiles\")))))"
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
       }
      },
-     "template": "MusicShrapnelVolley",
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_d6dd0",
+     "origin": "pig_attack_forge_king_dj_new_ability",
+     "type": "Attack",
+     "source": "pig_attack_forge_king_dj_new_ability",
+     "name": "Booty Blast",
+     "desc": "Every enemy and an additional enemy take 130% damage and get stunned for 1 turn. Charge: 2 turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "anim_clip": 6115402,
+      "anim_projectile": 662892,
+      "anim_ranged": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
      "duration": 0,
      "design": ""
     }

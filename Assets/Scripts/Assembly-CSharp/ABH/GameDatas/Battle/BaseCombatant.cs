@@ -104,11 +104,21 @@ namespace ABH.GameDatas.Battle
 			}
 		}
 
+		// the Forge's Ability Decision Order trees: one picked for this battle (ForgeDecisionTrees)
+		private List<AiCombo> m_TreeSource;
+		private List<AiCombo> m_TreeCombos;
+
 		public virtual List<AiCombo> AiCombos
 		{
 			get
 			{
-				return Model.SkillCombos;
+				var all = Model.SkillCombos;
+				if (all != m_TreeSource || (all != null && m_TreeCombos == null))
+				{
+					m_TreeSource = all;
+					m_TreeCombos = ForgeDecisionTrees.Pick(all);
+				}
+				return m_TreeCombos;
 			}
 		}
 

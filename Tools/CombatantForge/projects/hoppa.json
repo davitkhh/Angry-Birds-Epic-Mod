@@ -1,0 +1,49 @@
+{
+ "id": "hoppa",
+ "name": "Hoppa",
+ "rig": "PigDrone",
+ "variant": "spring",
+ "slots": {},
+ "abilities": [
+  {
+   "uid": "9h3on9yz",
+   "type": "Combo",
+   "name": "Bounce",
+   "desc": "Click here to write what the tooltip says.",
+   "color": "CD7936",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "",
+   "comboId": "new_ability",
+   "recipes": [
+    {
+     "uid": "4036liho",
+     "ids": [
+      "new_ability"
+     ],
+     "design": ""
+    }
+   ]
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 70,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ }
+}

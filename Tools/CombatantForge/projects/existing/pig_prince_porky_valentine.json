@@ -57,43 +57,149 @@
  "abilities": [
   {
    "uid": "a0_8baa0",
-   "origin": "pig_attack_prince_porky_02",
+   "origin": "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal",
    "type": "Attack",
    "source": "pig_attack_prince_porky_02",
-   "name": "Vicious Backstab",
-   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+   "name": "Vicious Heartbreak",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Target receives [ff0000]{value_6}%[-] less healing for [ff0000]{value_2}[-] turns.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "Attack",
    "params": {
     "damage_in_percent": 100,
-    "attack_count": 3
+    "attack_count": 3,
+    "chance": 100,
+    "healing_debuff": 30
    },
    "values": {
     "{value_1}": {
      "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
     },
-    "{value_2}": {
+    "{value_5}": {
      "expr": "(p(\"charge\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"healing_debuff\"))"
     },
     "{value_4}": {
      "expr": "(p(\"attack_count\"))"
     },
+    "{value_2}": {
+     "expr": "D"
+    },
     "{value_3}": {
-     "expr": "p(\"charge\")"
+     "expr": "(p(\"chance\"))"
     }
    },
-   "template": "SimpleAttackSkill",
+   "template": "AttackAndApplyHealingDebuffSkill",
+   "duration": 2,
+   "design": "Target recieves 30% less healing for 2 turns",
+   "nameId": "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal",
+   "written": true,
+   "effects": [
+    {
+     "timing": "Movement",
+     "delay": 0.1,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_WeaponEffect_Strike_Medium",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": true,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "",
+     "onHit": true,
+     "onHitPrefix": "SkillFX_Hit_Triple",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Bottom",
+     "prefab": "Cmaera_Shake_Subtle",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Hit_Roses_Porky",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_BodyAirstream_Small",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0.25,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Curse_ReducedHealing",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    }
+   ]
+  },
+  {
+   "uid": "a7pks3o2",
+   "type": "Attack",
+   "source": "pig_attack_prince_porky_duel",
+   "name": "Just You and I",
+   "desc": "Isolates the target for a duel. Lasts [ff0000]{value_1}[-] turns. Isolated targets take [ff0000]{value_2}%[-] extra damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "duel_turns": 3,
+    "damage_taken_bonus_in_percent": 15
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+    },
+    "{value_2}": {
+     "expr": "((p(\"damage_taken_bonus_in_percent\")))"
+    }
+   },
+   "template": "DuelKnockback",
    "duration": 0,
-   "design": ""
+   "design": "Isolated targets take 15% extra damage",
+   "nameId": "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i",
+   "written": true,
+   "origin": "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i"
   },
   {
    "uid": "a1_cf112",
-   "origin": "pig_support_prince_porky_02",
+   "origin": "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
    "type": "Support",
    "source": "pig_support_prince_porky_02",
    "name": "Tit for Tat",
-   "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "desc": "Increases damage dealt and taken from all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
    "color": "8CCB50",
    "atlas": "Skills_Pigs_01",
    "icon": "Blessing",
@@ -115,7 +221,41 @@
    },
    "template": "IncreaseDamageDealtAndReceived",
    "duration": 3,
-   "design": ""
+   "design": "",
+   "nameId": "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat"
+  },
+  {
+   "uid": "efrg94d0",
+   "type": "Support",
+   "name": "All For You",
+   "desc": "Prince Porky takes damage instead of the target. If the target is attacked, Porky counters for [ff0000]{value_4}x {value_1}[-] damage.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "design": "Prince Porky takes damage instead of the target. If the target is attacked, Prince Porky counters for 3x120% damage.",
+   "nameId": "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you",
+   "written": true,
+   "template": "ShelterAndCounterAlly",
+   "params": {
+    "counter_damage": 120,
+    "chance": 100
+   },
+   "duration": 2,
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"counter_damage\") / 100 * q(\"damage_in_percent\", 100) / 100 * A"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_4}": {
+     "expr": "Math.max(1, q(\"attack_count\", 1))"
+    }
+   },
+   "origin": "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you"
   },
   {
    "uid": "a2_995b7",
@@ -166,16 +306,24 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_prince_porky_valentine",
-  "fingerprint": "5f2a11109bf691153abe1b9f7df7d80d73c5472c",
+  "fingerprint": "9df8300b448d053eb5bb8900ab597d7fe5a14cd9",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 100,
+    "Percentage": 50,
     "ComboChain": [
-     "pig_support_prince_porky_02",
-     "pig_attack_prince_porky_02",
-     "pig_attack_prince_porky_02"
+     "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
+     "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you",
+     "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
+     "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you",
+     "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i"
     ]
    }
   ],
@@ -257,43 +405,149 @@
    "abilities": [
     {
      "uid": "a0_8baa0",
-     "origin": "pig_attack_prince_porky_02",
+     "origin": "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal",
      "type": "Attack",
      "source": "pig_attack_prince_porky_02",
-     "name": "Vicious Backstab",
-     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+     "name": "Vicious Heartbreak",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Target receives [ff0000]{value_6}%[-] less healing for [ff0000]{value_2}[-] turns.",
      "color": "E55B5B",
      "atlas": "Skills_Pigs_01",
      "icon": "Attack",
      "params": {
       "damage_in_percent": 100,
-      "attack_count": 3
+      "attack_count": 3,
+      "chance": 100,
+      "healing_debuff": 30
      },
      "values": {
       "{value_1}": {
        "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
       },
-      "{value_2}": {
+      "{value_5}": {
        "expr": "(p(\"charge\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"healing_debuff\"))"
       },
       "{value_4}": {
        "expr": "(p(\"attack_count\"))"
       },
+      "{value_2}": {
+       "expr": "D"
+      },
       "{value_3}": {
-       "expr": "p(\"charge\")"
+       "expr": "(p(\"chance\"))"
       }
      },
-     "template": "SimpleAttackSkill",
+     "template": "AttackAndApplyHealingDebuffSkill",
+     "duration": 2,
+     "design": "Target recieves 30% less healing for 2 turns",
+     "nameId": "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal",
+     "written": true,
+     "effects": [
+      {
+       "timing": "Movement",
+       "delay": 0.1,
+       "target": "Origin",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_WeaponEffect_Strike_Medium",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": true,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "",
+       "onHit": true,
+       "onHitPrefix": "SkillFX_Hit_Triple",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "GlobalCamera",
+       "anchor": "Bottom",
+       "prefab": "Cmaera_Shake_Subtle",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "SkillFX_Hit_Roses_Porky",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Movement",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "Center",
+       "prefab": "SkillFX_Generic_BodyAirstream_Small",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0.25,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "SkillFX_Curse_ReducedHealing",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {}
+      }
+     ]
+    },
+    {
+     "uid": "a7pks3o2",
+     "type": "Attack",
+     "source": "pig_attack_prince_porky_duel",
+     "name": "Just You and I",
+     "desc": "Isolates the target for a duel. Lasts [ff0000]{value_1}[-] turns. Isolated targets take [ff0000]{value_2}%[-] extra damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "duel_turns": 3,
+      "damage_taken_bonus_in_percent": 15
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+      },
+      "{value_2}": {
+       "expr": "((p(\"damage_taken_bonus_in_percent\")))"
+      }
+     },
+     "template": "DuelKnockback",
      "duration": 0,
-     "design": ""
+     "design": "Isolated targets take 15% extra damage",
+     "nameId": "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i",
+     "written": true,
+     "origin": "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i"
     },
     {
      "uid": "a1_cf112",
-     "origin": "pig_support_prince_porky_02",
+     "origin": "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
      "type": "Support",
      "source": "pig_support_prince_porky_02",
      "name": "Tit for Tat",
-     "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "desc": "Increases damage dealt and taken from all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
      "color": "8CCB50",
      "atlas": "Skills_Pigs_01",
      "icon": "Blessing",
@@ -315,7 +569,41 @@
      },
      "template": "IncreaseDamageDealtAndReceived",
      "duration": 3,
-     "design": ""
+     "design": "",
+     "nameId": "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat"
+    },
+    {
+     "uid": "efrg94d0",
+     "type": "Support",
+     "name": "All For You",
+     "desc": "Prince Porky takes damage instead of the target. If the target is attacked, Porky counters for [ff0000]{value_4}x {value_1}[-] damage.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "design": "Prince Porky takes damage instead of the target. If the target is attacked, Prince Porky counters for 3x120% damage.",
+     "nameId": "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you",
+     "written": true,
+     "template": "ShelterAndCounterAlly",
+     "params": {
+      "counter_damage": 120,
+      "chance": 100
+     },
+     "duration": 2,
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"counter_damage\") / 100 * q(\"damage_in_percent\", 100) / 100 * A"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_4}": {
+       "expr": "Math.max(1, q(\"attack_count\", 1))"
+      }
+     },
+     "origin": "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you"
     },
     {
      "uid": "a2_995b7",
@@ -343,5 +631,6 @@
     }
    ]
   }
- }
+ },
+ "publishedAt": "2026-11-13 16:57"
 }

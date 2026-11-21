@@ -1,0 +1,468 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_rogue_dynamite",
+ "name": "Dynamite Rogue",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue",
+     "name": "Headgear_Rogue",
+     "item": "Headgear_Rogue",
+     "w": 148,
+     "h": 99,
+     "pivot": [
+      -0.145,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue_Back",
+     "name": "Headgear_Rogue_Back",
+     "item": "Headgear_Rogue",
+     "w": 148,
+     "h": 93,
+     "pivot": [
+      -0.15,
+      -0.15
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Pyrobolist",
+     "name": "MainHand_Pyrobolist",
+     "item": "MainHand_Pyrobolist",
+     "w": 52,
+     "h": 136,
+     "pivot": [
+      -0.41529736,
+      -0.02126654
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_e0b7f",
+   "origin": "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_dynamite",
+   "name": "Kablowey",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 90,
+    "all": 1,
+    "charge": 2,
+    "anim_projectile": 16310667,
+    "anim_impact_on_hit": 1,
+    "anim_ranged": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": "",
+   "ranged": "ranged",
+   "projectile": "ForgeProjectile_dynamite",
+   "impactOnHit": true,
+   "effects": [
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "TargetArea",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_Spell_Explosion_Large",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_Spell_Explosion_Large",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Center",
+     "prefab": "Camera_Shake_Medium",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    }
+   ],
+   "anim": "",
+   "nameId": "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey"
+  },
+  {
+   "uid": "48ru1bfu",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_02",
+   "name": "Sneer",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Laughs moronically. No effect at all!",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Sneer",
+   "params": {
+    "laugh": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": "",
+   "paramEdits": {
+    "charge": 2
+   },
+   "nameId": "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer",
+   "origin": "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 110,
+  "attack": 20,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_rogue_dynamite",
+  "fingerprint": "716968a6d33e61f748d1b04075b812165f92863d",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 80.0,
+    "ComboChain": [
+     "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey"
+    ]
+   },
+   {
+    "Percentage": 20.0,
+    "ComboChain": [
+     "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Dynamite Rogue",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue",
+       "name": "Headgear_Rogue",
+       "item": "Headgear_Rogue",
+       "w": 148,
+       "h": 99,
+       "pivot": [
+        -0.145,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Rogue_Back",
+       "name": "Headgear_Rogue_Back",
+       "item": "Headgear_Rogue",
+       "w": 148,
+       "h": 93,
+       "pivot": [
+        -0.15,
+        -0.15
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Pyrobolist",
+       "name": "MainHand_Pyrobolist",
+       "item": "MainHand_Pyrobolist",
+       "w": 52,
+       "h": 136,
+       "pivot": [
+        -0.41529736,
+        -0.02126654
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 110,
+    "attack": 20,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_e0b7f",
+     "origin": "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_dynamite",
+     "name": "Kablowey",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 90,
+      "all": 1,
+      "charge": 2,
+      "anim_projectile": 16310667,
+      "anim_impact_on_hit": 1,
+      "anim_ranged": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": "",
+     "ranged": "ranged",
+     "projectile": "ForgeProjectile_dynamite",
+     "impactOnHit": true,
+     "effects": [
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "TargetArea",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_Spell_Explosion_Large",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_Spell_Explosion_Large",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "GlobalCamera",
+       "anchor": "Center",
+       "prefab": "Camera_Shake_Medium",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {}
+      }
+     ],
+     "anim": "",
+     "nameId": "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey"
+    },
+    {
+     "uid": "48ru1bfu",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_02",
+     "name": "Sneer",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Laughs moronically. No effect at all!",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Sneer",
+     "params": {
+      "laugh": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_chance\"))"
+      }
+     },
+     "template": "DoNothingSkill",
+     "duration": 0,
+     "design": "",
+     "paramEdits": {
+      "charge": 2
+     },
+     "nameId": "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer",
+     "origin": "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
+    }
+   ]
+  }
+ },
+ "publishedAt": "2026-11-17 17:34",
+ "decisionBalance": true,
+ "decisionOrder": {
+  "trees": [
+   {
+    "id": "auto0",
+    "name": "Main",
+    "on": true,
+    "pct": 100,
+    "kids": [
+     {
+      "id": "auto1",
+      "ref": "a0_e0b7f",
+      "w": 80,
+      "kids": []
+     },
+     {
+      "id": "auto2",
+      "ref": "48ru1bfu",
+      "w": 20,
+      "kids": []
+     }
+    ]
+   }
+  ],
+  "active": "auto0"
+ }
+}

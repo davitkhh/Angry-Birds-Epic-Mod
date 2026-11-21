@@ -7681,5 +7681,83 @@
     "ThirdMaterialAmount": 4,
     "FallbackItemName": "gold",
     "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_offhand_red_shield_start_protect_01",
+    "Level": 1,
+    "AppliedItemNameId": "upgrade_offhand_red_shield_start_protect",
+    "FirstMaterialNameId": "resource_cobalt_stone",
+    "FirstMaterialAmount": 3,
+    "SecondMaterialNameId": "",
+    "SecondMaterialAmount": 0,
+    "ThirdMaterialNameId": "",
+    "ThirdMaterialAmount": 0,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_offhand_red_shield_start_protect_02",
+    "Level": 2,
+    "AppliedItemNameId": "upgrade_offhand_red_shield_start_protect",
+    "FirstMaterialNameId": "resource_cobalt_stone",
+    "FirstMaterialAmount": 6,
+    "SecondMaterialNameId": "",
+    "SecondMaterialAmount": 0,
+    "ThirdMaterialNameId": "",
+    "ThirdMaterialAmount": 0,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_offhand_red_shield_start_protect_last_01",
+    "Level": 1,
+    "AppliedItemNameId": "upgrade_offhand_red_shield_start_protect_last",
+    "FirstMaterialNameId": "resource_cobalt_stone",
+    "FirstMaterialAmount": 6,
+    "SecondMaterialNameId": "",
+    "SecondMaterialAmount": 0,
+    "ThirdMaterialNameId": "",
+    "ThirdMaterialAmount": 0,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_offhand_red_shield_introwheel_protect_01",
+    "Level": 1,
+    "AppliedItemNameId": "upgrade_offhand_red_shield_introwheel_protect",
+    "FirstMaterialNameId": "resource_cobalt_stone",
+    "FirstMaterialAmount": 7,
+    "SecondMaterialNameId": "",
+    "SecondMaterialAmount": 0,
+    "ThirdMaterialNameId": "",
+    "ThirdMaterialAmount": 0,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_offhand_red_shield_introwheel_protect_02",
+    "Level": 2,
+    "AppliedItemNameId": "upgrade_offhand_red_shield_introwheel_protect",
+    "FirstMaterialNameId": "resource_cobalt_stone",
+    "FirstMaterialAmount": 14,
+    "SecondMaterialNameId": "",
+    "SecondMaterialAmount": 0,
+    "ThirdMaterialNameId": "",
+    "ThirdMaterialAmount": 0,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
+  },
+  {
+    "NameId": "cost_upgrade_offhand_red_shield_introwheel_protect_last_01",
+    "Level": 1,
+    "AppliedItemNameId": "upgrade_offhand_red_shield_introwheel_protect_last",
+    "FirstMaterialNameId": "resource_cobalt_stone",
+    "FirstMaterialAmount": 14,
+    "SecondMaterialNameId": "",
+    "SecondMaterialAmount": 0,
+    "ThirdMaterialNameId": "",
+    "ThirdMaterialAmount": 0,
+    "FallbackItemName": "gold",
+    "FallbackItemCount": 10
   }
 ]

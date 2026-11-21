@@ -86,7 +86,7 @@ public static class McCoolShopPeekBuilder
 		Run(mode);
 	}
 
-	[MenuItem("Tools/McCool Shop Peek/Build")]
+	[MenuItem("Tools/Build/McCool Shop Peek/Build")]
 	public static void Build()
 	{
 		Run("build");

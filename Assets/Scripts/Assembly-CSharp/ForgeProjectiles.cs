@@ -268,7 +268,22 @@ public class ForgeProjectileRunner : MonoBehaviour
 		public float stopT;
 		public Vector2 stopAt;
 		public float lingerT;
-		public TrailRenderer ribbon;
+	}
+
+	// Anything an air trail can follow: a fired shot, or one piece of another component (an impact spark flying off,
+	// a piece of another trail...), with where it is over time
+	private class Track
+	{
+		public Flight f;
+		public ForgeProjectiles.Comp pc;
+		public Vector2 p;
+		public float seed;
+		public float k;
+		public float turn;
+		public float t0;
+		public float stopT;
+		public float dir;
+		public float tseed;
 	}
 
 	private struct Shot
@@ -362,11 +377,23 @@ public class ForgeProjectileRunner : MonoBehaviour
 	private float m_Over;
 	private bool m_Ricochet;
 	private Dictionary<int, List<Flight>> m_Shots = new Dictionary<int, List<Flight>>();
+	private readonly Dictionary<int, List<Track>> m_Tracks = new Dictionary<int, List<Track>>();
+	private readonly Dictionary<long, TrailRenderer> m_Ribbons = new Dictionary<long, TrailRenderer>();
 	private readonly Dictionary<int, List<SpriteRenderer>> m_Pools = new Dictionary<int, List<SpriteRenderer>>();
 	private readonly Dictionary<int, int> m_Used = new Dictionary<int, int>();
 
 	// slow motion components that have gone off (component, shot, event)
 	private readonly HashSet<int> m_SlowDone = new HashSet<int>();
+
+	// slow motions that have gone off and will be over at (unscaled) time at: their "slow motion ends" event
+	private class SlowEnd
+	{
+		public float at;
+		public Vector2 p;
+		public long key;
+	}
+
+	private readonly List<SlowEnd> m_SlowEnds = new List<SlowEnd>();
 
 	private static float Rand(float a, float b, float c)
 	{
@@ -513,6 +540,10 @@ public class ForgeProjectileRunner : MonoBehaviour
 					firstHit = Mathf.Min(firstHit, f.t0 + f.T);
 				}
 			}
+		}
+		for (var ci = 0; ci < def.components.Length; ci++)
+		{
+			TracksOf(ci, new HashSet<int>());
 		}
 		m_Over = 0f;
 		Simulate(0f);
@@ -677,12 +708,140 @@ public class ForgeProjectileRunner : MonoBehaviour
 		return true;
 	}
 
+	// What a component leaves for an air trail to follow (see Track); worked out once, when it is fired
+	private List<Track> TracksOf(int ci, HashSet<int> building)
+	{
+		List<Track> outList;
+		if (m_Tracks.TryGetValue(ci, out outList))
+		{
+			return outList;
+		}
+		outList = new List<Track>();
+		if (ci < 0 || ci >= m_Def.components.Length || building.Contains(ci))
+		{
+			return outList;
+		}
+		var c = m_Def.components[ci];
+		if (c.spawn == "fire")
+		{
+			List<Flight> own;
+			if (m_Shots.TryGetValue(ci, out own))
+			{
+				foreach (var f in own)
+				{
+					outList.Add(new Track { f = f, t0 = f.t0, stopT = f.stopT, dir = f.dir, tseed = f.ci * 31 + f.k });
+				}
+			}
+			m_Tracks[ci] = outList;
+			return outList;
+		}
+		if (c.type == "slowmo" || (c.spawn == "trail" && c.style == "ribbon"))
+		{
+			m_Tracks[ci] = outList;
+			return outList;
+		}
+		building.Add(ci);
+		if (c.spawn == "trail")
+		{
+			var rate = Mathf.Max(1f, c.rate);
+			foreach (var f in TracksOf(c.of, building))
+			{
+				var parent = f;
+				TrailPieces(c, parent, rate, parent.t0, parent.stopT, (s, j, turn) => AddPieceTrack(outList, c, ci, s.p, j / rate, parent.tseed, j, turn, parent.dir));
+			}
+		}
+		else
+		{
+			List<Flight> parents;
+			if (c.of >= 0 && m_Shots.TryGetValue(c.of, out parents))
+			{
+				foreach (var f in parents)
+				{
+					foreach (var ev in f.events)
+					{
+						if (ev.kind != c.spawn)
+						{
+							continue;
+						}
+						var seed = f.ci * 31 + f.k + ev.t * 7f;
+						var many = Mathf.Max(1, Mathf.RoundToInt(Pick(c, "count", seed, 0, 11)));
+						for (var k = 0; k < many; k++)
+						{
+							AddPieceTrack(outList, c, ci, ev.p, ev.t, seed, k, ev.rot, f.dir);
+						}
+					}
+				}
+			}
+		}
+		building.Remove(ci);
+		m_Tracks[ci] = outList;
+		return outList;
+	}
+
+	private void AddPieceTrack(List<Track> list, ForgeProjectiles.Comp c, int ci, Vector2 p, float ts, float seed, float k, float turn, float dir)
+	{
+		var own = Mathf.Max(0.02f, Pick(c, "life", seed, k, 5));
+		list.Add(new Track { pc = c, p = p, seed = seed, k = k, turn = turn, t0 = ts, stopT = ts + own, dir = dir, tseed = seed * 1.37f + k * 0.731f + ci * 17.3f });
+	}
+
+	private bool TrackAt(Track tr, float t, out Shot shot)
+	{
+		if (tr.f != null)
+		{
+			return ShotAt(tr.f, t, out shot);
+		}
+		shot = default(Shot);
+		Vector2 pos;
+		float rot, sx, sy, alpha;
+		if (!PieceAt(tr.pc, tr.p, t - tr.t0, tr.seed, tr.k, tr.turn, out pos, out rot, out sx, out sy, out alpha))
+		{
+			return false;
+		}
+		shot = new Shot { p = pos, rot = rot, alpha = alpha };
+		return true;
+	}
+
+	// The pieces an air trail leaves behind what it follows between two times: each one's place, index and turn
+	private void TrailPieces(ForgeProjectiles.Comp c, Track f, float rate, float from, float to, Action<Shot, int, float> fn)
+	{
+		var first = Mathf.CeilToInt(from * rate);
+		var last = Mathf.FloorToInt(to * rate);
+		for (var j = first; j <= last; j++)
+		{
+			Shot s;
+			if (!TrackAt(f, j / rate, out s))
+			{
+				continue;
+			}
+			var turn = 0f;
+			if (c.trailAlign)
+			{
+				Shot s2;
+				if (!TrackAt(f, j / rate + 0.004f, out s2))
+				{
+					s2 = s;
+				}
+				var ddx = s2.p.x - s.p.x;
+				turn = Mathf.Atan2(s2.p.y - s.p.y, ddx != 0f ? ddx : f.dir) - Mathf.Atan2(0f, f.dir);
+			}
+			fn(s, j, turn);
+		}
+	}
+
 	private void Update()
 	{
 		m_Clock += Time.deltaTime * LocalScale();
 		var t = m_Clock;
 		Simulate(t);
-		if (t > m_Over + 0.1f)
+		for (var i = m_SlowEnds.Count - 1; i >= 0; i--)
+		{
+			if (Time.unscaledTime >= m_SlowEnds[i].at)
+			{
+				Emit(ForgeEffectExtras.TimingSlowMotionEnd, m_SlowEnds[i].p, m_SlowEnds[i].key);
+				m_SlowEnds.RemoveAt(i);
+			}
+		}
+		if (t > m_Over + 0.1f && m_SlowEnds.Count == 0)
 		{
 			Destroy(gameObject);
 		}
@@ -724,10 +883,23 @@ public class ForgeProjectileRunner : MonoBehaviour
 
 	private void Piece(ForgeProjectiles.Comp c, int ci, Vector2 p, float age, float seed, float k, float turn)
 	{
+		Vector2 pos;
+		float rot, sx, sy, alpha;
+		if (PieceAt(c, p, age, seed, k, turn, out pos, out rot, out sx, out sy, out alpha))
+		{
+			Draw(ci, pos, rot, sx, sy, alpha);
+		}
+	}
+
+	// Where a piece left at p is when it is age seconds old, and how it looks; false once it is gone
+	private bool PieceAt(ForgeProjectiles.Comp c, Vector2 p, float age, float seed, float k, float turn, out Vector2 pos, out float rot, out float sx, out float sy, out float alpha)
+	{
+		pos = p;
+		rot = sx = sy = alpha = 0f;
 		var own = Mathf.Max(0.02f, Pick(c, "life", seed, k, 5));
 		if (age > own || age < 0f)
 		{
-			return;
+			return false;
 		}
 		var a = Mathf.Min(1f, age / own);
 		var ang = Rand(seed, k, 1) * Mathf.PI * 2f;
@@ -737,7 +909,12 @@ public class ForgeProjectileRunner : MonoBehaviour
 		var sc = Mathf.Lerp(Pick(c, "scaleStart", seed, k, 8), Pick(c, "scaleEnd", seed, k, 9), a);
 		var q = c.squash * Mathf.Exp(-5f * a) * Mathf.Cos(14f * a);
 		var randomTurn = c.randomTurn ? Rand(seed, k, 3) * Mathf.PI * 2f : 0f;
-		Draw(ci, new Vector2(px, py), turn + randomTurn + Pick(c, "spin", seed, k, 10) * age * Mathf.Deg2Rad, sc * (1f + q), sc * (1f - q), c.fade ? 1f - a : 1f);
+		pos = new Vector2(px, py);
+		rot = turn + randomTurn + Pick(c, "spin", seed, k, 10) * age * Mathf.Deg2Rad;
+		sx = sc * (1f + q);
+		sy = sc * (1f - q);
+		alpha = c.fade ? 1f - a : 1f;
+		return true;
 	}
 
 	private void Simulate(float t)
@@ -776,6 +953,33 @@ public class ForgeProjectileRunner : MonoBehaviour
 				}
 				continue;
 			}
+			var life = Mathf.Max(0.02f, c.life + Range(c, "life"));
+			if (c.spawn == "trail")
+			{
+				// an air trail follows any component: a fired shot, or each piece of another component
+				List<Track> followed;
+				if (!m_Tracks.TryGetValue(c.of, out followed))
+				{
+					continue;
+				}
+				if (c.style == "ribbon")
+				{
+					for (var i = 0; i < followed.Count; i++)
+					{
+						m_Over = Mathf.Max(m_Over, followed[i].stopT + life);
+						Ribbon(c, ci, i, followed[i], t, life);
+					}
+					continue;
+				}
+				var rate = Mathf.Max(1f, c.rate);
+				foreach (var f in followed)
+				{
+					m_Over = Mathf.Max(m_Over, f.stopT + life);
+					var tseed = f.tseed;
+					TrailPieces(c, f, rate, Mathf.Max(f.t0, t - life), Mathf.Min(f.stopT, t), (s, j, turn) => Piece(c, ci, s.p, t - j / rate, tseed, j, turn));
+				}
+				continue;
+			}
 			List<Flight> parents;
 			if (c.of < 0 || !m_Shots.TryGetValue(c.of, out parents))
 			{
@@ -797,6 +1001,9 @@ public class ForgeProjectileRunner : MonoBehaviour
 						if (t >= ev.t && m_SlowDone.Add(ci * 100000 + f.k * 1000 + e))
 						{
 							Emit(ForgeEffectExtras.TimingSlowMotion, ev.p, -1 - (((long)ci * 1000 + f.k) * 1000 + e));
+							var slowEase = Mathf.Max(0f, c.slowEase);
+							m_SlowEnds.Add(new SlowEnd { at = Time.unscaledTime + slowEase + Mathf.Max(0f, c.slowDuration) + (c.slowEaseOut < 0f ? slowEase : c.slowEaseOut), p = ev.p,
+								key = long.MinValue / 2 + (((long)ci * 1000 + f.k) * 1000 + e) });
 							if (c.slowScope == "projectile")
 							{
 								m_LocalSlows.Add(new LocalSlow { start = Time.unscaledTime, scale = Mathf.Clamp(c.slowScale, 0.01f, 1f), duration = Mathf.Max(0f, c.slowDuration), ease = Mathf.Max(0f, c.slowEase), easeOut = c.slowEaseOut < 0f ? Mathf.Max(0f, c.slowEase) : c.slowEaseOut });
@@ -806,47 +1013,6 @@ public class ForgeProjectileRunner : MonoBehaviour
 								ForgeSlowMotion.Play(c.slowScale, c.slowDuration, c.slowEase, c.slowEaseOut);
 							}
 						}
-					}
-				}
-				continue;
-			}
-			var life = Mathf.Max(0.02f, c.life + Range(c, "life"));
-			if (c.spawn == "trail" && c.style == "ribbon")
-			{
-				foreach (var f in parents)
-				{
-					m_Over = Mathf.Max(m_Over, f.stopT + life);
-					Ribbon(c, ci, f, t, life);
-				}
-				continue;
-			}
-			if (c.spawn == "trail")
-			{
-				var rate = Mathf.Max(1f, c.rate);
-				foreach (var f in parents)
-				{
-					m_Over = Mathf.Max(m_Over, f.stopT + life);
-					var first = Mathf.CeilToInt(Mathf.Max(f.t0, t - life) * rate);
-					var last = Mathf.FloorToInt(Mathf.Min(f.stopT, t) * rate);
-					for (var j = first; j <= last; j++)
-					{
-						Shot s;
-						if (!ShotAt(f, j / rate, out s))
-						{
-							continue;
-						}
-						var turn = 0f;
-						if (c.trailAlign)
-						{
-							Shot s2;
-							if (!ShotAt(f, j / rate + 0.004f, out s2))
-							{
-								s2 = s;
-							}
-							var ddx = s2.p.x - s.p.x;
-							turn = Mathf.Atan2(s2.p.y - s.p.y, ddx != 0f ? ddx : f.dir) - Mathf.Atan2(0f, f.dir);
-						}
-						Piece(c, ci, s.p, t - j / rate, f.ci * 31 + f.k, j, turn);
 					}
 				}
 				continue;
@@ -886,15 +1052,17 @@ public class ForgeProjectileRunner : MonoBehaviour
 	}
 
 	// A ribbon trail is a TrailRenderer following the shot, as the game's own projectile trails are.
-	private void Ribbon(ForgeProjectiles.Comp c, int ci, Flight f, float t, float life)
+	private void Ribbon(ForgeProjectiles.Comp c, int ci, int index, Track f, float t, float life)
 	{
 		if (c.m_RibbonMaterial == null || t < f.t0)
 		{
 			return;
 		}
 		Shot s;
-		var alive = ShotAt(f, Mathf.Min(t, f.stopT), out s);
-		if (f.ribbon == null)
+		var alive = TrackAt(f, Mathf.Min(t, f.stopT), out s);
+		var key = (long)ci * 1000000 + index;
+		TrailRenderer ribbon;
+		if (!m_Ribbons.TryGetValue(key, out ribbon))
 		{
 			if (!alive)
 			{
@@ -933,12 +1101,13 @@ public class ForgeProjectileRunner : MonoBehaviour
 			gradient.SetKeys(new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) }, alphas);
 			tr.colorGradient = gradient;
 			tr.Clear();
-			f.ribbon = tr;
+			ribbon = tr;
+			m_Ribbons[key] = tr;
 		}
 		if (alive && t <= f.stopT)
 		{
-			f.ribbon.transform.position = new Vector3(s.p.x * m_Scale, s.p.y * m_Scale, m_Z + 0.01f);
+			ribbon.transform.position = new Vector3(s.p.x * m_Scale, s.p.y * m_Scale, m_Z + 0.01f);
 		}
-		f.ribbon.emitting = t <= f.stopT;
+		ribbon.emitting = t <= f.stopT;
 	}
 }

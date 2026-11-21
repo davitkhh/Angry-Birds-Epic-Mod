@@ -122,6 +122,31 @@ namespace ABH.GameDatas.Battle.Skills
 			DIContainerLogic.GetBattleService().HealCurrentTurn(skillTarget, battle, true, false, false, false, true, source);
 		}
 
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			if (m_Percent == 0f || ctx.Target.CombatantFaction != ctx.Source.CombatantFaction || PreviewStartsCharge(ctx.Source))
+			{
+				return;
+			}
+			var targets = new List<ICombatant>();
+			if (!m_All)
+			{
+				targets.Add(m_Self ? ctx.Source : ctx.Target);
+			}
+			else
+			{
+				targets.AddRange(ctx.FactionOf(ctx.Target).Where(c => c != ctx.Source));
+				targets.Add(ctx.Source);
+			}
+			var initialTarget = m_Self && !m_All ? ctx.Source : ctx.Target;
+			foreach (var skillTarget in targets)
+			{
+				var percent = m_Percent + (skillTarget == initialTarget ? m_AdditionalPercentOnTarget : 0f);
+				var health = m_InvokersHealth ? ctx.Source.ModifiedHealth : !m_FirsTargetHealth ? skillTarget.ModifiedHealth : ctx.Target.ModifiedHealth;
+				ctx.AddHeal(skillTarget, health * percent / 100f);
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

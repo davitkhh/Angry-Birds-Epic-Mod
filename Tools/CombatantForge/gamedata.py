@@ -162,6 +162,14 @@ def sprite_image(key):
     if source == 'look':
         rig_id, _, look = name.partition(':')
         return look_image(rig_id, look)
+    if source == 'beams':  # an eye beams layer's picture (beams.py); the beams themselves are drawn live
+        import beams
+        return beams.icon_image()
+    if source == 'bells':  # a bells layer's picture or the bells atlas (bells.py); the bells themselves are drawn live
+        import bells
+        return bells.sprite_image(name)
+    if source == 'blush':  # one cheek of the Piglette's blush (blush_image)
+        return blush_image(name)
     if source == 'upload':
         path = os.path.normpath(os.path.join(UPLOADS, name))
         if not path.startswith(UPLOADS + os.sep):
@@ -179,7 +187,7 @@ def sprite_image(key):
 def sprite_png(key):
     safe = re.sub(r'[^\w.-]', '_', key)
     path = os.path.join(CACHE, 'sprites', safe + '.png')
-    live = key.startswith(('upload:', 'look:'))  # uploads and looks (drawn from SpringDrone.cs) aren't cached
+    live = key.startswith(('upload:', 'look:', 'beams:', 'bells:', 'blush:'))  # uploads and looks (drawn from SpringDrone.cs) aren't cached
     if live or not os.path.exists(path):
         buf = io.BytesIO()
         sprite_image(key).save(buf, 'PNG')
@@ -529,7 +537,9 @@ def bake_rig(rig_id):
         pos = re.search(r'm_LocalPosition: \{x: ([-\d.e]+), y: ([-\d.e]+)', block)
         if pos:
             body = [float(pos.group(1)), float(pos.group(2))]
-    return {'id': rig_id, 'side': rig['side'], 'bodyCenter': body, 'paths': paths, 'parents': parents, 'bones': bone_rows, 'slots': slot_rows,
+    # how far from its target it stops to attack (CharacterAssetController.OffsetFromEnemyX; 100 when the prefab has none)
+    off = re.search(r'  OffsetFromEnemyX: ([-\d.e]+)', text)
+    return {'id': rig_id, 'side': rig['side'], 'bodyCenter': body, 'offsetFromEnemyX': float(off.group(1)) if off else 100.0, 'paths': paths, 'parents': parents, 'bones': bone_rows, 'slots': slot_rows,
             'clips': clips, 'textures': textures, 'variants': variants, 'base': base, 'looks': looks}
 
 
@@ -546,7 +556,9 @@ def rig_mtime(rig_id):
 def rig_json(rig_id):
     path = os.path.join(CACHE, 'rigs', '%s.%d.json' % (rig_id, CACHE_VERSION))
     if os.path.exists(path) and os.path.getmtime(path) >= rig_mtime(rig_id):
-        return open(path, 'rb').read()
+        data = open(path, 'rb').read()
+        if b'"offsetFromEnemyX"' in data:  # cached before the field existed: baked again
+            return data
     data = json.dumps(bake_rig(rig_id), separators=(',', ':')).encode()
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'wb') as f:
@@ -595,6 +607,10 @@ def spring_look(finish='spring'):
         m = re.search(r'Band\[\] ' + source + r'\s*=\s*\{(.*?)\};', text, re.S)
         rows = re.findall(r'new Band\((-?[\d.]+)f, (-?[\d.]+)f, (\d+), (\d+), (\d+)\)', m.group(1)) if m else []
         look['bands'][name] = [[float(w), float(o), [int(r), int(g_), int(b)]] for w, o, r, g_, b in rows]
+    # The finish's default spring constant (N/m); a project can set its own (project['spring'], spring_config.py).
+    # StaticSag (rig units the pod sinks at rest) follows from it, as SpringDrone.StaticSag: m g / k.
+    look['DefaultConstant'] = look.get('SteelSpringConstant' if finish == 'springsteel' else 'LavenderSpringConstant', 327.0)
+    look['StaticSag'] = look.get('PodMass', 2.0) * 9.81 / look['DefaultConstant'] * look.get('PixelsPerMeter', 200.0)
     return look
 
 
@@ -821,7 +837,7 @@ def rig_icon(rig_id, variant='', slots=None, path=None):
         slot = slots.get(bone['slot'])
         if slot and slot.get('hidden'):
             continue
-        layers = [l for l in (slot or {}).get('layers', []) if not l.get('hidden')]
+        layers = [l for l in (slot or {}).get('layers', []) if not l.get('hidden') and l.get('kind') not in ('beams', 'bells')]
         if layers:
             for seq, l in enumerate(layers):
                 rot = math.radians(l.get('rot', 0))
@@ -981,8 +997,58 @@ def library():
         result.append(item)
     result.extend(uploaded_items())
     result.extend(look_items())
-    result.sort(key=lambda i: (i['side'], i['cat'], i['name']))
+    import beams  # Eye beams tiles, and the game's beams presets on the art that has them (Headgear_StoneGuard)
+    result.extend(beams.library_items())
+    beams.decorate(result)
+    import bells  # the Bells tile (bells.py)
+    result.extend(bells.library_items())
+    result.extend(blush_items())
+    # Eye beams, Bells and the blushes lead the Features
+    result.sort(key=lambda i: (i['side'], i['cat'], i.get('beams') is not True and i.get('bells') is not True and not i.get('blush'), i['name']))
     return result
+
+
+# The Piglette's blush is one sprite (Cheeks) holding both cheeks. The Forge offers each cheek as its own Feature tile, an
+# ordinary art layer that can go in any slot; it bakes into that slot's texture like any other layer.
+BLUSH_RIG, BLUSH_SPRITE, BLUSH_SIDES = 'Piglette', 'Cheeks', ('Left', 'Right')
+
+
+def _blush_source():
+    for atlas in rig_atlases(BLUSH_RIG):
+        if BLUSH_SPRITE in atlas['sprites']:
+            return '%s:%s' % (atlas['guid'], BLUSH_SPRITE)
+    return None
+
+
+def blush_image(side):
+    """side = Left | Right: that cheek (the left or right half of the picture), trimmed to its glow."""
+    if side not in BLUSH_SIDES:
+        raise KeyError(side)
+    src = _blush_source()
+    if not src:
+        raise KeyError('no %s sprite on %s' % (BLUSH_SPRITE, BLUSH_RIG))
+    im = sprite_image(src)
+    half = im.width // 2
+    im = im.crop((0, 0, half, im.height) if side == 'Left' else (half, 0, im.width, im.height))
+    box = im.getchannel('A').point(lambda a: 255 if a > 2 else 0).getbbox()
+    if box:
+        pad = 1
+        im = im.crop((max(0, box[0] - pad), max(0, box[1] - pad), min(im.width, box[2] + pad), min(im.height, box[3] + pad)))
+    return im
+
+
+def blush_items():
+    if not _blush_source():
+        return []
+    out = []
+    for side in BLUSH_SIDES:
+        im = blush_image(side)
+        name = 'Blush_' + side
+        for lib_side in ('pig', 'bird'):  # any combatant can wear them
+            out.append({'id': '%s/%s/%s' % (lib_side, BLUSH_RIG, name), 'side': lib_side, 'rig': BLUSH_RIG, 'name': name, 'cat': 'Feature',
+                        'group': 'Blush', 'blush': side,
+                        'parts': {'front': {'key': 'blush:' + side, 'name': name, 'w': im.width, 'h': im.height, 'pivot': [0, 0]}}})
+    return out
 
 
 def uploaded_items():
@@ -1047,7 +1113,8 @@ _template_values = {}
 _template_sources = {}
 SKILL_DIRS = (os.path.join(ASSETS, 'Scripts', 'Assembly-CSharp', 'ABH', 'GameDatas', 'Battle', 'Skills'),
               os.path.join(ASSETS, 'Scripts', 'Assembly-CSharp', 'ABH', 'GameDatas', 'Battle'))
-EXPR_OK = re.compile(r'^(?:\s|\d+(?:\.\d+)?|[-+*/(),?:<>=!|]|\b[AHLDF]\b|Math\.(?:max|min|ceil|floor)|p\("\w+"\))+$')
+# q("param", fallback): that parameter of the combatant's first ability (invoker.GetSkill(0)), or fallback without one.
+EXPR_OK = re.compile(r'^(?:\s|\d+(?:\.\d+)?|[-+*/(),?:<>=!|]|\b[AHLDF]\b|Math\.(?:max|min|ceil|floor)|p\("\w+"\)|q\("\w+",\s*\d+(?:\.\d+)?\))+$')
 # Values no formula can give. A refdamage_percent is a share of a reference damage that depends on the player's level.
 # The charge and DoT entries are placeholders game text uses but the template never fills in, so the game prints them raw.
 SOURCE_FILES = {'IgnoreDamageSummonCombatant': 'IgnoreDamageAndSummonCombatant'}
@@ -1055,19 +1122,36 @@ VALUE_OVERRIDES = {'IgnoreDamage': {'{value_1}': {'expr': 'p("refdamage_percent"
                    'SimpleAttackSkill': {'{value_3}': {'expr': 'p("charge")'}},
                    'ReduceRageAttackSkill': {'{value_2}': {'expr': 'p("charge")'}},
                    'AttackAndApplyDotSkill': {'{value_6}': {'expr': 'p("dot_damage_in_percent") / 100 * A'}},
-                   'IgnoreDamageSummonCombatant': {'{value_1}': {'expr': 'p("refdamage_percent")', 'percent': True}}}
+                   'IgnoreDamageSummonCombatant': {'{value_1}': {'expr': 'p("refdamage_percent")', 'percent': True}},
+                   # The counter replays the combatant's first ability at counter_damage %.
+                   'ShelterAndCounterAlly': {'{value_1}': {'expr': 'p("counter_damage") / 100 * q("damage_in_percent", 100) / 100 * A'},
+                                             '{value_4}': {'expr': 'Math.max(1, q("attack_count", 1))'}}}
+
+
+def _template_path(name):
+    for folder in SKILL_DIRS:
+        path = os.path.join(folder, SOURCE_FILES.get(name, name) + '.cs')
+        if os.path.exists(path):
+            return path
+    return None
+
+
+def _stamp(name):
+    """What a template's cached source and values depend on: its file and when it last changed (Claude may rewrite it
+    while the Forge runs)."""
+    path = _template_path(name)
+    try:
+        return path, os.path.getmtime(path) if path else None
+    except OSError:
+        return path, None
 
 
 def _template_source(name):
-    if name not in _template_sources:
-        text = None
-        for folder in SKILL_DIRS:
-            path = os.path.join(folder, SOURCE_FILES.get(name, name) + '.cs')
-            if os.path.exists(path):
-                text = read_text(path)
-                break
-        _template_sources[name] = text
-    return _template_sources[name]
+    stamp = _stamp(name)
+    cached = _template_sources.get(name)
+    if not cached or cached[0] != stamp:
+        cached = _template_sources[name] = (stamp, read_text(stamp[0]) if stamp[0] else None)
+    return cached[1]
 
 
 def _method_body(text, signature):
@@ -1132,8 +1216,9 @@ def template_values(template):
     """{'{value_N}': {'expr': formula}} from the template's GetLocalizedDescription and Init, following base classes.
     A formula uses p("param"), A (attack), H (health), L (level), D (effect duration) and F (the first parameter's value,
     which summon skills read their amount from). Preview only."""
-    if template in _template_values:
-        return _template_values[template]
+    cached = _template_values.get(template)
+    if cached and all(_stamp(n) == st for n, st in cached[0]):
+        return cached[1]
     chain, name = [], template
     while name and _template_source(name) and name not in chain:
         chain.append(name)
@@ -1176,7 +1261,7 @@ def template_values(template):
                     result[key] = {'expr': _conditional(expr, (result.get(key) or {}).get('expr'), body, m.start())}
     for name in chain:
         result.update(VALUE_OVERRIDES.get(name, {}))
-    _template_values[template] = result
+    _template_values[template] = ([(n, _stamp(n)) for n in chain or [template]], result)
     return result
 
 

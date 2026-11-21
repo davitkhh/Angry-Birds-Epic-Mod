@@ -252,6 +252,7 @@ namespace ABH.Services.Logic
 			}
 			battleGameData.m_BattleGroundName = battleStartData.m_BackgroundAssetId;
 			battleGameData.m_BirdsByInitiative = GetBirdCombatants(battleStartData.m_Birds, battleGameData);
+			battleGameData.m_BirdsEnteredCount = battleStartData.m_Birds != null ? battleStartData.m_Birds.Count : 0;
 			if (battleGameData.m_BirdBanner != null)
 			{
 				battleGameData.m_BirdsByInitiative.Add(battleGameData.m_BirdBanner);
@@ -787,6 +788,14 @@ namespace ABH.Services.Logic
 		{
 			var currentPlayer = DIContainerInfrastructure.GetCurrentPlayer();
 			battle.m_BattleEndData.m_WinnerFaction = Faction.Birds;
+			// Bird unlock tutorials (BirdUnlockSequence) give nothing and report nothing.
+			if (BirdUnlockSequence.IsUnlockBattle(battle.Balancing.NameId))
+			{
+				battle.m_BattleEndData.m_LastWaveIndex = battle.CurrentWaveIndex;
+				RemovePassiveFromBirds(battle);
+				battle.RaiseBattleEnded(Faction.Birds);
+				return;
+			}
 			battle.m_BattleEndData.m_DisplayScore = EvaluateFinalBattleScore(battle, true);
 			battle.m_BattleEndData.m_Score = EvaluateFinalBattleScore(battle, false);
 			battle.m_BattleEndData.m_BattlePerformanceStars = EvaluateBattlePerformance(battle);
@@ -840,6 +849,7 @@ namespace ABH.Services.Logic
 					1
 				} }, battle.m_BattleEndData.m_Level, battle.m_BattleEndData.m_BattlePerformanceStars, ref battle.m_BattleEndData.m_ThrownWheelIndex);
 				battle.m_BattleEndData.m_additionalLoot = DIContainerLogic.GetLootOperationService().GenerateLoot(battle.Balancing.LootTableAdditional, battle.m_BattleEndData.m_Level);
+				AddSaveGrantedLoot(battle, currentPlayer);
 			}
 			battle.m_BattleEndData.m_LastWaveIndex = battle.CurrentWaveIndex;
 			battle.m_BattleEndData.m_BattleEndTime = DIContainerLogic.GetTimingService().GetPresentTime();
@@ -1256,16 +1266,11 @@ namespace ABH.Services.Logic
 				break;
 			}
 			battle.m_BattleEndData.m_NeededScoreFor3Stars = num * 3;
-			var a = 1;
-			for (var num2 = 3; num2 > 0; num2--)
-			{
-				if (battle.m_BattleEndData.m_Score >= num * num2)
-				{
-					a = num2;
-					break;
-				}
-			}
-			return Mathf.Max(a, 1);
+			// Each star position is either the usual score threshold (position * score per star) or a condition
+			// (BattleBalancingData.Stars); a won battle always gets at least one star
+			var earned = BattleStars.Evaluate(battle, num);
+			battle.m_BattleEndData.m_StarsEarned = earned;
+			return earned.Count(e => e);
 		}
 
 		private List<ICombatant> GetBirdCombatants(List<BirdGameData> selectedBirds, BattleGameData battle)
@@ -3049,6 +3054,13 @@ namespace ABH.Services.Logic
 				return param;
 			});
 			
+			// SugarRush: damage on every skill use plus bonus moves once per turn
+			BattleEffectsByTriggerAndByType[EffectTriggerType.AfterSkillUse].Add(BattleEffectType.SugarRush, delegate(float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant attacker)
+			{
+				SugarRushSkill.OnSkillUsed(effectGameData, effect);
+				return param;
+			});
+
 			//
 			// OnEndOfTurn
 			//
@@ -3857,6 +3869,22 @@ namespace ABH.Services.Logic
 				if (source4.CombatantFaction == attacker.CombatantFaction || source4.IsStunned)
 				{
 					return param;
+				}
+				// Interval shelter (ProtectAllyEveryNthHitSkill): Values = [0, chance, interval, hits left to skip].
+				// The shelterer takes the first hit, lets the next (interval - 1) hits through, then takes one again.
+				// Attacks it could not take (stunned, spray, a healthier shelterer) don't advance the count.
+				if (effect.Values.Count >= 4)
+				{
+					if (attacker.CombatantView.m_SkillToDo != null && attacker.CombatantView.m_SkillToDo.Model.SkillParameters.ContainsKey("spray_count"))
+					{
+						return param;
+					}
+					if (effect.Values[3] > 0f)
+					{
+						effect.Values[3] -= 1f;
+						return param;
+					}
+					effect.Values[3] = Math.Max(effect.Values[2] - 1f, 0f);
 				}
 				attacker.CombatantView.targetSheltered = effectGameData.m_Source;
 				effectGameData.EvaluateEffect();
@@ -5412,7 +5440,8 @@ namespace ABH.Services.Logic
 		private float InvokeEffect(Func<float, BattleEffectGameData, BattleEffect, ICombatant, float> handler, float param, BattleEffectGameData effectGameData, BattleEffect effect, ICombatant target)
 		{
 			var bonus = GetRallyBonus(effectGameData, effect, target);
-			if (bonus == 0f)
+			var multiplier = BlessingAmplifier.GetMultiplier(effectGameData, effect);
+			if (bonus == 0f && multiplier == 1f)
 			{
 				return handler(param, effectGameData, effect, target);
 			}
@@ -5420,6 +5449,11 @@ namespace ABH.Services.Logic
 			var values = effect.Values;
 			var boosted = new List<float>(values);
 			boosted[0] += bonus;
+			for (var i = 0; i < boosted.Count; i++)
+			{
+				boosted[i] = BlessingAmplifier.Scale(effect, i, boosted[i], multiplier);
+			}
+			var boostedBefore = new List<float>(boosted);
 			effect.Values = boosted;
 			try
 			{
@@ -5427,11 +5461,19 @@ namespace ABH.Services.Logic
 			}
 			finally
 			{
+				// Keep changes the handler made to its own values (countdowns, stacking), minus the temporary boost
+				if (effect.Values == boosted && values.Count == boosted.Count)
+				{
+					for (var i = 0; i < values.Count; i++)
+					{
+						values[i] += boosted[i] - boostedBefore[i];
+					}
+				}
 				effect.Values = values;
 			}
 		}
 
-		private static float GetRallyBonus(BattleEffectGameData effectGameData, BattleEffect effect, ICombatant target)
+		public static float GetRallyBonus(BattleEffectGameData effectGameData, BattleEffect effect, ICombatant target)
 		{
 			var source = effectGameData.AppliedBy;
 			if (source == null || !RallyEffectTypes.Contains(effect.EffectType) || effect.Values == null || effect.Values.Count == 0)
@@ -5471,6 +5513,11 @@ namespace ABH.Services.Logic
 
 		public float ApplyEffectsOnTriggerType(float effectedParam, EffectTriggerType triggerType, ICombatant effectOwner, ICombatant target)
 		{
+			if (triggerType == EffectTriggerType.OnReceiveDamage)
+			{
+				// Duel ("damage_taken_bonus_in_percent"): the isolated bird takes extra damage while the duel lasts.
+				effectedParam += DuelDirector.DamageTakenBonus(effectOwner);
+			}
 			if (effectOwner.CurrrentEffects == null)
 			{
 				return effectedParam;
@@ -6044,7 +6091,13 @@ namespace ABH.Services.Logic
 				DebugLog.Error("No Hand Selected for next Skill!");
 				return null;
 			}
-			
+			// Intellegent passive: the planner picks the skill (and its target) instead of combos and health rolls.
+			SkillBattleDataBase plannedSkill;
+			if (IntellegentPlanner.TryPickSkill(battle, combatant, out plannedSkill))
+			{
+				return plannedSkill;
+			}
+
 			var birdCombatant = combatant as BirdCombatant;
 			if (birdCombatant != null)
 			{
@@ -6299,6 +6352,12 @@ namespace ABH.Services.Logic
 
 		public bool GetNextTarget(BattleGameData battle, ICombatant combatant, SkillGameData skill, Faction ownFaction)
 		{
+			ICombatant plannedTarget;
+			if (IntellegentPlanner.TryPickTarget(battle, combatant, skill, out plannedTarget))
+			{
+				combatant.AttackTarget = plannedTarget;
+				return true;
+			}
 			switch (skill.Balancing.TargetType)
 			{
 			case SkillTargetTypes.Attack:
@@ -6874,6 +6933,50 @@ namespace ABH.Services.Logic
 			{
 				DIContainerLogic.GetLootOperationService().RewardLoot(inventory, 0, endGameData.m_lostLoot, "Battle_Lost");
 			}
+		}
+
+		// Testing hook, saved per profile in EquippedSkins like "forcevisible:": "grantloot:<hotspot>" = "item[,item...]"
+		// adds those items to the next win at that hotspot (any of its battle variants, replays included), then removes
+		// itself. Used to replay a cleared level in a save without Bomb and get addbird_blackbird (the unlock sequence).
+		private void AddSaveGrantedLoot(BattleGameData battle, PlayerGameData currentPlayer)
+		{
+			if (currentPlayer == null || currentPlayer.Data.EquippedSkins == null || currentPlayer.Data.EquippedSkins.Count == 0)
+			{
+				return;
+			}
+			var hotspot = DIContainerBalancing.Service.GetBalancingDataList<HotspotBalancingData>()
+				.FirstOrDefault(h => h.BattleId != null && h.BattleId.Contains(battle.Balancing.NameId));
+			string items;
+			if (hotspot == null || !currentPlayer.Data.EquippedSkins.TryGetValue("grantloot:" + hotspot.NameId, out items))
+			{
+				return;
+			}
+			currentPlayer.Data.EquippedSkins.Remove("grantloot:" + hotspot.NameId);
+			var table = new Dictionary<string, int>();
+			foreach (var item in items.Split(','))
+			{
+				var id = item.Trim();
+				if (id.Length > 0)
+				{
+					table[id] = 1;
+				}
+			}
+			if (table.Count == 0)
+			{
+				return;
+			}
+			if (battle.m_BattleEndData.m_additionalLoot == null)
+			{
+				battle.m_BattleEndData.m_additionalLoot = new Dictionary<string, LootInfoData>();
+			}
+			foreach (var entry in DIContainerLogic.GetLootOperationService().GenerateLoot(table, battle.m_BattleEndData.m_Level))
+			{
+				if (!battle.m_BattleEndData.m_additionalLoot.ContainsKey(entry.Key))
+				{
+					battle.m_BattleEndData.m_additionalLoot.Add(entry.Key, entry.Value);
+				}
+			}
+			DebugLog.Log("grantloot: " + hotspot.NameId + " -> " + items);
 		}
 
 		public bool WonSecondaryPrize(BattleEndGameData endGameData)

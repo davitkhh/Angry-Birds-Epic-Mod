@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_pig_brute_mic__e0_Atlas
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: 7f924350c91144b3b10193750cbe31c4, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.59765625
+    width: 0.322265625
+    height: 0.40234375
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.294921875
+    width: 0.564453125
+    height: 0.298828125
+  - serializedVersion: 2
+    x: 0.328125
+    y: 0.6328125
+    width: 0.451171875
+    height: 0.3671875
+  textureGUIDs:
+  - 4f18b2f3f57940b3a1bbf47170e87694
+  - ef02f78c31e44a449bfaad149812c11e
+  - 297e0673acdf4970882016c885b1e33d
+  textureSizes:
+  - {x: 165, y: 206}
+  - {x: 289, y: 153}
+  - {x: 231, y: 188}
+  defaultPivotOffsets:
+  - {x: -0.7993872, y: 0.4865378}
+  - {x: -0.1846455, y: 0.08832575}
+  - {x: -0.339256, y: -0.1725975}
+  textureNames:
+  - Forge_pig_brute_mic__e0
+  - Forge_pig_brute_mic__e0_Back
+  - Forge_pig_brute_mic__e0_MainHand
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/pig_brute_mic__e0/Forge_pig_brute_mic__e0.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_brute_mic__e0/Forge_pig_brute_mic__e0_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_brute_mic__e0/Forge_pig_brute_mic__e0_MainHand.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

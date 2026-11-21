@@ -55,6 +55,12 @@ namespace ABH.GameDatas.Battle
 		// How many times this effect is stacked (Hype perk); shown as "Nx" on the effect's info row when above 1
 		public int m_Stacks = 1;
 
+		// Pep Rally (BlessingAmplifier): > 0 makes this effect amplify its target's other blessings by this percent,
+		// growing by m_BlessingAmplifyStep each time the target applies a status effect
+		public float m_BlessingAmplifyPercent;
+
+		public float m_BlessingAmplifyStep;
+
 		private static int s_LastAddedOrder;
 
 		private bool m_PersistIfDefeated = true;
@@ -125,6 +131,8 @@ namespace ABH.GameDatas.Battle
 			m_ChargeTurnsAdded = original.m_ChargeTurnsAdded;
 			m_AddedOrder = original.m_AddedOrder;
 			m_Stacks = original.m_Stacks;
+			m_BlessingAmplifyPercent = original.m_BlessingAmplifyPercent;
+			m_BlessingAmplifyStep = original.m_BlessingAmplifyStep;
 			InitActions(m_Source, m_Battle);
 		}
 
@@ -304,6 +312,7 @@ namespace ABH.GameDatas.Battle
 			}
 			AddEffectValue(m_Target, m_EffectIdent, this);
 			Skills.Stinkeye.RefreshIndicators(m_Battle);
+			BlessingAmplifier.OnStatusApplied(this);
 			if (DIContainerLogic.GetBattleService().ApplyEffectsOnTriggerType(0f, EffectTriggerType.OnAddEffect, m_Target, m_Target) > 0f)
 			{
 				return true;

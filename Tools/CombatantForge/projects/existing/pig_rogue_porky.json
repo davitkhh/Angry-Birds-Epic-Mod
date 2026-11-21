@@ -161,6 +161,9 @@
    "values": {
     "{value_1}": {
      "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+    },
+    "{value_2}": {
+     "expr": "((p(\"damage_taken_bonus_in_percent\")))"
     }
    },
    "template": "DuelKnockback",

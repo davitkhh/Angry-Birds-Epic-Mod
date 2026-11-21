@@ -1,0 +1,475 @@
+{
+ "kind": "existing",
+ "id": "pig_caster_pyropig_boss",
+ "name": "Inferno Pig",
+ "rig": "PigMage",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_PyroPig",
+     "name": "Headgear_PyroPig",
+     "item": "Headgear_PyroPig",
+     "w": 258,
+     "h": 156,
+     "pivot": [
+      0,
+      -0.24
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_PyroPig_Back",
+     "name": "Headgear_PyroPig_Back",
+     "item": "Headgear_PyroPig",
+     "w": 260,
+     "h": 70,
+     "pivot": [
+      0,
+      0.36
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "7f6e3d7bfb45387428cfb7d745501761:MainHand_PyroPig",
+     "name": "MainHand_PyroPig",
+     "item": "MainHand_PyroPig",
+     "w": 179,
+     "h": 26,
+     "pivot": [
+      -0.3642857,
+      -0.0553228
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_PyroPig",
+     "name": "OffHand_PyroPig",
+     "item": "OffHand_PyroPig",
+     "w": 118,
+     "h": 86,
+     "pivot": [
+      -0.67,
+      -0.5
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  },
+  "OffHand_Back": {
+   "layers": [
+    {
+     "uid": "gb6d6e89",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_PyroPig_Back",
+     "name": "OffHand_PyroPig_Back",
+     "item": "OffHand_PyroPig",
+     "w": 280,
+     "h": 84,
+     "pivot": [
+      0.03,
+      -0.53
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_off"
+    }
+   ],
+   "hidden": false,
+   "active": "gb6d6e89"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_42859",
+   "origin": "pig_attack_caster_pyropig_boss",
+   "type": "Attack",
+   "source": "pig_attack_caster_pyropig_boss",
+   "name": "Firestorm",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 200,
+    "charge": 2,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_435c4",
+   "origin": "pig_support_caster_pyropig_boss",
+   "type": "Support",
+   "source": "pig_support_caster_pyropig_boss",
+   "name": "Heavy Fire Power",
+   "desc": "Increase attack power of all pigs by [00a800]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_increase": 30,
+    "all": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"damage_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_friend\"))"
+    }
+   },
+   "template": "IncreaseDamageWithEffectsSkill",
+   "duration": 5,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 1000,
+  "attack": 49,
+  "sizeType": "Large",
+  "sizeScale": 1.33,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_01_defeated_gold": 1,
+   "loot_pig_boss_01_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_caster_pyropig_boss",
+  "fingerprint": "28c34756fdcf8767e2f190076f4434244b055d66",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_support_caster_pyropig_boss",
+     "pig_attack_caster_pyropig_boss",
+     "pig_attack_caster_pyropig_boss"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Inferno Pig",
+   "rig": "PigMage",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_PyroPig",
+       "name": "Headgear_PyroPig",
+       "item": "Headgear_PyroPig",
+       "w": 258,
+       "h": 156,
+       "pivot": [
+        0,
+        -0.24
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Headgear_PyroPig_Back",
+       "name": "Headgear_PyroPig_Back",
+       "item": "Headgear_PyroPig",
+       "w": 260,
+       "h": 70,
+       "pivot": [
+        0,
+        0.36
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "7f6e3d7bfb45387428cfb7d745501761:MainHand_PyroPig",
+       "name": "MainHand_PyroPig",
+       "item": "MainHand_PyroPig",
+       "w": 179,
+       "h": 26,
+       "pivot": [
+        -0.3642857,
+        -0.0553228
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_PyroPig",
+       "name": "OffHand_PyroPig",
+       "item": "OffHand_PyroPig",
+       "w": 118,
+       "h": 86,
+       "pivot": [
+        -0.67,
+        -0.5
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    },
+    "OffHand_Back": {
+     "layers": [
+      {
+       "uid": "gb6d6e89",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:OffHand_PyroPig_Back",
+       "name": "OffHand_PyroPig_Back",
+       "item": "OffHand_PyroPig",
+       "w": 280,
+       "h": 84,
+       "pivot": [
+        0.03,
+        -0.53
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_off"
+      }
+     ],
+     "hidden": false,
+     "active": "gb6d6e89"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 1000,
+    "attack": 49,
+    "sizeType": "Large",
+    "sizeScale": 1.33,
+    "strength": 6,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig_boss_01_defeated_gold": 1,
+     "loot_pig_boss_01_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_42859",
+     "origin": "pig_attack_caster_pyropig_boss",
+     "type": "Attack",
+     "source": "pig_attack_caster_pyropig_boss",
+     "name": "Firestorm",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 200,
+      "charge": 2,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_435c4",
+     "origin": "pig_support_caster_pyropig_boss",
+     "type": "Support",
+     "source": "pig_support_caster_pyropig_boss",
+     "name": "Heavy Fire Power",
+     "desc": "Increase attack power of all pigs by [00a800]{value_1}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_increase": 30,
+      "all": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"damage_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_friend\"))"
+      }
+     },
+     "template": "IncreaseDamageWithEffectsSkill",
+     "duration": 5,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

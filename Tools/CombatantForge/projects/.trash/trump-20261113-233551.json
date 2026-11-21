@@ -1,0 +1,124 @@
+{
+ "id": "trump",
+ "name": "Trump",
+ "rig": "PrincePorky",
+ "variant": "",
+ "slots": {
+  "Body": {
+   "layers": [
+    {
+     "uid": "nln2um94",
+     "src": "e96119f541d54b243afe42090f52bfb9:Body",
+     "name": "Body",
+     "item": "Body",
+     "w": 332,
+     "h": 286,
+     "pivot": [
+      0,
+      -0.5
+     ],
+     "tx": 0,
+     "ty": -93,
+     "rot": 0,
+     "sx": 0.3493975903614458,
+     "sy": 0.3493975903614458,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "nln2um94"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "ajzcdsbf",
+     "src": "c7848d0aed585214ba8a92ef686c67a9:MainHand_BigPirate",
+     "name": "MainHand_BigPirate",
+     "item": "MainHand_BigPirate",
+     "w": 307,
+     "h": 207,
+     "pivot": [
+      -0.39642856,
+      0.013392856
+     ],
+     "tx": -54.54596183008783,
+     "ty": 8.077399377876247,
+     "rot": 0,
+     "sx": 0.5462049814516795,
+     "sy": 0.5462049814516795,
+     "shear": 0,
+     "hidden": false
+    }
+   ],
+   "hidden": false,
+   "active": "60elz2m6"
+  },
+  "Hair_Front": {
+   "layers": [
+    {
+     "uid": "j3hqfz23",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_MakeUpArtist",
+     "name": "Headgear_MakeUpArtist",
+     "item": "Headgear_MakeUpArtist",
+     "w": 92,
+     "h": 124,
+     "pivot": [
+      -0.46607143,
+      -0.4829205
+     ],
+     "tx": -27.09270282771844,
+     "ty": -53.97535465815491,
+     "rot": 13.04495393753687,
+     "sx": 0.7096774193548387,
+     "sy": 0.7096774193548387,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "j3hqfz23"
+  },
+  "Hair_Back": {
+   "layers": [
+    {
+     "uid": "9i7fgbqa",
+     "src": "c0d17167a2dc3e04081b6969e8a85ba3:Headgear_Back",
+     "name": "Headgear_Back",
+     "item": "Headgear",
+     "w": 246,
+     "h": 96,
+     "pivot": [
+      -0.0066320812,
+      -0.0028324514
+     ],
+     "tx": 23.561694887172813,
+     "ty": -53.48034696009134,
+     "rot": -6.812665141799509,
+     "sx": 0.6773809239774554,
+     "sy": 0.6224607829475541,
+     "shear": 0,
+     "hidden": false
+    }
+   ],
+   "hidden": false,
+   "active": "9i7fgbqa"
+  }
+ },
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 300,
+  "attack": 7,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 6,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ }
+}

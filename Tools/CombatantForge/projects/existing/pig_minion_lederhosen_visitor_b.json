@@ -1,0 +1,279 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_lederhosen_visitor_b",
+ "name": "Pretzel Fan",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_LederhosenVisitorB",
+     "name": "Headgear_LederhosenVisitorB",
+     "item": "Headgear_LederhosenVisitorB",
+     "w": 122,
+     "h": 104,
+     "pivot": [
+      -0.27321428,
+      -0.590728
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_LederhosenVisitorB",
+     "name": "OffHand_LederhosenVisitorB",
+     "item": "OffHand_LederhosenVisitorB",
+     "w": 72,
+     "h": 74,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_bac8a",
+   "origin": "pig_attack_minion_lederhosen_visitor_b",
+   "type": "Attack",
+   "source": "pig_attack_minion_lederhosen_visitor_b",
+   "name": "Crumbing Punch",
+   "desc": "Deals [ff0000]2x {value_1}[-] damage. Heals an ally by [00a800]{value_3}%[-] of the dealt damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 50,
+    "attack_count": 2,
+    "heal_ally": 20,
+    "intensity": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal_ally\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithHealWeakerAlly",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_e7af9",
+   "origin": "pig_passive_minion_lederhosen_visitor_b",
+   "type": "Passive",
+   "source": "pig_passive_minion_lederhosen_visitor_b",
+   "name": "Feisty Mood",
+   "desc": "[0000ff]Passive:[-] If an ally is defeated, the Pretzel Fan attacks a random enemy.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100 * A))"
+    }
+   },
+   "template": "RevengeAllyDeath",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 155,
+  "attack": 18,
+  "sizeType": "Small",
+  "sizeScale": 1.5,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_lederhosen_visitor_b",
+  "fingerprint": "a7d3b2010b4818b8357bf545811aa377caa54ccd",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_lederhosen_visitor_b"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pretzel Fan",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_LederhosenVisitorB",
+       "name": "Headgear_LederhosenVisitorB",
+       "item": "Headgear_LederhosenVisitorB",
+       "w": 122,
+       "h": 104,
+       "pivot": [
+        -0.27321428,
+        -0.590728
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_LederhosenVisitorB",
+       "name": "OffHand_LederhosenVisitorB",
+       "item": "OffHand_LederhosenVisitorB",
+       "w": 72,
+       "h": 74,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 155,
+    "attack": 18,
+    "sizeType": "Small",
+    "sizeScale": 1.5,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_bac8a",
+     "origin": "pig_attack_minion_lederhosen_visitor_b",
+     "type": "Attack",
+     "source": "pig_attack_minion_lederhosen_visitor_b",
+     "name": "Crumbing Punch",
+     "desc": "Deals [ff0000]2x {value_1}[-] damage. Heals an ally by [00a800]{value_3}%[-] of the dealt damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 50,
+      "attack_count": 2,
+      "heal_ally": 20,
+      "intensity": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal_ally\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithHealWeakerAlly",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_e7af9",
+     "origin": "pig_passive_minion_lederhosen_visitor_b",
+     "type": "Passive",
+     "source": "pig_passive_minion_lederhosen_visitor_b",
+     "name": "Feisty Mood",
+     "desc": "[0000ff]Passive:[-] If an ally is defeated, the Pretzel Fan attacks a random enemy.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(((p(\"damage_in_percent\")) / 100 * A))"
+      }
+     },
+     "template": "RevengeAllyDeath",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -21,6 +21,9 @@ public static class ForgeEffectExtras
 	public const int TimingProjectileHit = 12;
 	public const int TimingProjectileBounce = 13;
 	public const int TimingProjectileEnd = 14;
+	// when a slow motion is over (back to normal speed), and when the skill's attack or support clip ends
+	public const int TimingSlowMotionEnd = 15;
+	public const int TimingAnimationEnd = 16;
 
 	// Forge target: where the projectile event happened (BattleMgrBase.SpawnEffectAt)
 	public const int TargetProjectile = 20;
@@ -54,6 +57,12 @@ public static class ForgeEffectExtras
 		public float easeOut = -1f;
 		public string turnWith = "anchor";
 		public string bone = "";
+		// sits on this bone of the combatant (instead of its anchor), at this point in the bone's own space
+		public string attach = "";
+		// the game's own word (a loca key) an effect shows while it carries these settings
+		public string word = "";
+		public float attachX;
+		public float attachY;
 
 		[NonSerialized]
 		public bool isText;
@@ -108,6 +117,36 @@ public static class ForgeEffectExtras
 		else if (Mathf.Abs(s.turn) > 0.01f)
 		{
 			spawned.transform.rotation = spawned.transform.rotation * Quaternion.Euler(0f, 0f, s.turn);
+		}
+	}
+
+	// The bone an effect sits on instead of its anchor (Settings.attach), or null
+	public static Transform AttachBone(CharacterControllerBattleGroundBase character, Settings s)
+	{
+		if (s == null || string.IsNullOrEmpty(s.attach) || character == null || character.m_AssetController == null)
+		{
+			return null;
+		}
+		var bones = character.m_AssetController.GetComponentInChildren<SmoothMoves.BoneAnimation>();
+		return bones != null ? bones.GetBoneTransform(s.attach) : null;
+	}
+
+	// Puts an effect on its point of the bone (parented: it moves with it; else just where it is now)
+	public static void PlaceOnBone(GameObject spawned, Transform bone, Settings s, bool parented)
+	{
+		if (spawned == null || bone == null || s == null)
+		{
+			return;
+		}
+		var point = new Vector3(s.attachX, s.attachY, 0f);
+		if (parented && spawned.transform.parent == bone)
+		{
+			spawned.transform.localPosition = point;
+		}
+		else
+		{
+			var at = bone.TransformPoint(point);
+			spawned.transform.position = new Vector3(at.x, at.y, spawned.transform.position.z);
 		}
 	}
 

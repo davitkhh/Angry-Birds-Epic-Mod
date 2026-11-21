@@ -23,7 +23,7 @@ MonoBehaviour:
   textureSizes:
   - {x: 291, y: 191}
   defaultPivotOffsets:
-  - {x: 0.01216976, y: -0.1166835}
+  - {x: 0.04632124, y: -0.09986642}
   textureNames:
   - Forge_pig_zombie_farmer__e0
   texturePaths:

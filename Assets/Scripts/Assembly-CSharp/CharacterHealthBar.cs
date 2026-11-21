@@ -28,6 +28,22 @@ public class CharacterHealthBar : MonoBehaviour
 	[SerializeField]
 	private Transform m_SpacerParent;
 
+	// For the hover health preview (HealthBarPreview)
+	public UISprite CurrentBar
+	{
+		get { return m_CurrentBar; }
+	}
+
+	public UISprite ChangedBar
+	{
+		get { return m_ChangedBar; }
+	}
+
+	public ICombatant Model
+	{
+		get { return m_Model; }
+	}
+
 	public virtual void SetModel(ICombatant model)
 	{
 		m_Model = model;

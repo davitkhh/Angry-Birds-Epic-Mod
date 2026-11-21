@@ -25,10 +25,105 @@
      "sy": 1,
      "shear": 0,
      "pair": "g_class"
+    },
+    {
+     "uid": "x3d9junw",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g499aa97",
+     "ring": [
+      79,
+      -15.7
+     ],
+     "ringArt": "RingPlain",
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
+    },
+    {
+     "uid": "r62l0onk",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells 2",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g499aa97",
+     "ring": [
+      25.2,
+      53.3
+     ],
+     "ringArt": "RingPlain",
+     "materials": [],
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
+    },
+    {
+     "uid": "3yhd9kou",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells 3",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g499aa97",
+     "ring": [
+      -96,
+      29
+     ],
+     "ringArt": "RingPlain",
+     "materials": [],
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
     }
    ],
    "hidden": false,
-   "active": "g499aa97"
+   "active": "r62l0onk"
   },
   "Headgear_Back": {
    "layers": [
@@ -53,7 +148,7 @@
     }
    ],
    "hidden": false,
-   "active": "g6917eb7"
+   "active": "suul2iu5"
   },
   "MainHand": {
    "layers": [
@@ -74,10 +169,106 @@
      "sx": 1,
      "sy": 1,
      "shear": 0
+    },
+    {
+     "uid": "u91vzgyd",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells 3",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g1f9cdfc",
+     "ring": [
+      22.3,
+      15.8
+     ],
+     "ringArt": "RingPlain",
+     "materials": [],
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
+    },
+    {
+     "uid": "wr0ob6oz",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g1f9cdfc",
+     "ring": [
+      -2.4,
+      20.8
+     ],
+     "ringArt": "RingPlain",
+     "materials": [],
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
+    },
+    {
+     "uid": "yzvw399i",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells 2",
+     "w": 120,
+     "h": 120,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g1f9cdfc",
+     "ring": [
+      -15.7,
+      -8.7
+     ],
+     "ringArt": "RingPlain",
+     "materials": [],
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
     }
    ],
    "hidden": false,
-   "active": "g1f9cdfc"
+   "active": "u91vzgyd"
   },
   "OffHand_Back": {
    "layers": [
@@ -111,28 +302,20 @@
    "origin": "pig_attack_caster_santa",
    "type": "Attack",
    "source": "pig_attack_caster_santa",
-   "name": "Sugar Slap",
-   "desc": "Deals [ff0000]{value_1}[-] damage. Target also takes [ff0000]{value_7}[-] damage per turn for the next [ff0000]{value_2}[-] turns.",
+   "name": "Sugar Rush",
+   "desc": "Deals [ff0000]{value_1}[-] damage. The target moves twice every turn and takes [ff0000]{value_7}[-] damage every time they use an ability. Lasts [ff0000]{value_2}[-] turns.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
    "icon": "AttackCurse",
    "params": {
     "damage_in_percent": 35,
     "dot_chance": 100,
-    "dot_damage_in_percent": 100
+    "dot_damage_in_percent": 100,
+    "extra_moves": 1
    },
    "values": {
     "{value_1}": {
-     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
-    },
-    "{value_5}": {
-     "expr": "(p(\"charge\"))"
-    },
-    "{value_7}": {
-     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
-    },
-    "{value_4}": {
-     "expr": "(p(\"attack_count\"))"
+     "expr": "(((p(\"damage_in_percent\")) / 100) * A)"
     },
     "{value_2}": {
      "expr": "D"
@@ -140,43 +323,56 @@
     "{value_3}": {
      "expr": "(p(\"dot_chance\"))"
     },
-    "{value_6}": {
-     "expr": "p(\"dot_damage_in_percent\") / 100 * A"
+    "{value_4}": {
+     "expr": "(p(\"extra_moves\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"dot_damage_in_percent\")) / 100 * A)"
     }
    },
-   "template": "AttackAndApplyDotSkill",
-   "duration": 3,
-   "design": ""
+   "template": "SugarRushSkill",
+   "duration": 4,
+   "design": "Deals 35% damage. The target moves twice every turn and takes 100% damage every time they use an ability. Lasts 4 turns.",
+   "nameId": "pig_attack_forge_pig_caster_santa__e0_sugar_rush",
+   "written": true
   },
   {
-   "uid": "a1_62323",
-   "origin": "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help",
+   "uid": "cf99wv01",
    "type": "Support",
-   "source": "pig_support_caster_santa",
-   "name": "Ho ho ho help!",
-   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Summons Little Helpers.",
+   "source": "pig_support_forge_pig_caster_pyropig_teacher__e0_repeat_after_me",
+   "name": "Ho ho help!",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Summons [ff0000]{value_3}[-] Santa's Little Helpers, then does a random move with [ff0000]{value_1}%[-] effectiveness. The new Helpers and [ff0000]{value_4}[-] others do the same for [ff0000]{value_1}%[-] effectiveness.",
    "color": "8CCB50",
    "atlas": "Skills_Pigs_01",
-   "icon": "Reinforcements",
+   "icon": "Blessing",
    "params": {
+    "charge": 3,
     "summon_elf": 2,
-    "charge": 2
+    "effectiveness_in_percent": 70,
+    "helper_count": 2
    },
    "values": {
     "{value_1}": {
-     "expr": "(F)"
+     "expr": "(p(\"effectiveness_in_percent\"))"
     },
     "{value_2}": {
      "expr": "(p(\"charge\"))"
     },
     "{value_3}": {
-     "expr": "(p(\"charge_min\"))"
+     "expr": "(F)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"helper_count\"))"
     }
    },
-   "template": "SummonCombatant",
+   "template": "HoHoHelp",
    "duration": 0,
-   "design": "",
-   "nameId": "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help"
+   "design": "Charge: 3 turns. Summons 2 Santa's Little Helpers then does a random move for 70% effectiveness. The new Helpers and 2 others do the same for 70% effectiveness (if santa did a support they do a support, and likewise for attack).",
+   "nameId": "pig_support_forge_pig_caster_santa__e0_ho_ho_help",
+   "written": true
   },
   {
    "uid": "a2_c1d19",
@@ -231,13 +427,13 @@
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 50.0,
+    "Percentage": 50,
     "ComboChain": [
      "pig_attack_caster_santa"
     ]
    },
    {
-    "Percentage": 50.0,
+    "Percentage": 50,
     "ComboChain": [
      "pig_support_forge_pig_caster_santa__e0_ho_ho_ho_help"
     ]
@@ -468,5 +664,11 @@
    ]
   }
  },
- "publishedAt": "2026-11-12 12:10"
+ "publishedAt": "2026-11-12 12:10",
+ "bonePivots": {
+  "Headgear": [
+   75.3,
+   78.7
+  ]
+ }
 }

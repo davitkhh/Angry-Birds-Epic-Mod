@@ -1,0 +1,365 @@
+{
+ "kind": "existing",
+ "id": "pig_ninja_black_boss",
+ "name": "Little Ninja",
+ "rig": "NinjaPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_RedNinja",
+     "name": "Headgear_RedNinja",
+     "item": "Headgear_RedNinja",
+     "w": 196,
+     "h": 74,
+     "pivot": [
+      0,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_RedNinja_Back",
+     "name": "Headgear_RedNinja_Back",
+     "item": "Headgear_RedNinja",
+     "w": 184,
+     "h": 24,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_6c02b",
+   "origin": "pig_attack_ninja_black_boss_01",
+   "type": "Attack",
+   "source": "pig_attack_ninja_black_boss_01",
+   "name": "Chi Block",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Empties Rage Chili by [ff0000]{value_3}%[-]. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "ragereduce": 15,
+    "falloff": 2,
+    "attack_count": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"ragereduce\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "ReduceRageAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_a11fc",
+   "origin": "pig_attack_ninja_black_boss_02",
+   "type": "Attack",
+   "source": "pig_attack_ninja_black_boss_02",
+   "name": "Draining Punch",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "heal": 50,
+    "attack_count": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"heal\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithLeech",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_995b7",
+   "origin": "pig_passive_fastness",
+   "type": "Passive",
+   "source": "pig_passive_fastness",
+   "name": "Dodge",
+   "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 23,
+    "lower_or_higher": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 400,
+  "attack": 20,
+  "sizeType": "Small",
+  "sizeScale": 0.85,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_01_defeated_exp": 1,
+   "loot_pig_boss_01_defeated_gold": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_ninja_black_boss",
+  "fingerprint": "f0bc5eeabc29d9c9e3f75c99c5312ef69b349dee",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_ninja_black_boss_01"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_attack_ninja_black_boss_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Little Ninja",
+   "rig": "NinjaPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_RedNinja",
+       "name": "Headgear_RedNinja",
+       "item": "Headgear_RedNinja",
+       "w": 196,
+       "h": 74,
+       "pivot": [
+        0,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_RedNinja_Back",
+       "name": "Headgear_RedNinja_Back",
+       "item": "Headgear_RedNinja",
+       "w": 184,
+       "h": 24,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 400,
+    "attack": 20,
+    "sizeType": "Small",
+    "sizeScale": 0.85,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig_boss_01_defeated_exp": 1,
+     "loot_pig_boss_01_defeated_gold": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_6c02b",
+     "origin": "pig_attack_ninja_black_boss_01",
+     "type": "Attack",
+     "source": "pig_attack_ninja_black_boss_01",
+     "name": "Chi Block",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Empties Rage Chili by [ff0000]{value_3}%[-]. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "ragereduce": 15,
+      "falloff": 2,
+      "attack_count": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"ragereduce\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "ReduceRageAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_a11fc",
+     "origin": "pig_attack_ninja_black_boss_02",
+     "type": "Attack",
+     "source": "pig_attack_ninja_black_boss_02",
+     "name": "Draining Punch",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. Heals for [00a800]{value_3}%[-] of dealt damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "heal": 50,
+      "attack_count": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"heal\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithLeech",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_995b7",
+     "origin": "pig_passive_fastness",
+     "type": "Passive",
+     "source": "pig_passive_fastness",
+     "name": "Dodge",
+     "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 23,
+      "lower_or_higher": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -201,7 +201,39 @@
   {
     "NameId": "ResourceSpawnAmountPerNode",
     "StringValue": "",
-    "FloatValue": 10.0,
+    "FloatValue": 9.0,
+    "RequirementValue": null,
+    "FloatlistValue": null,
+    "BoolValue": false
+  },
+  {
+    "NameId": "ResourceNodeStarsPerRefill",
+    "StringValue": "",
+    "FloatValue": 16.0,
+    "RequirementValue": null,
+    "FloatlistValue": null,
+    "BoolValue": false
+  },
+  {
+    "NameId": "ResourceNodeStarsPerRefill_Rock",
+    "StringValue": "",
+    "FloatValue": -1.0,
+    "RequirementValue": null,
+    "FloatlistValue": null,
+    "BoolValue": false
+  },
+  {
+    "NameId": "ResourceNodeStarsPerRefill_TreeStump",
+    "StringValue": "",
+    "FloatValue": -1.0,
+    "RequirementValue": null,
+    "FloatlistValue": null,
+    "BoolValue": false
+  },
+  {
+    "NameId": "ResourceNodeStarsPerRefill_Seashell",
+    "StringValue": "",
+    "FloatValue": -1.0,
     "RequirementValue": null,
     "FloatlistValue": null,
     "BoolValue": false

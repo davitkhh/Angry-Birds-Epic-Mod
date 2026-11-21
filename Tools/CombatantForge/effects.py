@@ -27,7 +27,8 @@ _infos = {}
 
 TIMINGS = {0: 'Start', 1: 'Movement', 2: 'Impact', 3: 'Affected', 4: 'Triggered',
            # the Forge's own (ForgeEffectExtras.Timing*)
-           10: 'SlowMotion', 11: 'ProjectileLaunch', 12: 'ProjectileHit', 13: 'ProjectileBounce', 14: 'ProjectileEnd'}
+           10: 'SlowMotion', 11: 'ProjectileLaunch', 12: 'ProjectileHit', 13: 'ProjectileBounce', 14: 'ProjectileEnd',
+           15: 'SlowMotionEnd', 16: 'AnimationEnd'}
 TARGETS = {0: 'Origin', 1: 'Target', 2: 'OriginArea', 3: 'TargetArea', 4: 'CenterArea', 5: 'GlobalCamera', 6: 'GlobalScreen', 7: 'SlowMotion',
            20: 'Projectile'}  # the Forge's "at the projectile" (BattleMgrBase.SpawnEffectAt)
 ANCHORS = {0: 'Bottom', 1: 'Center', 2: 'MainHand', 3: 'OffHand'}
@@ -65,9 +66,11 @@ def extras(raw):
             out['after'] = {k: data[k] for k in ('duration', 'interval', 'life', 'opacity', 'tint', 'behind', 'spread', 'driftX', 'driftY', 'grow') if k in data}
         elif 'text' in data:
             out['text'] = {k: data[k] for k in ('text', 'color', 'outline', 'size', 'rotation', 'arc') if k in data}
-        for k in ('turn', 'turnWith', 'bone', 'offsetX', 'offsetY'):
+        for k in ('turn', 'turnWith', 'bone', 'offsetX', 'offsetY', 'attach', 'attachX', 'attachY'):
             if k in data:
                 out[k] = data[k]
+        if data.get('word'):
+            out['textDefault'] = g.loca_texts().get(data['word'], data['word'])
     elif ident and str(raw.get('HasText', '0')).strip() in ('1', 'True', 'true'):
         out['textDefault'] = g.loca_texts().get(ident, ident)
     if str(raw.get('TargetCombatant', '0')).strip() == '7':

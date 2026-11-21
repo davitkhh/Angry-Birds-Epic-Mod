@@ -177,6 +177,11 @@ public class EquipmentOverlay : MonoBehaviour
 		{
 			m_PerkDesc.text = EquipmentGameData.GetPerkDesc(equip);
 		}
+		// Bonus perks (upgrades) get perk boxes of their own under the item's perk
+		if (m_PerkIcon)
+		{
+			BonusPerkRows.ApplyToOverlay(m_PerkIcon.cachedTransform.parent, m_PerkDesc, equip, EquipmentGameData.GetMainPerkDesc(equip));
+		}
 		var text = DIContainerInfrastructure.GetLocaService().Tr("tt_item_equipment_desc", "Scrap for");
 		if (m_EquipmentDesc)
 		{

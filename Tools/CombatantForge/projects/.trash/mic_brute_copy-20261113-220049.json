@@ -1,0 +1,177 @@
+{
+ "id": "mic_brute_copy",
+ "name": "Mic Brute copy",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "ff61bcbb",
+     "src": "c33c2ecbfbab4a7e8a9a06ee66668d32:Forge_pig_brute_mic__e0",
+     "name": "Forge_pig_brute_mic__e0",
+     "item": "Forge_pig_brute_mic__e0",
+     "w": 165,
+     "h": 206,
+     "pivot": [
+      -0.7993872,
+      0.4865378
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class_mic_brute_copy"
+    }
+   ],
+   "hidden": false,
+   "active": "ff61bcbb"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "0cf3c70c",
+     "src": "c33c2ecbfbab4a7e8a9a06ee66668d32:Forge_pig_brute_mic__e0_Back",
+     "name": "Forge_pig_brute_mic__e0_Back",
+     "item": "Forge_pig_brute_mic__e0",
+     "w": 289,
+     "h": 153,
+     "pivot": [
+      -0.1846455,
+      0.08832575
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class_mic_brute_copy"
+    }
+   ],
+   "hidden": false,
+   "active": "0cf3c70c"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "364328b5",
+     "src": "c33c2ecbfbab4a7e8a9a06ee66668d32:Forge_pig_brute_mic__e0_MainHand",
+     "name": "Forge_pig_brute_mic__e0_MainHand",
+     "item": "Forge_pig_brute_mic__e0_MainHand",
+     "w": 231,
+     "h": 188,
+     "pivot": [
+      -0.339256,
+      -0.1725975
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "364328b5"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "fe87ba08",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_brute_mic__e0_mic_drop",
+   "name": "Mic Drop",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, plus [ff0000]{value_3}%[-] of the damage the Pigs took last turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 120,
+    "charge": 2,
+    "bonus_from_pig_damage_taken_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_from_pig_damage_taken_in_percent\"))"
+    }
+   },
+   "template": "AttackWithBonusDamageFromPigDamageTaken",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "b2d12c6b",
+   "type": "Support",
+   "source": "pig_support_forge_pig_brute_mic__e0_hype_up",
+   "name": "Hype Up",
+   "desc": "A random Pig takes [ff0000]{value_3}%[-] increased damage for [ff0000]{value_2}[-] turn. Whoever it attacks catches the same curse, for the same duration",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_taken_increase": 20,
+    "anim_clip": 6115402
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_taken_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "IncreaseDamageRandomAlly",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 380,
+  "attack": 32,
+  "sizeType": "Large",
+  "sizeScale": 1.2,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "duplicateOf": "pig_brute_mic",
+ "combos": [
+  {
+   "Percentage": 60,
+   "ComboChain": [
+    "pig_support_forge_pig_brute_mic__e0_hype_up",
+    "pig_attack_forge_pig_brute_mic__e0_mic_drop"
+   ]
+  },
+  {
+   "Percentage": 40,
+   "ComboChain": [
+    "pig_attack_forge_pig_brute_mic__e0_mic_drop"
+   ]
+  }
+ ],
+ "keepSkills": []
+}

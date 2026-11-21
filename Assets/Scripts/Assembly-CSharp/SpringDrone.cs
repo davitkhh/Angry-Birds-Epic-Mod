@@ -1,5 +1,6 @@
 using ABH.GameDatas;
 using ABH.GameDatas.Interfaces;
+using System;
 using System.Collections.Generic;
 using SmoothMoves;
 using UnityEngine;
@@ -49,9 +50,18 @@ public class SpringDrone : MonoBehaviour
 	// Coils touch: the spring can't get shorter.
 	public float SolidLength = 20f;
 
-	// How far the pod's weight compresses the spring at rest (sets stiffness: k/m = g / StaticSag). 6 = twice as stiff
-	// as the first spring (12): shorter, snappier stances.
-	public float StaticSag = 6f;
+	// Pod mass (kg), so the spring constant can be a real one: the pod sinks m g / k at rest (StaticSag).
+	public float PodMass = 2f;
+
+	// Default spring constants (N/m) per finish. Lavender has the original spring (sags 12 units at rest), steel the
+	// stiffer one (twice as stiff, sags 6: shorter, snappier stances).
+	public float LavenderSpringConstant = 327f;
+
+	public float SteelSpringConstant = 654f;
+
+	// This drone's spring constant (N/m): its finish's default or what the Combatant Forge set (SpringDrones.json),
+	// rolled once per drone within +- its variance.
+	public float SpringConstant;
 
 	public float DampingRatio = 0.07f;
 
@@ -313,15 +323,77 @@ public class SpringDrone : MonoBehaviour
 		{
 			return null;
 		}
-		var drone = Attach(asset.m_BoneAnimation);
-		if (drone != null)
+		var pig = model as PigGameData;
+		return Attach(asset.m_BoneAnimation, FinishOf(model), pig != null && pig.BalancingData != null ? pig.BalancingData.NameId : null);
+	}
+
+	// The Forge's per-pig springs: Assets/Resources/SpringDrones.json, {"springs":[{"pig":..,"constant":..,"variance":..}]}.
+	[Serializable]
+	private class SpringEntry
+	{
+		public string pig;
+
+		public float constant;
+
+		public float variance;
+	}
+
+	[Serializable]
+	private class SpringTable
+	{
+		public SpringEntry[] springs;
+	}
+
+	private const string ConfigName = "SpringDrones";
+
+	private static Dictionary<string, SpringEntry> s_Config;
+
+	private static SpringEntry ConfigFor(string pigId)
+	{
+		if (string.IsNullOrEmpty(pigId))
 		{
-			drone.Finish = FinishOf(model);
+			return null;
 		}
-		return drone;
+#if UNITY_EDITOR
+		// In the editor, read the file itself: a Forge upload applies without waiting for Unity to reimport it.
+		s_Config = null;
+#endif
+		if (s_Config == null)
+		{
+			s_Config = new Dictionary<string, SpringEntry>();
+			string text = null;
+#if UNITY_EDITOR
+			var path = System.IO.Path.Combine(Application.dataPath, "Resources/" + ConfigName + ".json");
+			if (System.IO.File.Exists(path))
+			{
+				text = System.IO.File.ReadAllText(path);
+			}
+#else
+			var asset = Resources.Load<TextAsset>(ConfigName);
+			text = asset != null ? asset.text : null;
+#endif
+			var table = string.IsNullOrEmpty(text) ? null : JsonUtility.FromJson<SpringTable>(text);
+			if (table != null && table.springs != null)
+			{
+				foreach (var entry in table.springs)
+				{
+					if (entry != null && !string.IsNullOrEmpty(entry.pig))
+					{
+						s_Config[entry.pig] = entry;
+					}
+				}
+			}
+		}
+		SpringEntry found;
+		return s_Config.TryGetValue(pigId, out found) ? found : null;
 	}
 
 	public static SpringDrone Attach(BoneAnimation bones)
+	{
+		return Attach(bones, SpringFinish.Lavender, null);
+	}
+
+	public static SpringDrone Attach(BoneAnimation bones, SpringFinish finish, string pigId)
 	{
 		if (bones == null || bones.GetComponent<SpringDrone>() != null)
 		{
@@ -340,6 +412,12 @@ public class SpringDrone : MonoBehaviour
 			CHMotionTween.AdjustDuration += AdjustTween;
 		}
 		var drone = bones.gameObject.AddComponent<SpringDrone>();
+		drone.Finish = finish;
+		var entry = ConfigFor(pigId);
+		var constant = entry != null && entry.constant > 0f ? entry.constant : finish == SpringFinish.Steel ? drone.SteelSpringConstant : drone.LavenderSpringConstant;
+		var variance = entry != null ? Mathf.Abs(entry.variance) : 0f;
+		// Each drone's spring is a little different within the variance; never softer than a tenth of the default.
+		drone.SpringConstant = Mathf.Max(constant * 0.1f, constant + UnityEngine.Random.Range(-variance, variance));
 		drone.Init(bones, root, body, animation);
 		return drone;
 	}
@@ -398,7 +476,7 @@ public class SpringDrone : MonoBehaviour
 			m_ShadowRestScale = new Vector3(Mathf.Abs(rest.x) < 0.01f ? 1f : rest.x, Mathf.Abs(rest.y) < 0.01f ? 1f : rest.y, rest.z);
 		}
 		// Drop in from somewhere in the hop so several spring drones don't bounce in step.
-		m_Height = RestLength + Random.Range(0.2f, 1f) * HopHeight;
+		m_Height = RestLength + UnityEngine.Random.Range(0.2f, 1f) * HopHeight;
 		m_Velocity = 0f;
 		m_HopTarget = HopHeight;
 		// Starting guess for the energy the damping takes per hop (refined at every apex).
@@ -500,6 +578,12 @@ public class SpringDrone : MonoBehaviour
 	private float Gravity
 	{
 		get { return 9.81f * PixelsPerMeter; }
+	}
+
+	// How far the pod's weight compresses the spring at rest, in rig units: m g / k.
+	private float StaticSag
+	{
+		get { return PodMass * 9.81f / Mathf.Max(1f, SpringConstant) * PixelsPerMeter; }
 	}
 
 	// Spring stiffness and damping per unit of pod mass.

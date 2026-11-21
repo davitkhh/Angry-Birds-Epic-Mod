@@ -42,6 +42,15 @@ public class InventoryItemSlot : BaseItemSlot
 	[SerializeField]
 	protected UILabel m_BaseStatValue;
 
+	// Quantity bubble (the cauldron's "Amount" bubble; a copy of it on Button_Recipe_Equipment for upgrade blueprints).
+	[SerializeField]
+	private GameObject m_AmountRoot;
+
+	[SerializeField]
+	private UILabel m_AmountValue;
+
+	private Vector3? m_PerkBubbleHomePosition;
+
 	[SerializeField]
 	public UIInputTrigger m_InputTrigger;
 
@@ -738,7 +747,7 @@ public class InventoryItemSlot : BaseItemSlot
 			m_BaseStatType.atlas = gameObject.GetComponent<UIAtlas>();
 		}
 		m_BaseStatType.spriteName = craftingItemBalancingData.AssetBaseId;
-		m_BaseStatValue.text = DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
+		ShowOwnedAmount(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
 	}
 
 	private void SetRecipeIngredientItem(IInventoryItemGameData item)
@@ -754,7 +763,7 @@ public class InventoryItemSlot : BaseItemSlot
 			m_BaseStatType.atlas = gameObject.GetComponent<UIAtlas>();
 		}
 		m_BaseStatType.spriteName = craftingItemBalancingData.AssetBaseId;
-		m_BaseStatValue.text = DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
+		ShowOwnedAmount(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
 	}
 
 	private void SetRecipeConsumableItem(IInventoryItemGameData item)
@@ -770,7 +779,7 @@ public class InventoryItemSlot : BaseItemSlot
 			m_BaseStatType.atlas = gameObject.GetComponent<UIAtlas>();
 		}
 		m_BaseStatType.spriteName = consumableItemBalancingData.AssetBaseId;
-		m_BaseStatValue.text = DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
+		ShowOwnedAmount(DIContainerLogic.InventoryService.GetItemValue(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, m_FinalItem.ItemBalancing.NameId));
 	}
 
 	// Upgrade blueprints for a class draw the (tinted) class on the golden parchment.
@@ -875,14 +884,41 @@ public class InventoryItemSlot : BaseItemSlot
 
 	// Upgrade blueprints get the golden parchment and show their uses left instead of a stat comparison;
 	// the tinted equipment in the middle stays the same.
+	//
+	// Layout: the wide stat label is hidden, the quantity sits in a cauldron-style Amount bubble in the
+	// bottom-right corner and the perk icon bubble sits just left of it. With a single use left there is
+	// no quantity bubble and the perk icon stays in its usual spot.
 	private void SetUpgradeBlueprintLook(bool upgrade)
 	{
 		UpgradeBlueprints.SetGoldParchment(gameObject, upgrade);
+		var primaryStat = m_BaseStatValue ? m_BaseStatValue.transform.parent : null;
+		var statsBody = primaryStat && primaryStat.parent ? primaryStat.parent.Find("Body") : null;
+		var perkBubble = m_PerkType ? m_PerkType.transform.parent : null;
+		if (perkBubble && m_PerkBubbleHomePosition == null)
+		{
+			m_PerkBubbleHomePosition = perkBubble.localPosition;
+		}
 		if (!upgrade)
 		{
 			if (m_BaseStatType)
 			{
 				m_BaseStatType.gameObject.SetActive(true);
+			}
+			if (m_AmountRoot && m_AmountValue != m_BaseStatValue)
+			{
+				if (primaryStat)
+				{
+					primaryStat.gameObject.SetActive(true);
+				}
+				if (statsBody)
+				{
+					statsBody.gameObject.SetActive(true);
+				}
+				if (perkBubble && m_PerkBubbleHomePosition != null)
+				{
+					perkBubble.localPosition = m_PerkBubbleHomePosition.Value;
+				}
+				m_AmountRoot.SetActive(false);
 			}
 			return;
 		}
@@ -894,10 +930,72 @@ public class InventoryItemSlot : BaseItemSlot
 		{
 			m_BaseStatType.gameObject.SetActive(false);
 		}
+		if (!m_AmountRoot || !m_AmountValue)
+		{
+			// Prefab without an Amount bubble: keep the old "xN" label.
+			if (m_BaseStatValue)
+			{
+				m_BaseStatValue.text = "x" + m_Model.ItemValue;
+			}
+			return;
+		}
+		if (primaryStat)
+		{
+			primaryStat.gameObject.SetActive(false);
+		}
+		if (statsBody)
+		{
+			statsBody.gameObject.SetActive(false);
+		}
+		var showAmount = SetQuantityBubble(m_AmountRoot, m_AmountValue, m_Model.ItemValue);
+		if (perkBubble && m_PerkBubbleHomePosition != null)
+		{
+			if (showAmount && perkBubble.parent)
+			{
+				// One bubble-width (64 + 48) / 2 + a small gap to the left of the Amount bubble.
+				var amount = m_AmountRoot.transform;
+				var target = perkBubble.parent.InverseTransformPoint(amount.parent.TransformPoint(amount.localPosition + new Vector3(-60f, 0f, 0f)));
+				perkBubble.localPosition = new Vector3(target.x, target.y, m_PerkBubbleHomePosition.Value.z);
+			}
+			else
+			{
+				perkBubble.localPosition = m_PerkBubbleHomePosition.Value;
+			}
+		}
+	}
+
+	// Owned amount of a cauldron/anvil recipe's result, shown in the slot's Amount bubble.
+	private void ShowOwnedAmount(int owned)
+	{
+		if (m_AmountRoot && m_AmountValue == m_BaseStatValue)
+		{
+			SetQuantityBubble(m_AmountRoot, m_BaseStatValue, owned);
+			return;
+		}
 		if (m_BaseStatValue)
 		{
-			m_BaseStatValue.text = "x" + m_Model.ItemValue;
+			m_BaseStatValue.text = DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(owned);
 		}
+	}
+
+	// Menus only show a quantity for duplicates: the bubble is hidden when one (or none) is owned.
+	protected virtual bool HideSingleQuantity
+	{
+		get { return true; }
+	}
+
+	private bool SetQuantityBubble(GameObject root, UILabel label, int count)
+	{
+		var show = count > 1 || !HideSingleQuantity;
+		if (label)
+		{
+			label.text = DIContainerInfrastructure.GetFormatProvider().GetResourceAmountFormat(count);
+		}
+		if (root)
+		{
+			root.SetActive(show);
+		}
+		return show;
 	}
 
 	private IEnumerator SetRecipeShader(Renderer[] renderers)

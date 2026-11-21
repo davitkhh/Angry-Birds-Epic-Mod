@@ -736,6 +736,7 @@ public class WorldMapStateMgr : BaseLocationStateManager
 				var birdGameData = DIContainerInfrastructure.GetCurrentPlayer().Birds[i];
 				var gameObject = (GameObject)UnityEngine.Object.Instantiate(m_WorldMapCharacterController, m_CharacterRoot.position, m_CharacterRoot.rotation);
 				var component = gameObject.GetComponent<CharacterControllerWorldMap>();
+				component.m_UsesWorldMapGear = true; // gear chosen in the options strip (WorldMapGear)
 				component.SetModel(birdGameData);
 				var gameObject2 = new GameObject(birdGameData.BalancingData.AssetId);
 				gameObject2.AddComponent<CHMotionTween>();

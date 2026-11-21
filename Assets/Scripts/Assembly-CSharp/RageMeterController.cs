@@ -65,6 +65,22 @@ public class RageMeterController : MonoBehaviour
 
 	private bool m_goldChiliActive;
 
+	public bool IsDragging
+	{
+		get
+		{
+			return m_dragging;
+		}
+	}
+
+	public GameObject GoldBody
+	{
+		get
+		{
+			return m_GoldBody;
+		}
+	}
+
 	public Transform DraggedChili
 	{
 		get
@@ -76,8 +92,9 @@ public class RageMeterController : MonoBehaviour
 	public void SetBattleMgr(BattleMgrBase battleMgr)
 	{
 		m_battleMgr = battleMgr;
-		m_sceneryCamera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
-		m_interfaceCamera = Camera.allCameras.FirstOrDefault(c => !c.CompareTag("SceneryCamera"));
+		RageMeterPreview.Attach(this);
+		m_sceneryCamera = BirdUnlockSequence.SceneryCamera();
+		m_interfaceCamera = BirdUnlockSequence.Active != null ? DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera : Camera.allCameras.FirstOrDefault(c => !c.CompareTag("SceneryCamera"));
 	}
 
 	public void Enter()
@@ -294,6 +311,13 @@ public class RageMeterController : MonoBehaviour
 
 	public void OnRelease(Vector3 pos)
 	{
+		ReleaseRage(pos);
+		// no-op when the rage went off (the preview was committed)
+		HealthPreviewDirector.Clear();
+	}
+
+	private void ReleaseRage(Vector3 pos)
+	{
 		if (!m_dragging)
 		{
 			return;
@@ -353,6 +377,7 @@ public class RageMeterController : MonoBehaviour
 	{
 		if (ActivateRageSkillForCombatant(combatant))
 		{
+			HealthPreviewDirector.Commit();
 			if (m_DraggableTransform)
 			{
 				StartCoroutine(ResetRageMeterAfterUse());
@@ -487,11 +512,34 @@ public class RageMeterController : MonoBehaviour
 				m_CurrentGlow.transform.position = m_cachedOverCharacter.m_AssetController.BodyCenter.position;
 			}
 			var layer = hitInfo.transform.gameObject.layer;
+			UpdateHealthPreview();
 		}
 		else
 		{
 			m_CurrentGlow.gameObject.SetActive(false);
+			HealthPreviewDirector.Clear();
 		}
+	}
+
+	// Health bars show what the hovered bird's rage would do (on the targets the rage picks itself)
+	private void UpdateHealthPreview()
+	{
+		var bird = m_cachedOverCharacter != null ? m_cachedOverCharacter.GetModel() : null;
+		if (bird == null || bird.CombatantFaction != Faction.Birds || !bird.IsParticipating || !UseRageIsPossible(bird) || bird.GetSkill(2) == null)
+		{
+			HealthPreviewDirector.Clear();
+			return;
+		}
+		var rage = bird.GetSkill(2);
+		// The target ActivateRageSkill gives the rage
+		var faction = rage.Model.Balancing.TargetType == SkillTargetTypes.Attack ? DIContainerLogic.GetBattleService().GetOppositeFaction(bird.CombatantFaction) : bird.CombatantFaction;
+		var target = m_battleMgr.Model.m_CombatantsByInitiative.FirstOrDefault(c => c.CombatantFaction == faction);
+		if (target == null)
+		{
+			HealthPreviewDirector.Clear();
+			return;
+		}
+		HealthPreviewDirector.Show(m_battleMgr.Model, bird, rage, target, true);
 	}
 
 	private void m_DragTrigger_onDrag(GameObject draggedObject, Vector2 delta)

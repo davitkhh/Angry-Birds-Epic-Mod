@@ -177,9 +177,16 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		HideGearBonesUnderTwins();
 		if (isWorldMap && Model is BirdGameData)
 		{
-			SetBirdHeadgear();
-			HideGearBone("MainHand");
-			HideGearBone("OffHand");
+			if (WorldMapGear.AppliesTo(this))
+			{
+				SetWorldMapToggledGear();
+			}
+			else
+			{
+				SetBirdHeadgear();
+				HideGearBone("MainHand");
+				HideGearBone("OffHand");
+			}
 		}
 		else if (Model is PigGameData)
 		{
@@ -353,6 +360,63 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		m_EquipmentSetOnce = true;
 	}
 
+	// Re-applies the gear (WorldMapGear calls this when the world-map gear toggles change).
+	public void RefreshEquipment()
+	{
+		if (Model != null)
+		{
+			SetEquipment(!m_ShowEquipment, true);
+		}
+	}
+
+	// A world-map bird wearing only the pieces switched on in the options strip (WorldMapGear).
+	private void SetWorldMapToggledGear()
+	{
+		if (WorldMapGear.Shows(WorldMapGear.Part.Headgear))
+		{
+			SetBirdHeadgear();
+		}
+		else
+		{
+			HideGearBoneIfPresent("Headgear");
+			HideGearBoneIfPresent("Headgear_Back");
+		}
+		if (WorldMapGear.Shows(WorldMapGear.Part.MainHand))
+		{
+			SetEquipmentItem(Model.MainHandItem, "MainHand", string.Empty);
+			if (m_BoneAnimation.GetBoneTransform("MainHand_Arrow") != null)
+			{
+				SetEquipmentItem(Model.MainHandItem, "MainHand_Arrow", "_Arrow");
+			}
+		}
+		else
+		{
+			HideGearBone("MainHand");
+			HideGearBoneIfPresent("MainHand_Arrow");
+		}
+		if (WorldMapGear.Shows(WorldMapGear.Part.OffHand))
+		{
+			SetEquipmentItem(Model.OffHandItem, "OffHand", string.Empty);
+			if (m_BoneAnimation.GetBoneTransform("OffHand_Back") != null)
+			{
+				SetEquipmentItem(Model.OffHandItem, "OffHand_Back", "_Back");
+			}
+		}
+		else
+		{
+			HideGearBone("OffHand");
+			HideGearBoneIfPresent("OffHand_Back");
+		}
+	}
+
+	private void HideGearBoneIfPresent(string boneName)
+	{
+		if (m_BoneAnimation.GetBoneTransform(boneName) != null)
+		{
+			HideGearBone(boneName);
+		}
+	}
+
 	private void SetBirdHeadgear()
 	{
 		if (Model is BirdGameData && (Model as BirdGameData).ClassSkin != null && Model.ClassItem != null && Model.ClassItem.BalancingData.NameId == (Model as BirdGameData).ClassSkin.BalancingData.OriginalClass)
@@ -391,9 +455,12 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 			return;
 		}
 		var triggerFrameBone = triggerFrame.GetTriggerFrameBone(boneIndex);
+		m_BoneTextures.Remove(boneName);
 		if (itemGameData == null || string.IsNullOrEmpty(itemGameData.ItemAssetName))
 		{
 			m_BoneAnimation.HideBone(boneName, true);
+			m_BoneItems.Remove(boneName);
+			ScytheBells.Refresh(this);
 			return;
 		}
 		var itemAssetName = GetHeadgearPlacement(itemGameData.ItemAssetName.Replace("_Ancient", string.Empty));
@@ -401,6 +468,38 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		{
 			m_BoneAnimation.HideBone(boneName, true);
 		}
+		else
+		{
+			m_BoneTextures[boneName] = itemAssetName + suffix;
+		}
+		if (m_BoneTextures.ContainsKey(boneName) && itemGameData.ItemBalancing != null)
+		{
+			m_BoneItems[boneName] = itemGameData.ItemBalancing.NameId;
+		}
+		else
+		{
+			m_BoneItems.Remove(boneName);
+		}
+		// Bells hanging off the gear (the belled Dark Cupid scythe, Forge bells layers).
+		ScytheBells.Refresh(this);
+	}
+
+	// The texture each bone was last given by its equipment or the Forge (HelmetBeams finds the helmet worn this way).
+	private readonly Dictionary<string, string> m_BoneTextures = new Dictionary<string, string>();
+
+	public string ShownTexture(string boneName)
+	{
+		string texture;
+		return m_BoneTextures.TryGetValue(boneName, out texture) ? texture : null;
+	}
+
+	// The item (EquipmentBalancingData NameId) each gear bone was last dressed in (ScytheBells finds belled items this way).
+	private readonly Dictionary<string, string> m_BoneItems = new Dictionary<string, string>();
+
+	public string ShownItem(string boneName)
+	{
+		string item;
+		return m_BoneItems.TryGetValue(boneName, out item) ? item : null;
 	}
 
 	// Body-parented twins of the gear bones. PigPirate's and MinionPig's Action_Attack_3 hide the gear bones and draw
@@ -535,6 +634,13 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				break;
 			}
 		}
+		// The bone's own texture is in none of the rig's atlases (PigPirate's HeadgearBody_Back placeholder is a missing
+		// texture): nothing to swap from, so the caller hides the bone. Throwing here used to abort a whole wave's placement.
+		if (textureAtlas3 == null)
+		{
+			DebugLog.Warn(GetType(), "SwapBoneToTexture: " + boneName + "'s original texture is in no atlas of " + base.gameObject.name + "; hiding it");
+			return false;
+		}
 		m_BoneAnimation.HideBone(boneName, false);
 		if (m_EquipmentSetOnce)
 		{
@@ -629,6 +735,7 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 		foreach (var swappedBone in m_ForgeSwappedBones)
 		{
 			m_BoneAnimation.RestoreBoneTexture(swappedBone);
+			m_BoneTextures.Remove(swappedBone);
 		}
 		m_ForgeSwappedBones.Clear();
 		var assetName = classItem == null || string.IsNullOrEmpty(classItem.ItemAssetName) ? string.Empty : classItem.ItemAssetName;
@@ -665,7 +772,9 @@ public class CharacterAssetController : AssetControllerWithBoneAnimationBase
 				m_BoneAnimation.SwapBoneTexture(bone.boneName, originalAtlas.name, originalAtlas.textureNames[originalAtlas.GetTextureIndex(guid)], forgeAtlas.name, forgeName);
 			}
 			m_ForgeSwappedBones.Add(bone.boneName);
+			m_BoneTextures[bone.boneName] = forgeName;
 		}
+		ScytheBells.Refresh(this);
 	}
 
 	private readonly List<GameObject> m_CarriedHandItems = new List<GameObject>();

@@ -18,8 +18,8 @@
       -0.20892857,
       -0.8170408
      ],
-     "tx": -31.95568662430037,
-     "ty": -34.90631600298248,
+     "tx": -41.89376671488753,
+     "ty": -38.11836952314168,
      "rot": 11.992401369153047,
      "sx": 1.9678998698234507,
      "sy": 1.9678998698234507,
@@ -48,10 +48,45 @@
      "sx": 1,
      "sy": 1,
      "shear": 0
+    },
+    {
+     "uid": "aqw75jvi",
+     "kind": "bells",
+     "src": "bells:icon",
+     "name": "Bells",
+     "w": 124,
+     "h": 141,
+     "pivot": [
+      -0.27321428,
+      -0.14840426
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "follow": "g1f9cdfc",
+     "ring": [
+      28.5,
+      -63.3
+     ],
+     "ringArt": "Ring",
+     "materials": [
+      "Bronze",
+      "Bronze"
+     ],
+     "on": {
+      "always": true,
+      "types": [
+       "Attack"
+      ],
+      "abilities": []
+     }
     }
    ],
    "hidden": false,
-   "active": "g1f9cdfc"
+   "active": "aqw75jvi"
   }
  },
  "abilities": [
@@ -68,7 +103,10 @@
    "params": {
     "damage_in_percent": 40,
     "chance": 100,
-    "health_in_percent": 20
+    "health_in_percent": 20,
+    "anim_clip": 350065,
+    "anim_projectile": 15290457,
+    "anim_ranged": 1
    },
    "values": {
     "{value_1}": {
@@ -96,7 +134,115 @@
    "nameId": "pig_attack_forge_pig_zombie_farmer__e0_sow",
    "anim": "Action_Attack_2",
    "ranged": "ranged",
-   "projectile": "Projectile_ZombiePig_Barf"
+   "projectile": "Projectile_ZombiePig_Barf",
+   "effects": [
+    {
+     "timing": "Affected",
+     "delay": 0.25,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Curse_HealAttacker",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "Type": "1"
+     }
+    },
+    {
+     "timing": "Movement",
+     "delay": 0.1,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_WeaponEffect_Strike_Medium",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "UseTargetBoneScale": "1",
+      "UseTargetBoneRotation": "1"
+     }
+    },
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_BodyAirflow_Weak",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Hit_Impact_Top",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "",
+     "onHit": true,
+     "onHitPrefix": "SkillFX_Hit_Single",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Start",
+     "delay": 0.9,
+     "target": "Origin",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_GroundImpact_Dust_Medium",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "DoNotParentOnBone": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Aura_Curse",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Bottom",
+     "prefab": "Camera_Shake_Subtle",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Spell_Barf_Target",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    }
+   ]
   },
   {
    "uid": "a1_7ae66",
@@ -177,7 +323,7 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_zombie_farmer",
-  "fingerprint": "36f7465ddb69372579e0bd0f60dda3f71ac825db",
+  "fingerprint": "12d24e75fc0b784fccb28570e5ecfba46bc01b1d",
   "rev": 0,
   "keepSkills": [],
   "combos": [
@@ -207,8 +353,8 @@
         -0.20892857,
         -0.8170408
        ],
-       "tx": -31.95568662430037,
-       "ty": -34.90631600298248,
+       "tx": -41.89376671488753,
+       "ty": -38.11836952314168,
        "rot": 11.992401369153047,
        "sx": 1.9678998698234507,
        "sy": 1.9678998698234507,
@@ -303,7 +449,10 @@
      "template": "BarfAndApplyHealOnAttackSkill",
      "duration": 2,
      "design": "",
-     "nameId": "pig_attack_forge_pig_zombie_farmer__e0_sow"
+     "nameId": "pig_attack_forge_pig_zombie_farmer__e0_sow",
+     "anim": "Action_Attack_2",
+     "ranged": "ranged",
+     "projectile": "Projectile_ZombiePig_Barf"
     },
     {
      "uid": "a1_7ae66",
@@ -371,6 +520,6 @@
   "atlas:HR": "1086907627eb4468b75d3133c926965f",
   "atlas:LR": "891a86404d7e4889b1722645b0e7a637"
  },
- "publishedAt": "2026-11-12 12:00",
+ "publishedAt": "2026-11-13 18:44",
  "publishedRig": "ZombiePig"
 }

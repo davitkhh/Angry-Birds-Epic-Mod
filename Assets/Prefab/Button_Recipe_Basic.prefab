@@ -282,6 +282,8 @@ MonoBehaviour:
   m_ItemInfoRoot: {fileID: 0}
   m_BaseStatType: {fileID: 114456030095355864}
   m_BaseStatValue: {fileID: 114752867782789916}
+  m_AmountRoot: {fileID: 1817846528924950}
+  m_AmountValue: {fileID: 114752867782789916}
   m_InputTrigger: {fileID: 114024167411060194}
   m_ButtonBody: {fileID: 114188572457219482}
   m_SelectionFramePrefab: {fileID: 1776667699833675, guid: eab56e8097bdb844cb0353cf8cefff6f, type: 2}

@@ -1,0 +1,342 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_apprentice_bird3",
+ "name": "Apprentice",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Apprentice",
+     "name": "Headgear_Apprentice",
+     "item": "Headgear_Apprentice",
+     "w": 96,
+     "h": 128,
+     "pivot": [
+      -0.4,
+      -0.64
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Apprentice",
+     "name": "MainHand_Apprentice",
+     "item": "MainHand_Apprentice",
+     "w": 128,
+     "h": 46,
+     "pivot": [
+      -0.28,
+      0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_99afd",
+   "origin": "pig_attack_forge_pig_minion_apprentice__e0_poke",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_minion_apprentice__e0_poke",
+   "name": "Poke",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Takes [ff0000]{value_3}%[-] less damage for [ff0000]{value_4}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "reduction_in_percent": 30
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "D"
+    }
+   },
+   "template": "AttackAndApplySelfDamageReductionSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_5d573",
+   "origin": "pig_support_minion_apprentice",
+   "type": "Support",
+   "source": "pig_support_minion_apprentice",
+   "name": "Protective Bubble",
+   "desc": "Target receives [00a800]{value_1}%[-] less damage. Lasts [00a800]{value_2}[-] turns. ",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "percent": 40
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_7}": {
+     "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+    }
+   },
+   "template": "BlockDamageSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 58,
+  "attack": 10,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_apprentice_bird3",
+  "fingerprint": "f8342266d1e79ff884f94616d3ce3f7c77c1c164",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "@tree1:40",
+     "pig_attack_forge_pig_minion_apprentice__e0_poke"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "@tree1:40",
+     "pig_support_minion_apprentice"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "@tree2:40",
+     "pig_attack_forge_pig_minion_apprentice__e0_poke"
+    ]
+   },
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "@tree2:40",
+     "pig_support_minion_apprentice"
+    ]
+   },
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "@tree3:10",
+     "pig_support_minion_apprentice"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "@tree4:10",
+     "pig_attack_forge_pig_minion_apprentice__e0_poke"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "@tree4:10",
+     "pig_support_minion_apprentice"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Apprentice",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_Apprentice",
+       "name": "Headgear_Apprentice",
+       "item": "Headgear_Apprentice",
+       "w": 96,
+       "h": 128,
+       "pivot": [
+        -0.4,
+        -0.64
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Apprentice",
+       "name": "MainHand_Apprentice",
+       "item": "MainHand_Apprentice",
+       "w": 128,
+       "h": 46,
+       "pivot": [
+        -0.28,
+        0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 58,
+    "attack": 10,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_99afd",
+     "origin": "pig_attack_forge_pig_minion_apprentice__e0_poke",
+     "type": "Attack",
+     "source": "pig_attack_forge_pig_minion_apprentice__e0_poke",
+     "name": "Poke",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Takes [ff0000]{value_3}%[-] less damage for [ff0000]{value_4}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "reduction_in_percent": 30
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "D"
+      }
+     },
+     "template": "AttackAndApplySelfDamageReductionSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_5d573",
+     "origin": "pig_support_minion_apprentice",
+     "type": "Support",
+     "source": "pig_support_minion_apprentice",
+     "name": "Protective Bubble",
+     "desc": "Target receives [00a800]{value_1}%[-] less damage. Lasts [00a800]{value_2}[-] turns. ",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "percent": 40
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_7}": {
+       "expr": "((p(\"percent\")) + (p(\"extra_percent_on_target\")))"
+      }
+     },
+     "template": "BlockDamageSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

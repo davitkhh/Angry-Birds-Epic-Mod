@@ -172,6 +172,28 @@
    "template": "HealOverTime",
    "duration": -1,
    "design": ""
+  },
+  {
+   "uid": "1pxplfaw",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": "",
+   "origin": "pig_passive_incompetentminions"
   }
  ],
  "weapon": {
@@ -198,7 +220,7 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_moustache_pastrychef",
-  "fingerprint": "06fbfd98dd6b1ea1dc34f78ef5878b78b863e7eb",
+  "fingerprint": "244eeeea31aaf7efefc2df22eb8c2adebab1135a",
   "rev": 0,
   "keepSkills": [],
   "combos": [
@@ -409,8 +431,31 @@
      "template": "HealOverTime",
      "duration": -1,
      "design": ""
+    },
+    {
+     "uid": "1pxplfaw",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": "",
+     "origin": "pig_passive_incompetentminions"
     }
    ]
   }
- }
+ },
+ "publishedAt": "2026-11-13 16:53"
 }

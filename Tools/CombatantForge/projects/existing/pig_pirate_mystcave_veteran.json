@@ -129,7 +129,7 @@
    "color": "BEE8FE",
    "atlas": "Skills_Pigs_01",
    "icon": "PassiveEffect",
-   "params": {},
+   "params": null,
    "values": {},
    "template": "ImmunityToCurses",
    "duration": -1,

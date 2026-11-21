@@ -269,7 +269,7 @@ namespace ABH.Services.Logic
 					// An early level on a pirate chain hotspot beats the level, not the story (PirateChain).
 					var battleId = ClientInfo.CurrentBattleGameData != null && ClientInfo.CurrentBattleGameData.Balancing != null ? ClientInfo.CurrentBattleGameData.Balancing.NameId : ClientInfo.CurrentBattleStartGameData != null ? ClientInfo.CurrentBattleStartGameData.m_BattleBalancingNameId : null;
 					var countsForStory = PirateChain.OnBattleWon(playerGameData, hotspot, battleId);
-					CompleteHotSpot(playerGameData, hotspot, Mathf.Max(battleResult.m_BattlePerformanceStars, 1), battleResult.m_Score);
+					CompleteHotSpot(playerGameData, hotspot, battleResult.m_BattlePerformanceStars, battleResult.m_Score);
 					if (countsForStory)
 					{
 						SetWorldMapHotspotProgress(playerGameData, hotspot);

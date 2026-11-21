@@ -2670,5 +2670,37 @@
     "LocaBaseId": "",
     "SortPriority": 0,
     "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "merchant_stock_upgrade_shield_start",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_merchant_shield_start_blueprint_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "merchant_stock_upgrade_shield_introwheel",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
+  },
+  {
+    "NameId": "story_merchant_shield_introwheel_blueprint_bought",
+    "ItemType": "Story",
+    "AssetBaseId": "",
+    "LocaBaseId": "",
+    "SortPriority": 0,
+    "SetAsNewInShop": 0
   }
 ]

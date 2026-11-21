@@ -1,0 +1,411 @@
+{
+ "kind": "existing",
+ "id": "pig_ninja_master",
+ "name": "Master Ninja",
+ "rig": "NinjaPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_MasterNinja",
+     "name": "Headgear_MasterNinja",
+     "item": "Headgear_MasterNinja",
+     "w": 160,
+     "h": 142,
+     "pivot": [
+      -0.06964286,
+      -0.09354656
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_MasterNinja_Back",
+     "name": "Headgear_MasterNinja_Back",
+     "item": "Headgear_MasterNinja",
+     "w": 132,
+     "h": 73,
+     "pivot": [
+      -0.074999996,
+      0.18889433
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c3d60452515b3ab4c9ccf37f04a85e20:MainHand_MasterNinja",
+     "name": "MainHand_MasterNinja",
+     "item": "MainHand_MasterNinja",
+     "w": 151,
+     "h": 124,
+     "pivot": [
+      -0.39,
+      0.146
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_7516c",
+   "origin": "pig_attack_ninja_master",
+   "type": "Attack",
+   "source": "pig_attack_ninja_master",
+   "name": "Four Season Strike",
+   "desc": "[00a800]{value_3}%[-] chance to immediately remove helpful effects from all enemies. Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "all": 1,
+    "purge_chance": 65
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"purge_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"purge_chance\"))"
+    }
+   },
+   "template": "AttackWithPurgeSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_82695",
+   "origin": "pig_support_ninja_master",
+   "type": "Support",
+   "source": "pig_support_ninja_master",
+   "name": "Focus Chi",
+   "desc": "Target is healed by [00a800]{value_1}[-] health per turn for the next [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Heal",
+   "params": {
+    "health_in_percent": 10,
+    "hot_chance": 100,
+    "invoker": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "!((1) > 0) ? (p(\"health_in_percent\")) : (H * (p(\"health_in_percent\")) / 100)"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_3}": {
+     "expr": "(p(\"hot_chance\"))"
+    }
+   },
+   "template": "HotSkill",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a2_995b7",
+   "origin": "pig_passive_fastness",
+   "type": "Passive",
+   "source": "pig_passive_fastness",
+   "name": "Dodge",
+   "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 23,
+    "lower_or_higher": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Strike",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 190,
+  "attack": 30,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig5_defeated_gold": 1,
+   "loot_pig5_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_ninja_master",
+  "fingerprint": "e72591515029f9b673ace649fbb347a86f3c3baa",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_attack_ninja_master"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_support_ninja_master"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Master Ninja",
+   "rig": "NinjaPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_MasterNinja",
+       "name": "Headgear_MasterNinja",
+       "item": "Headgear_MasterNinja",
+       "w": 160,
+       "h": 142,
+       "pivot": [
+        -0.06964286,
+        -0.09354656
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "c3d60452515b3ab4c9ccf37f04a85e20:Headgear_MasterNinja_Back",
+       "name": "Headgear_MasterNinja_Back",
+       "item": "Headgear_MasterNinja",
+       "w": 132,
+       "h": 73,
+       "pivot": [
+        -0.074999996,
+        0.18889433
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c3d60452515b3ab4c9ccf37f04a85e20:MainHand_MasterNinja",
+       "name": "MainHand_MasterNinja",
+       "item": "MainHand_MasterNinja",
+       "w": 151,
+       "h": 124,
+       "pivot": [
+        -0.39,
+        0.146
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Strike",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 190,
+    "attack": 30,
+    "sizeType": "Small",
+    "sizeScale": 1.1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig5_defeated_gold": 1,
+     "loot_pig5_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_7516c",
+     "origin": "pig_attack_ninja_master",
+     "type": "Attack",
+     "source": "pig_attack_ninja_master",
+     "name": "Four Season Strike",
+     "desc": "[00a800]{value_3}%[-] chance to immediately remove helpful effects from all enemies. Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "all": 1,
+      "purge_chance": 65
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"purge_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"purge_chance\"))"
+      }
+     },
+     "template": "AttackWithPurgeSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_82695",
+     "origin": "pig_support_ninja_master",
+     "type": "Support",
+     "source": "pig_support_ninja_master",
+     "name": "Focus Chi",
+     "desc": "Target is healed by [00a800]{value_1}[-] health per turn for the next [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Heal",
+     "params": {
+      "health_in_percent": 10,
+      "hot_chance": 100,
+      "invoker": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "!((1) > 0) ? (p(\"health_in_percent\")) : (H * (p(\"health_in_percent\")) / 100)"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_3}": {
+       "expr": "(p(\"hot_chance\"))"
+      }
+     },
+     "template": "HotSkill",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a2_995b7",
+     "origin": "pig_passive_fastness",
+     "type": "Passive",
+     "source": "pig_passive_fastness",
+     "name": "Dodge",
+     "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 23,
+      "lower_or_higher": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

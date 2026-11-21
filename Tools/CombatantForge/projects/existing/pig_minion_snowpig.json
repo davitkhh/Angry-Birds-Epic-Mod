@@ -1,0 +1,295 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_snowpig",
+ "name": "Snow Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_SnowPig",
+     "name": "Headgear_SnowPig",
+     "item": "Headgear_SnowPig",
+     "w": 151,
+     "h": 141,
+     "pivot": [
+      -0.20892857,
+      -0.36430472
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_SnowPig_Back",
+     "name": "Headgear_SnowPig_Back",
+     "item": "Headgear_SnowPig",
+     "w": 136,
+     "h": 52,
+     "pivot": [
+      -0.13928571,
+      -0.1190934
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_SnowPig",
+     "name": "MainHand_SnowPig",
+     "item": "MainHand_SnowPig",
+     "w": 123,
+     "h": 46,
+     "pivot": [
+      -0.4285714,
+      -0.3652756
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_e44d4",
+   "origin": "pig_attack_minion_snowpig",
+   "type": "Attack",
+   "source": "pig_attack_minion_snowpig",
+   "name": "Chilly Blow",
+   "desc": "[ff0000]{value_3}%[-] chance to immediately remove helpful effects from target. Deals [ff0000]{value_1}[-] damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "purge_chance": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"purge_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"purge_chance\"))"
+    }
+   },
+   "template": "AttackWithPurgeSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 135,
+  "attack": 18,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_snowpig",
+  "fingerprint": "29859b350a443e281505e9a0e01088e6080dd2fe",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_snowpig"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Snow Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_SnowPig",
+       "name": "Headgear_SnowPig",
+       "item": "Headgear_SnowPig",
+       "w": 151,
+       "h": 141,
+       "pivot": [
+        -0.20892857,
+        -0.36430472
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_SnowPig_Back",
+       "name": "Headgear_SnowPig_Back",
+       "item": "Headgear_SnowPig",
+       "w": 136,
+       "h": 52,
+       "pivot": [
+        -0.13928571,
+        -0.1190934
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_SnowPig",
+       "name": "MainHand_SnowPig",
+       "item": "MainHand_SnowPig",
+       "w": 123,
+       "h": 46,
+       "pivot": [
+        -0.4285714,
+        -0.3652756
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 135,
+    "attack": 18,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_e44d4",
+     "origin": "pig_attack_minion_snowpig",
+     "type": "Attack",
+     "source": "pig_attack_minion_snowpig",
+     "name": "Chilly Blow",
+     "desc": "[ff0000]{value_3}%[-] chance to immediately remove helpful effects from target. Deals [ff0000]{value_1}[-] damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "purge_chance": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"purge_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"purge_chance\"))"
+      }
+     },
+     "template": "AttackWithPurgeSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

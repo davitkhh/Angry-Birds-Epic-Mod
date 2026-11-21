@@ -42,7 +42,39 @@ public class EquipmentItemInfo : MonoBehaviour
 	{
 		if (m_Item != null && m_PerkSprite)
 		{
+			// With bonus perks shown as their own rows, the item's perk shows on its own too
+			if (m_Item.Perk != null && BonusPerkRows.GetPerk(m_PerkSprite.cachedTransform.parent, 0) != null)
+			{
+				DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.ShowPerkOverlay(m_PerkSprite.cachedTransform, m_Item.Perk, true);
+				return;
+			}
 			DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.ShowPerkOverlay(m_PerkSprite.cachedTransform, m_Item, true);
+		}
+	}
+
+	// Sent by the bonus perk rows' tap and hold (BonusPerkRows.ApplyToRow)
+	public void ShowBonusPerkTooltip0()
+	{
+		ShowBonusPerkTooltip(0);
+	}
+
+	public void ShowBonusPerkTooltip1()
+	{
+		ShowBonusPerkTooltip(1);
+	}
+
+	public void ShowBonusPerkTooltip2()
+	{
+		ShowBonusPerkTooltip(2);
+	}
+
+	private void ShowBonusPerkTooltip(int index)
+	{
+		var block = m_PerkSprite ? m_PerkSprite.cachedTransform.parent : null;
+		var perk = BonusPerkRows.GetPerk(block, index);
+		if (perk != null)
+		{
+			DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.ShowPerkOverlay(BonusPerkRows.GetIcon(block, index), perk, true);
 		}
 	}
 
@@ -142,6 +174,11 @@ public class EquipmentItemInfo : MonoBehaviour
 		if (m_PerkName)
 		{
 			m_PerkName.text = EquipmentGameData.GetPerkName(equipmentGameData);
+		}
+		// Bonus perks (upgrades) as perks of their own, stacked under the item's perk
+		if (m_PerkSprite && m_PerkSprite.cachedTransform.parent != null && m_PerkSprite.cachedTransform.parent.parent == base.transform)
+		{
+			BonusPerkRows.ApplyToRow(m_PerkSprite.cachedTransform.parent, m_PerkName, equipmentGameData);
 		}
 		if (statisticsElement)
 		{

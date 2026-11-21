@@ -1,0 +1,613 @@
+{
+ "kind": "existing",
+ "id": "pig_pirate_charents",
+ "name": "Charents",
+ "rig": "PigPirate",
+ "variant": "",
+ "slots": {
+  "EyePatch": {
+   "layers": [],
+   "hidden": true
+  },
+  "Eye_Left": {
+   "layers": [
+    {
+     "uid": "fm63w4h3",
+     "src": "d3868f285c104f9facecfd3fd3290cc3:Eye_LeftGangster",
+     "name": "Eye_LeftGangster",
+     "item": "Eye_LeftGangster",
+     "w": 36,
+     "h": 40,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "fm63w4h3"
+  },
+  "Eye_Right": {
+   "layers": [
+    {
+     "uid": "1txs7c5v",
+     "src": "d3868f285c104f9facecfd3fd3290cc3:Eye_RightGangster",
+     "name": "Eye_RightGangster",
+     "item": "Eye_RightGangster",
+     "w": 40,
+     "h": 42,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "1txs7c5v"
+  },
+  "Snout": {
+   "layers": [
+    {
+     "uid": "88m42cni",
+     "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Snout",
+     "name": "Snout",
+     "item": "Snout",
+     "w": 64,
+     "h": 66,
+     "pivot": [
+      -0.03,
+      -0.15
+     ],
+     "tx": -1.92,
+     "ty": -9.9,
+     "rot": 0,
+     "sx": 0.9090909090909091,
+     "sy": 0.9090909090909091,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "88m42cni"
+  },
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "re1lgues",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+     "name": "Headgear_BestBoy",
+     "item": "Headgear_BestBoy",
+     "w": 56,
+     "h": 70,
+     "pivot": [
+      -1.0488416,
+      -0.062450107
+     ],
+     "tx": 11.908942319675816,
+     "ty": -75.75561736939864,
+     "rot": 0,
+     "sx": 2.054782386105191,
+     "sy": 2.054782386105191,
+     "shear": 0,
+     "pair": "x2tjhunf"
+    },
+    {
+     "uid": "aoa8zulk",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsB",
+     "name": "Headgear_SpectatorsB",
+     "item": "Headgear_SpectatorsB",
+     "w": 100,
+     "h": 56,
+     "pivot": [
+      -0.01807229,
+      -0.248494
+     ],
+     "tx": 14.243577198800352,
+     "ty": 8.984599235546177,
+     "rot": 0,
+     "sx": 2.2327907571869123,
+     "sy": 2.2327907571869123,
+     "shear": 0,
+     "pair": "ldyna642"
+    }
+   ],
+   "hidden": false,
+   "active": "re1lgues"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "m9up8kq9",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+     "name": "Headgear_BestBoy_Back",
+     "item": "Headgear_BestBoy",
+     "w": 98,
+     "h": 52,
+     "pivot": [
+      -0.3267857,
+      -0.6512019
+     ],
+     "tx": -16.264433389686406,
+     "ty": -44.64903918682939,
+     "rot": 0,
+     "sx": 2.054782386105191,
+     "sy": 2.054782386105191,
+     "shear": 0,
+     "pair": "x2tjhunf"
+    },
+    {
+     "uid": "swua6p2o",
+     "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsB_Back",
+     "name": "Headgear_SpectatorsB_Back",
+     "item": "Headgear_SpectatorsB",
+     "w": 68,
+     "h": 18,
+     "pivot": [
+      0.5707895,
+      -0.5020431
+     ],
+     "tx": 20.67923948410271,
+     "ty": -11.663441986050874,
+     "rot": 0,
+     "sx": 2.2327907571869123,
+     "sy": 2.2327907571869123,
+     "shear": 0,
+     "pair": "ldyna642"
+    }
+   ],
+   "hidden": false,
+   "active": "m9up8kq9"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "urap4j2v",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SlatePig",
+     "name": "MainHand_SlatePig",
+     "item": "MainHand_SlatePig",
+     "w": 114,
+     "h": 96,
+     "pivot": [
+      -0.26250002,
+      -0.12405134
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "urap4j2v"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_03366",
+   "origin": "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+   "type": "Attack",
+   "source": "pig_attack_pirate_charents",
+   "name": "You, You, You",
+   "desc": "Deals [ff0000]{value_1}[-] damage and forces the target and a random ally to target each other for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 125
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "SimpleAttackWithMutualTauntSkill",
+   "duration": 2,
+   "design": "",
+   "nameId": "pig_attack_forge_pig_pirate_charents__e0_you_you_you"
+  },
+  {
+   "uid": "a1_4cbf7",
+   "origin": "pig_support_forge_pig_pirate_charents__e0_get_ready",
+   "type": "Support",
+   "source": "pig_support_pirate_charents",
+   "name": "Get Ready",
+   "desc": "All allies deal [ff0000]{value_1}%[-] less damage for [ff0000]1[-] turn, then [ff0000]{value_2}%[-] more damage for [ff0000]2[-] turns. They also counter when attacked for [ff0000]{value_4}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "counter": 100,
+    "damage_in_percent": 80,
+    "reduction_in_percent": 50,
+    "increase_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "D"
+    }
+   },
+   "template": "PhasedDamageAndCounterBlessing",
+   "duration": 3,
+   "design": "",
+   "nameId": "pig_support_forge_pig_pirate_charents__e0_get_ready"
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Strike",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 190,
+  "attack": 12,
+  "sizeType": "Large",
+  "sizeScale": 0.9,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_pirate_charents",
+  "fingerprint": "aed0d36412476960c641540eccd4e34b2f7ac528",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_attack_forge_pig_pirate_charents__e0_you_you_you"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+     "pig_support_forge_pig_pirate_charents__e0_get_ready"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+     "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+     "pig_support_forge_pig_pirate_charents__e0_get_ready"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Charents",
+   "rig": "PigPirate",
+   "variant": "",
+   "slots": {
+    "EyePatch": {
+     "layers": [],
+     "hidden": true
+    },
+    "Eye_Left": {
+     "layers": [
+      {
+       "uid": "fm63w4h3",
+       "src": "d3868f285c104f9facecfd3fd3290cc3:Eye_LeftGangster",
+       "name": "Eye_LeftGangster",
+       "item": "Eye_LeftGangster",
+       "w": 36,
+       "h": 40,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "fm63w4h3"
+    },
+    "Eye_Right": {
+     "layers": [
+      {
+       "uid": "1txs7c5v",
+       "src": "d3868f285c104f9facecfd3fd3290cc3:Eye_RightGangster",
+       "name": "Eye_RightGangster",
+       "item": "Eye_RightGangster",
+       "w": 40,
+       "h": 42,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "1txs7c5v"
+    },
+    "Snout": {
+     "layers": [
+      {
+       "uid": "88m42cni",
+       "src": "6cadab4b35b35bb45b3f17c4dcb9d26d:Snout",
+       "name": "Snout",
+       "item": "Snout",
+       "w": 64,
+       "h": 66,
+       "pivot": [
+        -0.03,
+        -0.15
+       ],
+       "tx": -1.92,
+       "ty": -9.9,
+       "rot": 0,
+       "sx": 0.9090909090909091,
+       "sy": 0.9090909090909091,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "88m42cni"
+    },
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "re1lgues",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+       "name": "Headgear_BestBoy",
+       "item": "Headgear_BestBoy",
+       "w": 56,
+       "h": 70,
+       "pivot": [
+        -1.0488416,
+        -0.062450107
+       ],
+       "tx": 11.908942319675816,
+       "ty": -75.75561736939864,
+       "rot": 0,
+       "sx": 2.054782386105191,
+       "sy": 2.054782386105191,
+       "shear": 0,
+       "pair": "x2tjhunf"
+      },
+      {
+       "uid": "aoa8zulk",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsB",
+       "name": "Headgear_SpectatorsB",
+       "item": "Headgear_SpectatorsB",
+       "w": 100,
+       "h": 56,
+       "pivot": [
+        -0.01807229,
+        -0.248494
+       ],
+       "tx": 14.243577198800352,
+       "ty": 8.984599235546177,
+       "rot": 0,
+       "sx": 2.2327907571869123,
+       "sy": 2.2327907571869123,
+       "shear": 0,
+       "pair": "ldyna642"
+      }
+     ],
+     "hidden": false,
+     "active": "re1lgues"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "m9up8kq9",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+       "name": "Headgear_BestBoy_Back",
+       "item": "Headgear_BestBoy",
+       "w": 98,
+       "h": 52,
+       "pivot": [
+        -0.3267857,
+        -0.6512019
+       ],
+       "tx": -16.264433389686406,
+       "ty": -44.64903918682939,
+       "rot": 0,
+       "sx": 2.054782386105191,
+       "sy": 2.054782386105191,
+       "shear": 0,
+       "pair": "x2tjhunf"
+      },
+      {
+       "uid": "swua6p2o",
+       "src": "73c353f8c2c3101419f6ef980ae64cee:Headgear_SpectatorsB_Back",
+       "name": "Headgear_SpectatorsB_Back",
+       "item": "Headgear_SpectatorsB",
+       "w": 68,
+       "h": 18,
+       "pivot": [
+        0.5707895,
+        -0.5020431
+       ],
+       "tx": 20.67923948410271,
+       "ty": -11.663441986050874,
+       "rot": 0,
+       "sx": 2.2327907571869123,
+       "sy": 2.2327907571869123,
+       "shear": 0,
+       "pair": "ldyna642"
+      }
+     ],
+     "hidden": false,
+     "active": "m9up8kq9"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "urap4j2v",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SlatePig",
+       "name": "MainHand_SlatePig",
+       "item": "MainHand_SlatePig",
+       "w": 114,
+       "h": 96,
+       "pivot": [
+        -0.26250002,
+        -0.12405134
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "urap4j2v"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Strike",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 190,
+    "attack": 12,
+    "sizeType": "Large",
+    "sizeScale": 0.9,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig7_defeated_gold": 1,
+     "loot_pig7_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_03366",
+     "origin": "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+     "type": "Attack",
+     "source": "pig_attack_pirate_charents",
+     "name": "You, You, You",
+     "desc": "Deals [ff0000]{value_1}[-] damage and forces the target and a random ally to target each other for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 125
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "SimpleAttackWithMutualTauntSkill",
+     "duration": 2,
+     "design": "",
+     "nameId": "pig_attack_forge_pig_pirate_charents__e0_you_you_you"
+    },
+    {
+     "uid": "a1_4cbf7",
+     "origin": "pig_support_forge_pig_pirate_charents__e0_get_ready",
+     "type": "Support",
+     "source": "pig_support_pirate_charents",
+     "name": "Get Ready",
+     "desc": "All allies deal [ff0000]{value_1}%[-] less damage for [ff0000]1[-] turn, then [ff0000]{value_2}%[-] more damage for [ff0000]2[-] turns. They also counter when attacked for [ff0000]{value_4}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "counter": 100,
+      "damage_in_percent": 80,
+      "reduction_in_percent": 50,
+      "increase_in_percent": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"damage_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "D"
+      }
+     },
+     "template": "PhasedDamageAndCounterBlessing",
+     "duration": 3,
+     "design": "",
+     "nameId": "pig_support_forge_pig_pirate_charents__e0_get_ready"
+    }
+   ]
+  }
+ },
+ "guids": {
+  "src:Forge_pig_pirate_charents__e0_Pirate": "abf34f13ac7b43a2b31fae386412d17b",
+  "src:Forge_pig_pirate_charents__e0_Pirate_Back": "51892821bb3f48bea93581cc4769dd9e",
+  "src:Forge_pig_pirate_charents__e0_Pirate__EyePatch": "853fc015fe01414e8564114671f1befe",
+  "src:Forge_pig_pirate_charents__e0_Pirate__Eye_Left": "02e4aaa858f34c04a64137ebb874c0a8",
+  "src:Forge_pig_pirate_charents__e0_Pirate__Eye_Right": "2dd74344cb924e8e986c1b0dc411da3b",
+  "src:Forge_pig_pirate_charents__e0_Pirate__Snout": "1d3b9112425148a585f5acfe0ac1e074",
+  "src:Forge_pig_pirate_charents__e0_MainHand": "a598f3848fb04f8184a722dd4499dcf1",
+  "tex:HR": "035caa6b5b944f4d9265a9702e931c64",
+  "tex:LR": "4b3a3922115941e2b5528feec6e55c65",
+  "mat:HR": "a8367f6219b748b990f2eb00178f8b53",
+  "mat:LR": "1ad4bbdf08cd495fb189a11c5519e0fb",
+  "atlas:HR": "cd3633dc98b84939bd8da99a851ade62",
+  "atlas:LR": "75c7917a364c406fb69d2a68f0089c30"
+ },
+ "publishedAt": "2026-11-13 18:50",
+ "publishedRig": "PigPirate"
+}

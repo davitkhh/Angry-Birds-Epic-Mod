@@ -247,7 +247,7 @@ namespace ABH.GameDatas.Battle
 			if (m_Skills.Count == 0)
 			{
 				AddBattleSkillImpl(ApplySetChargeReduction(ApplyDynamitePerk(!m_pvpBird ? Model.ClassItem.PrimarySkill : Model.ClassItem.PrimaryPvPSkill)));
-				AddBattleSkillImpl(ApplySetChargeReduction(ApplySupportPerk(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill)));
+				AddBattleSkillImpl(ApplySetChargeReduction(ApplySupportPerk(ApplySupportUpgrades(!m_pvpBird ? Model.ClassItem.SecondarySkill : Model.ClassItem.SecondaryPvPSkill))));
 				AddBattleSkillImpl(ApplySetChargeReduction(ApplyRageUpgrades(!m_pvpBird ? Model.RageSkill : Model.PvPRageSkill)));
 				if (Model.PassiveSkill != null)
 					AddBattleSkillImpl(Model.PassiveSkill);
@@ -282,6 +282,42 @@ namespace ABH.GameDatas.Battle
 			var balancing = CloneSkillBalancing(support.Balancing);
 			balancing.EffectDuration = Mathf.RoundToInt(balancing.EffectDuration * factor);
 			return new SkillGameData(support.SkillNameId, parameters).OverrideBalancing(balancing);
+		}
+
+		// Upgrade blueprints can raise support skill parameters, and a Bulwark perk (McCool's shield upgrades) adds its
+		// value to the support's "percent" (Red's Protect 55% -> 65%). Applied before Amplify scales the skill.
+		private SkillGameData ApplySupportUpgrades(SkillGameData support)
+		{
+			if (support == null)
+			{
+				return null;
+			}
+			var bonuses = UpgradeBlueprints.GetSupportSkillBonuses(Model);
+			var bulwark = UpgradeBlueprints.FindEquippedPerk(this, PerkType.Bulwark);
+			if (bulwark != null && bulwark.PerkValue != 0f)
+			{
+				float percent;
+				bonuses.TryGetValue("percent", out percent);
+				bonuses["percent"] = percent + bulwark.PerkValue;
+			}
+			var parameters = new Dictionary<string, float>(support.SkillParameters);
+			var changed = false;
+			foreach (var pair in bonuses)
+			{
+				float value;
+				if (parameters.TryGetValue(pair.Key, out value))
+				{
+					parameters[pair.Key] = value + pair.Value;
+					changed = true;
+				}
+			}
+			if (!changed)
+			{
+				return support;
+			}
+			var balancing = CloneSkillBalancing(support.Balancing);
+			balancing.SkillParameters = parameters;
+			return new SkillGameData(support.Balancing.NameId, parameters).OverrideBalancing(balancing);
 		}
 
 		// Upgrade blueprints on the class or equipped items can raise rage skill parameters (e.g. +1 Speed of Light

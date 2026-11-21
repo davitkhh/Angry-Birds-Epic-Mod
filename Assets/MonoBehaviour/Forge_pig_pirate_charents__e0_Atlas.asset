@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: Forge_pig_pirate_charents__e0_Atlas
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: a8367f6219b748b990f2eb00178f8b53, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.359375
+    width: 0.22265625
+    height: 0.1875
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.552734375
+    width: 0.4375
+    height: 0.447265625
+  - serializedVersion: 2
+    x: 0.44140625
+    y: 0.791015625
+    width: 0.412109375
+    height: 0.208984375
+  - serializedVersion: 2
+    x: 0.50390625
+    y: 0.54296875
+    width: 0.00390625
+    height: 0.00390625
+  - serializedVersion: 2
+    x: 0.4296875
+    y: 0.46875
+    width: 0.0703125
+    height: 0.078125
+  - serializedVersion: 2
+    x: 0.34765625
+    y: 0.46484375
+    width: 0.078125
+    height: 0.08203125
+  - serializedVersion: 2
+    x: 0.2265625
+    y: 0.4296875
+    width: 0.115234375
+    height: 0.1171875
+  textureGUIDs:
+  - a598f3848fb04f8184a722dd4499dcf1
+  - abf34f13ac7b43a2b31fae386412d17b
+  - 51892821bb3f48bea93581cc4769dd9e
+  - 853fc015fe01414e8564114671f1befe
+  - 02e4aaa858f34c04a64137ebb874c0a8
+  - 2dd74344cb924e8e986c1b0dc411da3b
+  - 1d3b9112425148a585f5acfe0ac1e074
+  textureSizes:
+  - {x: 114, y: 96}
+  - {x: 224, y: 229}
+  - {x: 211, y: 107}
+  - {x: 2, y: 2}
+  - {x: 36, y: 40}
+  - {x: 40, y: 42}
+  - {x: 59, y: 60}
+  defaultPivotOffsets:
+  - {x: -0.2625, y: -0.1240513}
+  - {x: -0.07274386, y: 0.1263823}
+  - {x: -0.05307007, y: 0.1008088}
+  - {x: 0, y: 0}
+  - {x: -0, y: -0}
+  - {x: -0, y: -0}
+  - {x: -0, y: -0}
+  textureNames:
+  - Forge_pig_pirate_charents__e0_MainHand
+  - Forge_pig_pirate_charents__e0_Pirate
+  - Forge_pig_pirate_charents__e0_Pirate_Back
+  - Forge_pig_pirate_charents__e0_Pirate__EyePatch
+  - Forge_pig_pirate_charents__e0_Pirate__Eye_Left
+  - Forge_pig_pirate_charents__e0_Pirate__Eye_Right
+  - Forge_pig_pirate_charents__e0_Pirate__Snout
+  texturePaths:
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_MainHand.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_Pirate.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_Pirate_Back.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_Pirate__EyePatch.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_Pirate__Eye_Left.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_Pirate__Eye_Right.png
+  - Assets/content/4_Characters/_Forge/Baked/pig_pirate_charents__e0/Forge_pig_pirate_charents__e0_Pirate__Snout.png
+  lastBuildID: 20160822143532908
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

@@ -1,0 +1,432 @@
+{
+ "kind": "existing",
+ "id": "pig_drone_doom",
+ "name": "Doom Drone",
+ "rig": "PigDrone",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_DoomDrone",
+     "name": "Headgear_DoomDrone",
+     "item": "Headgear_DoomDrone",
+     "w": 190,
+     "h": 184,
+     "pivot": [
+      -0.05892857,
+      0.2738257
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_DoomDrone_Back",
+     "name": "Headgear_DoomDrone_Back",
+     "item": "Headgear_DoomDrone",
+     "w": 116,
+     "h": 64,
+     "pivot": [
+      0.1928571,
+      0.5874442
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "944fb69e523fc284d8461513e658b534:MainHand_DoomDrone",
+     "name": "MainHand_DoomDrone",
+     "item": "MainHand_DoomDrone",
+     "w": 182,
+     "h": 140,
+     "pivot": [
+      -0.1875,
+      0.03830357
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_a3793",
+   "origin": "pig_attack_drone_doom_01",
+   "type": "Attack",
+   "source": "pig_attack_drone_doom_01",
+   "name": "Rocket Salvo",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies. All enemies receive [ff0000]{value_3}%[-] more damage for [ff0000]{value_2}[-] turns. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "all": 1,
+    "increase_in_percent": 25,
+    "chance": 100,
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "AttackWithIncreaseDamageReceived",
+   "duration": 3,
+   "design": ""
+  },
+  {
+   "uid": "a1_dd063",
+   "origin": "pig_attack_drone_doom_02",
+   "type": "Attack",
+   "source": "pig_attack_drone_doom_02",
+   "name": "Self-Destruction",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "charge": 3,
+    "damage_in_percent": 1000,
+    "all": 1,
+    "use_support_anim": 1,
+    "target_allies": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"stun_chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"stun_duration\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"ragereduce\"))"
+    }
+   },
+   "template": "AttackAndSelfDestruct",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_8f19a",
+   "origin": "pig_passive_drone_doom",
+   "type": "Passive",
+   "source": "pig_passive_drone_doom",
+   "name": "Call Drone",
+   "desc": "Calls a drone as support every [ff0000]{value_2}[-] turns.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Reinforcements",
+   "params": {
+    "table_index": 22,
+    "delay_in_turns": 2,
+    "amount": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"amount\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"delay_in_turns\"))"
+    }
+   },
+   "template": "SummonCombatantDelayed",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": true,
+  "projectile": "Projectile_PigDrone_RocketSalvo",
+  "hitEffect": "_Ranged_Projectile",
+  "directProjectile": true
+ },
+ "stats": {
+  "hp": 500,
+  "attack": 30,
+  "sizeType": "Large",
+  "sizeScale": 1.3,
+  "strength": 8,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_drone_doom",
+  "fingerprint": "0d0143066941d2fbc595124ac589e8e36f2f81a6",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_drone_doom_01",
+     "pig_attack_drone_doom_01",
+     "pig_attack_drone_doom_01",
+     "pig_attack_drone_doom_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Doom Drone",
+   "rig": "PigDrone",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_DoomDrone",
+       "name": "Headgear_DoomDrone",
+       "item": "Headgear_DoomDrone",
+       "w": 190,
+       "h": 184,
+       "pivot": [
+        -0.05892857,
+        0.2738257
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_DoomDrone_Back",
+       "name": "Headgear_DoomDrone_Back",
+       "item": "Headgear_DoomDrone",
+       "w": 116,
+       "h": 64,
+       "pivot": [
+        0.1928571,
+        0.5874442
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "944fb69e523fc284d8461513e658b534:MainHand_DoomDrone",
+       "name": "MainHand_DoomDrone",
+       "item": "MainHand_DoomDrone",
+       "w": 182,
+       "h": 140,
+       "pivot": [
+        -0.1875,
+        0.03830357
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": true,
+    "projectile": "Projectile_PigDrone_RocketSalvo",
+    "hitEffect": "_Ranged_Projectile",
+    "directProjectile": true
+   },
+   "stats": {
+    "hp": 500,
+    "attack": 30,
+    "sizeType": "Large",
+    "sizeScale": 1.3,
+    "strength": 8,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_a3793",
+     "origin": "pig_attack_drone_doom_01",
+     "type": "Attack",
+     "source": "pig_attack_drone_doom_01",
+     "name": "Rocket Salvo",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies. All enemies receive [ff0000]{value_3}%[-] more damage for [ff0000]{value_2}[-] turns. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "all": 1,
+      "increase_in_percent": 25,
+      "chance": 100,
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"increase_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      }
+     },
+     "template": "AttackWithIncreaseDamageReceived",
+     "duration": 3,
+     "design": ""
+    },
+    {
+     "uid": "a1_dd063",
+     "origin": "pig_attack_drone_doom_02",
+     "type": "Attack",
+     "source": "pig_attack_drone_doom_02",
+     "name": "Self-Destruction",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage to all.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "charge": 3,
+      "damage_in_percent": 1000,
+      "all": 1,
+      "use_support_anim": 1,
+      "target_allies": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"stun_chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"stun_duration\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"ragereduce\"))"
+      }
+     },
+     "template": "AttackAndSelfDestruct",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_8f19a",
+     "origin": "pig_passive_drone_doom",
+     "type": "Passive",
+     "source": "pig_passive_drone_doom",
+     "name": "Call Drone",
+     "desc": "Calls a drone as support every [ff0000]{value_2}[-] turns.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Reinforcements",
+     "params": {
+      "table_index": 22,
+      "delay_in_turns": 2,
+      "amount": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"amount\"))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"delay_in_turns\"))"
+      }
+     },
+     "template": "SummonCombatantDelayed",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

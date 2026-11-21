@@ -969,6 +969,79 @@ public class BattlePreperationUI : MonoBehaviour
 		m_EventEnergyCost.gameObject.SetActive(false);
 		m_EventEnergyRoot.gameObject.SetActive(false);
 		m_SelectedFriend = null;
+		// SetHotSpot runs before Enter() activates the window, and Invoke/coroutines don't run on an inactive
+		// object, so the star tiles are spawned from Enter() (or right away if the window is already open)
+		m_StarRulesPending = BattleStars.HasConditions(m_battleBalancing);
+		if (m_StarRulesPending)
+		{
+			foreach (Transform item in m_RulesGrid.transform)
+			{
+				UnityEngine.Object.Destroy(item.gameObject);
+			}
+			if (base.gameObject.activeInHierarchy)
+			{
+				m_StarRulesPending = false;
+				StartCoroutine(SpawnStarRulesNextFrame());
+			}
+		}
+	}
+
+	private bool m_StarRulesPending;
+
+	// Next frame, so the tiles destroyed above are gone before the grid repositions
+	private IEnumerator SpawnStarRulesNextFrame()
+	{
+		yield return null;
+		SpawnStarRules();
+		m_RulesGrid.Reposition();
+	}
+
+	// The battle's three stars as rule tiles (only when one of them is a condition star): the condition icon on
+	// the star, tap and hold for its description. Regular stars are plain stars ("reach the score").
+	// Regular star score for the prep screen tooltip, for the birds selected right now ("~" = estimate, see
+	// BattleStars.EstimateScorePerStar)
+	private string StarScoreText(int position)
+	{
+		var birds = (m_SelectedBirds != null ? m_SelectedBirds.Count : 0) + (m_SelectedFriend != null ? 1 : 0) + (!string.IsNullOrEmpty(m_forcedBird) ? 1 : 0);
+		bool estimated;
+		var perStar = BattleStars.EstimateScorePerStar(m_battleBalancing, birds, out estimated);
+		return (estimated ? "~" : string.Empty) + BattleStars.ScoreForStar(position, perStar);
+	}
+
+	private void SpawnStarRules()
+	{
+		if (m_battleBalancing == null || !BattleStars.HasConditions(m_battleBalancing) || m_RulesPrefabBirdNumber == null)
+		{
+			return;
+		}
+		m_BattleRules.SetActive(true);
+		for (var i = 0; i < BattleStars.Count; i++)
+		{
+			var tile = UnityEngine.Object.Instantiate(m_RulesPrefabBirdNumber);
+			tile.name = "ListElement_BattleRule_Star_" + (i + 1);
+			// The tile keeps its collider and tap-and-hold (touches land on the tile root, which has the Rigidbody);
+			// only the bird number tooltip and number label go
+			var invoker = tile.GetComponent<RulesOverlayInvoker>();
+			if (invoker != null)
+			{
+				UnityEngine.Object.DestroyImmediate(invoker);
+			}
+			var trigger = tile.GetComponent<UITapHoldTrigger>();
+			var value = tile.transform.Find("Value");
+			if (value != null)
+			{
+				value.gameObject.SetActive(false);
+			}
+			tile.transform.parent = m_RulesGrid.transform;
+			tile.transform.localScale = Vector3.one;
+			tile.transform.localPosition = Vector3.zero;
+			tile.transform.localRotation = Quaternion.identity;
+			var icon = tile.transform.Find("BirdsIcon").GetComponent<UISprite>();
+			icon.spriteName = "BattleStars";
+			var view = StarConditionView.Attach(icon, BattleStars.Get(m_battleBalancing, i), true, trigger);
+			var position = i;
+			view.ScoreText = () => StarScoreText(position);
+		}
 	}
 
 	private void SetHardDungeonBalancing()
@@ -1091,6 +1164,7 @@ public class BattlePreperationUI : MonoBehaviour
 			gameObject4.transform.localRotation = Quaternion.identity;
 			gameObject4.GetComponent<RulesOverlayInvoker>().m_AllowedBirdsNum = m_battleBalancing.MaxBirdsInBattle;
 		}
+		SpawnStarRules();
 		m_RulesGrid.Reposition();
 	}
 
@@ -1193,6 +1267,11 @@ public class BattlePreperationUI : MonoBehaviour
 		}
 		base.gameObject.SetActive(true);
 		StartCoroutine(EnterCoroutine());
+		if (m_StarRulesPending)
+		{
+			m_StarRulesPending = false;
+			StartCoroutine(SpawnStarRulesNextFrame());
+		}
 	}
 
 	public void SelectFriend(FriendGameData friend)

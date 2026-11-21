@@ -282,6 +282,10 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			StopCoroutine("CountDownTimer");
 			StartCoroutine("CountDownTimer", DIContainerLogic.GetTimingService().GetPresentTime().AddSeconds(DIContainerLogic.GetShopService().GetClassSwitchTimeLeft(DIContainerInfrastructure.GetCurrentPlayer()).TotalSeconds));
 		}
+		else
+		{
+			RegisterResourceBars();
+		}
 		yield return new WaitForSeconds(m_BoardAnimation["Board_Enter"].clip.length);
 		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("worldmap_shop_animate");
 		RegisterEventHandlers();
@@ -290,6 +294,46 @@ public class WorldMapShopMenuUI : MonoBehaviour
 		{
 			DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("entered_workshop", m_Model.NameId);
 		}
+	}
+
+	// Items with their own top-bar counter; anything else a shop charges (cobalt stone, wood, ...) gets a resource bar.
+	private static readonly string[] CurrencyBarItems = { "gold", "lucky_coin", "friendship_essence", "event_energy" };
+
+	// Shows a counter for each non-currency item any offer of this shop charges, next to the usual currencies
+	// (same set as the world map's depth-0 bar). Leave() removes it with DeRegisterBar(2u).
+	private void RegisterResourceBars()
+	{
+		var resources = new List<string>();
+		var shopService = DIContainerLogic.GetShopService();
+		foreach (var category in m_Model.Categories ?? new List<string>())
+		{
+			foreach (var offer in shopService.GetAllShopOffersInCategory(category))
+			{
+				if (offer == null || offer.BuyRequirements == null)
+				{
+					continue;
+				}
+				foreach (var requirement in offer.BuyRequirements)
+				{
+					if (requirement != null && requirement.RequirementType == RequirementType.PayItem && !string.IsNullOrEmpty(requirement.NameId) && Array.IndexOf(CurrencyBarItems, requirement.NameId) < 0 && !resources.Contains(requirement.NameId))
+					{
+						resources.Add(requirement.NameId);
+					}
+				}
+			}
+		}
+		if (resources.Count == 0)
+		{
+			return;
+		}
+		DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.RegisterBar(new BarRegistry
+		{
+			Depth = 2u,
+			showFriendshipEssence = true,
+			showLuckyCoins = true,
+			showSnoutlings = true,
+			showResources = resources
+		}, true);
 	}
 
 	private void HandleAnvil()
@@ -778,14 +822,15 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			var waitTime = 0f;
 			foreach (var offer in boughtOffers)
 			{
-				var boughtBlind = m_ShopOfferBlinds.FirstOrDefault(b => b.GetModel() != null && b.GetModel().NameId == offer.NameId);
+				var boughtBlind = m_ShopOfferBlinds.FirstOrDefault(b => b.OwnsOffer(offer.NameId));
 				if (boughtBlind == null)
 				{
 					continue;
 				}
 				DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
 				// Repeatable trades keep their tile on screen so it can be clicked again right away.
-				if (m_MenuType != ShopMenuType.Dojo && ShopOfferBlindWorldmap.CanBeBoughtAgain(offer))
+				// A pair tile always stays: its other half (or the next purchase of this one) is still on it.
+				if (m_MenuType != ShopMenuType.Dojo && (boughtBlind.IsPair || ShopOfferBlindWorldmap.CanBeBoughtAgain(offer)))
 				{
 					boughtBlind.ShowBoughtIndicator();
 				}
@@ -810,6 +855,7 @@ public class WorldMapShopMenuUI : MonoBehaviour
 			}
 			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateLuckyCoinsBar();
 			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateCoinsBar();
+			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.UpdateResourceBars();
 		}
 		m_IsRefreshing = false;
 		if (m_IsLeaving)

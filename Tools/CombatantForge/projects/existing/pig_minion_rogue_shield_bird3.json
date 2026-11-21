@@ -1,0 +1,534 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_rogue_shield_bird3",
+ "name": "Protected Rogue",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0",
+     "name": "Forge_pig_minion_rogue_shield__e0",
+     "item": "Forge_pig_minion_rogue_shield__e0",
+     "w": 148,
+     "h": 99,
+     "pivot": [
+      -0.145,
+      -0.4
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0_Back",
+     "name": "Forge_pig_minion_rogue_shield__e0_Back",
+     "item": "Forge_pig_minion_rogue_shield__e0",
+     "w": 148,
+     "h": 93,
+     "pivot": [
+      -0.15,
+      -0.15
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0_MainHand",
+     "name": "Forge_pig_minion_rogue_shield__e0_MainHand",
+     "item": "Forge_pig_minion_rogue_shield__e0_MainHand",
+     "w": 137,
+     "h": 41,
+     "pivot": [
+      -0.31,
+      0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0_OffHand",
+     "name": "Forge_pig_minion_rogue_shield__e0_OffHand",
+     "item": "Forge_pig_minion_rogue_shield__e0_OffHand",
+     "w": 74,
+     "h": 78,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_ed146",
+   "origin": "pig_attack_minion_rogue_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_01",
+   "name": "Backstab",
+   "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "attack_count": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_2296c",
+   "origin": "pig_attack_minion_rogue_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_rogue_02",
+   "name": "Sneer",
+   "desc": "Laughs stupidly. No effect at all!",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Sneer",
+   "params": {
+    "laugh": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a2_a4e65",
+   "origin": "pig_support_forge_pig_minion_rogue_shield__e0_block",
+   "type": "Support",
+   "source": "pig_support_forge_pig_minion_rogue_shield__e0_block",
+   "name": "Block",
+   "desc": "Takes a hit instead of a random ally every [ff0000]{value_1}[-] hits. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "amount_of_targets": 1,
+    "hit_interval": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"hit_interval\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"amount_of_targets\"))"
+    }
+   },
+   "template": "ProtectAllyEveryNthHitSkill",
+   "duration": 2,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 149,
+  "attack": 8,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 4,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_rogue_shield_bird3",
+  "fingerprint": "16af525cff0abbcc80a04a63ddca6a22944802a9",
+  "rev": 0,
+  "keepSkills": [
+   {
+    "id": "pig_attack_minion_rogue",
+    "passive": false
+   }
+  ],
+  "combos": [
+   {
+    "Percentage": 17.15,
+    "ComboChain": [
+     "pig_attack_minion_rogue_01",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_01",
+     "pig_attack_minion_rogue_01"
+    ]
+   },
+   {
+    "Percentage": 7.35,
+    "ComboChain": [
+     "pig_attack_minion_rogue_01",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_01",
+     "pig_attack_minion_rogue_02"
+    ]
+   },
+   {
+    "Percentage": 7.35,
+    "ComboChain": [
+     "pig_attack_minion_rogue_01",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_02",
+     "pig_attack_minion_rogue_01"
+    ]
+   },
+   {
+    "Percentage": 3.15,
+    "ComboChain": [
+     "pig_attack_minion_rogue_01",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_02",
+     "pig_attack_minion_rogue_02"
+    ]
+   },
+   {
+    "Percentage": 7.35,
+    "ComboChain": [
+     "pig_attack_minion_rogue_02",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_01",
+     "pig_attack_minion_rogue_01"
+    ]
+   },
+   {
+    "Percentage": 3.15,
+    "ComboChain": [
+     "pig_attack_minion_rogue_02",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_01",
+     "pig_attack_minion_rogue_02"
+    ]
+   },
+   {
+    "Percentage": 3.15,
+    "ComboChain": [
+     "pig_attack_minion_rogue_02",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_02",
+     "pig_attack_minion_rogue_01"
+    ]
+   },
+   {
+    "Percentage": 1.35,
+    "ComboChain": [
+     "pig_attack_minion_rogue_02",
+     "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "pig_attack_minion_rogue_02",
+     "pig_attack_minion_rogue_02"
+    ]
+   },
+   {
+    "Percentage": 27,
+    "ComboChain": [
+     "pig_attack_minion_rogue_01"
+    ]
+   },
+   {
+    "Percentage": 3,
+    "ComboChain": [
+     "pig_attack_minion_rogue_02"
+    ]
+   },
+   {
+    "Percentage": 20,
+    "ComboChain": [
+     "pig_support_forge_pig_minion_rogue_shield__e0_block"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Protected Rogue",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0",
+       "name": "Forge_pig_minion_rogue_shield__e0",
+       "item": "Forge_pig_minion_rogue_shield__e0",
+       "w": 148,
+       "h": 99,
+       "pivot": [
+        -0.145,
+        -0.4
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0_Back",
+       "name": "Forge_pig_minion_rogue_shield__e0_Back",
+       "item": "Forge_pig_minion_rogue_shield__e0",
+       "w": 148,
+       "h": 93,
+       "pivot": [
+        -0.15,
+        -0.15
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0_MainHand",
+       "name": "Forge_pig_minion_rogue_shield__e0_MainHand",
+       "item": "Forge_pig_minion_rogue_shield__e0_MainHand",
+       "w": 137,
+       "h": 41,
+       "pivot": [
+        -0.31,
+        0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "2c6c1403d6dc44debe3e51058145958a:Forge_pig_minion_rogue_shield__e0_OffHand",
+       "name": "Forge_pig_minion_rogue_shield__e0_OffHand",
+       "item": "Forge_pig_minion_rogue_shield__e0_OffHand",
+       "w": 74,
+       "h": 78,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 149,
+    "attack": 8,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 4,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_ed146",
+     "origin": "pig_attack_minion_rogue_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_01",
+     "name": "Backstab",
+     "desc": "Deals [ff0000]{value_4}x {value_1}[-] damage. ",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "attack_count": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_2296c",
+     "origin": "pig_attack_minion_rogue_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_rogue_02",
+     "name": "Sneer",
+     "desc": "Laughs stupidly. No effect at all!",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Sneer",
+     "params": {
+      "laugh": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_chance\"))"
+      }
+     },
+     "template": "DoNothingSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a2_a4e65",
+     "origin": "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "type": "Support",
+     "source": "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "name": "Block",
+     "desc": "Takes a hit instead of a random ally every [ff0000]{value_1}[-] hits. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "amount_of_targets": 1,
+      "hit_interval": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"hit_interval\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"amount_of_targets\"))"
+      }
+     },
+     "template": "ProtectAllyEveryNthHitSkill",
+     "duration": 2,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

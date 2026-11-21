@@ -19,6 +19,10 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private const float MaxSignUpTime = 1.2f;
 
+		// Strength of this sign-up (1 = full). A move repeated at reduced effectiveness (RepeatAfterMe) lowers it;
+		// the recipe's damage is scaled by the comboers' average.
+		public float Effectiveness = 1f;
+
 		public string ComboId
 		{
 			get

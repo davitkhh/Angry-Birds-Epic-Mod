@@ -1,0 +1,695 @@
+{
+ "kind": "existing",
+ "id": "pig_brute_mic",
+ "name": "Mic Brute",
+ "rig": "PigBrute",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "22r5ytfb",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+     "name": "Headgear_BestBoy",
+     "item": "Headgear_BestBoy",
+     "w": 56,
+     "h": 70,
+     "pivot": [
+      -1.0488416,
+      -0.062450107
+     ],
+     "tx": 73.16375694986567,
+     "ty": -104.59829043648617,
+     "rot": 0,
+     "sx": 2.940319734192046,
+     "sy": 2.940319734192046,
+     "shear": 0,
+     "pair": "kt85tnh1"
+    }
+   ],
+   "hidden": false,
+   "active": "22r5ytfb"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "47o81vcv",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+     "name": "Headgear_BestBoy_Back",
+     "item": "Headgear_BestBoy",
+     "w": 98,
+     "h": 52,
+     "pivot": [
+      -0.3267857,
+      -0.6512019
+     ],
+     "tx": 21.337562667710948,
+     "ty": -47.376338016807026,
+     "rot": 0,
+     "sx": 2.940319734192046,
+     "sy": 2.940319734192046,
+     "shear": 0,
+     "pair": "kt85tnh1"
+    }
+   ],
+   "hidden": false,
+   "active": "47o81vcv"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "ovu6lvps",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SoundPig",
+     "name": "MainHand_SoundPig",
+     "item": "MainHand_SoundPig",
+     "w": 128,
+     "h": 104,
+     "pivot": [
+      -0.1875,
+      -0.23406592
+     ],
+     "tx": 54.368132303036134,
+     "ty": 8.105482980869581,
+     "rot": 0,
+     "sx": 1.8023759899721095,
+     "sy": 1.8023759899721095,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "ovu6lvps"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_e65e1",
+   "origin": "pig_attack_forge_pig_brute_mic__e0_mic_drop",
+   "type": "Attack",
+   "source": "pig_attack_brute_mic",
+   "name": "Mic Drop",
+   "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, plus [ff0000]{value_3}%[-] of the damage the Pigs took last turn.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 120,
+    "charge": 2,
+    "bonus_from_pig_damage_taken_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_from_pig_damage_taken_in_percent\"))"
+    }
+   },
+   "template": "AttackWithBonusDamageFromPigDamageTaken",
+   "duration": 0,
+   "design": "",
+   "effects": [
+    {
+     "timing": "Movement",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_BodyAirstream_Large",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Movement",
+     "delay": 0.1,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_WeaponEffect_Strike_VeryLarge",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "UseTargetBoneRotation": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_GroundImpact_ShatteredEarth_Strong",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "DoNotParentOnBone": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "",
+     "onHit": true,
+     "onHitPrefix": "SkillFX_Hit_Single",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Center",
+     "prefab": "SkillFX_Hit_Impact_Top",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Hit_Heavy",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_GroundImpact_Dust_Large",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "DoNotParentOnBone": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Bottom",
+     "prefab": "Camera_Shake_Massive",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Support_Warcry_Circular",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {},
+     "turnWith": "anchor",
+     "attach": "MainHand",
+     "attachX": 165.6,
+     "attachY": 96.3,
+     "offsetX": 100
+    }
+   ],
+   "nameId": "pig_attack_forge_pig_brute_mic__e0_mic_drop"
+  },
+  {
+   "uid": "a1_8aa0e",
+   "origin": "pig_support_forge_pig_brute_mic__e0_hype_up",
+   "type": "Support",
+   "source": "pig_support_brute_mic",
+   "name": "Hype Up",
+   "desc": "A random Pig takes [ff0000]{value_3}%[-] increased damage for [ff0000]{value_2}[-] turn. Whoever it attacks catches the same curse, for the same duration",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_taken_increase": 20,
+    "anim_clip": 6115402
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_taken_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    }
+   },
+   "template": "IncreaseDamageRandomAlly",
+   "duration": 3,
+   "design": "",
+   "effects": [
+    {
+     "timing": "Start",
+     "delay": 0,
+     "target": "GlobalCamera",
+     "anchor": "Bottom",
+     "prefab": "Camera_Shake_Medium",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "SlowMotionEnd",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Aura_Blessing",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Start",
+     "delay": 0,
+     "target": "SlowMotion",
+     "anchor": "Center",
+     "prefab": "",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {},
+     "slow": {
+      "scale": 0.4,
+      "duration": 0.5,
+      "ease": 0.1,
+      "easeOut": 0.1
+     }
+    },
+    {
+     "timing": "SlowMotion",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_Generic_Support_Warcry_Circular",
+     "doNotMirror": false,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {},
+     "offsetX": 200,
+     "offsetY": 60
+    }
+   ],
+   "anim": "Hit",
+   "nameId": "pig_support_forge_pig_brute_mic__e0_hype_up"
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 380,
+  "attack": 32,
+  "sizeType": "Large",
+  "sizeScale": 1.2,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig8_defeated_gold": 1,
+   "loot_pig8_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_brute_mic",
+  "fingerprint": "7fc3a34ba2fe8712ddcab4f8070947e11f673ac6",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 60,
+    "ComboChain": [
+     "pig_support_forge_pig_brute_mic__e0_hype_up",
+     "pig_attack_forge_pig_brute_mic__e0_mic_drop"
+    ]
+   },
+   {
+    "Percentage": 40,
+    "ComboChain": [
+     "pig_attack_forge_pig_brute_mic__e0_mic_drop"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Mic Brute",
+   "rig": "PigBrute",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "22r5ytfb",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy",
+       "name": "Headgear_BestBoy",
+       "item": "Headgear_BestBoy",
+       "w": 56,
+       "h": 70,
+       "pivot": [
+        -1.0488416,
+        -0.062450107
+       ],
+       "tx": 73.16375694986567,
+       "ty": -104.59829043648617,
+       "rot": 0,
+       "sx": 2.940319734192046,
+       "sy": 2.940319734192046,
+       "shear": 0,
+       "pair": "kt85tnh1"
+      }
+     ],
+     "hidden": false,
+     "active": "22r5ytfb"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "47o81vcv",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_BestBoy_Back",
+       "name": "Headgear_BestBoy_Back",
+       "item": "Headgear_BestBoy",
+       "w": 98,
+       "h": 52,
+       "pivot": [
+        -0.3267857,
+        -0.6512019
+       ],
+       "tx": 21.337562667710948,
+       "ty": -47.376338016807026,
+       "rot": 0,
+       "sx": 2.940319734192046,
+       "sy": 2.940319734192046,
+       "shear": 0,
+       "pair": "kt85tnh1"
+      }
+     ],
+     "hidden": false,
+     "active": "47o81vcv"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "ovu6lvps",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SoundPig",
+       "name": "MainHand_SoundPig",
+       "item": "MainHand_SoundPig",
+       "w": 128,
+       "h": 104,
+       "pivot": [
+        -0.1875,
+        -0.23406592
+       ],
+       "tx": 54.368132303036134,
+       "ty": 8.105482980869581,
+       "rot": 0,
+       "sx": 1.8023759899721095,
+       "sy": 1.8023759899721095,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "ovu6lvps"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 380,
+    "attack": 32,
+    "sizeType": "Large",
+    "sizeScale": 1.2,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig8_defeated_gold": 1,
+     "loot_pig8_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_e65e1",
+     "origin": "pig_attack_forge_pig_brute_mic__e0_mic_drop",
+     "type": "Attack",
+     "source": "pig_attack_brute_mic",
+     "name": "Mic Drop",
+     "desc": "[0000ff]Charge:[-] [ff0000]{value_2}[-] turns. Deals [ff0000]{value_1}[-] damage, plus [ff0000]{value_3}%[-] of the damage the Pigs took last turn.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 120,
+      "charge": 2,
+      "bonus_from_pig_damage_taken_in_percent": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_from_pig_damage_taken_in_percent\"))"
+      }
+     },
+     "template": "AttackWithBonusDamageFromPigDamageTaken",
+     "duration": 0,
+     "design": "",
+     "effects": [
+      {
+       "timing": "Movement",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "Center",
+       "prefab": "SkillFX_Generic_BodyAirstream_Large",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Movement",
+       "delay": 0.1,
+       "target": "Origin",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_WeaponEffect_Strike_VeryLarge",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {
+        "UseTargetBoneRotation": "1"
+       }
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_GroundImpact_ShatteredEarth_Strong",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {
+        "DoNotParentOnBone": "1"
+       }
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "",
+       "onHit": true,
+       "onHitPrefix": "SkillFX_Hit_Single",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Center",
+       "prefab": "SkillFX_Hit_Impact_Top",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_Hit_Heavy",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_GroundImpact_Dust_Large",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {
+        "DoNotParentOnBone": "1"
+       }
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "GlobalCamera",
+       "anchor": "Bottom",
+       "prefab": "Camera_Shake_Massive",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_Generic_Support_Warcry_Circular",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {},
+       "turnWith": "anchor",
+       "attach": "MainHand",
+       "attachX": 165.6,
+       "attachY": 96.3,
+       "offsetX": 100
+      }
+     ],
+     "nameId": "pig_attack_forge_pig_brute_mic__e0_mic_drop"
+    },
+    {
+     "uid": "a1_8aa0e",
+     "origin": "pig_support_forge_pig_brute_mic__e0_hype_up",
+     "type": "Support",
+     "source": "pig_support_brute_mic",
+     "name": "Hype Up",
+     "desc": "A random Pig takes [ff0000]{value_3}%[-] increased damage for [ff0000]{value_2}[-] turn. Whoever it attacks catches the same curse, for the same duration",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_taken_increase": 20,
+      "anim_clip": 6115402
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"damage_taken_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      }
+     },
+     "template": "IncreaseDamageRandomAlly",
+     "duration": 3,
+     "design": "",
+     "effects": [
+      {
+       "timing": "Start",
+       "delay": 0,
+       "target": "GlobalCamera",
+       "anchor": "Bottom",
+       "prefab": "Camera_Shake_Medium",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_Generic_Aura_Blessing",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Start",
+       "delay": 0,
+       "target": "SlowMotion",
+       "anchor": "Center",
+       "prefab": "",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {},
+       "slow": {
+        "scale": 0.4,
+        "duration": 0.5,
+        "ease": 0.1,
+        "easeOut": 0.1
+       }
+      },
+      {
+       "timing": "SlowMotion",
+       "delay": 0,
+       "target": "Origin",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_Generic_Support_Warcry_Circular",
+       "doNotMirror": false,
+       "onHit": false,
+       "onHitPrefix": "",
+       "raw": {},
+       "offsetX": 200,
+       "offsetY": 60
+      }
+     ],
+     "anim": "Hit",
+     "nameId": "pig_support_forge_pig_brute_mic__e0_hype_up"
+    }
+   ]
+  }
+ },
+ "guids": {
+  "src:Forge_pig_brute_mic__e0": "4f18b2f3f57940b3a1bbf47170e87694",
+  "src:Forge_pig_brute_mic__e0_Back": "ef02f78c31e44a449bfaad149812c11e",
+  "src:Forge_pig_brute_mic__e0_MainHand": "297e0673acdf4970882016c885b1e33d",
+  "tex:HR": "ea663781c7034d45b957b73f41c5c2a1",
+  "tex:LR": "92e03f4f3ef5473c9751a3c3375b34dc",
+  "mat:HR": "7f924350c91144b3b10193750cbe31c4",
+  "mat:LR": "17cc902ae0ba49b0b16289bce489f355",
+  "atlas:HR": "c33c2ecbfbab4a7e8a9a06ee66668d32",
+  "atlas:LR": "38c584ff89e347be87f8e14243768c48"
+ },
+ "publishedAt": "2026-11-13 18:49",
+ "publishedRig": "PigBrute"
+}

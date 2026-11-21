@@ -6,6 +6,7 @@ using ABH.GameDatas.Interfaces;
 using ABH.Shared.BalancingData;
 using ABH.Shared.Generic;
 using ABH.Shared.Models.Character;
+using ABH.Shared.Models.Generic;
 using UnityEngine;
 
 public class InfoOverlayMgr : MonoBehaviour
@@ -87,6 +88,9 @@ public class InfoOverlayMgr : MonoBehaviour
 
 	// Created from m_EquipmentOverlay on first use
 	private ShopItemInfoOverlay m_ShopItemOverlay;
+
+	// Created from m_EquipmentOverlay on first use
+	private StarConditionOverlay m_StarConditionOverlay;
 
 	private void Awake()
 	{
@@ -255,6 +259,13 @@ public class InfoOverlayMgr : MonoBehaviour
 		m_PerkOverlay.ShowPerkOverlay(root, equipment, orientatedCamera);
 	}
 
+	public void ShowPerkOverlay(Transform root, EquipmentPerk perk, bool interfaceCam)
+	{
+		m_PerkOverlay.gameObject.SetActive(true);
+		var orientatedCamera = AdjustToCamera(interfaceCam);
+		m_PerkOverlay.ShowPerkOverlay(root, perk, orientatedCamera);
+	}
+
 	public void HidePerkOverlay()
 	{
 		Invoke("DisableBlocker", m_DisableBlockerDelay);
@@ -367,20 +378,20 @@ public class InfoOverlayMgr : MonoBehaviour
 				var text = UpgradeBlueprints.GetDescription(upgradeBlueprint);
 				var changes = UpgradeBlueprints.GetStatChanges(upgradeBlueprint, inventory);
 				var label = m_GenericOverlayWithHeader.m_TextBox.Label;
-				// Blank lines at the end make room for the old -> new stat rows drawn over them
+				// Blank lines at the end (the last one holds a space so it counts) make room for the old -> new stat rows drawn over them
 				var reserved = string.Empty;
 				if (changes.Count > 0 && label != null)
 				{
 					var lineHeight = Mathf.Max(1f, label.fontSize + label.spacingY);
 					var lines = Mathf.CeilToInt(UpgradeStatChangeView.GetHeight(changes.Count) / lineHeight);
-					for (var i = 0; i < lines; i++)
+					for (var i = 0; i < lines - 1; i++)
 					{
 						reserved += "\n";
 					}
 					reserved += " ";
 				}
 				text = (string.IsNullOrEmpty(text) ? string.Empty : text + "\n\n") + UpgradeBlueprints.GetSupportedEquipmentText(upgradeBlueprint, inventory) + (reserved.Length > 0 ? "\n" + reserved : string.Empty);
-				ShowGenericOverlay(root, UpgradeBlueprints.GetName(upgradeBlueprint), text, interfaceCam);
+				ShowGenericOverlay(root, UpgradeBlueprints.GetName(upgradeBlueprint), text, interfaceCam, true);
 				if (changes.Count > 0 && label != null)
 				{
 					var size = label.printedSize;
@@ -439,6 +450,22 @@ public class InfoOverlayMgr : MonoBehaviour
 	}
 
 	// Shop tiles: gear and (upgrade) blueprints show name, stats per star, perks and recipe. False for other items.
+	// Tap-and-hold of a battle star (BattleStars); star == null = a regular score star
+	internal void ShowStarConditionOverlay(Transform root, StarCondition star, bool interfaceCam, string scoreText = null)
+	{
+		if (m_EquipmentOverlay == null)
+		{
+			return;
+		}
+		if (m_StarConditionOverlay == null)
+		{
+			m_StarConditionOverlay = StarConditionOverlay.Create(m_EquipmentOverlay, DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera);
+		}
+		var camera = AdjustToCamera(interfaceCam);
+		m_StarConditionOverlay.gameObject.SetActive(true);
+		m_StarConditionOverlay.Show(root, camera, star, scoreText);
+	}
+
 	internal bool TryShowShopItemOverlay(Transform root, IInventoryItemGameData item, bool interfaceCam)
 	{
 		if (item == null || m_EquipmentOverlay == null)
@@ -529,6 +556,9 @@ public class InfoOverlayMgr : MonoBehaviour
 		Invoke("DisableBlocker", m_DisableBlockerDelay);
 	}
 
+	// Scene height of m_GenericOverlayWithHeader's description label
+	private const int DescriptionLineHeight = 30;
+
 	internal void ShowGenericOverlay(Transform root, string localizedText, bool interfaceCam)
 	{
 		m_GenericOverlay.gameObject.SetActive(true);
@@ -536,12 +566,20 @@ public class InfoOverlayMgr : MonoBehaviour
 		m_GenericOverlay.ShowGenericOverlay(root, localizedText, orientatedCamera);
 	}
 
-	internal void ShowGenericOverlay(Transform root, string localizedHeader, string localizedText, bool interfaceCam)
+	// growHeight: the description keeps its size and the label grows to fit all lines. Otherwise it keeps the scene's
+	// ShrinkContent with a one-line (30px) height, which shrinks multi-line text to nothing.
+	internal void ShowGenericOverlay(Transform root, string localizedHeader, string localizedText, bool interfaceCam, bool growHeight = false)
 	{
 		// Only upgrade blueprints draw stat rows into this overlay; drop leftovers from the last one
 		if (m_GenericOverlayWithHeader.m_TextBox != null && m_GenericOverlayWithHeader.m_TextBox.Label != null)
 		{
-			UpgradeStatChangeView.Clear(m_GenericOverlayWithHeader.m_TextBox.Label.transform);
+			var label = m_GenericOverlayWithHeader.m_TextBox.Label;
+			UpgradeStatChangeView.Clear(label.transform);
+			label.overflowMethod = growHeight ? UILabel.Overflow.ResizeHeight : UILabel.Overflow.ShrinkContent;
+			if (!growHeight && label.height != DescriptionLineHeight)
+			{
+				label.height = DescriptionLineHeight;
+			}
 		}
 		m_GenericOverlayWithHeader.gameObject.SetActive(true);
 		var orientatedCamera = AdjustToCamera(interfaceCam);
@@ -559,7 +597,7 @@ public class InfoOverlayMgr : MonoBehaviour
 	internal void ShowMissingCurrencyOverlay(Transform root, string spriteName, string text, UIAtlas atlas, bool interfaceCam)
 	{
 		m_MissingCurrencyOverlay.gameObject.SetActive(true);
-		var orientatedCamera = !interfaceCam ? Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera")) : Camera.allCameras.FirstOrDefault(c => c.CompareTag("UICamera"));
+		var orientatedCamera = !interfaceCam ? BirdUnlockSequence.SceneryCamera() : Camera.allCameras.FirstOrDefault(c => c.CompareTag("UICamera"));
 		m_MissingCurrencyOverlay.ShowGenericOverlay(root, spriteName, text, orientatedCamera, atlas);
 		CancelInvoke("HideMissingCurrencyOverlay");
 		Invoke("HideMissingCurrencyOverlay", DIContainerLogic.GetPacingBalancing().MissingCurrencyOverlayTime);
@@ -568,7 +606,7 @@ public class InfoOverlayMgr : MonoBehaviour
 	internal void ShowMissingCurrencyOverlay(Transform root, BasicItemGameData item, bool interfaceCam)
 	{
 		m_MissingCurrencyOverlay.gameObject.SetActive(true);
-		var orientatedCamera = !interfaceCam ? Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera")) : Camera.allCameras.FirstOrDefault(c => c.CompareTag("UICamera"));
+		var orientatedCamera = !interfaceCam ? BirdUnlockSequence.SceneryCamera() : Camera.allCameras.FirstOrDefault(c => c.CompareTag("UICamera"));
 		var dictionary = new Dictionary<string, string>();
 		dictionary.Add("{value_1}", item.ItemLocalizedName);
 		var replacementStrings = dictionary;
@@ -667,7 +705,7 @@ public class InfoOverlayMgr : MonoBehaviour
 		}
 		else
 		{
-			m_ReferencedCamera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
+			m_ReferencedCamera = BirdUnlockSequence.SceneryCamera();
 		}
 		SetDragControllerActive(false);
 		m_InputBlocker.SetActive(true);
@@ -743,7 +781,11 @@ public class InfoOverlayMgr : MonoBehaviour
 		{
 			m_ShopItemOverlay.Hide();
 		}
-		var camera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
+		if (m_StarConditionOverlay != null)
+		{
+			m_StarConditionOverlay.Hide();
+		}
+		var camera = BirdUnlockSequence.SceneryCamera();
 		if (camera)
 		{
 			camera.eventMask = 1 << LayerMask.NameToLayer("Scenery");
@@ -783,7 +825,11 @@ public class InfoOverlayMgr : MonoBehaviour
 		{
 			m_ShopItemOverlay.gameObject.SetActive(false);
 		}
-		var camera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
+		if (m_StarConditionOverlay != null)
+		{
+			m_StarConditionOverlay.gameObject.SetActive(false);
+		}
+		var camera = BirdUnlockSequence.SceneryCamera();
 		if (camera)
 		{
 			camera.eventMask = 1 << LayerMask.NameToLayer("Scenery");

@@ -446,7 +446,7 @@ public class BirdWindowUI : BirdWindowUIBase
 			m_BirdEquipmentPreviewUI.RefreshStats(true);
 		}
 		SelectDefaultSlot();
-		yield return StartCoroutine(RestorePosition(m_ItemPanel, m_SelectedSlot.transform, m_ItemGrid));
+		yield return StartCoroutine(RestorePosition(m_ItemPanel, m_SelectedSlot ? m_SelectedSlot.transform : null, m_ItemGrid));
 		StartCoroutine(SetCharacterHeader());
 		SelectDefaultSlot();
 		if (showUpdateAnim)
@@ -480,6 +480,14 @@ public class BirdWindowUI : BirdWindowUIBase
 
 	private void SetItemInfo(SkinItemGameData selectedSkin = null)
 	{
+		if (m_SelectedItem == null || (m_CurrentItemType == InventoryItemType.Trinket && m_SelectedItem.ItemBalancing.ItemType != InventoryItemType.Trinket))
+		{
+			// Nothing to show yet (e.g. an empty Trinkets tab still holding the previous tab's item).
+			m_EquipmentInfo.gameObject.SetActive(false);
+			m_EnchantableEquipmentInfo.gameObject.SetActive(false);
+			m_ClassInfo.gameObject.SetActive(false);
+			return;
+		}
 		var allowEnchanting = false;
 		var equipmentGameData = m_SelectedItem as EquipmentGameData;
 		if (equipmentGameData != null && m_AllyShowcase == null)
@@ -611,7 +619,7 @@ public class BirdWindowUI : BirdWindowUIBase
 		m_ownedClass = true;
 		m_hiddenClass = false;
 		var equippedItem = m_SelectedBird.InventoryGameData.Items[m_CurrentItemType].FirstOrDefault();
-		var inventoryItemSlot = m_ItemSlots.FirstOrDefault(s => s.GetModel().ItemBalancing.NameId.Equals(equippedItem.ItemBalancing.NameId) && s.GetModel().ItemData.Level.Equals(equippedItem.ItemData.Level) && s.GetModel().ItemData.Quality.Equals(equippedItem.ItemData.Quality));
+		var inventoryItemSlot = equippedItem == null ? null : m_ItemSlots.FirstOrDefault(s => s.GetModel().ItemBalancing.NameId.Equals(equippedItem.ItemBalancing.NameId) && s.GetModel().ItemData.Level.Equals(equippedItem.ItemData.Level) && s.GetModel().ItemData.Quality.Equals(equippedItem.ItemData.Quality));
 		if (!inventoryItemSlot)
 		{
 			inventoryItemSlot = m_ItemSlots.FirstOrDefault(birdClass => birdClass.GetModel().ItemBalancing is ClassItemBalancingData && !(birdClass.GetModel().ItemBalancing as ClassItemBalancingData).IsPremium);
@@ -619,6 +627,12 @@ public class BirdWindowUI : BirdWindowUIBase
 		if (m_SelectedSlot)
 		{
 			m_SelectedSlot.Deselect(m_buyableClass);
+		}
+		if (!inventoryItemSlot)
+		{
+			// Empty tab (Trinkets): the old slot was destroyed with the previous list.
+			m_SelectedSlot = null;
+			return;
 		}
 		SelectSlot(inventoryItemSlot);
 	}
@@ -723,7 +737,8 @@ public class BirdWindowUI : BirdWindowUIBase
 				root = m_BirdEquipmentPreviewUI.m_CurrentCharacterController.m_AssetController.HeadGearBone;
 				break;
 		}
-		if (m_ownedClass && !m_alreadyEquipped)
+		// Trinkets have no bone to fly to.
+		if (root != null && m_ownedClass && !m_alreadyEquipped)
 		{
 			m_SwitchBirdsBlocked = true;
 			yield return new WaitForSeconds(slot.FlyToTransform(root, offset));
@@ -1083,7 +1098,8 @@ public class BirdWindowUI : BirdWindowUIBase
 	private void OnSlotSelected(InventoryItemSlot slot)
 	{
 		m_SelectedItem = slot.GetModel();
-		if (m_CurrentItemType != InventoryItemType.Class || m_ownedClass)
+		// Trinkets have no equipping slot yet: selecting one only shows it.
+		if (m_CurrentItemType != InventoryItemType.Trinket && (m_CurrentItemType != InventoryItemType.Class || m_ownedClass))
 		{
 			DIContainerLogic.InventoryService.EquipBirdWithItem(new List<IInventoryItemGameData> { m_SelectedItem }, m_CurrentItemType, m_SelectedBird.InventoryGameData);
 			if (m_AllyShowcase != null)

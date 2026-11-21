@@ -266,6 +266,23 @@ public class BattleResultWon : MonoBehaviour
 			uISprite.spriteName = uISprite.spriteName.Replace("_Desaturated", string.Empty);
 			uISprite.spriteName += "_Desaturated";
 		}
+		// Condition stars (BattleStars) show their icon and a tap-and-hold; battles with only score stars stay as before
+		if (m_BattleData != null && BattleStars.HasConditions(m_BattleData.Balancing))
+		{
+			for (var i = 0; i < m_StarSprite.Length && i < BattleStars.Count; i++)
+			{
+				// The stars share depth 0 with the loot wheel; two lower leaves room for the icon (star + 1) under
+				// the wheel. Nothing else of the popup's main panel is between -6 and 0.
+				if (m_StarSprite[i].depth > -2)
+				{
+					m_StarSprite[i].depth = -2;
+				}
+				var view = StarConditionView.Attach(m_StarSprite[i], BattleStars.Get(m_BattleData.Balancing, i), true);
+				view.SetEarned(false);
+				var position = i;
+				view.ScoreText = () => BattleStars.ScoreForStar(position, (int)((float)m_gameEndData.m_NeededScoreFor3Stars / 3f)).ToString();
+			}
+		}
 		m_StarsAnimation.Play("BattleWon_Step1_Enter");
 		m_ScoreText.text = "0";
 		m_ScoreHeader.text = m_BattleData.Balancing.BattleParticipantsIds.Count != m_gameEndData.m_LastWaveIndex ? DIContainerInfrastructure.GetLocaService().Tr("battlewon_early_header_score") : DIContainerInfrastructure.GetLocaService().Tr("battlewon_header_score");
@@ -632,7 +649,20 @@ public class BattleResultWon : MonoBehaviour
 		var scoreForOneStar = (int)((float)m_gameEndData.m_NeededScoreFor3Stars / 3f);
 		var maxScore = scoreForOneStar * 4;
 		var currentScore = 0;
-		var starIndex = 0;
+		// Per star position: earned condition stars light first, score stars when the count passes their threshold,
+		// and anything still earned (the guaranteed first star) at the end
+		var starsEarned = BattleStars.Earned(m_gameEndData);
+		var balancing = m_BattleData != null ? m_BattleData.Balancing : null;
+		m_StarsLit = new bool[BattleStars.Count];
+		m_StarsLitCount = 0;
+		for (var c = 0; c < BattleStars.Count; c++)
+		{
+			if (starsEarned[c] && !BattleStars.IsRegular(balancing, c))
+			{
+				LightStar(c);
+				yield return new WaitForSeconds(0.25f);
+			}
+		}
 		var scorePercent = (float)m_gameEndData.m_Score / (float)maxScore;
 		var maxTime = DIContainerLogic.GetPacingBalancing().ScoringAnimationMaxTime;
 		var actualTime = scorePercent * maxTime;
@@ -660,47 +690,26 @@ public class BattleResultWon : MonoBehaviour
 				currentScore = m_gameEndData.m_Score;
 			}
 			m_ScoreText.text = displayScore.ToString();
-			if ((starIndex == 0 && currentScore >= scoreForOneStar) || (starIndex == 1 && currentScore >= scoreForOneStar * 2) || (starIndex == 2 && currentScore >= scoreForOneStar * 3))
+			for (var c = 0; c < BattleStars.Count; c++)
 			{
-				DebugLog.Log("play star animation " + starIndex);
-				m_StarSprite[starIndex].spriteName = m_StarSprite[starIndex].spriteName.Replace("_Desaturated", string.Empty);
-				m_StarGainedAnimation[starIndex].Play();
-				m_StarGainedParticle[starIndex].Play();
-				DIContainerInfrastructure.AudioManager.PlaySound("UI_Star_" + (starIndex + 1));
-				starIndex++;
+				if (!m_StarsLit[c] && starsEarned[c] && BattleStars.IsRegular(balancing, c) && currentScore >= scoreForOneStar * (c + 1))
+				{
+					LightStar(c);
+				}
 			}
 			yield return null;
 		}
 		while (currentScore < m_gameEndData.m_Score);
-		if (starIndex == 0)
-		{
-			DebugLog.Log("play star animation " + starIndex);
-			m_StarSprite[starIndex].spriteName = m_StarSprite[starIndex].spriteName.Replace("_Desaturated", string.Empty);
-			m_StarGainedAnimation[starIndex].Play();
-			m_StarGainedParticle[starIndex].Play();
-			DIContainerInfrastructure.AudioManager.PlaySound("UI_Star_" + (starIndex + 1));
-			starIndex++;
-		}
 		if (currentScore < m_gameEndData.m_Score)
 		{
 			currentScore = m_gameEndData.m_Score;
 		}
 		m_ScoreText.text = displayScore.ToString();
-		var starsChecked = false;
-		while (!starsChecked)
+		for (var c = 0; c < BattleStars.Count; c++)
 		{
-			if ((starIndex == 0 && currentScore >= scoreForOneStar) || (starIndex == 1 && currentScore >= scoreForOneStar * 2) || (starIndex == 2 && currentScore >= scoreForOneStar * 3))
+			if (!m_StarsLit[c] && starsEarned[c])
 			{
-				DebugLog.Log("play star animation " + starIndex);
-				m_StarSprite[starIndex].spriteName = m_StarSprite[starIndex].spriteName.Replace("_Desaturated", string.Empty);
-				m_StarGainedAnimation[starIndex].Play();
-				m_StarGainedParticle[starIndex].Play();
-				DIContainerInfrastructure.AudioManager.PlaySound("UI_Star_" + (starIndex + 1));
-				starIndex++;
-			}
-			else
-			{
-				starsChecked = true;
+				LightStar(c);
 			}
 		}
 		DIContainerInfrastructure.AudioManager.StopSound("background_wheel_enter_loop");
@@ -728,6 +737,31 @@ public class BattleResultWon : MonoBehaviour
 		m_initalAnimationSquenceDone = true;
 		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("result_won_enter");
 		DIContainerInfrastructure.BackButtonMgr.RegisterAction(3, m_WheelButton_Clicked);
+	}
+
+	private bool[] m_StarsLit = new bool[BattleStars.Count];
+
+	private int m_StarsLitCount;
+
+	// Lights the star at a position; the gain sound rises with the number of stars lit so far
+	private void LightStar(int index)
+	{
+		if (index < 0 || index >= m_StarSprite.Length || m_StarsLit[index])
+		{
+			return;
+		}
+		DebugLog.Log("play star animation " + index);
+		m_StarsLit[index] = true;
+		m_StarSprite[index].spriteName = m_StarSprite[index].spriteName.Replace("_Desaturated", string.Empty);
+		m_StarGainedAnimation[index].Play();
+		m_StarGainedParticle[index].Play();
+		m_StarsLitCount++;
+		DIContainerInfrastructure.AudioManager.PlaySound("UI_Star_" + Mathf.Clamp(m_StarsLitCount, 1, 3));
+		var view = m_StarSprite[index].GetComponent<StarConditionView>();
+		if (view != null)
+		{
+			view.SetEarned(true);
+		}
 	}
 
 	private void SetLootIcons()

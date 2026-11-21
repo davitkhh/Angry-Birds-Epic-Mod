@@ -30,6 +30,10 @@ public class CharacterControllerWorldMap : MonoBehaviour
 
 	private bool m_IsLite;
 
+	// One of the world map's own birds: its gear follows the options strip's world-map gear toggles (WorldMapGear).
+	[NonSerialized]
+	public bool m_UsesWorldMapGear;
+
 	[method: MethodImpl(32)]
 	public event Action<ICombatant> Clicked;
 

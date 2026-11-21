@@ -1,0 +1,4 @@
+both layers: top-left in reference px 159 298, size 208 57
+Glasses_PirateReading: above Snout
+Glasses_PirateReading_Far: behind Snout, above Eye/Pupil/Lid
+Glasses_PirateReading_Back: behind Body (tip hooks round the back of the head)

@@ -1,0 +1,20 @@
+{
+ "src:Headgear_CactusKnightFruit": "39a2105ac3104edf9852cdeb59d506dd",
+ "src:Headgear_CactusKnightFruit_Back": "e44b892f54244de5b7812e64a2ac4e76",
+ "src:MainHand_CactusKnightFruit": "9fc06cda8e714daeaadf2777780cdbde",
+ "src:OffHand_CactusKnightFruit": "6ac230981cd34adba65f3de2655ad173",
+ "tex:HR": "4e91a6d95a8a4075acde7502f822e12a",
+ "tex:LR": "3a31b6361922476c92e4fb56e9106256",
+ "mat:HR": "a43dae8d65fd45aabddb0b353dff3d50",
+ "mat:LR": "c43007d576754699953a7edf91110a93",
+ "atlas:HR": "137770c1adc24ea6a3adf148c86ca953",
+ "atlas:LR": "ee47b98a5b7c477e8406c2674e4a7c5d",
+ "src:Headgear_CactusKnightBud": "5c76357a14a845ce8d4af3831de46033",
+ "src:Headgear_CactusKnightBud_Back": "18af88fb0da845ea9032f1f51d088d34",
+ "src:MainHand_CactusKnightBud": "6aea0e18867d4df8b4a96be3c2d7fa31",
+ "src:OffHand_CactusKnightBud": "dbb0f83d1eab4e8da20fbcdfe5d22ffe",
+ "src:Headgear_CactusKnightBloom": "158dfb343e1d4d2e99e7addff5eaf713",
+ "src:Headgear_CactusKnightBloom_Back": "e577005b643141eab207db376e37fbd5",
+ "src:MainHand_CactusKnightBloom": "e4cee4e00e2947e1bb0c8f08447de411",
+ "src:OffHand_CactusKnightBloom": "21a572ce3a97465ab3bd2298eee0fdb6"
+}

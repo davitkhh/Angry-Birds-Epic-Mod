@@ -1,0 +1,404 @@
+{
+ "kind": "existing",
+ "id": "pig_prince_porky_thirdencounter_resolved",
+ "name": "Prince Porky",
+ "rig": "PrincePorky",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "c1363ce0bce06414a9ccf6387f6f95c5:Headgear",
+     "name": "Headgear",
+     "item": "Headgear",
+     "w": 180,
+     "h": 126,
+     "pivot": [
+      -0.04,
+      -0.17
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "c1363ce0bce06414a9ccf6387f6f95c5:MainHand_SkiStick",
+     "name": "MainHand_SkiStick",
+     "item": "MainHand_SkiStick",
+     "w": 173,
+     "h": 57,
+     "pivot": [
+      -0.3321429,
+      -0.1382049
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a2_f5d0d",
+   "origin": "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch",
+   "type": "Attack",
+   "source": "pig_attack_prince_porky_quad",
+   "name": "Quick Stitch",
+   "desc": "Attacks random targets [ff0000]{value_4}[-] times for [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100,
+    "swing_count": 4
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100) * A)"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(Math.max(1, ((p(\"swing_count\")))))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "RepeatedSwingsAttack",
+   "duration": 0,
+   "design": "",
+   "nameId": "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch"
+  },
+  {
+   "uid": "a3_e4802",
+   "origin": "pig_attack_prince_porky_duel",
+   "type": "Attack",
+   "source": "pig_attack_prince_porky_duel",
+   "name": "Duel",
+   "desc": "Isolates the target for a duel. Lasts [ff0000]{value_1}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "duel_turns": 3
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+    }
+   },
+   "template": "DuelKnockback",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_08a99",
+   "origin": "pig_support_prince_porky",
+   "type": "Support",
+   "source": "pig_support_prince_porky",
+   "name": "Tit for Tat",
+   "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_dealt_increase": 25,
+    "damage_taken_increase": 25,
+    "all": 1
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_dealt_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_taken_increase\"))"
+    }
+   },
+   "template": "IncreaseDamageDealtAndReceived",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a4_995b7",
+   "origin": "pig_passive_fastness",
+   "type": "Passive",
+   "source": "pig_passive_fastness",
+   "name": "Dodge",
+   "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "refdamage_percent": 23,
+    "lower_or_higher": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "p(\"refdamage_percent\")",
+     "percent": true
+    }
+   },
+   "template": "IgnoreDamage",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 500,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig10_defeated_gold": 1,
+   "loot_pig10_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_prince_porky_thirdencounter_resolved",
+  "fingerprint": "3166895b0e91dab2be798ed2930c353b3b9e36d3",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_support_prince_porky"
+    ]
+   },
+   {
+    "Percentage": 12.5,
+    "ComboChain": [
+     "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch"
+    ]
+   },
+   {
+    "Percentage": 12.5,
+    "ComboChain": [
+     "pig_attack_prince_porky_duel"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Prince Porky",
+   "rig": "PrincePorky",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "c1363ce0bce06414a9ccf6387f6f95c5:Headgear",
+       "name": "Headgear",
+       "item": "Headgear",
+       "w": 180,
+       "h": 126,
+       "pivot": [
+        -0.04,
+        -0.17
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "c1363ce0bce06414a9ccf6387f6f95c5:MainHand_SkiStick",
+       "name": "MainHand_SkiStick",
+       "item": "MainHand_SkiStick",
+       "w": 173,
+       "h": 57,
+       "pivot": [
+        -0.3321429,
+        -0.1382049
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 500,
+    "attack": 12,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 7,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig10_defeated_gold": 1,
+     "loot_pig10_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a2_f5d0d",
+     "origin": "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch",
+     "type": "Attack",
+     "source": "pig_attack_prince_porky_quad",
+     "name": "Quick Stitch",
+     "desc": "Attacks random targets [ff0000]{value_4}[-] times for [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100,
+      "swing_count": 4
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(((p(\"damage_in_percent\")) / 100) * A)"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(Math.max(1, ((p(\"swing_count\")))))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "RepeatedSwingsAttack",
+     "duration": 0,
+     "design": "",
+     "nameId": "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch"
+    },
+    {
+     "uid": "a3_e4802",
+     "origin": "pig_attack_prince_porky_duel",
+     "type": "Attack",
+     "source": "pig_attack_prince_porky_duel",
+     "name": "Duel",
+     "desc": "Isolates the target for a duel. Lasts [ff0000]{value_1}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "duel_turns": 3
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+      }
+     },
+     "template": "DuelKnockback",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_08a99",
+     "origin": "pig_support_prince_porky",
+     "type": "Support",
+     "source": "pig_support_prince_porky",
+     "name": "Tit for Tat",
+     "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_dealt_increase": 25,
+      "damage_taken_increase": 25,
+      "all": 1
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"damage_dealt_increase\"))"
+      },
+      "{value_2}": {
+       "expr": "D"
+      },
+      "{value_6}": {
+       "expr": "(p(\"damage_taken_increase\"))"
+      }
+     },
+     "template": "IncreaseDamageDealtAndReceived",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a4_995b7",
+     "origin": "pig_passive_fastness",
+     "type": "Passive",
+     "source": "pig_passive_fastness",
+     "name": "Dodge",
+     "desc": "[0000ff]Passive:[-] Can't take more than [00a800]{value_1}[-] per attack.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "refdamage_percent": 23,
+      "lower_or_higher": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "p(\"refdamage_percent\")",
+       "percent": true
+      }
+     },
+     "template": "IgnoreDamage",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ },
+ "publishedAt": "2026-11-13 15:03"
+}

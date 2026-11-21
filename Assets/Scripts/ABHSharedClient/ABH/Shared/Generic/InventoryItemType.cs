@@ -27,6 +27,8 @@ namespace ABH.Shared.Generic
 		EventBossItem,
 		CollectionComponent,
 		Trophy,
-		Skin
+		Skin,
+		// Carried by a bird without a fixed equipping slot (unlike Class/headgear, MainHand, OffHand).
+		Trinket
 	}
 }

@@ -72,6 +72,26 @@ namespace ABH.GameDatas.Battle.Skills
 			battle.SetRageAvailable(source.CombatantFaction, true);
 		}
 
+		protected override List<ICombatant> GetPreviewTargets(HealthPreviewContext ctx)
+		{
+			return new List<ICombatant> { ctx.FactionOf(ctx.Target).OrderBy(c => c.CurrentHealth).LastOrDefault() };
+		}
+
+		// Collateral damage on up to m_AdditionalEnemiesAffected random other enemies
+		protected override void PreviewAfterHit(HealthPreviewContext ctx, ICombatant target, HealthChange hit, float chance)
+		{
+			var others = ctx.Battle.m_CombatantsByInitiative.Where(c => c.CombatantFaction != ctx.Source.CombatantFaction && c != target && c.CombatantView != null).ToList();
+			if (others.Count == 0)
+			{
+				return;
+			}
+			var picked = System.Math.Min(others.Count, (int)System.Math.Round(m_AdditionalEnemiesAffected));
+			foreach (var other in others)
+			{
+				ctx.AddHit(other, ctx.Source.ModifiedAttack * m_CollateralDamageMod, 1, false, chance * picked / others.Count);
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

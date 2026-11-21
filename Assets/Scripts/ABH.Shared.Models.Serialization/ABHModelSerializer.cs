@@ -2090,6 +2090,48 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteFieldHeader(27, WireType.Fixed32, _param1);
       ProtoWriter.WriteSingle((float) powerlevelModifier, _param1);
     }
+    var stars = _param0.Stars;
+    if (stars != null)
+    {
+      foreach (var star in stars)
+      {
+        ProtoWriter.WriteFieldHeader(28, WireType.String, _param1);
+        ProtoWriter.WriteString(StarConditionToString(star), _param1);
+      }
+    }
+  }
+
+  // Battle stars travel as "Type|Value|NameId" strings (field 28), so no new proto type is needed
+  private static string StarConditionToString(StarCondition star)
+  {
+    if (star == null)
+      return StarConditionType.Regular.ToString() + "|0|";
+    return star.Type.ToString() + "|" + star.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + (star.NameId ?? string.Empty);
+  }
+
+  private static StarCondition StarConditionFromString(string text)
+  {
+    var star = new StarCondition();
+    if (string.IsNullOrEmpty(text))
+      return star;
+    var parts = text.Split('|');
+    try
+    {
+      star.Type = (StarConditionType) Enum.Parse(typeof (StarConditionType), parts[0], true);
+    }
+    catch (ArgumentException)
+    {
+      star.Type = StarConditionType.Regular;
+    }
+    if (parts.Length > 1)
+    {
+      int value;
+      if (int.TryParse(parts[1], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out value))
+        star.Value = value;
+    }
+    if (parts.Length > 2 && parts[2].Length > 0)
+      star.NameId = string.Join("|", parts, 2, parts.Length - 2);
+    return star;
   }
 
   private static BattleBalancingData Read(BattleBalancingData _param0, ProtoReader _param1)
@@ -2556,6 +2598,17 @@ public sealed class ABHModelSerializer : TypeModel
           }
           var powerlevelModifier = _param1.ReadSingle();
           _param0.PowerlevelModifier = powerlevelModifier;
+          continue;
+        case 28:
+          if (_param0 == null)
+          {
+            var battleBalancingData = new BattleBalancingData();
+            ProtoReader.NoteObject((object) battleBalancingData, _param1);
+            _param0 = battleBalancingData;
+          }
+          if (_param0.Stars == null)
+            _param0.Stars = new List<StarCondition>();
+          _param0.Stars.Add(StarConditionFromString(_param1.ReadString()));
           continue;
         case 90:
           if (_param0 != null && !(_param0 is ChronicleCaveBattleBalancingData))
@@ -18517,6 +18570,18 @@ public sealed class ABHModelSerializer : TypeModel
       ProtoWriter.WriteFieldHeader(21, WireType.Fixed32, _param1);
       ProtoWriter.WriteSingle(vRageSkillParameterBonus, _param1);
     }
+    var vSupportSkillParameter = _param0.SupportSkillParameter;
+    if (vSupportSkillParameter != null)
+    {
+      ProtoWriter.WriteFieldHeader(22, WireType.String, _param1);
+      ProtoWriter.WriteString(vSupportSkillParameter, _param1);
+    }
+    var vSupportSkillParameterBonus = _param0.SupportSkillParameterBonus;
+    if (vSupportSkillParameterBonus != 0f)
+    {
+      ProtoWriter.WriteFieldHeader(23, WireType.Fixed32, _param1);
+      ProtoWriter.WriteSingle(vSupportSkillParameterBonus, _param1);
+    }
   }
 
   private static UpgradeBlueprintBalancingData Read(UpgradeBlueprintBalancingData _param0, ProtoReader _param1)
@@ -18605,6 +18670,12 @@ public sealed class ABHModelSerializer : TypeModel
           continue;
         case 21:
           _param0.RageSkillParameterBonus = _param1.ReadSingle();
+          continue;
+        case 22:
+          _param0.SupportSkillParameter = _param1.ReadString();
+          continue;
+        case 23:
+          _param0.SupportSkillParameterBonus = _param1.ReadSingle();
           continue;
         default:
           _param1.SkipField();

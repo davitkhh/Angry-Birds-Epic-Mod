@@ -852,8 +852,7 @@
   {
     "NameId": "pig_pirate_matey_01",
     "DefaultInventoryContent": {
-      "pig_weapon_pirate_matey_01": 1,
-      "headgear_pirate_bucket": 1
+      "pig_weapon_pirate_matey_01": 1
     },
     "InitializingLevel": 0
   },
@@ -1246,6 +1245,33 @@
       "pig_weapon_knight_cactusknight_cactus_01": 1,
       "pig_offhand_knight_cactusknight_shield_01": 1,
       "headgear_knight_cactus": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_knight_cactus_fruit_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_knight_cactusknight_cactus_fruit_01": 1,
+      "pig_offhand_knight_cactusknight_shield_fruit_01": 1,
+      "headgear_knight_cactus_fruit": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_knight_cactus_bloom_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_knight_cactusknight_cactus_bloom_01": 1,
+      "pig_offhand_knight_cactusknight_shield_bloom_01": 1,
+      "headgear_knight_cactus_bloom": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_knight_cactus_bud_01",
+    "DefaultInventoryContent": {
+      "pig_weapon_knight_cactusknight_cactus_bud_01": 1,
+      "pig_offhand_knight_cactusknight_shield_bud_01": 1,
+      "headgear_knight_cactus_bud": 1
     },
     "InitializingLevel": 0
   },
@@ -2263,6 +2289,66 @@
       "pig_forge_pig_minion_rogue_shield__e0_headgear": 1,
       "pig_forge_pig_minion_rogue_shield__e0_mainhand": 1,
       "pig_forge_pig_minion_rogue_shield__e0_offhand": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_minion_turban_shield__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_turban_arabic_sword_01": 1,
+      "headgear_turban": 1,
+      "pig_forge_pig_minion_turban_shield__e0_offhand": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_pirate_charents__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_forge_pig_pirate_charents__e0_headgear": 1,
+      "pig_forge_pig_pirate_charents__e0_mainhand": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_brute_mic__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_forge_pig_brute_mic__e0_headgear": 1,
+      "pig_forge_pig_brute_mic__e0_mainhand": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_minion_farmer__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_offhand_minion_bird_catcher_01": 1,
+      "pig_forge_pig_minion_farmer__e0_headgear": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_minion_farmer__e0_inv2",
+    "DefaultInventoryContent": {
+      "pig_weapon_minion_cupid_dark_01": 1,
+      "pig_offhand_minion_bird_catcher_01": 1,
+      "pig_forge_pig_minion_farmer__e0_headgear": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_minion_guard_fork__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_forge_pig_minion_guard_fork__e0_headgear": 1,
+      "pig_forge_pig_minion_guard_fork__e0_mainhand": 1,
+      "pig_forge_pig_minion_guard_fork__e0_offhand": 1
+    },
+    "InitializingLevel": 0
+  },
+  {
+    "NameId": "pig_forge_pig_minion_phat_loot_attack__e0_inv1",
+    "DefaultInventoryContent": {
+      "pig_offhand_minion_phat_loot_01": 1,
+      "headgear_rogue": 1,
+      "pig_forge_pig_minion_phat_loot_attack__e0_mainhand": 1
     },
     "InitializingLevel": 0
   }

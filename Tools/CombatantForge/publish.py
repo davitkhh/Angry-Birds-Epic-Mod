@@ -429,6 +429,12 @@ def _effect_entry(e):
     for k in ('offsetX', 'offsetY'):
         if e.get(k):
             turn[k] = float(e[k])
+    # a point on one of the combatant's bones it sits on (ForgeEffectExtras.AttachBone), in the bone's own space
+    if e.get('attach'):
+        turn['attach'] = e['attach']
+        for k in ('attachX', 'attachY'):
+            if e.get(k):
+                turn[k] = float(e[k])
     if e.get('turnWith') and e.get('turnWith') != 'anchor':
         turn['turnWith'] = e['turnWith']
         if e['turnWith'] == 'bone':
@@ -437,8 +443,16 @@ def _effect_entry(e):
         raw['HasText'] = True
         raw['EffectTextIdent'] = 'forge:' + json.dumps(dict(e['text'], **turn), separators=(',', ':'))
     elif turn and raw.get('PrefabName') != 'Forge_AfterImages':
-        if str(raw.get('EffectTextIdent') or '').strip() and not str(raw.get('EffectTextIdent')).startswith('forge:'):
-            pass  # a game word (txt_...) stays: the turn can't ride along
+        word = str(raw.get('EffectTextIdent') or '').strip()
+        if word and not word.startswith('forge:') and str(raw.get('HasText', '0')).strip() in ('1', 'True', 'true'):
+            # a game word (txt_...) rides along: the game still shows it (BattleMgrBase reads Settings.word)
+            raw['EffectTextIdent'] = 'forge:' + json.dumps(dict(turn, word=word), separators=(',', ':'))
+        elif word.startswith('forge:') and '"word"' in word:
+            try:
+                old = json.loads(word[len('forge:'):]).get('word')
+            except ValueError:
+                old = None
+            raw['EffectTextIdent'] = 'forge:' + json.dumps(dict(turn, word=old) if old else turn, separators=(',', ':'))
         else:
             raw['EffectTextIdent'] = 'forge:' + json.dumps(turn, separators=(',', ':'))
             raw['HasText'] = False
@@ -675,6 +689,89 @@ def build_skills(project, log):
     return rows, texts, ids
 
 
+def decision_combos(order, id_of, actives):
+    """The game's SkillCombos from an Turn Plan (web/decisions.js). Only ticked trees go to the game: with
+    one, its combos as they are; with more, each tree's combos start with "@tree<n>:<pct>" and the combatant picks one
+    tree by pct at the start of a battle (ForgeDecisionTrees.cs). An order saved before there were tabs is one tree."""
+    order = order or {}
+    if 'trees' not in order:
+        return tree_combos(order, id_of, actives)
+    on = [t for t in order.get('trees') or [] if t.get('on')]
+    if len(on) == 1:
+        return tree_combos(on[0], id_of, actives)
+    total = sum(max(0.0, float(t.get('pct') or 0)) for t in on)
+    out = []
+    for i, t in enumerate(on):
+        share = 100.0 * max(0.0, float(t.get('pct') or 0)) / total if total > 0 else 100.0 / len(on)
+        mark = '@tree%d:%s' % (i + 1, ('%.2f' % share).rstrip('0').rstrip('.'))
+        out += [{'Percentage': c['Percentage'], 'ComboChain': [mark] + c['ComboChain']} for c in tree_combos(t, id_of, actives)]
+    return out
+
+
+def tree_combos(tree, id_of, actives):
+    """One tree's combos: every path from the start is a combo, its chance the product of its branch shares. id_of maps
+    a node's ref (an ability uid, or 'keep:<skill id>') to the skill NameId; steps whose ability is gone are skipped."""
+    out = []
+    if 'chains' in (tree or {}):
+        # chains (web/decisions.js): a chain's moves always follow each other, then it takes one of its branches
+        # a chain's percentage goes to the game as typed (the game takes each combo's share of their total); a
+        # branch's chance is its share of its siblings' total
+        def walk_seq(seqs, chain, share, top=False):
+            total = sum(max(0.0, float(q.get('w') or 0)) for q in seqs)
+            for q in seqs:
+                w = max(0.0, float(q.get('w') or 0))
+                sh = w if top else share * w / total if total > 0 else 0.0
+                c = list(chain)
+                for m in q.get('moves') or []:
+                    ref = m.get('ref') or ''
+                    sid = ref[5:] if ref.startswith('keep:') else id_of.get(ref)
+                    if sid and sid in actives:
+                        c.append(sid)
+                if q.get('branches'):
+                    walk_seq(q['branches'], c, sh)
+                elif c:
+                    out.append((sh, c))
+
+        walk_seq(tree.get('chains') or [], [], 100.0, True)
+        return [{'Percentage': round(pct, 2), 'ComboChain': chain} for pct, chain in out]
+
+    # step by step (web/decisions.js): a first step's chance goes to the game as typed (the game takes each combo's
+    # share of their total); a later step's is its share of its siblings' total. A '@decision' step takes one of its
+    # options by share, and every path through it goes on with the decision's kids.
+    def end(chain, s, after):
+        for i, nxt in enumerate(after):
+            if nxt:
+                return walk(nxt, chain, s, False, after[i + 1:])
+        if chain and len(out) < 4000:
+            out.append((s, chain))
+
+    def walk(nodes, chain, share, top, after):
+        total = sum(max(0.0, float(n.get('w') or 0)) for n in nodes)
+        for n in nodes:
+            w = max(0.0, float(n.get('w') or 0))
+            s = w if top else share * w / total if total > 0 else 0.0
+            ref = n.get('ref') or ''
+            if ref == '@stop':
+                end(chain, s, after)
+                continue
+            if ref == '@decision':
+                nxt = [n.get('kids') or []] + after
+                if n.get('options'):
+                    walk(n['options'], chain, s, False, nxt)
+                else:
+                    end(chain, s, nxt)
+                continue
+            sid = ref[5:] if ref.startswith('keep:') else id_of.get(ref)
+            c = chain + [sid] if sid and sid in actives else chain
+            if n.get('kids'):
+                walk(n['kids'], c, s, False, after)
+            else:
+                end(c, s, after)
+
+    walk((tree or {}).get('kids') or [], [], 100.0, True, [])
+    return [{'Percentage': round(pct, 2), 'ComboChain': chain} for pct, chain in out]
+
+
 def combos_for(ids):
     supports = [i for i, t in ids if t == 'Support']
     attacks = [i for i, t in ids if t in ('Attack', 'Combo')]  # a combo move is picked like an attack
@@ -770,6 +867,43 @@ WATCH_TIMEOUT = 20
 MANUAL_TIMEOUT = 180
 
 
+def _done_marker(cls):
+    """What the editor log shows once a written file is encoded. The JSON watcher re-encodes just the changed class
+    (\"Reimported ABH.Shared.BalancingData.<cls>\") and then writes the container; a full encode (the menu, or
+    ForgeEncodeRequest) prints CONTAINER_DONE."""
+    if cls == 'Loca':
+        return LOCA_DONE
+    return r'Reimported ABH\.Shared\.BalancingData\.%s in|%s' % (re.escape(cls), CONTAINER_DONE)
+
+
+def _wait_written(path, before, timeout=10):
+    """Until the file at path changed since `before` (mtime, size) and stopped changing."""
+    end = time.time() + timeout
+    last = None
+    while time.time() < end:
+        try:
+            st = os.stat(path)
+            now = (st.st_mtime, st.st_size)
+        except OSError:
+            now = None
+        if now and now != before and now == last:
+            return True
+        last = now
+        time.sleep(0.3)
+    return False
+
+
+def _stat(path):
+    try:
+        st = os.stat(path)
+        return st.st_mtime, st.st_size
+    except OSError:
+        return None
+
+
+LOCA_BYTES = os.path.join(ASSETS, 'StreamingAssets', 'local', 'live_English.bytes')
+
+
 def encode(writes, log):
     """writes: [(class name or 'Loca', path, text)]."""
     if unity_running():
@@ -778,32 +912,24 @@ def encode(writes, log):
             open(request, 'w').close()
             log('Asked the open Unity editor to import the new assets')
         missed = {}
-        settled = {}  # log position once each kind's last file had its chance; a menu encode after it covers all of them
         for cls, path, text in writes:
-            what = 'English text' if cls == 'Loca' else 'balancing data'
-            done = LOCA_DONE if cls == 'Loca' else CONTAINER_DONE
+            what = 'loca' if cls == 'Loca' else 'balancing'
+            target = LOCA_BYTES if cls == 'Loca' else CONTAINER
             log('Encoding %s...' % cls)
-            since = _log_size()
-            write_in_place(path, text)
-            if not _wait_log(done, since, WATCH_TIMEOUT):
-                # The watcher can miss a write, for example during a script reload.
-                since = _log_size()
+            ok = False
+            for attempt in range(2):  # the watcher can miss a write, for example during a script reload
+                since, before = _log_size(), _stat(target)
                 write_in_place(path, text)
-                if not _wait_log(done, since, WATCH_TIMEOUT):
-                    missed[what] = done
-                    settled[what] = _log_size()
-                    continue
-            log('Encoded ' + cls)
-            time.sleep(1.5)  # the watcher can fire twice; the next file must not race its second write
-            settled[what] = _log_size()
-        menus = {'balancing data': 'Balancing Data > Encode > Balancing container', 'English text': 'Balancing Data > Loca > Serialize all loca'}
-        for what, done in missed.items():
-            if not _wait_log(done, settled[what], 0.6):
-                log('Unity did not encode the %s by itself. Run %s now. Waiting up to %d s; you can close this window meanwhile.' % (what, menus[what], MANUAL_TIMEOUT))
-                if not _wait_log(done, settled[what], MANUAL_TIMEOUT):
-                    log('WARNING: the %s was not encoded, so the game still has the old version. Run %s.' % (what, menus[what]))
-                    continue
-            log('Encoded the %s' % what)
+                if _wait_log(_done_marker(cls), since, WATCH_TIMEOUT):
+                    ok = _wait_written(target, before)
+                    break
+            if ok:
+                log('Encoded ' + cls)
+                time.sleep(1.5)  # the watcher can fire twice; the next file must not race its second write
+            else:
+                missed[what] = True
+        if missed:
+            _encode_in_editor(missed, log)
         return
     for _, path, text in writes:
         write_in_place(path, text)
@@ -823,6 +949,38 @@ def encode(writes, log):
             return
         log('Encoded with ' + method)
     # The loca encoder rewrites all languages; only English changed.
+    for path, data in keep.items():
+        with open(path, 'wb') as f:
+            f.write(data)
+
+
+def _encode_in_editor(missed, log):
+    """The watcher missed some files: ask the open editor to run the encode menu commands (Assets/Editor/
+    ForgeEncodeRequest.cs), else tell the designer which to run."""
+    menus = {'balancing': 'Balancing Data > Encode > Balancing container', 'loca': 'Balancing Data > Loca > Serialize all loca'}
+    marks = {'balancing': CONTAINER_DONE, 'loca': LOCA_DONE}
+    loca_dir = os.path.join(ASSETS, 'StreamingAssets', 'local')
+    # serializing all loca rewrites every language; only English changed
+    keep = {p: open(p, 'rb').read() for p in glob.glob(os.path.join(loca_dir, 'live_*.bytes'))
+            if not p.endswith(('live_English.bytes', os.path.basename(CONTAINER)))} if 'loca' in missed else {}
+    since = _log_size()
+    request = os.path.join(g.ROOT, 'Temp', 'ForgeEncode.request')
+    try:
+        with open(request, 'w') as f:
+            f.write('\n'.join(missed))
+        log('Unity\'s file watcher missed it: asked the editor to encode (%s)' % ', '.join(missed))
+    except OSError:
+        pass
+    for what in missed:
+        if _wait_log(marks[what], since, 60):
+            log('Encoded the %s' % ('English text' if what == 'loca' else 'balancing data'))
+            continue
+        log('Unity did not encode the %s. Run %s now. Waiting up to %d s; you can close this window meanwhile.' % (what, menus[what], MANUAL_TIMEOUT))
+        if _wait_log(marks[what], since, MANUAL_TIMEOUT):
+            log('Encoded the %s' % what)
+        else:
+            log('WARNING: the %s was not encoded, so the game still has the old version. Run %s.' % (what, menus[what]))
+    time.sleep(1)
     for path, data in keep.items():
         with open(path, 'wb') as f:
             f.write(data)
@@ -852,9 +1010,11 @@ def publish(project, log):
         raise ValueError('; '.join(problems))
     base = asset_base(project)
     entries = {}
+    names = {}
     for key, slot in project.get('slots', {}).items():
-        name = base + GEAR_TEXTURE[key] if key in GEAR_TEXTURE else '%s__%s' % (base, key)
-        layers = [l for l in slot.get('layers', []) if not l.get('hidden')]
+        name = names[key] = base + GEAR_TEXTURE[key] if key in GEAR_TEXTURE else '%s__%s' % (base, key)
+        # eye beams and bells layers aren't art: beams.py / bells.py upload them on their own
+        layers = [l for l in slot.get('layers', []) if not l.get('hidden') and l.get('kind') not in ('beams', 'bells')]
         if slot.get('hidden'):
             # A hidden feature gets a blank texture. Hidden equipment simply has none, and the game hides its bone.
             if key not in GEAR_TEXTURE:
@@ -868,6 +1028,10 @@ def publish(project, log):
     write_bone_pivots(project, log)
 
     skill_rows, texts, ids = build_skills(project, log)
+    import beams  # eye beams: Assets/Resources/HelmetBeams.json (HelmetBeams.cs)
+    beams.write([base, 'Forge_' + art_id(project)], beams.project_entries(project, {k: n for k, n in names.items() if n in entries}, {a['uid']: i for a, (i, _) in zip(project['abilities'], ids)}, log), log)
+    import bells  # bells: Assets/Resources/ScytheBellsConfig.json (ScytheBells.cs)
+    bells.write([base, 'Forge_' + art_id(project)], bells.project_entries(project, {k: n for k, n in names.items() if n in entries}, {a['uid']: i for a, (i, _) in zip(project['abilities'], ids)}, log), log)
     pid = 'pig_forge_' + project['id']
     equipment, class_row, inventory = build_items(project, entries)
     stats = project.get('stats') or {}
@@ -884,6 +1048,10 @@ def publish(project, log):
         kept = existing.remap_combos(project['combos'], mapping, planned - set(mapping), added, actives)
         if kept is not None:
             combos = kept
+    if project.get('decisionOrder') is not None:
+        # its own Turn Plan (the Abilities tab)
+        by_uid = {a['uid']: i for a, (i, _) in zip(project['abilities'], ids)}
+        combos = decision_combos(project['decisionOrder'], by_uid, set(actives))
     pig = {'NameId': pid, 'AssetId': project['rig'], 'LocaId': pid, 'DefaultInventoryNameId': inventory['NameId'], 'BaseHealth': int(stats.get('hp', 100)), 'BaseAttack': int(stats.get('attack', 10)),
            'PerLevelHealth': int(stats.get('perLevelHealth', 0)), 'PerLevelAttack': int(stats.get('perLevelAttack', 0)), 'SkillNameIds': actives, 'SkillCombos': combos, 'SizeType': stats.get('sizeType', 'Medium'),
            'Faction': 'Pigs', 'LootTableDefeatBonus': stats.get('loot') or {}, 'SizeScale': float(stats.get('sizeScale', 1.0)), 'PigStrength': int(stats.get('strength', 5)),
@@ -904,6 +1072,8 @@ def publish(project, log):
     writes.append(('Loca', loca_path, loca_text))
     log('Combatant id: %s, inventory: %s, abilities: %s' % (pid, inventory['NameId'], ', '.join(i for i, _ in ids)))
     encode(writes, log)
+    import spring_config  # a spring drone's spring constant: Assets/Resources/SpringDrones.json
+    spring_config.publish(pid, project, log)
     project['publishedAt'] = time.strftime('%Y-%m-%d %H:%M')
     log('Done. Place "%s" in a battle table to fight it.' % pid)
     return project
@@ -1000,6 +1170,10 @@ def unpublish(project, log):
     writes.append(('Loca', loca_path, loca_text))
 
     remove_atlas(project, art, log)
+    import beams
+    beams.write([asset_base(project), 'Forge_' + art], [], log)
+    import bells
+    bells.write([asset_base(project), 'Forge_' + art], [], log)
     log('Removing %s, its inventory, items, %d abilit%s and its text' % (pid, len(skills), 'y' if len(skills) == 1 else 'ies'))
     encode(writes, log)
     log('Removed from the game.')

@@ -67,6 +67,12 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		// The pig with the most health left, like ActionsAfterTargetSelection
+		protected override List<ICombatant> GetPreviewTargets(HealthPreviewContext ctx)
+		{
+			return new List<ICombatant> { ctx.FactionOf(ctx.Target).OrderBy(c => c.CurrentHealth).LastOrDefault() };
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

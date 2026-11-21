@@ -32,6 +32,7 @@ namespace ABH.Shared.Generic
 		Dynamite,
 		GroundZero,
 		Rally,
-		Hype
+		Hype,
+		Bulwark
 	}
 }

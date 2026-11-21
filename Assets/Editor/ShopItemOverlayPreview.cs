@@ -86,7 +86,15 @@ public static class ShopItemOverlayPreview
 		}
 		knight.Recipe.Add(ShopItemInfo.Cell.FromSprite("Wood", "8", text, "Resources"));
 		knight.Recipe.Add(ShopItemInfo.Cell.FromSprite("Stone", "12", text, "Resources"));
-		return new List<ShopItemInfo> { wand, sword, knight };
+		var annotations = new ShopItemInfo { Name = "Brilliant Annotations", RecipeCaption = "Recipe" };
+		annotations.Perks.Add(new ShopItemInfo.PerkInfo
+		{
+			Icon = ShopItemInfo.Cell.FromSprite("PassiveEffect_CriticalStrike", null, text),
+			Name = "Brilliance",
+			Values = { ShopItemInfo.Cell.FromSprite("Character_Damage_Large", "+10%", ShopItemInfo.Red), ShopItemInfo.Cell.FromSprite("PassiveEffect_CriticalStrike", "+10%", ShopItemInfo.Red) }
+		});
+		annotations.Recipe.Add(ShopItemInfo.Cell.FromSprite("Wood", "8", text, "Resources"));
+		return new List<ShopItemInfo> { wand, sword, knight, annotations };
 	}
 
 	private static void Render(StringBuilder log)

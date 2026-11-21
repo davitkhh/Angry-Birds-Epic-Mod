@@ -163,6 +163,7 @@ public class ShopItemInfo
 			AddValue(row, DamageIcon, definition.AttackPercent * multiplier, "+", "%", TextColor);
 			AddValue(row, HealthIcon, definition.HealthPercent * multiplier, "+", "%", TextColor);
 			AddRageSkillValue(row, definition, supported.FirstOrDefault());
+			AddSupportSkillValue(row, definition, supported.FirstOrDefault());
 			info.StatRows.Add(row);
 		}
 		if (equipmentBalancing != null)
@@ -182,6 +183,22 @@ public class ShopItemInfo
 		info.SetRecipe(UpgradeBlueprints.GetNextUseCost(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData, definition));
 		info.DropUnchangedStarRows();
 		return info;
+	}
+
+	// e.g. "+10%" next to Red's Protect icon for McCool's shield blueprints
+	private static void AddSupportSkillValue(List<Cell> row, UpgradeBlueprintBalancingData definition, IInventoryItemBalancingData supported)
+	{
+		if (string.IsNullOrEmpty(definition.SupportSkillParameter) || definition.SupportSkillParameterBonus == 0f || supported == null)
+		{
+			return;
+		}
+		var support = UpgradeBlueprints.GetSupportSkill(supported);
+		if (support == null)
+		{
+			return;
+		}
+		var suffix = definition.SupportSkillParameter.Contains("percent") ? "%" : string.Empty;
+		row.Add(Cell.FromSprite(support.IconAssetId, "+" + UpgradeBlueprints.FormatValue(definition.SupportSkillParameterBonus) + suffix, TextColor, support.IconAtlasId));
 	}
 
 	private static void AddRageSkillValue(List<Cell> row, UpgradeBlueprintBalancingData definition, IInventoryItemBalancingData supported)
@@ -333,6 +350,9 @@ public class ShopItemInfo
 			break;
 		case PerkType.Rally:
 			AddValue(values, "PassiveEffect_Vigor", value, "+", "%", Green);
+			break;
+		case PerkType.Bulwark:
+			AddValue(values, "PassiveEffect_SoaringProtection", value, "+", "%", Green);
 			break;
 		case PerkType.Hype:
 			AddValue(values, DamageIcon, value, "+", "%", Red);

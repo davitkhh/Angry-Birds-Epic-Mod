@@ -64,6 +64,12 @@ public class ActionTree : MonoBehaviour
 	//[HideInInspector]
 	public bool isFinished;
 
+	// Set once the tree has run a node; story state trees whose conditions don't hold are never started.
+	private bool m_Started;
+
+	// EndNow stopped the tree while it was running, so a ControlActionTree resume may restart it.
+	private bool m_EndedWhileRunning;
+
 	private Dictionary<string, GameObject> m_runtimeInstantiateDictionary = new Dictionary<string, GameObject>();
 
 	private List<GameObject> m_destroyList = new List<GameObject>();
@@ -90,6 +96,7 @@ public class ActionTree : MonoBehaviour
 	// Ends the tree after the current node; the remaining nodes and pending waits are skipped.
 	public void EndNow()
 	{
+		m_EndedWhileRunning = m_Started && !isFinished;
 		StopAllCoroutines();
 		skipDisabled = false;
 		node = null;
@@ -299,6 +306,7 @@ public class ActionTree : MonoBehaviour
 
 	public bool Load(int id)
 	{
+		m_Started = true;
 		currentNode = id;
 		node = GetNodeByID(currentNode);
 		m_WorldMapStatMgr = UnityEngine.Object.FindObjectOfType(typeof(BaseLocationStateManager)) as BaseLocationStateManager;
@@ -562,6 +570,11 @@ public class ActionTree : MonoBehaviour
 			case NodeType.SetScale:
 			{
 				var gameObjectFromNode5 = GetGameObjectFromNode(node);
+				if (gameObjectFromNode5 == null)
+				{
+					DebugLog.Warn("SetScale: no object for " + node.objectName);
+					break;
+				}
 				if (node.customInt3 == 1)
 				{
 					// The base scale of the character's ScaleController (its depth scaling rewrites the scale itself).
@@ -830,6 +843,11 @@ public class ActionTree : MonoBehaviour
 				}
 				
 				var gameObjectFromNode7 = GetGameObjectFromNode(node);
+				if (gameObjectFromNode7 == null)
+				{
+					DebugLog.Warn("FindObject: no parent object " + node.objectName + " to search for " + node.text);
+					break;
+				}
 				var transform4 = FindTransformRecursively(gameObjectFromNode7.transform, node.text);
 				if (transform4 != null)
 				{
@@ -1340,7 +1358,7 @@ public class ActionTree : MonoBehaviour
 			// node customInt, skipping a part of the cutscene (e.g. McCool's robbery).
 			case NodeType.Branch:
 			{
-				if (!StoryToggles.IsOn(node.secondaryText))
+				if (!StoryToggles.Decide(node.secondaryText))
 				{
 					if (GetNodeByID(node.customInt) != null)
 					{
@@ -1366,7 +1384,12 @@ public class ActionTree : MonoBehaviour
 				}
 				if (node.customBool)
 				{
-					other.ResumeAt(node.customInt);
+					// Only restart a tree that was running when it was stopped (e.g. a story state that isn't active
+					// on this save never ran, so it must not start here).
+					if (other.m_EndedWhileRunning)
+					{
+						other.ResumeAt(node.customInt);
+					}
 				}
 				else
 				{

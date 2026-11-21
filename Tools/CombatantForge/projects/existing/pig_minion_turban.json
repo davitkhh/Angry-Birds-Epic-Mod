@@ -83,7 +83,7 @@
  "abilities": [
   {
    "uid": "a0_18a16",
-   "origin": "pig_attack_minion_turban",
+   "origin": "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
    "type": "Attack",
    "source": "pig_attack_minion_turban",
    "name": "Blinding Strike",
@@ -94,7 +94,8 @@
    "params": {
     "damage_in_percent": 100,
     "reduction_in_percent": 33,
-    "chance": 100
+    "chance": 100,
+    "anim_clip": 350065
    },
    "values": {
     "{value_1}": {
@@ -118,7 +119,88 @@
    },
    "template": "AttackWithDamageDebuffSkill",
    "duration": 2,
-   "design": ""
+   "design": "",
+   "anim": "Action_Attack_2",
+   "nameId": "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+  },
+  {
+   "uid": "4h14qp5f",
+   "type": "Attack",
+   "source": "pig_attack_minion_stickpig_02",
+   "name": "Kick Sand",
+   "desc": "The pig stumbles and lowers target attack power by [ff0000]{value_1}%[-] for [ff0000]{value_2}[-] turns. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "reduction_in_percent": 33
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "TumbleAndApplyDamageDebuff",
+   "duration": 2,
+   "design": "The pigs stumbles and lowers target attack power by 33%.",
+   "nameId": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+   "written": true,
+   "origin": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+   "effects": [
+    {
+     "timing": "Start",
+     "delay": 0.33,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Generic_BodyAirstream_Small",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_GroundImpact_Dust_Medium",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "DoNotParentOnBone": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SKillFX_Hit_Impact_Frontal",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Origin",
+     "anchor": "Center",
+     "prefab": "SkillFX_Spell_SandBlast_Origin",
+     "doNotMirror": true,
+     "onHit": false,
+     "onHitPrefix": "",
+     "raw": {}
+    }
+   ],
+   "anim": ""
   }
  ],
  "weapon": {
@@ -129,7 +211,7 @@
   "directProjectile": false
  },
  "stats": {
-  "hp": 105,
+  "hp": 125,
   "attack": 15,
   "sizeType": "Small",
   "sizeScale": 1,
@@ -145,14 +227,20 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_minion_turban",
-  "fingerprint": "b6ab78ac35b6af773f03e2b3d25eba4072ecb867",
+  "fingerprint": "501c40fea576a13ef5097741821d2463b511ff7d",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 100,
+    "Percentage": 70,
     "ComboChain": [
-     "pig_attack_minion_turban"
+     "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ]
    }
   ],
@@ -244,7 +332,7 @@
     "directProjectile": false
    },
    "stats": {
-    "hp": 105,
+    "hp": 125,
     "attack": 15,
     "sizeType": "Small",
     "sizeScale": 1,
@@ -260,7 +348,7 @@
    "abilities": [
     {
      "uid": "a0_18a16",
-     "origin": "pig_attack_minion_turban",
+     "origin": "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
      "type": "Attack",
      "source": "pig_attack_minion_turban",
      "name": "Blinding Strike",
@@ -295,9 +383,67 @@
      },
      "template": "AttackWithDamageDebuffSkill",
      "duration": 2,
-     "design": ""
+     "design": "",
+     "anim": "Action_Attack_2",
+     "nameId": "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+    },
+    {
+     "uid": "4h14qp5f",
+     "type": "Attack",
+     "source": "pig_attack_minion_stickpig_02",
+     "name": "Kick Sand",
+     "desc": "The pig stumbles and lowers target attack power by [ff0000]{value_1}%[-] for [ff0000]{value_2}[-] turns. Stupid pig.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "reduction_in_percent": 33
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "TumbleAndApplyDamageDebuff",
+     "duration": 2,
+     "design": "The pigs stumbles and lowers target attack power by 33%.",
+     "nameId": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+     "written": true,
+     "origin": "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     }
    ]
   }
+ },
+ "publishedAt": "2026-11-14 17:20",
+ "decisionOrder": {
+  "trees": [
+   {
+    "id": "auto0",
+    "name": "Main",
+    "on": true,
+    "pct": 100,
+    "kids": [
+     {
+      "id": "auto1",
+      "ref": "a0_18a16",
+      "w": 70,
+      "kids": []
+     },
+     {
+      "id": "auto2",
+      "ref": "4h14qp5f",
+      "w": 30,
+      "kids": []
+     }
+    ]
+   }
+  ],
+  "active": "auto0"
  }
 }

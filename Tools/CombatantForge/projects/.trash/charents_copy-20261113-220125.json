@@ -1,0 +1,267 @@
+{
+ "id": "charents_copy",
+ "name": "Charents copy",
+ "rig": "PigPirate",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "53c3fab1",
+     "src": "cd3633dc98b84939bd8da99a851ade62:Forge_pig_pirate_charents__e0_Pirate",
+     "name": "Forge_pig_pirate_charents__e0_Pirate",
+     "item": "Forge_pig_pirate_charents__e0_Pirate",
+     "w": 224,
+     "h": 229,
+     "pivot": [
+      -0.07274386,
+      0.1263823
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class_charents_copy"
+    }
+   ],
+   "hidden": false,
+   "active": "53c3fab1"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "814c9414",
+     "src": "cd3633dc98b84939bd8da99a851ade62:Forge_pig_pirate_charents__e0_Pirate_Back",
+     "name": "Forge_pig_pirate_charents__e0_Pirate_Back",
+     "item": "Forge_pig_pirate_charents__e0_Pirate",
+     "w": 211,
+     "h": 107,
+     "pivot": [
+      -0.05307007,
+      0.1008088
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class_charents_copy"
+    }
+   ],
+   "hidden": false,
+   "active": "814c9414"
+  },
+  "EyePatch": {
+   "layers": [],
+   "hidden": true
+  },
+  "Eye_Left": {
+   "layers": [
+    {
+     "uid": "2472218f",
+     "src": "cd3633dc98b84939bd8da99a851ade62:Forge_pig_pirate_charents__e0_Pirate__Eye_Left",
+     "name": "Forge_pig_pirate_charents__e0_Pirate__Eye_Left",
+     "item": "Forge_pig_pirate_charents__e0_Pirate",
+     "w": 36,
+     "h": 40,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "2472218f"
+  },
+  "Eye_Right": {
+   "layers": [
+    {
+     "uid": "b580d328",
+     "src": "cd3633dc98b84939bd8da99a851ade62:Forge_pig_pirate_charents__e0_Pirate__Eye_Right",
+     "name": "Forge_pig_pirate_charents__e0_Pirate__Eye_Right",
+     "item": "Forge_pig_pirate_charents__e0_Pirate",
+     "w": 40,
+     "h": 42,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "b580d328"
+  },
+  "Snout": {
+   "layers": [
+    {
+     "uid": "e5436f02",
+     "src": "cd3633dc98b84939bd8da99a851ade62:Forge_pig_pirate_charents__e0_Pirate__Snout",
+     "name": "Forge_pig_pirate_charents__e0_Pirate__Snout",
+     "item": "Forge_pig_pirate_charents__e0_Pirate",
+     "w": 59,
+     "h": 60,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "e5436f02"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "84f91853",
+     "src": "cd3633dc98b84939bd8da99a851ade62:Forge_pig_pirate_charents__e0_MainHand",
+     "name": "Forge_pig_pirate_charents__e0_MainHand",
+     "item": "Forge_pig_pirate_charents__e0_MainHand",
+     "w": 114,
+     "h": 96,
+     "pivot": [
+      -0.2625,
+      -0.1240513
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "84f91853"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "4d015851",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+   "name": "You, You, You",
+   "desc": "Deals [ff0000]{value_1}[-] damage and forces the target and a random ally to target each other for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 125
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    }
+   },
+   "template": "SimpleAttackWithMutualTauntSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "8128dbbe",
+   "type": "Support",
+   "source": "pig_support_forge_pig_pirate_charents__e0_get_ready",
+   "name": "Get Ready",
+   "desc": "All allies deal [ff0000]{value_1}%[-] less damage for [ff0000]1[-] turn, then [ff0000]{value_2}%[-] more damage for [ff0000]2[-] turns. They also counter when attacked for [ff0000]{value_4}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "counter": 100,
+    "damage_in_percent": 80,
+    "reduction_in_percent": 50,
+    "increase_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"increase_in_percent\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"damage_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "D"
+    }
+   },
+   "template": "PhasedDamageAndCounterBlessing",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Strike",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 190,
+  "attack": 12,
+  "sizeType": "Large",
+  "sizeScale": 0.9,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig7_defeated_gold": 1,
+   "loot_pig7_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "duplicateOf": "pig_pirate_charents",
+ "combos": [
+  {
+   "Percentage": 40,
+   "ComboChain": [
+    "pig_attack_forge_pig_pirate_charents__e0_you_you_you"
+   ]
+  },
+  {
+   "Percentage": 40,
+   "ComboChain": [
+    "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+    "pig_support_forge_pig_pirate_charents__e0_get_ready"
+   ]
+  },
+  {
+   "Percentage": 30,
+   "ComboChain": [
+    "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+    "pig_attack_forge_pig_pirate_charents__e0_you_you_you",
+    "pig_support_forge_pig_pirate_charents__e0_get_ready"
+   ]
+  }
+ ],
+ "keepSkills": []
+}

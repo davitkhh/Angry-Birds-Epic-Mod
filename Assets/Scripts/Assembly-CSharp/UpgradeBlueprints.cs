@@ -533,6 +533,36 @@ public static class UpgradeBlueprints
 		return bonuses;
 	}
 
+	// Amounts added to the bird's support skill parameters (by SkillParameters key) by the upgrades on its class and
+	// equipped items. Not scaled by stars.
+	public static Dictionary<string, float> GetSupportSkillBonuses(BirdGameData bird)
+	{
+		var bonuses = new Dictionary<string, float>();
+		foreach (var item in new IInventoryItemGameData[] { bird.ClassItem, bird.MainHandItem, bird.OffHandItem })
+		{
+			if (item == null)
+			{
+				continue;
+			}
+			foreach (var effect in Effects(GetUpgradeList(item.ItemData)))
+			{
+				AddSupportSkillBonus(bonuses, effect.Key, 1);
+			}
+		}
+		return bonuses;
+	}
+
+	private static void AddSupportSkillBonus(Dictionary<string, float> bonuses, UpgradeBlueprintBalancingData definition, int count)
+	{
+		if (definition == null || string.IsNullOrEmpty(definition.SupportSkillParameter) || definition.SupportSkillParameterBonus == 0f)
+		{
+			return;
+		}
+		float value;
+		bonuses.TryGetValue(definition.SupportSkillParameter, out value);
+		bonuses[definition.SupportSkillParameter] = value + definition.SupportSkillParameterBonus * count;
+	}
+
 	private static void AddRageSkillBonuses(Dictionary<string, float> bonuses, List<string> upgrades)
 	{
 		foreach (var effect in Effects(upgrades))
@@ -620,25 +650,49 @@ public static class UpgradeBlueprints
 		return perk;
 	}
 
+	// Bonus perks of one type stack into a single perk (values add up). McCool's blueprintless shield upgrades
+	// (MerchantShieldUpgrades) add theirs to every copy of the shield the player bought them for.
 	public static List<EquipmentPerk> GetBonusPerks(EquipmentData data)
 	{
 		var perks = new List<EquipmentPerk>();
 		foreach (var effect in Effects(data))
 		{
-			PerkType type;
-			if (string.IsNullOrEmpty(effect.Key.AddPerkType) || !TryParsePerk(effect.Key.AddPerkType, out type))
+			AddBonusPerk(perks, effect.Key, effect.Value.Multiplier);
+		}
+		if (data != null)
+		{
+			foreach (var direct in MerchantShieldUpgrades.GetDirectUpgradesFor(data.NameId))
 			{
-				continue;
+				for (var i = 0; i < direct.Value; i++)
+				{
+					AddBonusPerk(perks, direct.Key, 1f);
+				}
 			}
-			perks.Add(new EquipmentPerk
-			{
-				Type = type,
-				ProbablityInPercent = effect.Key.AddPerkChance > 0f ? effect.Key.AddPerkChance : 100f,
-				PerkValue = effect.Key.AddPerkValue * effect.Value.Multiplier,
-				PerkValue2 = effect.Key.AddPerkValue2 * effect.Value.Multiplier
-			});
 		}
 		return perks;
+	}
+
+	private static void AddBonusPerk(List<EquipmentPerk> perks, UpgradeBlueprintBalancingData definition, float multiplier)
+	{
+		PerkType type;
+		if (string.IsNullOrEmpty(definition.AddPerkType) || !TryParsePerk(definition.AddPerkType, out type))
+		{
+			return;
+		}
+		var existing = perks.FirstOrDefault(p => p.Type == type);
+		if (existing != null)
+		{
+			existing.PerkValue += definition.AddPerkValue * multiplier;
+			existing.PerkValue2 += definition.AddPerkValue2 * multiplier;
+			return;
+		}
+		perks.Add(new EquipmentPerk
+		{
+			Type = type,
+			ProbablityInPercent = definition.AddPerkChance > 0f ? definition.AddPerkChance : 100f,
+			PerkValue = definition.AddPerkValue * multiplier,
+			PerkValue2 = definition.AddPerkValue2 * multiplier
+		});
 	}
 
 	private static bool TryParsePerk(string name, out PerkType type)
@@ -670,6 +724,7 @@ public static class UpgradeBlueprints
 		case PerkType.Amplify:
 		case PerkType.Rally:
 		case PerkType.Hype:
+		case PerkType.Bulwark:
 			return true;
 		default:
 			return false;
@@ -778,6 +833,10 @@ public static class UpgradeBlueprints
 		// sprite, which was found narrower at runtime on some tiles and made the gold scroll squashed
 		uiTexture.width = texture.width;
 		uiTexture.height = texture.height;
+		// Keep the item model drawn on the parchment above the gold draw call
+		var itemQueue = goldObject.AddComponent<GoldParchmentItemQueue>();
+		itemQueue.SlotRoot = root;
+		itemQueue.Parchment = uiTexture;
 		if (parchment.width != texture.width || parchment.height != texture.height)
 		{
 			DebugLog.Log("[UpgradeBlueprints] parchment " + parchment.name + " is " + parchment.width + "x" + parchment.height + ", gold drawn at " + texture.width + "x" + texture.height);
@@ -839,6 +898,7 @@ public static class UpgradeBlueprints
 		AddPercentChange(changes, "Character_Damage_Large", oldUpgrades, newUpgrades, true);
 		AddPercentChange(changes, "Character_Health_Large", oldUpgrades, newUpgrades, false);
 		AddRageSkillChanges(changes, supported, oldUpgrades, newUpgrades);
+		AddSupportSkillChanges(changes, supported, oldUpgrades, newUpgrades);
 
 		if (!(supported is EquipmentBalancingData))
 		{
@@ -862,10 +922,19 @@ public static class UpgradeBlueprints
 			AddPerkValueChange(changes, icon, oldPerk.PerkValue, newPerk.PerkValue, PerkValueSuffix(oldPerk.Type, 2));
 			AddPerkValueChange(changes, GetSecondValueIcon(oldPerk.Type), oldPerk.PerkValue2, newPerk.PerkValue2, PerkValueSuffix(oldPerk.Type, 3));
 		}
-		foreach (var bonusPerk in newItem.BonusPerks.Skip(oldItem.BonusPerks.Count))
+		// Bonus perks stack by type, so a second use raises the existing perk's value
+		foreach (var bonusPerk in newItem.BonusPerks)
 		{
+			var oldBonus = oldItem.BonusPerks.FirstOrDefault(p => p.Type == bonusPerk.Type);
 			var value = bonusPerk.PerkValue != 0f ? bonusPerk.PerkValue : bonusPerk.ProbablityInPercent;
-			changes.Add(new StatChange { OldIcon = null, OldValue = "-", NewIcon = EquipmentGameData.GetPerkIconNameByPerk(bonusPerk.Type), NewValue = FormatValue(value) + PerkValueSuffix(bonusPerk.Type, 2) });
+			var oldValue = oldBonus == null ? 0f : (oldBonus.PerkValue != 0f ? oldBonus.PerkValue : oldBonus.ProbablityInPercent);
+			if (oldBonus != null && Mathf.Approximately(oldValue, value))
+			{
+				continue;
+			}
+			var icon = EquipmentGameData.GetPerkIconNameByPerk(bonusPerk.Type);
+			var suffix = PerkValueSuffix(bonusPerk.Type, 2);
+			changes.Add(new StatChange { OldIcon = oldBonus == null ? null : icon, OldValue = oldBonus == null ? "-" : FormatValue(oldValue) + suffix, NewIcon = icon, NewValue = FormatValue(value) + suffix });
 		}
 		return changes;
 	}
@@ -923,6 +992,84 @@ public static class UpgradeBlueprints
 				NewValue = FormatValue(baseValue + pair.Value)
 			});
 		}
+	}
+
+	// Support skill parameters (e.g. Protect's percent) of the item's bird, with the skill's own icon. The skill is the
+	// one of the class that bird has equipped now (Red's Knight Protect by default).
+	private static void AddSupportSkillChanges(List<StatChange> changes, IInventoryItemBalancingData supported, List<string> oldUpgrades, List<string> newUpgrades)
+	{
+		var oldBonuses = new Dictionary<string, float>();
+		var newBonuses = new Dictionary<string, float>();
+		foreach (var effect in Effects(oldUpgrades))
+		{
+			AddSupportSkillBonus(oldBonuses, effect.Key, 1);
+		}
+		foreach (var effect in Effects(newUpgrades))
+		{
+			AddSupportSkillBonus(newBonuses, effect.Key, 1);
+		}
+		if (newBonuses.Count == 0)
+		{
+			return;
+		}
+		var support = GetSupportSkill(supported);
+		if (support == null)
+		{
+			return;
+		}
+		foreach (var pair in newBonuses)
+		{
+			float baseValue;
+			float oldBonus;
+			if (support.SkillParameters == null || !support.SkillParameters.TryGetValue(pair.Key, out baseValue))
+			{
+				continue;
+			}
+			oldBonuses.TryGetValue(pair.Key, out oldBonus);
+			if (Mathf.Approximately(oldBonus, pair.Value))
+			{
+				continue;
+			}
+			var suffix = pair.Key.Contains("percent") ? "%" : string.Empty;
+			changes.Add(new StatChange
+			{
+				OldIcon = support.IconAssetId,
+				OldAtlas = support.IconAtlasId,
+				OldValue = FormatValue(baseValue + oldBonus) + suffix,
+				NewIcon = support.IconAssetId,
+				NewAtlas = support.IconAtlasId,
+				NewValue = FormatValue(baseValue + pair.Value) + suffix
+			});
+		}
+	}
+
+	// The support skill of the class the item's bird uses now (the player's bird), else of the bird's default class.
+	public static SkillBalancingData GetSupportSkill(IInventoryItemBalancingData item)
+	{
+		var equipment = item as EquipmentBalancingData;
+		var classItem = item as ClassItemBalancingData;
+		var birdId = equipment != null ? equipment.RestrictedBirdId : (classItem != null ? classItem.RestrictedBirdId : null);
+		string classId = classItem != null ? classItem.NameId : null;
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		if (classId == null && !string.IsNullOrEmpty(birdId) && player != null && player.Birds != null)
+		{
+			var bird = player.Birds.FirstOrDefault(b => b.BalancingData.NameId == birdId);
+			if (bird != null && bird.ClassItem != null)
+			{
+				classId = bird.ClassItem.ItemBalancing.NameId;
+			}
+		}
+		if (classId == null && birdId == "bird_red")
+		{
+			classId = "class_knight";
+		}
+		ClassItemBalancingData classBalancing;
+		SkillBalancingData skill;
+		if (string.IsNullOrEmpty(classId) || !DIContainerBalancing.Service.TryGetBalancingData(classId, out classBalancing) || classBalancing.SkillNameIds == null || classBalancing.SkillNameIds.Count < 2 || !DIContainerBalancing.Service.TryGetBalancingData(classBalancing.SkillNameIds[1], out skill))
+		{
+			return null;
+		}
+		return skill;
 	}
 
 	private static void AddPerkValueChange(List<StatChange> changes, string icon, float oldValue, float newValue, string suffix)

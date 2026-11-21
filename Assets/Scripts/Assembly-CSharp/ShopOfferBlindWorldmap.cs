@@ -9,7 +9,7 @@ using ABH.Shared.Generic;
 using ABH.Shared.Models.Generic;
 using UnityEngine;
 
-public class ShopOfferBlindWorldmap : MonoBehaviour
+public partial class ShopOfferBlindWorldmap : MonoBehaviour
 {
 	[SerializeField]
 	private List<RequirementRoot> m_RequirementRoots = new List<RequirementRoot>();
@@ -138,6 +138,11 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 
 	public void ShowTooltip()
 	{
+		// A pair tile has two items; the hold doesn't know which half it is on
+		if (m_IsPair)
+		{
+			return;
+		}
 		if (DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.TryShowShopItemOverlay(m_IconRoot, m_RecipeItem != null ? (IInventoryItemGameData)m_RecipeItem : m_Item, true))
 		{
 			return;
@@ -180,6 +185,14 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		m_Item = null;
 		m_Model = model;
 		m_StateMgr = stateMgr;
+		if (MerchantShieldUpgrades.IsPairOffer(model))
+		{
+			// Two half-width offers in this tile (McCool's shield upgrades)
+			m_BuyButtonTrigger.Clicked -= BuyOfferClicked;
+			SetPairModel(model);
+			return;
+		}
+		ExitPairMode();
 		var shopOfferContent = DIContainerLogic.GetShopService().GetShopOfferContent(DIContainerInfrastructure.GetCurrentPlayer(), m_Model, DIContainerLogic.GetSalesManagerService().GetOfferSaleDetails(m_Model.NameId));
 		m_ItemIconSprite.gameObject.SetActive(false);
 		RestoreItemIconSize();
@@ -599,7 +612,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 
 	// Cost blinds are reused across offers, so always hand back an atlas rather than null;
 	// otherwise a Resources atlas set for one offer would stick to the next offer's coin icon.
-	private static UIAtlas GetIconAtlas(InventoryItemType itemType)
+	internal static UIAtlas GetIconAtlas(InventoryItemType itemType)
 	{
 		string atlasName;
 		switch (itemType)
@@ -861,6 +874,7 @@ public class ShopOfferBlindWorldmap : MonoBehaviour
 		}
 		ReleaseIconPreviewStage();
 		DeRegisterEventHandlers();
+		ExitPairMode();
 	}
 
 	private void RemoveAsset(IInventoryItemGameData item)

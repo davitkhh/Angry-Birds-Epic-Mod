@@ -46,6 +46,18 @@ namespace ABH.GameDatas.Battle.Skills
 			});
 		}
 
+		protected override void PreviewAfterHit(HealthPreviewContext ctx, ICombatant target, HealthChange hit, float chance)
+		{
+			if (hit == null || hit.Amount <= 0)
+			{
+				return;
+			}
+			foreach (var ally in ctx.FactionOf(ctx.Source).Where(c => c.CurrentHealth > 0f))
+			{
+				ctx.AddHeal(ally, hit.Amount * m_Percent / 100f, chance);
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

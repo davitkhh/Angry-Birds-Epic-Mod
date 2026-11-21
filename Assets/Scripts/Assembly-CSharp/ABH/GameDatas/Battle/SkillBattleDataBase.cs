@@ -54,6 +54,22 @@ namespace ABH.GameDatas.Battle
 			Init(model);
 		}
 
+		// A projectile is drawn flying level toward the enemy side: turn it toward where it really goes (as Ricochet turns
+		// its hops), so a shot up or down at a target points its tip there.
+		private static void AimProjectile(GameObject projectile, ICombatant source, Vector3 end)
+		{
+			var start = projectile.transform.position;
+			var shooter = source.CombatantView.m_AssetController.transform.position;
+			var travel = new Vector2(end.x - start.x, end.y - start.y);
+			if (travel.sqrMagnitude <= 0.0001f)
+			{
+				return;
+			}
+			var forward = new Vector2(Mathf.Sign(end.x - shooter.x), 0f);
+			var angle = Mathf.Atan2(travel.y, travel.x) - Mathf.Atan2(forward.y, forward.x);
+			projectile.transform.rotation = Quaternion.Euler(0f, 0f, angle * Mathf.Rad2Deg);
+		}
+
 		public virtual void BoneAnimationUserTrigger(UserTriggerEvent triggerEvent)
 		{
 			if (triggerEvent.tag == "Movement")
@@ -110,6 +126,23 @@ namespace ABH.GameDatas.Battle
 					mgr.InstantiateEffect(m_Source, effect, m_VisualEffectSetting, m_Targets ?? new List<ICombatant>(), false);
 				}
 			}
+		}
+
+		// whether one of the skill's effects plays at this Forge timing
+		public bool HasForgeTiming(int timing)
+		{
+			if (m_VisualEffectSetting == null || m_VisualEffectSetting.VisualEffects == null)
+			{
+				return false;
+			}
+			foreach (var effect in m_VisualEffectSetting.VisualEffects)
+			{
+				if ((int)effect.SpawnTiming == timing)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private IEnumerator ForgeEventLater(int timing, float delay, Transform at)
@@ -203,6 +236,7 @@ namespace ABH.GameDatas.Battle
 					return;
 				}
 				componentInChildren.m_EndTransform = combatant.CombatantView.m_AssetController.BodyCenter;
+				AimProjectile(gameObject, source, componentInChildren.m_EndTransform.position);
 				if (componentInChildren.m_EndTransform.position.y < gameObject.transform.position.y)
 				{
 					componentInChildren.InvertCurves(true);
@@ -231,6 +265,7 @@ namespace ABH.GameDatas.Battle
 					return;
 				}
 				componentInChildren2.m_EndTransform = source.CombatantFaction != 0 ? source.CombatantView.m_BattleMgr.m_BirdCenterPosition : source.CombatantView.m_BattleMgr.m_PigCenterPosition;
+				AimProjectile(gameObject2, source, componentInChildren2.m_EndTransform.position);
 				if (componentInChildren2.m_EndTransform.position.y < gameObject2.transform.position.y)
 				{
 					componentInChildren2.InvertCurves(true);
@@ -514,6 +549,23 @@ namespace ABH.GameDatas.Battle
 		}
 
 		public abstract string GetLocalizedDescription(ICombatant invoker);
+
+		// Health bar preview while the player hovers this skill over ctx.Target (HealthPreviewDirector): add the
+		// health changes the skill would cause to ctx. Must only read battle state.
+		public virtual void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+		}
+
+		// The skill would only start charging now (no effect this turn).
+		protected bool PreviewStartsCharge(ICombatant source)
+		{
+			var charge = 0f;
+			if (!Model.SkillParameters.TryGetValue("charge", out charge) || charge <= 0f || source.ChargeDone)
+			{
+				return false;
+			}
+			return source.CurrrentEffects == null || !source.CurrrentEffects.Keys.Any(k => k.StartsWith("Charge_"));
+		}
 
 		public virtual bool IsPseudoPerk()
 		{

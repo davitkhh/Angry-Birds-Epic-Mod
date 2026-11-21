@@ -1,0 +1,275 @@
+{
+ "kind": "existing",
+ "id": "pig_drone_blue_hunter",
+ "name": "Blue Hunter Drone",
+ "rig": "PigDrone",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_BlueHunter",
+     "name": "Headgear_BlueHunter",
+     "item": "Headgear_BlueHunter",
+     "w": 128,
+     "h": 64,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "944fb69e523fc284d8461513e658b534:MainHand_BlueHunter",
+     "name": "MainHand_BlueHunter",
+     "item": "MainHand_BlueHunter",
+     "w": 124,
+     "h": 50,
+     "pivot": [
+      -0.43392855,
+      -0.04765625
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_4becb",
+   "origin": "pig_attack_drone_blue",
+   "type": "Attack",
+   "source": "pig_attack_drone_blue",
+   "name": "Shock",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]+{value_3}%[-] bonus damage against wet targets.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "bonus_damage_vs_wet": 150
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+    }
+   },
+   "template": "AttackWithBonusDamage",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_efd05",
+   "origin": "pig_passive_hunter_blue",
+   "type": "Passive",
+   "source": "pig_passive_hunter_blue",
+   "name": "Blue Hunter",
+   "desc": "Blues take [ff0000]{value_3}%[-] damage from attacks.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "bonus_damage_vs_blues": 150
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+    }
+   },
+   "template": "PassiveBonusAgainstBirds",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 110,
+  "attack": 10,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_drone_blue_hunter",
+  "fingerprint": "bead3c0475b72e55234330a4013dfbc20de15d03",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_drone_blue"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Blue Hunter Drone",
+   "rig": "PigDrone",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "70afebbe7b2b1564b91403a8dfb13904:Headgear_BlueHunter",
+       "name": "Headgear_BlueHunter",
+       "item": "Headgear_BlueHunter",
+       "w": 128,
+       "h": 64,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "944fb69e523fc284d8461513e658b534:MainHand_BlueHunter",
+       "name": "MainHand_BlueHunter",
+       "item": "MainHand_BlueHunter",
+       "w": 124,
+       "h": 50,
+       "pivot": [
+        -0.43392855,
+        -0.04765625
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 110,
+    "attack": 10,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_4becb",
+     "origin": "pig_attack_drone_blue",
+     "type": "Attack",
+     "source": "pig_attack_drone_blue",
+     "name": "Shock",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [00a800]+{value_3}%[-] bonus damage against wet targets.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "bonus_damage_vs_wet": 150
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_ink\"))) || (((p(\"bonus_damage_vs_spotlight\"))) || (((p(\"bonus_damage_vs_paint\"))) || (((p(\"bonus_damage_vs_pumpkin\"))) || (((p(\"bonus_damage_vs_chocolate\"))) || (((p(\"bonus_damage_vs_stun\"))) || (((p(\"bonus_damage_vs_goo\"))) || ((p(\"bonus_damage_vs_wet\")))))))))"
+      }
+     },
+     "template": "AttackWithBonusDamage",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_efd05",
+     "origin": "pig_passive_hunter_blue",
+     "type": "Passive",
+     "source": "pig_passive_hunter_blue",
+     "name": "Blue Hunter",
+     "desc": "Blues take [ff0000]{value_3}%[-] damage from attacks.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "bonus_damage_vs_blues": 150
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "((p(\"bonus_damage_vs_blues\"))) || (((p(\"bonus_damage_vs_black\"))) || (((p(\"bonus_damage_vs_white\"))) || (((p(\"bonus_damage_vs_yellow\"))) || ((p(\"bonus_damage_vs_red\"))))))"
+      }
+     },
+     "template": "PassiveBonusAgainstBirds",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

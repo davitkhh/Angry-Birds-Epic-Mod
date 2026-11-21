@@ -31,6 +31,11 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 
 	private Camera m_sceneryCamera;
 
+	// Slingshot targeting (TargetingStyle): where the drag started; the ring is aimed mirrored through it.
+	private bool m_SlingAnchored;
+
+	private Vector2 m_SlingPress;
+
 	private bool m_CachedTargetInvalid;
 
 	// The hovered target is valid but the skill for it lacks ammo
@@ -120,7 +125,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 
 	public override void RecreateAssetController()
 	{
-		m_sceneryCamera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
+		m_sceneryCamera = BirdUnlockSequence.SceneryCamera();
 		if (m_Model != null && m_AssetController == null)
 		{
 			m_AssetController = null;
@@ -422,6 +427,12 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			{
 				DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("bird_turn_started", m_Model.CharacterModel.Name);
 			}
+			// Bird unlock tutorials point at the move to make (BirdUnlockSequence).
+			var unlockBattle = m_BattleMgr as BattleMgr;
+			if (unlockBattle != null && unlockBattle.m_BirdUnlock != null)
+			{
+				unlockBattle.m_BirdUnlock.OnBirdAwaitingInput(unlockBattle, this);
+			}
 		}
 		var autoBattle = true;
 		if (m_Model is BirdCombatant && !m_BattleMgr.AutoBattle)
@@ -584,7 +595,8 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		}
 		if (m_SkillToDo != null)
 		{
-			if (m_BattleMgr.Model.IsPvP && GetModel().CombatantFaction == Faction.Pigs)
+			// An Intellegent combatant keeps its own plan instead of the PvP AI's.
+			if (m_BattleMgr.Model.IsPvP && GetModel().CombatantFaction == Faction.Pigs && ABH.GameDatas.Battle.Skills.Intellegent.Of(GetModel()) == null)
 			{
 				var aiTurn = DIContainerLogic.GetBattleService().m_PvpIntelligence.GetCommand(GetModel());
 				if (aiTurn != null && aiTurn.m_Target != null && aiTurn.m_Target.IsAlive)
@@ -723,7 +735,9 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		var goad = skillUsed as ABH.GameDatas.Battle.Skills.GoadAllyIntoAttack;
 		// Same for his Duel: he already walked to his spot in the duel area.
 		var duel = skillUsed as ABH.GameDatas.Battle.Skills.DuelKnockback;
-		var alreadyHome = (goad != null && goad.ReturnedToBasePosition) || (duel != null && duel.ReturnedToBasePosition);
+		// Pyropig's Repeat After Me walks him back before his apprentices repeat his move.
+		var repeat = skillUsed as ABH.GameDatas.Battle.Skills.RepeatAfterMe;
+		var alreadyHome = (goad != null && goad.ReturnedToBasePosition) || (duel != null && duel.ReturnedToBasePosition) || (repeat != null && repeat.ReturnedToBasePosition);
 		if (!alreadyHome)
 		{
 			yield return new WaitForSeconds(DIContainerLogic.GetPacingBalancing().TimeForShowDamageAndReturnToBasePosInSec);
@@ -979,6 +993,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 			m_cachedOverCharacterTransform = null;
 			m_BattleMgr.m_DraggedCharacter = null;
 			m_cachedOverCharacter = null;
+			HealthPreviewDirector.Clear();
 			return;
 		}
 		if (m_tauntedTarget != null)
@@ -1011,9 +1026,36 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				AmmoUI.ShowNoAmmo(m_BattleMgr.m_CharacterInteractionBlockedItems[j], m_Model);
 			}
 		}
+		var slingshot = TargetingStyle.UsesSlingshot;
+		if (slingshot && (!m_SlingAnchored || m_BattleMgr.m_DraggedCharacter != this))
+		{
+			m_SlingPress = Input.mousePosition;
+			m_SlingAnchored = true;
+		}
+		else if (!slingshot)
+		{
+			m_SlingAnchored = false;
+		}
 		m_BattleMgr.LockDragVisualizationByCode = true;
 		m_BattleMgr.m_DraggedCharacter = this;
-		SetDragHUD(Input.mousePosition);
+		SetDragHUD(slingshot ? (Vector3)TargetingStyle.SlingshotAim(m_SlingPress, Input.mousePosition) : Input.mousePosition);
+		UpdateSlingshotAimLine(slingshot);
+	}
+
+	// The dotted line from the bird to the real finger while aiming slingshot style.
+	private void UpdateSlingshotAimLine(bool slingshot)
+	{
+		if (m_CurrentControlHUD == null)
+		{
+			return;
+		}
+		Vector3? finger = null;
+		RaycastHit hitInfo;
+		if (slingshot && Physics.Raycast(m_sceneryCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, 10000f, (1 << LayerMask.NameToLayer("TutorialScenery")) | (1 << LayerMask.NameToLayer("Scenery"))))
+		{
+			finger = hitInfo.point;
+		}
+		m_CurrentControlHUD.SetAimLine(base.transform, finger);
 	}
 
 	public void SetDragHUD(Vector3 currentScreenPos)
@@ -1095,6 +1137,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 				m_CurrentGlow.transform.localScale = m_cachedOverCharacter.transform.localScale * num / m_cachedOverCharacter.GetModel().CharacterModel.Scale;
 				m_CurrentGlow.transform.position = m_cachedOverCharacter.m_AssetController.BodyCenter.position;
 			}
+			UpdateHealthPreview();
 			if (m_CachedTargetInvalid || (m_tauntedTarget != null && m_cachedOverCharacter != null && m_cachedOverCharacter.GetModel() != m_tauntedTarget && m_tauntedTarget.CombatantFaction == m_cachedOverCharacter.GetModel().CombatantFaction))
 			{
 				m_CurrentControlHUD.SetState(base.transform, m_cachedOverCharacter, hitInfo.point, m_BattleMgr, true, m_CachedTargetNoAmmo && m_cachedOverCharacter != null);
@@ -1107,7 +1150,21 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		else
 		{
 			m_CurrentGlow.gameObject.SetActive(false);
+			HealthPreviewDirector.Clear();
 		}
+	}
+
+	// Health bars show what the move would do to the hovered target (and whoever else it affects)
+	private void UpdateHealthPreview()
+	{
+		var over = m_cachedOverCharacter;
+		if (over == null || over == this || m_CachedTargetInvalid || !over.GetModel().IsParticipating || (m_tauntedTarget != null && over.GetModel() != m_tauntedTarget && m_tauntedTarget.CombatantFaction == over.GetModel().CombatantFaction))
+		{
+			HealthPreviewDirector.Clear();
+			return;
+		}
+		var skill = over.GetModel().CombatantFaction != m_Model.CombatantFaction ? m_Model.GetSkill(0) : m_Model.GetSkill(1);
+		HealthPreviewDirector.Show(m_BattleMgr.Model, m_Model, skill, over.GetModel(), false);
 	}
 
 	public override void DisableGlow()
@@ -1186,10 +1243,23 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 
 	private void OnTouchReleased()
 	{
-		HandleRelease(Input.mousePosition);
+		Vector2 releasePos = Input.mousePosition;
+		if (m_SlingAnchored)
+		{
+			releasePos = TargetingStyle.SlingshotAim(m_SlingPress, releasePos);
+			m_SlingAnchored = false;
+		}
+		HandleRelease(releasePos);
 	}
 
 	public void HandleRelease(Vector2 releasePos)
+	{
+		HandleReleaseOnTarget(releasePos);
+		// no-op when the release committed the preview
+		HealthPreviewDirector.Clear();
+	}
+
+	private void HandleReleaseOnTarget(Vector2 releasePos)
 	{
 		for (var i = 0; i < m_BattleMgr.m_CharacterInteractionBlockedItems.Count; i++)
 		{
@@ -1261,6 +1331,7 @@ public class CharacterControllerBattleGround : CharacterControllerBattleGroundBa
 		{
 			DebugLog.Log("Acting Character: " + m_BattleMgr.m_DraggedCharacter.GetModel().CombatantName);
 			DebugLog.Log("Targeted Character: " + component.GetModel().CombatantName);
+			HealthPreviewDirector.Commit();
 			component.Clicked -= OnCombatantClicked;
 			component.Clicked += OnCombatantClicked;
 			component.RegisterClicked();

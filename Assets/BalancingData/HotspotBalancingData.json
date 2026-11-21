@@ -407,7 +407,7 @@
     "CooldownInSeconds": 0,
     "VisibleRequirements": null,
     "IsSpawnEventPossible": false,
-    "ProgressId": 8,
+    "ProgressId": 0,
     "OrderId": 8,
     "IsSpawnGoldenPigPossible": false,
     "UseProgressIndicator": false,

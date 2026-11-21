@@ -119,6 +119,21 @@ public class CharacterControlHUD : MonoBehaviour
 
 	private const float ForbiddenXWallInset = 8f;
 
+	// Slingshot targeting (TargetingStyle): a dotted line from the bird to the real finger, built from short pieces of
+	// the HUD's own line mesh so it shares the ring's material (colour, fog look). It mirrors the HUD line's transforms
+	// (the tilted SelectionLine root and a rotation like RotationRoot).
+	private const int AimDotCount = 60;
+
+	private const float AimDotLength = 16f;
+
+	private const float AimDotSpacing = 36f;
+
+	private GameObject m_AimRoot;
+
+	private Transform m_AimRotation;
+
+	private Transform[] m_AimDots;
+
 	private void Awake()
 	{
 		m_BaseRotation = m_RotationControl.rotation;
@@ -127,6 +142,7 @@ public class CharacterControlHUD : MonoBehaviour
 		m_MarkerInitialRotation = m_Marker.rotation;
 		m_MarkerRingRenderers = m_Marker.GetComponentsInChildren<Renderer>(true);
 		CreateForbiddenX();
+		CreateAimLine();
 		var componentsInChildren = GetComponentsInChildren<Renderer>(true);
 		m_Renderers = componentsInChildren;
 		var array = componentsInChildren;
@@ -185,6 +201,77 @@ public class CharacterControlHUD : MonoBehaviour
 		m_ForbiddenX.AddComponent<MeshFilter>().sharedMesh = mesh;
 		m_ForbiddenX.AddComponent<MeshRenderer>();
 		m_ForbiddenX.SetActive(false);
+	}
+
+	private void CreateAimLine()
+	{
+		var lineRoot = m_RotationControl.parent;
+		var dash = m_BaseLine.GetComponentInChildren<MeshFilter>(true);
+		if (lineRoot == null || dash == null)
+		{
+			return;
+		}
+		var dashRenderer = dash.GetComponent<MeshRenderer>();
+		m_AimRoot = new GameObject("SlingshotAimLine");
+		m_AimRoot.layer = lineRoot.gameObject.layer;
+		m_AimRoot.transform.SetParent(lineRoot.parent, false);
+		m_AimRoot.transform.localPosition = lineRoot.localPosition;
+		m_AimRoot.transform.localRotation = lineRoot.localRotation;
+		m_AimRoot.transform.localScale = lineRoot.localScale;
+		m_AimRotation = new GameObject("AimRotation").transform;
+		m_AimRotation.gameObject.layer = m_AimRoot.layer;
+		m_AimRotation.SetParent(m_AimRoot.transform, false);
+		m_AimRotation.localRotation = m_RotationControl.localRotation;
+		m_AimDots = new Transform[AimDotCount];
+		for (var i = 0; i < AimDotCount; i++)
+		{
+			var dot = new GameObject("AimDot_" + i);
+			dot.layer = m_AimRoot.layer;
+			dot.transform.SetParent(m_AimRotation, false);
+			dot.transform.localPosition = new Vector3(m_LineOffsetToOrigin + i * AimDotSpacing, dash.transform.localPosition.y, 0f);
+			dot.transform.localScale = new Vector3(AimDotLength, 1f, 1f);
+			dot.AddComponent<MeshFilter>().sharedMesh = dash.sharedMesh;
+			var renderer = dot.AddComponent<MeshRenderer>();
+			if (dashRenderer != null)
+			{
+				renderer.shadowCastingMode = dashRenderer.shadowCastingMode;
+				renderer.receiveShadows = dashRenderer.receiveShadows;
+			}
+			m_AimDots[i] = dot.transform;
+		}
+		m_AimRoot.SetActive(false);
+	}
+
+	// Dotted line from the source to fingerWorldPos (null hides it). Same angle maths as SetState's line.
+	public void SetAimLine(Transform sourceTransform, Vector3? fingerWorldPos)
+	{
+		if (m_AimRoot == null)
+		{
+			return;
+		}
+		if (!fingerWorldPos.HasValue || sourceTransform == null)
+		{
+			if (m_AimRoot.activeSelf)
+			{
+				m_AimRoot.SetActive(false);
+			}
+			return;
+		}
+		var to = fingerWorldPos.Value - sourceTransform.position;
+		m_AimRotation.localRotation = Quaternion.Euler(new Vector3(m_AimRotation.localRotation.eulerAngles.x, Vector3.Angle(sourceTransform.right, to) * (float)(fingerWorldPos.Value.z <= sourceTransform.position.z ? 1 : -1)));
+		var length = to.magnitude;
+		for (var i = 0; i < m_AimDots.Length; i++)
+		{
+			var show = m_AimDots[i].localPosition.x + AimDotLength <= length;
+			if (m_AimDots[i].gameObject.activeSelf != show)
+			{
+				m_AimDots[i].gameObject.SetActive(show);
+			}
+		}
+		if (!m_AimRoot.activeSelf)
+		{
+			m_AimRoot.SetActive(true);
+		}
 	}
 
 	private static void ArmAxes(float degrees, out Vector3 along, out Vector3 side)
@@ -471,6 +558,7 @@ public class CharacterControlHUD : MonoBehaviour
 
 	public void ResetControlHUD()
 	{
+		SetAimLine(null, null);
 		m_BaseLine.gameObject.SetActive(false);
 		m_OrginMarker.gameObject.SetActive(false);
 		m_BaseLine.localScale = new Vector3(0f, 1f, 1f);

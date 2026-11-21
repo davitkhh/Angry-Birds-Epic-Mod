@@ -605,6 +605,12 @@ namespace ABH.GameDatas.Battle.Skills
 			return restAngle > 90f ? RestHeightUpsideDown : RestHeightUpright;
 		}
 
+		protected override List<ICombatant> GetPreviewTargets(HealthPreviewContext ctx)
+		{
+			var weakest = ctx.FactionOf(ctx.Target).Where(c => c.IsParticipating).OrderBy(c => c.CurrentHealth).FirstOrDefault();
+			return new List<ICombatant> { weakest ?? ctx.Target };
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

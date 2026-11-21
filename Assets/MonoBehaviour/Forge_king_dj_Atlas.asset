@@ -14,35 +14,35 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: a6a4a2c3485947adbd211e4ad964aae1, type: 2}
   uvs:
   - serializedVersion: 2
-    x: 0.369140625
-    y: 0.876953125
-    width: 0.0986328125
-    height: 0.123046875
+    x: 0.73828125
+    y: 0.75390625
+    width: 0.197265625
+    height: 0.24609375
   - serializedVersion: 2
     x: 0.0
-    y: 0.7412109375
-    width: 0.1728515625
-    height: 0.2587890625
+    y: 0.45703125
+    width: 0.345703125
+    height: 0.54296875
   - serializedVersion: 2
-    x: 0.17578125
-    y: 0.80859375
-    width: 0.19140625
-    height: 0.19140625
-  - serializedVersion: 2
-    x: 0.470703125
-    y: 0.880859375
-    width: 0.2392578125
-    height: 0.119140625
+    x: 0.3515625
+    y: 0.6171875
+    width: 0.3828125
+    height: 0.3828125
   - serializedVersion: 2
     x: 0.0
-    y: 0.6201171875
-    width: 0.3408203125
-    height: 0.1181640625
+    y: 0.21484375
+    width: 0.478515625
+    height: 0.23828125
   - serializedVersion: 2
-    x: 0.34375
-    y: 0.736328125
-    width: 0.001953125
-    height: 0.001953125
+    x: 0.484375
+    y: 0.216796875
+    width: 0.380859375
+    height: 0.236328125
+  - serializedVersion: 2
+    x: 0.87109375
+    y: 0.44921875
+    width: 0.00390625
+    height: 0.00390625
   textureGUIDs:
   - 93cabca3d1984a8fbb89c3fb5f88d6c6
   - a6c68e15494b4afb8c96eca3557d7620
@@ -52,17 +52,17 @@ MonoBehaviour:
   - 6286dcd4407a46d0b7519694793e2a54
   textureSizes:
   - {x: 101, y: 126}
-  - {x: 177, y: 265}
+  - {x: 177, y: 278}
   - {x: 196, y: 196}
   - {x: 245, y: 122}
-  - {x: 349, y: 121}
+  - {x: 195, y: 121}
   - {x: 2, y: 2}
   defaultPivotOffsets:
   - {x: -0.3382839, y: 0.4133169}
-  - {x: 0.07830967, y: -0.3263029}
+  - {x: 0.07830967, y: -0.3345616}
   - {x: -0.06844938, y: 0.04776693}
   - {x: 0.02899944, y: -0.4502384}
-  - {x: -0.1367634, y: -0.539937}
+  - {x: -0.6392669, y: -0.539937}
   - {x: 0, y: 0}
   textureNames:
   - Forge_king_dj

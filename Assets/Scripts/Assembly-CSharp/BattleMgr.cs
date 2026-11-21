@@ -73,7 +73,7 @@ public class BattleMgr : BattleMgrBase
 
 	protected virtual void OnApplicationResumed()
 	{
-		if (m_isInitialized && !m_BattleMainLoopDone && m_InterfaceCamera.gameObject.activeInHierarchy && (base.IsPausePossible || m_BattleUI.CanCloseConsumable) && DIContainerInfrastructure.GetCurrentPlayer().GetCurrentWorldProgress() > 1)
+		if (m_BattlePaused != null && m_isInitialized && !m_BattleMainLoopDone && m_InterfaceCamera.gameObject.activeInHierarchy && (base.IsPausePossible || m_BattleUI.CanCloseConsumable) && DIContainerInfrastructure.GetCurrentPlayer().GetCurrentWorldProgress() > 1)
 		{
 			m_BattlePaused.Enter();
 		}
@@ -84,7 +84,7 @@ public class BattleMgr : BattleMgrBase
 		if (m_wp8_battlePaused)
 		{
 			m_wp8_battlePaused = false;
-			if (!m_BattlePaused.IsVisible && m_isInitialized && !m_BattleMainLoopDone && m_InterfaceCamera.gameObject.activeInHierarchy && (base.IsPausePossible || m_BattleUI.CanCloseConsumable))
+			if (m_BattlePaused != null && !m_BattlePaused.IsVisible && m_isInitialized && !m_BattleMainLoopDone && m_InterfaceCamera.gameObject.activeInHierarchy && (base.IsPausePossible || m_BattleUI.CanCloseConsumable))
 			{
 				m_BattlePaused.Enter();
 			}
@@ -105,12 +105,26 @@ public class BattleMgr : BattleMgrBase
 		}
 		m_Model = DIContainerLogic.GetBattleService().GenerateBattle(ClientInfo.CurrentBattleStartGameData);
 		ClientInfo.CurrentBattleGameData = m_Model;
+		// A bird unlock tutorial runs on top of the world map (BirdUnlockSequence loaded this scene additively).
+		if (BirdUnlockSequence.Active != null && BirdUnlockSequence.IsUnlockBattle(m_Model.Balancing.NameId))
+		{
+			m_BirdUnlock = BirdUnlockSequence.Active;
+			m_BirdUnlock.PrepareBattleScene(this);
+		}
 		DIContainerInfrastructure.TutorialMgr.ShowTutorialGuideIfNecessary("entered_battle", m_Model.Balancing.NameId);
-		m_SceneryCamera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
-		DIContainerInfrastructure.GetCoreStateMgr().m_SceneryAudioListener = base.transform.GetComponentInChildren<AudioListener>();
-		DIContainerInfrastructure.GetCoreStateMgr().m_AllowSalesPopup = true;
-		m_InterfaceCamera = Camera.allCameras.FirstOrDefault(c => !c.CompareTag("SceneryCamera"));
-		m_HasConsumables = DIContainerLogic.InventoryService.CheckForItem(base.Model.m_ControllerInventory, "story_cauldron");
+		if (m_BirdUnlock != null)
+		{
+			m_SceneryCamera = m_BirdUnlock.BattleCamera;
+			m_InterfaceCamera = DIContainerInfrastructure.GetCoreStateMgr().m_InterfaceCamera;
+		}
+		else
+		{
+			m_SceneryCamera = Camera.allCameras.FirstOrDefault(c => c.CompareTag("SceneryCamera"));
+			DIContainerInfrastructure.GetCoreStateMgr().m_SceneryAudioListener = base.transform.GetComponentInChildren<AudioListener>();
+			DIContainerInfrastructure.GetCoreStateMgr().m_AllowSalesPopup = true;
+			m_InterfaceCamera = Camera.allCameras.FirstOrDefault(c => !c.CompareTag("SceneryCamera"));
+		}
+		m_HasConsumables = m_BirdUnlock == null && DIContainerLogic.InventoryService.CheckForItem(base.Model.m_ControllerInventory, "story_cauldron");
 		m_SceneryCamera.transparencySortMode = TransparencySortMode.Orthographic;
 		m_CurrentControlHUD = UnityEngine.Object.Instantiate(m_ControlHUDPrefab);
 		m_CurrentControlHUD.gameObject.SetActive(false);
@@ -188,8 +202,12 @@ public class BattleMgr : BattleMgrBase
 		m_LoadedLevels.Add("Menu_Battleground", false);
 		DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.AddUILevel("Menu_Battleground", OnWindowMenuBattlegroundLoaded);
 		yield return new WaitForEndOfFrame();
-		m_LoadedLevels.Add("Popup_BattlePaused", false);
-		DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.AddUILevel("Popup_BattlePaused", OnPopupBattlePausedLoaded);
+		// Bird unlock tutorials can't be paused; their pause popup would flash up while it loads over the world map.
+		if (m_BirdUnlock == null)
+		{
+			m_LoadedLevels.Add("Popup_BattlePaused", false);
+			DIContainerInfrastructure.GetCoreStateMgr().SceneLoadingMgr.AddUILevel("Popup_BattlePaused", OnPopupBattlePausedLoaded);
+		}
 		yield return new WaitForEndOfFrame();
 		DIContainerInfrastructure.AdService.AddPlacement("LevelStartInterstitial");
 		while (m_LoadedLevels.Values.Count(e => !e) > 0)
@@ -208,7 +226,10 @@ public class BattleMgr : BattleMgrBase
 				text = text.Substring(0, text.IndexOf("(") - 1);
 			}
 		}
-		if (Application.platform != RuntimePlatform.Android || Convert.ToInt32(text) < 22)
+		if (m_BirdUnlock != null)
+		{
+		}
+		else if (Application.platform != RuntimePlatform.Android || Convert.ToInt32(text) < 22)
 		{
 			if (DIContainerInfrastructure.AdService.ShowAd("LevelStartInterstitial"))
 			{
@@ -224,7 +245,10 @@ public class BattleMgr : BattleMgrBase
 			DebugLog.Warn("To force game-interrupting AD, you require Android 5.1 or older otherwise we cannot play music");
 		}
 		m_BattleUI.SetBattleMgr(this);
-		m_BattlePaused.SetBattleMgr(this);
+		if (m_BattlePaused != null)
+		{
+			m_BattlePaused.SetBattleMgr(this);
+		}
 		DeRegisterEventHandlers();
 		RegisterEventHandlers();
 		if (m_StorySequencesRoot)
@@ -246,8 +270,13 @@ public class BattleMgr : BattleMgrBase
 			m_Model.m_CoinsAtBattleStart = data.ItemValue;
 		}
 		StartOnSecondSceneryForDuel();
-		var tree = GetActionTreeForBattle(m_Model.CurrentWaveIndex, false, true);
-		if (tree != null)
+		var tree = m_BirdUnlock != null ? null : GetActionTreeForBattle(m_Model.CurrentWaveIndex, false, true);
+		if (m_BirdUnlock != null)
+		{
+			// The bird drifts in from the unlock popup and the first wave walks in (no start tree).
+			yield return StartCoroutine(m_BirdUnlock.RunBattleIntro(this));
+		}
+		else if (tree != null)
 		{
 			if (tree.m_ExecuteBeforeWave)
 			{
@@ -273,7 +302,10 @@ public class BattleMgr : BattleMgrBase
 			}
 		}
 		DebugLog.Log(GetType(), "Start: Setting up initial positions for combatants");
-		yield return StartCoroutine(SetupInitialPositions());
+		if (m_BirdUnlock == null)
+		{
+			yield return StartCoroutine(SetupInitialPositions());
+		}
 		if (IsIntroBattle(m_Model))
 		{
 			// Red's rig loses its shadow in some clips (Hit, Action_Attack_1); give him one that can't drop out.
@@ -328,8 +360,11 @@ public class BattleMgr : BattleMgrBase
 		}
 		base.IsPausePossible = true;
 		DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("battle_init");
-		DIContainerInfrastructure.GetCoreStateMgr().m_WindowRoot.Leave();
-		DIContainerInfrastructure.GetCoreStateMgr().m_PopupRoot.Leave();
+		if (m_BirdUnlock == null)
+		{
+			DIContainerInfrastructure.GetCoreStateMgr().m_WindowRoot.Leave();
+			DIContainerInfrastructure.GetCoreStateMgr().m_PopupRoot.Leave();
+		}
 		yield return new WaitForSeconds(0.5f);
 		m_isInitialized = true;
 		DebugLog.Log(GetType(), "Start: Init complete");
@@ -372,7 +407,7 @@ public class BattleMgr : BattleMgrBase
 	protected virtual void OnDisable()
 	{
 		DIContainerInfrastructure.AdService.HideAd("LevelStartInterstitial");
-		if (DIContainerInfrastructure.GetCoreStateMgr().m_ByGoToWorldMap)
+		if (DIContainerInfrastructure.GetCoreStateMgr().m_ByGoToWorldMap && m_BirdUnlock == null)
 		{
 			DIContainerInfrastructure.GetCoreStateMgr().m_GenericUI.StopCoinUpdates();
 			DIContainerInfrastructure.GetCoreStateMgr().m_ByGoToWorldMap = false;
@@ -665,6 +700,10 @@ public class BattleMgr : BattleMgrBase
 		}
 		yield return StartCoroutine(PlaceCharacter(m_PigCenterPosition, Faction.Pigs));
 		SwapCrystalDirector.For(this).OnWavePigsPlaced();
+		if (m_BirdUnlock != null)
+		{
+			m_BirdUnlock.NotifyWavePigsPlaced(this);
+		}
 		if (IsIntroBossWave(m_Model))
 		{
 			// Porky and Wiz Pig make their cutscene entrances (MoveByClip nodes in the wave's tree, which run in this same
@@ -750,6 +789,14 @@ public class BattleMgr : BattleMgrBase
 			}
 			bird.ActedThisTurn = false;
 			bird.UsedConsumable = false;
+		}
+		if (m_BirdUnlock != null)
+		{
+			// The wave's scripted part (the last wave: the pigs make the bird mad), then the bird goes first.
+			yield return StartCoroutine(m_BirdUnlock.OnWaveReady(this));
+			m_Model.m_CombatantsNotActed.Clear();
+			m_Model.m_CombatantsOutOfInitiativeOrder.Clear();
+			m_Model.CurrentCombatant = null;
 		}
 		if (IsIntroBossWave(m_Model))
 		{
@@ -1651,6 +1698,12 @@ public class BattleMgr : BattleMgrBase
 		{
 			DebugLog.Log(GetType(), "CheckForStageProgressOrBattleEnd: Battle All Birds are defeated!");
 			base.AutoBattle = false;
+			if (m_BirdUnlock != null)
+			{
+				yield return StartCoroutine(m_BirdUnlock.RunAbort(this));
+				WaveEnded = true;
+				yield break;
+			}
 			// The intro's scripted loss carries straight on into the raid.
 			var minTime = IsIntroBossWave(m_Model) ? 1f : 2.5f;
 			DIContainerInfrastructure.BackButtonMgr.DeRegisterBlockReason("battle_end");
@@ -1740,6 +1793,13 @@ public class BattleMgr : BattleMgrBase
 				{
 					yield return StartCoroutine(ExecuteActionTree(tree));
 				}
+				WaveEnded = true;
+				yield break;
+			}
+			if (m_BirdUnlock != null)
+			{
+				// No results: the bird celebrates and the unlock popup closes over the world map.
+				yield return StartCoroutine(m_BirdUnlock.RunOutro(this));
 				WaveEnded = true;
 				yield break;
 			}

@@ -1,0 +1,335 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_securitypig",
+ "name": "Security Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig",
+     "name": "Headgear_SecurityPig",
+     "item": "Headgear_SecurityPig",
+     "w": 138,
+     "h": 34,
+     "pivot": [
+      -0.18750001,
+      -0.3805147
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig_Back",
+     "name": "Headgear_SecurityPig_Back",
+     "item": "Headgear_SecurityPig",
+     "w": 38,
+     "h": 26,
+     "pivot": [
+      -0.14464286,
+      -0.26229396
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SecurityPig",
+     "name": "MainHand_SecurityPig",
+     "item": "MainHand_SecurityPig",
+     "w": 108,
+     "h": 78,
+     "pivot": [
+      -0.3267857,
+      -0.114972524
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_ad6ce",
+   "origin": "pig_attack_minion_securitypig",
+   "type": "Attack",
+   "source": "pig_attack_minion_securitypig",
+   "name": "Safeguard",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-].",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "ragereduce": 15,
+    "falloff": 1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"ragereduce\")))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "ReduceRageAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_ae871",
+   "origin": "pig_passive_minion_securitypig",
+   "type": "Passive",
+   "source": "pig_passive_minion_securitypig",
+   "name": "Exaggerated Safeguard",
+   "desc": "After using any rage ability, the Security Pig deals [ff0000]{value_1}[-] damage to a random enemy.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_in_percent": 300
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100 * A))"
+    }
+   },
+   "template": "RevengeOwnRageUse",
+   "duration": -1,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 120,
+  "attack": 11,
+  "sizeType": "Small",
+  "sizeScale": 1.1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_securitypig",
+  "fingerprint": "083b6a1230bea5905166c71082968592790de350",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100,
+    "ComboChain": [
+     "pig_attack_minion_securitypig"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Security Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig",
+       "name": "Headgear_SecurityPig",
+       "item": "Headgear_SecurityPig",
+       "w": 138,
+       "h": 34,
+       "pivot": [
+        -0.18750001,
+        -0.3805147
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SecurityPig_Back",
+       "name": "Headgear_SecurityPig_Back",
+       "item": "Headgear_SecurityPig",
+       "w": 38,
+       "h": 26,
+       "pivot": [
+        -0.14464286,
+        -0.26229396
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SecurityPig",
+       "name": "MainHand_SecurityPig",
+       "item": "MainHand_SecurityPig",
+       "w": 108,
+       "h": 78,
+       "pivot": [
+        -0.3267857,
+        -0.114972524
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 120,
+    "attack": 11,
+    "sizeType": "Small",
+    "sizeScale": 1.1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_ad6ce",
+     "origin": "pig_attack_minion_securitypig",
+     "type": "Attack",
+     "source": "pig_attack_minion_securitypig",
+     "name": "Safeguard",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Empties the Rage Chili by [ff0000]{value_3}%[-].",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "ragereduce": 15,
+      "falloff": 1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"ragereduce\")))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "ReduceRageAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_ae871",
+     "origin": "pig_passive_minion_securitypig",
+     "type": "Passive",
+     "source": "pig_passive_minion_securitypig",
+     "name": "Exaggerated Safeguard",
+     "desc": "After using any rage ability, the Security Pig deals [ff0000]{value_1}[-] damage to a random enemy.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "damage_in_percent": 300
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(((p(\"damage_in_percent\")) / 100 * A))"
+      }
+     },
+     "template": "RevengeOwnRageUse",
+     "duration": -1,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

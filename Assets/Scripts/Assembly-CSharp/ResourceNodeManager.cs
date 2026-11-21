@@ -92,11 +92,11 @@ public class ResourceNodeManager : MonoBehaviour, IResourceNodeManager
 		NodeHarvested(component.Model);
 	}
 
+	// The unlock state (Active while it has supply, Resolved once empty) is kept by ResourceNodeSupply.Consume.
 	public void NodeHarvested(HotspotGameData hotspot)
 	{
 		DIContainerLogic.GetTimingService().GetTrustedTimeEx(delegate(DateTime trustedTime)
 		{
-			hotspot.Data.UnlockState = HotspotUnlockState.Resolved;
 			hotspot.Data.LastVisitDateTime = trustedTime;
 			if (DIContainerInfrastructure.GetCurrentPlayer() != null)
 			{
@@ -110,36 +110,29 @@ public class ResourceNodeManager : MonoBehaviour, IResourceNodeManager
 		return DIContainerBalancing.GameConstantsBalancingDataProvider.MaximumSpawnableNodes - currentSpotAmount;
 	}
 
+	// Called on entering the world map and every minute after (WorldMapStateMgr.UpdateResourceNodeManager). Nodes no
+	// longer respawn on a timer: each unlocked node gets the refills the stars earned since its last one paid for
+	// (ResourceNodeSupply). The old TimeForResourceRespawn / MaximumSpawnableNodes constants are unused.
 	public void CheckGlobalCoolDown()
 	{
-		var activeSpots = m_spotList.Where(s => s.Model.Data.UnlockState == HotspotUnlockState.Active || s.Model.Data.UnlockState == HotspotUnlockState.ResolvedNew).ToList();
-		if (!SpawnOfNewSpotPossible(activeSpots))
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		if (player == null)
 		{
 			return;
 		}
-		var timeForResourceRespawn = DIContainerBalancing.GameConstantsBalancingDataProvider.TimeForResourceRespawn;
-		var list = m_spotList.Where(s => s.Model.Data.UnlockState == HotspotUnlockState.Resolved && DIContainerLogic.GetTimingService().IsAfter(s.Model.Data.LastVisitDateTime.AddSeconds(timeForResourceRespawn))).ToList();
-		DebugLog.Log("Inactive Resource Nodes Count: " + list.Count);
-		if (list.Count <= 0)
+		var changed = false;
+		foreach (var spot in m_spotList.ToList())
 		{
-			return;
-		}
-		var hotSpotWorldMapViewResource = list[UnityEngine.Random.Range(0, list.Count)];
-		if (!hotSpotWorldMapViewResource.IsResourceAvaible())
-		{
-			DebugLog.Log(hotSpotWorldMapViewResource.gameObject.name + " respawn ");
-			hotSpotWorldMapViewResource.Respawn();
-			DIContainerInfrastructure.GetCurrentPlayer().Data.LastResourceNodeSpawnTime = DIContainerLogic.GetDeviceTimingService().GetCurrentTimestamp();
-			if (DIContainerInfrastructure.GetCurrentPlayer() != null)
+			if (spot == null || spot.Model == null)
 			{
-				DIContainerInfrastructure.GetCurrentPlayer().SavePlayerData();
+				continue;
 			}
+			changed |= spot.ApplyStarRefills();
 		}
-	}
-
-	private bool SpawnOfNewSpotPossible(List<HotSpotWorldMapViewResource> activeSpots)
-	{
-		return DIContainerLogic.GetTimingService().IsAfter(DIContainerLogic.GetTimingService().GetDateTimeFromTimestamp(DIContainerInfrastructure.GetCurrentPlayer().Data.LastResourceNodeSpawnTime).AddSeconds(DIContainerBalancing.GameConstantsBalancingDataProvider.TimeForResourceRespawn)) && GetCurrentMaxResources(activeSpots.Count) > 0;
+		if (changed)
+		{
+			player.SavePlayerData();
+		}
 	}
 
 	private void SpawnNewNode()
@@ -166,5 +159,138 @@ public class ResourceNodeManager : MonoBehaviour, IResourceNodeManager
 			num++;
 		}
 		while (num < 1000);
+	}
+}
+
+// Star-driven resource node supply. Counting starts when a node unlocks: from then on, every StarsPerRefill(type) stars the
+// player earns (WorldMapService.GetTotalAccumulatedStars: world map battles + chronicle cave, better replays included)
+// adds one full supply (ResourceSpawnAmountPerNode harvests). An emptied node fills back up; a node that still has
+// supply left gets the full amount on top. Supply persists between visits (one tap = one harvest).
+// Saved per node in the player's EquippedSkins map as "resnode:<hotspot nameId>" = "<star baseline>|<supply>".
+public static class ResourceNodeSupply
+{
+	public const string KeyPrefix = "resnode:";
+
+	// Stars per refill, per material type of node (the node's AnimationPrefix without the "_": Rock, TreeStump, Seashell).
+	// GameConstants "ResourceNodeStarsPerRefill_<type>" (FloatValue): -1 (any negative) or missing = use the shared
+	// "ResourceNodeStarsPerRefill"; 0 = needs no stars (the node refills the moment it is emptied, so it never runs out).
+	// The shared value works the same way, with negative/missing falling back to DefaultStarsPerRefill.
+	// Balancing values apply once the .bytes is re-encoded.
+	public const string StarsPerRefillConstant = "ResourceNodeStarsPerRefill";
+
+	public const int DefaultStarsPerRefill = 3;
+
+	public static int StarsPerRefill(string nodeType)
+	{
+		var provider = DIContainerBalancing.GameConstantsBalancingDataProvider;
+		if (!string.IsNullOrEmpty(nodeType))
+		{
+			var typed = provider.GetBalancingData(StarsPerRefillConstant + "_" + nodeType);
+			if (typed != null && typed.FloatValue >= 0f)
+			{
+				return (int)Math.Round(typed.FloatValue);
+			}
+		}
+		var shared = provider.GetBalancingData(StarsPerRefillConstant);
+		return shared != null && shared.FloatValue >= 0f ? (int)Math.Round(shared.FloatValue) : DefaultStarsPerRefill;
+	}
+
+	public static int FullSupply
+	{
+		get { return Math.Max(1, DIContainerBalancing.GameConstantsBalancingDataProvider.ResourceSpawnAmountPerNode); }
+	}
+
+	public static bool IsUnlocked(HotspotGameData hotspot)
+	{
+		return hotspot != null && hotspot.Data.UnlockState > HotspotUnlockState.Hidden;
+	}
+
+	// Current supply after paying out any refills earned. The first call for an unlocked node starts its star count:
+	// a node that is up for harvest (just unlocked, or an Active one from an older save) starts full, an emptied one at 0.
+	// Keeps UnlockState in step (Active with supply, Resolved without). Does not save.
+	public static int Refresh(PlayerGameData player, HotspotGameData hotspot, string nodeType)
+	{
+		if (player == null || !IsUnlocked(hotspot))
+		{
+			return 0;
+		}
+		var stars = DIContainerLogic.WorldMapService.GetTotalAccumulatedStars(player);
+		int baseline;
+		int supply;
+		if (!TryRead(player, hotspot, out baseline, out supply))
+		{
+			baseline = stars;
+			supply = hotspot.Data.UnlockState == HotspotUnlockState.Resolved ? 0 : FullSupply;
+		}
+		var perRefill = StarsPerRefill(nodeType);
+		if (perRefill <= 0)
+		{
+			// Needs no stars: an empty node is full again right away.
+			baseline = stars;
+			if (supply <= 0)
+			{
+				supply = FullSupply;
+			}
+		}
+		else if (stars > baseline)
+		{
+			var refills = (stars - baseline) / perRefill;
+			baseline += refills * perRefill;
+			supply += refills * FullSupply;
+		}
+		Write(player, hotspot, baseline, supply);
+		hotspot.Data.UnlockState = supply > 0 ? HotspotUnlockState.Active : HotspotUnlockState.Resolved;
+		return supply;
+	}
+
+	// Takes one harvest; returns what is left. Saves.
+	public static int Consume(PlayerGameData player, HotspotGameData hotspot, string nodeType)
+	{
+		var supply = Math.Max(0, Refresh(player, hotspot, nodeType) - 1);
+		if (supply <= 0 && StarsPerRefill(nodeType) <= 0)
+		{
+			supply = FullSupply;
+		}
+		int baseline;
+		int unused;
+		TryRead(player, hotspot, out baseline, out unused);
+		Write(player, hotspot, baseline, supply);
+		hotspot.Data.UnlockState = supply > 0 ? HotspotUnlockState.Active : HotspotUnlockState.Resolved;
+		player.SavePlayerData();
+		return supply;
+	}
+
+	// Stars still needed for the next refill (for UI / debugging).
+	public static int StarsUntilNextRefill(PlayerGameData player, HotspotGameData hotspot, string nodeType)
+	{
+		int baseline;
+		int supply;
+		if (player == null || !TryRead(player, hotspot, out baseline, out supply))
+		{
+			return StarsPerRefill(nodeType);
+		}
+		return Math.Max(0, baseline + StarsPerRefill(nodeType) - DIContainerLogic.WorldMapService.GetTotalAccumulatedStars(player));
+	}
+
+	private static bool TryRead(PlayerGameData player, HotspotGameData hotspot, out int baseline, out int supply)
+	{
+		baseline = 0;
+		supply = 0;
+		string saved;
+		if (player.Data.EquippedSkins == null || !player.Data.EquippedSkins.TryGetValue(KeyPrefix + hotspot.BalancingData.NameId, out saved) || saved == null)
+		{
+			return false;
+		}
+		var parts = saved.Split('|');
+		return parts.Length >= 2 && int.TryParse(parts[0], out baseline) && int.TryParse(parts[1], out supply);
+	}
+
+	private static void Write(PlayerGameData player, HotspotGameData hotspot, int baseline, int supply)
+	{
+		if (player.Data.EquippedSkins == null)
+		{
+			player.Data.EquippedSkins = new Dictionary<string, string>();
+		}
+		player.Data.EquippedSkins[KeyPrefix + hotspot.BalancingData.NameId] = baseline + "|" + Math.Max(0, supply);
 	}
 }

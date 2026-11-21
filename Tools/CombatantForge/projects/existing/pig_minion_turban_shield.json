@@ -1,0 +1,488 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_turban_shield",
+ "name": "Protected Desert Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_TurbanPig",
+     "name": "Headgear_TurbanPig",
+     "item": "Headgear_TurbanPig",
+     "w": 153,
+     "h": 121,
+     "pivot": [
+      -0.17678572,
+      -0.28111717
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_TurbanPig_Back",
+     "name": "Headgear_TurbanPig_Back",
+     "item": "Headgear_TurbanPig",
+     "w": 127,
+     "h": 39,
+     "pivot": [
+      -0.23,
+      -0.64
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_TurbanPig",
+     "name": "MainHand_TurbanPig",
+     "item": "MainHand_TurbanPig",
+     "w": 144,
+     "h": 74,
+     "pivot": [
+      -0.31,
+      -0.02
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "fc5508f5c7494c03ba1c5c3c82728075:Forge_pig_minion_turban_shield__e0_OffHand",
+     "name": "Forge_pig_minion_turban_shield__e0_OffHand",
+     "item": "Forge_pig_minion_turban_shield__e0_OffHand",
+     "w": 74,
+     "h": 78,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_10258",
+   "origin": "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+   "name": "Blinding Strike",
+   "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "reduction_in_percent": 33,
+    "chance": 100,
+    "anim_clip": 350065
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_5}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_6}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    }
+   },
+   "template": "AttackWithDamageDebuffSkill",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "a1_42cf1",
+   "origin": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+   "type": "Attack",
+   "source": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+   "name": "Kick Sand",
+   "desc": "The pig stumbles and lowers target attack power by [ff0000]{value_1}%[-] for [ff0000]{value_2}[-] turns. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "reduction_in_percent": 33
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"reduction_in_percent\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"charge\"))"
+    }
+   },
+   "template": "TumbleAndApplyDamageDebuff",
+   "duration": 2,
+   "design": ""
+  },
+  {
+   "uid": "3dr19kr9",
+   "type": "Support",
+   "source": "pig_support_forge_pig_minion_rogue_shield__e0_block",
+   "name": "Block",
+   "desc": "Takes every [ff0000]{value_1}[-] hits instead of a random ally. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "amount_of_targets": 1,
+    "hit_interval": 2
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "(p(\"hit_interval\"))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "(p(\"amount_of_targets\"))"
+    }
+   },
+   "template": "ProtectAllyEveryNthHitSkill",
+   "duration": 2,
+   "design": "",
+   "nameId": "pig_support_forge_pig_minion_turban_shield__e0_block",
+   "origin": "pig_support_forge_pig_minion_turban_shield__e0_block"
+  }
+ ],
+ "weapon": {
+  "animationIndex": 2,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 200,
+  "attack": 15,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_turban_shield",
+  "fingerprint": "a8d7f9e0ef041e9a66e76321e085ee23568392e2",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_pig_minion_turban_shield__e0_block",
+     "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+    ]
+   },
+   {
+    "Percentage": 50,
+    "ComboChain": [
+     "pig_support_forge_pig_minion_turban_shield__e0_block",
+     "pig_attack_forge_pig_minion_turban__e0_kick_sand"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Protected Desert Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_TurbanPig",
+       "name": "Headgear_TurbanPig",
+       "item": "Headgear_TurbanPig",
+       "w": 153,
+       "h": 121,
+       "pivot": [
+        -0.17678572,
+        -0.28111717
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_TurbanPig_Back",
+       "name": "Headgear_TurbanPig_Back",
+       "item": "Headgear_TurbanPig",
+       "w": 127,
+       "h": 39,
+       "pivot": [
+        -0.23,
+        -0.64
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_TurbanPig",
+       "name": "MainHand_TurbanPig",
+       "item": "MainHand_TurbanPig",
+       "w": 144,
+       "h": 74,
+       "pivot": [
+        -0.31,
+        -0.02
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "fc5508f5c7494c03ba1c5c3c82728075:Forge_pig_minion_turban_shield__e0_OffHand",
+       "name": "Forge_pig_minion_turban_shield__e0_OffHand",
+       "item": "Forge_pig_minion_turban_shield__e0_OffHand",
+       "w": 74,
+       "h": 78,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 2,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 200,
+    "attack": 15,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_10258",
+     "origin": "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+     "type": "Attack",
+     "source": "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+     "name": "Blinding Strike",
+     "desc": "Deals [ff0000]{value_1}[-] damage. Lowers target attack power by [ff0000]{value_3}%[-] for [ff0000]{value_2}[-] turns.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "reduction_in_percent": 33,
+      "chance": 100,
+      "anim_clip": 350065
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_5}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_6}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      }
+     },
+     "template": "AttackWithDamageDebuffSkill",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "a1_42cf1",
+     "origin": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+     "type": "Attack",
+     "source": "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+     "name": "Kick Sand",
+     "desc": "The pig stumbles and lowers target attack power by [ff0000]{value_1}%[-] for [ff0000]{value_2}[-] turns. Stupid pig.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "reduction_in_percent": 33
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"reduction_in_percent\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"charge\"))"
+      }
+     },
+     "template": "TumbleAndApplyDamageDebuff",
+     "duration": 2,
+     "design": ""
+    },
+    {
+     "uid": "3dr19kr9",
+     "type": "Support",
+     "source": "pig_support_forge_pig_minion_rogue_shield__e0_block",
+     "name": "Block",
+     "desc": "Takes every [ff0000]{value_1}[-] hits instead of a random ally. Lasts [ff0000]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Blessing",
+     "params": {
+      "amount_of_targets": 1,
+      "hit_interval": 2
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "(p(\"hit_interval\"))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "(p(\"amount_of_targets\"))"
+      }
+     },
+     "template": "ProtectAllyEveryNthHitSkill",
+     "duration": 2,
+     "design": "",
+     "nameId": "pig_support_forge_pig_minion_turban_shield__e0_block",
+     "origin": "pig_support_forge_pig_minion_turban_shield__e0_block"
+    }
+   ]
+  }
+ },
+ "guids": {
+  "src:Forge_pig_minion_turban_shield__e0_OffHand": "0713d1a872aa427d955eb909ad323300",
+  "tex:HR": "50265f8a7c9c42fe87c3677b0e161110",
+  "tex:LR": "f2e2810886bf44f290cef31a7bdee6b7",
+  "mat:HR": "06c84babd08248f9ab07f64dcaaabd4d",
+  "mat:LR": "32fcb78c9c6241f9b46001673e78c1c1",
+  "atlas:HR": "fc5508f5c7494c03ba1c5c3c82728075",
+  "atlas:LR": "43e3625e30ce454bbdc8176b8caeaa4f"
+ },
+ "publishedAt": "2026-11-14 17:22",
+ "publishedRig": "MinionPig"
+}

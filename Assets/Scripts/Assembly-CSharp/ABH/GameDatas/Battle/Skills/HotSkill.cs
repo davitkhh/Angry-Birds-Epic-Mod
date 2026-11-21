@@ -84,6 +84,21 @@ namespace ABH.GameDatas.Battle.Skills
 			}
 		}
 
+		// One heal per turn while the blessing lasts (BattleService's per-turn DoHeal)
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			if (m_Percent == 0f || ctx.Target.CombatantFaction != ctx.Source.CombatantFaction)
+			{
+				return;
+			}
+			var targets = m_All ? ctx.FactionOf(ctx.Target) : new List<ICombatant> { m_Self ? ctx.Source : ctx.Target };
+			foreach (var skillTarget in targets)
+			{
+				var health = m_InvokersHealth == 1f ? ctx.Source.ModifiedHealth : skillTarget.ModifiedHealth;
+				ctx.AddHealOverTime(skillTarget, health * m_Percent / 100f, Model.Balancing.EffectDuration, m_HotChance / 100f);
+			}
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

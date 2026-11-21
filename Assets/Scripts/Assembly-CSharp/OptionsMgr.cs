@@ -81,14 +81,13 @@ public class OptionsMgr : MonoBehaviour
 	{
 		DebugSaveSlots.Install(this); // TEMPORARY testing save slots
 #if UNITY_IOS
+		// Strip is sound/info/voucher (398 wide); hiding the voucher button drops one 84 cell.
 		m_BonusCodeButton.transform.parent.gameObject.SetActive(false);
-		m_Background.GetComponent<UISprite>().width = 566;
-		m_ButtonGrid.Reposition();
-		
-		m_RestorePurchaseButton.transform.parent.gameObject.SetActive(false);
-		m_Background.GetComponent<UISprite>().width = 480;
+		m_Background.GetComponent<UISprite>().width = 314;
 		m_ButtonGrid.Reposition();
 #endif
+		TargetingStyle.Install(this); // battle targeting style toggle (drag / slingshot)
+		WorldMapGear.Install(this); // which gear the world map birds wear (world map only)
 	}
 
 	private IEnumerator EnterCoroutine(bool openOptions = false)

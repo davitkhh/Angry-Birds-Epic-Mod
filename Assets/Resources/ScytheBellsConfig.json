@@ -1,0 +1,307 @@
+{
+ "atlas": "ScytheBells",
+ "texel": 2,
+ "sprites": [
+  {
+   "name": "Ring",
+   "rect": [
+    1,
+    217,
+    36,
+    38
+   ],
+   "size": [
+    18.0,
+    19.0
+   ],
+   "pivot": [
+    0,
+    0
+   ]
+  },
+  {
+   "name": "BellLarge",
+   "rect": [
+    39,
+    209,
+    46,
+    46
+   ],
+   "size": [
+    23.0,
+    23.0
+   ],
+   "pivot": [
+    11.5,
+    1.65
+   ]
+  },
+  {
+   "name": "BellSmall",
+   "rect": [
+    87,
+    223,
+    32,
+    32
+   ],
+   "size": [
+    16.0,
+    16.0
+   ],
+   "pivot": [
+    8.0,
+    1.65
+   ]
+  },
+  {
+   "name": "BellLarge_Silver",
+   "rect": [
+    75,
+    161,
+    46,
+    46
+   ],
+   "size": [
+    23.0,
+    23.0
+   ],
+   "pivot": [
+    11.5,
+    1.65
+   ]
+  },
+  {
+   "name": "BellSmall_Silver",
+   "rect": [
+    1,
+    127,
+    32,
+    32
+   ],
+   "size": [
+    16.0,
+    16.0
+   ],
+   "pivot": [
+    8.0,
+    1.65
+   ]
+  },
+  {
+   "name": "BellLarge_Bronze",
+   "rect": [
+    35,
+    113,
+    46,
+    46
+   ],
+   "size": [
+    23.0,
+    23.0
+   ],
+   "pivot": [
+    11.5,
+    1.65
+   ]
+  },
+  {
+   "name": "BellSmall_Bronze",
+   "rect": [
+    83,
+    127,
+    32,
+    32
+   ],
+   "size": [
+    16.0,
+    16.0
+   ],
+   "pivot": [
+    8.0,
+    1.65
+   ]
+  },
+  {
+   "name": "ClapperLarge",
+   "rect": [
+    1,
+    169,
+    16,
+    38
+   ],
+   "size": [
+    8.0,
+    19.0
+   ],
+   "pivot": [
+    4.0,
+    1.55
+   ]
+  },
+  {
+   "name": "ClapperSmall",
+   "rect": [
+    19,
+    179,
+    14,
+    28
+   ],
+   "size": [
+    7.0,
+    14.0
+   ],
+   "pivot": [
+    3.5,
+    1.55
+   ]
+  },
+  {
+   "name": "Ding",
+   "rect": [
+    35,
+    185,
+    12,
+    22
+   ],
+   "size": [
+    6.0,
+    11.0
+   ],
+   "pivot": [
+    0.0,
+    5.5
+   ]
+  },
+  {
+   "name": "RingPlain",
+   "rect": [
+    49,
+    183,
+    24,
+    24
+   ],
+   "size": [
+    12.0,
+    12.0
+   ],
+   "pivot": [
+    6.0,
+    6.0
+   ]
+  }
+ ],
+ "weapons": [
+  {
+   "builtin": true,
+   "items": [
+    "pig_weapon_minion_cupid_dark_bells_01"
+   ],
+   "texture": "",
+   "slot": "MainHand",
+   "ring": "Ring",
+   "on": [
+    "Always"
+   ],
+   "cover": "",
+   "coverPivot": [
+    0,
+    0
+   ],
+   "ringCorner": [
+    53.879,
+    -32.575
+   ],
+   "ringCentre": [
+    62.379,
+    -42.375
+   ],
+   "hangRadius": 2.65
+  }
+ ],
+ "presets": [
+  {
+   "art": "MainHand_DarkCupid",
+   "ring": "Ring",
+   "ringCentre": [
+    28.5,
+    -63.3
+   ]
+  }
+ ],
+ "bells": [
+  {
+   "sprite": "BellLarge",
+   "clapper": "ClapperLarge",
+   "scale": 1.0,
+   "clapperPivot": [
+    0.0,
+    4.6
+   ],
+   "clapperLength": 13.4,
+   "centreOfMass": 10.5,
+   "mouth": 9.3,
+   "lip": 18.5,
+   "pitch": 1.0,
+   "soundClip": "Sound/Characters/Generic/bell_ring",
+   "soundStart": 2.4981,
+   "soundEnd": 2.9462,
+   "soundDecay": 0.184,
+   "material": "Brass"
+  },
+  {
+   "sprite": "BellSmall",
+   "clapper": "ClapperSmall",
+   "scale": 0.64,
+   "clapperPivot": [
+    0.0,
+    2.944
+   ],
+   "clapperLength": 8.576,
+   "centreOfMass": 6.72,
+   "mouth": 5.952,
+   "lip": 11.84,
+   "pitch": 1.5625,
+   "soundClip": "Sound/Characters/Generic/bell_ring",
+   "soundStart": 4.883,
+   "soundEnd": 5.331,
+   "soundDecay": 0.184,
+   "material": "Brass"
+  }
+ ],
+ "reference": "Brass",
+ "materials": [
+  {
+   "name": "Brass",
+   "label": "Brass",
+   "suffix": "",
+   "youngs": 110.0,
+   "density": 8530.0,
+   "decay": 1.0,
+   "roughness": 0.15,
+   "patina": 0.0,
+   "restitution": 0.35
+  },
+  {
+   "name": "Silver",
+   "label": "Silver (sterling)",
+   "suffix": "_Silver",
+   "youngs": 76.0,
+   "density": 10360.0,
+   "decay": 0.75,
+   "roughness": 0.08,
+   "patina": 0.0,
+   "restitution": 0.28
+  },
+  {
+   "name": "Bronze",
+   "label": "Bronze (bell metal)",
+   "suffix": "_Bronze",
+   "youngs": 104.0,
+   "density": 8770.0,
+   "decay": 1.35,
+   "roughness": 0.6,
+   "patina": 0.55,
+   "restitution": 0.45
+  }
+ ]
+}

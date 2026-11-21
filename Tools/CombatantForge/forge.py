@@ -157,6 +157,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(g.rig_json(parts[2]))
             if what == 'library':
                 return self.send(g.library())
+            if what == 'bells':
+                import bells
+                return self.send(bells.preview_config())
             if what == 'skills':
                 return self.send(g.skills_catalog())
             if what == 'existing':
@@ -245,6 +248,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(g.sprite_png(parts[1]), 'image/png', cache=not parts[1].startswith('upload:'))
         if head == 'ngui':
             return self.send(g.ngui_png(parts[1], parts[2]), 'image/png', cache=True)
+        if head == 'bellsound':
+            import bells
+            return self.send(bells.sound_wav(), 'audio/wav', cache=True)
         if head == 'font':
             return self.send(open(os.path.join(g.ASSETS, 'Font', 'AngryBirds-Regular.otf'), 'rb').read(), 'font/otf', cache=True)
         return self.static('/'.join(parts))
@@ -313,7 +319,7 @@ class Handler(BaseHTTPRequestHandler):
                 parent, suffix, ratios = body['parent'], body['suffix'], body.get('ratios') or {}
 
                 def work(log, register):
-                    job_result['nameId'] = existing.add_variant(parent, suffix, log, ratios)
+                    job_result['nameId'] = existing.add_variant(parent, suffix, log, ratios, body.get('template'))
                     return None
                 job_result = {}
                 job_id = start_job(work)

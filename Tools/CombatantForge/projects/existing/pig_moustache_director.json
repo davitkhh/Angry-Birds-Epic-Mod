@@ -173,6 +173,28 @@
    "template": "PassiveReduceCharge",
    "duration": -1,
    "design": ""
+  },
+  {
+   "uid": "a3_67846",
+   "origin": "pig_passive_incompetentminions",
+   "type": "Passive",
+   "source": "pig_passive_incompetentminions",
+   "name": "Incompetent Minions",
+   "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+   "color": "BEE8FE",
+   "atlas": "Skills_Pigs_01",
+   "icon": "PassiveEffect",
+   "params": {
+    "percent_per_pig": 25.0
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"percent_per_pig\"))"
+    }
+   },
+   "template": "ModifyDamageByDefeatedPigs",
+   "duration": -1,
+   "design": ""
   }
  ],
  "weapon": {
@@ -199,18 +221,18 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_moustache_director",
-  "fingerprint": "6e48854138f0121e2ddaaa6030325ecde09a1dce",
+  "fingerprint": "ad32458a05bc5b8c15813d96a0ce7a52991a2b7c",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
-    "Percentage": 75,
+    "Percentage": 75.0,
     "ComboChain": [
      "pig_attack_moustache_director"
     ]
    },
    {
-    "Percentage": 25,
+    "Percentage": 25.0,
     "ComboChain": [
      "pig_support_moustache_director"
     ]
@@ -410,8 +432,31 @@
      "template": "PassiveReduceCharge",
      "duration": -1,
      "design": ""
+    },
+    {
+     "uid": "79oedpxv",
+     "type": "Passive",
+     "source": "pig_passive_incompetentminions",
+     "name": "Incompetent Minions",
+     "desc": "[0000ff]Passive:[-] Damage increased by [00a800]{value_3}%[-] for each knocked out ally.",
+     "color": "BEE8FE",
+     "atlas": "Skills_Pigs_01",
+     "icon": "PassiveEffect",
+     "params": {
+      "percent_per_pig": 25
+     },
+     "values": {
+      "{value_3}": {
+       "expr": "(p(\"percent_per_pig\"))"
+      }
+     },
+     "template": "ModifyDamageByDefeatedPigs",
+     "duration": -1,
+     "design": "",
+     "origin": "pig_passive_incompetentminions"
     }
    ]
   }
- }
+ },
+ "publishedAt": "2026-11-13 16:52"
 }

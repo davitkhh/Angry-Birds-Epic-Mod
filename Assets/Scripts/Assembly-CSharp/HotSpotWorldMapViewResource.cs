@@ -138,7 +138,7 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 		if (base.Model.Data.UnlockState != HotspotUnlockState.Hidden && base.Model.Data.UnlockState != 0)
 		{
 			DIContainerLogic.GetResourceNodeManager().AddResourceSpot(this);
-			m_resourceAmount = DIContainerBalancing.GameConstantsBalancingDataProvider.ResourceSpawnAmountPerNode;
+			m_resourceAmount = ResourceNodeSupply.Refresh(DIContainerInfrastructure.GetCurrentPlayer(), base.Model, NodeType);
 		}
 		if (base.Model.Data.UnlockState == HotspotUnlockState.Active || base.Model.Data.UnlockState == HotspotUnlockState.ResolvedNew)
 		{
@@ -157,6 +157,13 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 	public override bool IsCompleted()
 	{
 		return base.Model.Data.UnlockState == HotspotUnlockState.Resolved;
+	}
+
+	// Material type of the node for its stars-per-refill setting (ResourceNodeSupply.StarsPerRefill): the animation
+	// prefix without the trailing "_" (Rock, TreeStump, Seashell).
+	public string NodeType
+	{
+		get { return string.IsNullOrEmpty(AnimationPrefix) ? string.Empty : AnimationPrefix.TrimEnd('_'); }
 	}
 
 	public bool IsResourceAvaible()
@@ -190,21 +197,46 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 			}
 			return;
 		}
-		m_resourceAmount--;
+		// One tap = one harvest from the saved supply (ResourceNodeSupply); the node empties on the last one and stays
+		// empty until enough stars are earned for a refill.
 		if (m_resourceAmount <= 0)
 		{
-			CancelInvoke("DespawnResource");
 			DespawnResource();
 			return;
 		}
-		if (!m_harvestingStarted)
-		{
-			m_harvestingStarted = true;
-			Invoke("DespawnResource", 10f);
-		}
+		m_resourceAmount = ResourceNodeSupply.Consume(DIContainerInfrastructure.GetCurrentPlayer(), base.Model, NodeType);
 		base.ShowContentView();
 		DIContainerLogic.GetResourceNodeManager().SpawnResource(base.gameObject, m_SpawnOffset);
 		PlayUsedAnimation();
+		if (m_resourceAmount <= 0)
+		{
+			DespawnResource();
+		}
+	}
+
+	// Pays out refills earned by stars since the last check. Shows the resources again if the node was empty; a node
+	// with supply left just gets more. Returns true if the supply grew (caller saves).
+	public bool ApplyStarRefills()
+	{
+		var player = DIContainerInfrastructure.GetCurrentPlayer();
+		if (!ResourceNodeSupply.IsUnlocked(base.Model))
+		{
+			return false;
+		}
+		var supply = ResourceNodeSupply.Refresh(player, base.Model, NodeType);
+		if (supply <= m_resourceAmount && (supply <= 0 || m_resourcesAvaible))
+		{
+			m_resourceAmount = supply;
+			return false;
+		}
+		var wasEmpty = !m_resourcesAvaible;
+		m_resourceAmount = supply;
+		if (wasEmpty)
+		{
+			DebugLog.Log(base.gameObject.name + " refilled by stars");
+			Respawn();
+		}
+		return true;
 	}
 
 	public void DespawnResource()
@@ -308,17 +340,21 @@ public class HotSpotWorldMapViewResource : HotSpotWorldMapViewBase
 	{
 	}
 
+	// Shows the node's resources with its saved supply (ResourceNodeSupply). Does nothing while the node is empty.
 	public void Respawn()
 	{
+		m_resourceAmount = ResourceNodeSupply.Refresh(DIContainerInfrastructure.GetCurrentPlayer(), base.Model, NodeType);
+		if (m_resourceAmount <= 0)
+		{
+			return;
+		}
 		var resourceObjects = m_resourceObjects;
 		foreach (var gameObject in resourceObjects)
 		{
 			gameObject.SetActive(true);
 		}
 		m_resourcesAvaible = true;
-		m_resourceAmount = DIContainerBalancing.GameConstantsBalancingDataProvider.ResourceSpawnAmountPerNode;
 		m_harvestingStarted = false;
-		base.Model.Data.UnlockState = HotspotUnlockState.Active;
 		DebugLog.Log("node respawned");
 		PlayActiveAnimation();
 	}

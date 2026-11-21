@@ -435,46 +435,6 @@
     "IgnoreDifficulty": false
   },
   {
-    "NameId": "pig_brute_mic",
-    "AssetId": "PigBruteMic",
-    "LocaId": "pig_brute_mic",
-    "DefaultInventoryNameId": "",
-    "BaseHealth": 380,
-    "BaseAttack": 32,
-    "PerLevelHealth": 0,
-    "PerLevelAttack": 0,
-    "SkillNameIds": [
-      "pig_attack_brute_mic",
-      "pig_support_brute_mic"
-    ],
-    "SkillCombos": [
-      {
-        "Percentage": 60.0,
-        "ComboChain": [
-          "pig_support_brute_mic",
-          "pig_attack_brute_mic"
-        ]
-      },
-      {
-        "Percentage": 40.0,
-        "ComboChain": [
-          "pig_attack_brute_mic"
-        ]
-      }
-    ],
-    "SizeType": "Large",
-    "Faction": "Pigs",
-    "LootTableDefeatBonus": {
-      "loot_pig8_defeated_gold": 1,
-      "loot_pig8_defeated_exp": 1,
-      "loot_piglarge_defeated_mastery": 1
-    },
-    "SizeScale": 1.2,
-    "PigStrength": 7,
-    "PassiveSkillNameId": "",
-    "IgnoreDifficulty": false
-  },
-  {
     "NameId": "pig_brute_brute_bird1",
     "AssetId": "PigBrute",
     "LocaId": "pig_brute_brute",
@@ -4106,7 +4066,7 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 6,
-    "PassiveSkillNameId": "pig_passive_kingpig_dracula_01",
+    "PassiveSkillNameId": "pig_passive_kingpig_dracula_01,pig_passive_annoying",
     "IgnoreDifficulty": false
   },
   {
@@ -4551,7 +4511,7 @@
   },
   {
     "NameId": "pig_knight_guard_yellow",
-    "AssetId": "PigKnightYellow",
+    "AssetId": "PigKnight",
     "LocaId": "pig_knight_guard_captain",
     "DefaultInventoryNameId": "pig_knight_guard_yellow_01",
     "BaseHealth": 240,
@@ -4594,7 +4554,7 @@
   },
   {
     "NameId": "pig_knight_guard_yellow_bird3",
-    "AssetId": "PigKnightYellow",
+    "AssetId": "PigKnight",
     "LocaId": "pig_knight_guard_captain",
     "DefaultInventoryNameId": "pig_knight_guard_yellow_01",
     "BaseHealth": 198,
@@ -5221,19 +5181,56 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_stickpig_01",
+      "pig_attack_forge_pig_minion_apprentice__e0_poke",
       "pig_support_minion_apprentice"
     ],
     "SkillCombos": [
       {
-        "Percentage": 50.0,
+        "Percentage": 60.0,
         "ComboChain": [
-          "pig_attack_minion_stickpig_01"
+          "@tree1:40",
+          "pig_attack_forge_pig_minion_apprentice__e0_poke"
+        ]
+      },
+      {
+        "Percentage": 40.0,
+        "ComboChain": [
+          "@tree1:40",
+          "pig_support_minion_apprentice"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "@tree2:40",
+          "pig_attack_forge_pig_minion_apprentice__e0_poke"
+        ]
+      },
+      {
+        "Percentage": 70.0,
+        "ComboChain": [
+          "@tree2:40",
+          "pig_support_minion_apprentice"
+        ]
+      },
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "@tree3:10",
+          "pig_support_minion_apprentice"
         ]
       },
       {
         "Percentage": 50.0,
         "ComboChain": [
+          "@tree4:10",
+          "pig_attack_forge_pig_minion_apprentice__e0_poke"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "@tree4:10",
           "pig_support_minion_apprentice"
         ]
       }
@@ -5260,19 +5257,56 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_stickpig_01",
+      "pig_attack_forge_pig_minion_apprentice__e0_poke",
       "pig_support_minion_apprentice"
     ],
     "SkillCombos": [
       {
-        "Percentage": 50.0,
+        "Percentage": 60.0,
         "ComboChain": [
-          "pig_attack_minion_stickpig_01"
+          "@tree1:40",
+          "pig_attack_forge_pig_minion_apprentice__e0_poke"
+        ]
+      },
+      {
+        "Percentage": 40.0,
+        "ComboChain": [
+          "@tree1:40",
+          "pig_support_minion_apprentice"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "@tree2:40",
+          "pig_attack_forge_pig_minion_apprentice__e0_poke"
+        ]
+      },
+      {
+        "Percentage": 70.0,
+        "ComboChain": [
+          "@tree2:40",
+          "pig_support_minion_apprentice"
+        ]
+      },
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "@tree3:10",
+          "pig_support_minion_apprentice"
         ]
       },
       {
         "Percentage": 50.0,
         "ComboChain": [
+          "@tree4:10",
+          "pig_attack_forge_pig_minion_apprentice__e0_poke"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "@tree4:10",
           "pig_support_minion_apprentice"
         ]
       }
@@ -5491,7 +5525,7 @@
   },
   {
     "NameId": "pig_merchant_corporal",
-    "AssetId": "CorporalMcPig",
+    "AssetId": "MinionPig",
     "LocaId": "pig_merchant_corporal",
     "DefaultInventoryNameId": "pig_merchant_corporal_01",
     "BaseHealth": 205,
@@ -5527,7 +5561,7 @@
   },
   {
     "NameId": "pig_merchant_corporal_castle",
-    "AssetId": "CorporalMcPig",
+    "AssetId": "MinionPig",
     "LocaId": "pig_merchant_corporal",
     "DefaultInventoryNameId": "pig_merchant_corporal_castle_01",
     "BaseHealth": 205,
@@ -5780,7 +5814,7 @@
     "NameId": "pig_minion_farmer",
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_farmer",
-    "DefaultInventoryNameId": "pig_minion_farmer_01",
+    "DefaultInventoryNameId": "pig_forge_pig_minion_farmer__e0_inv1",
     "BaseHealth": 60,
     "BaseAttack": 18,
     "PerLevelHealth": 0,
@@ -5820,7 +5854,7 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_01",
-    "BaseHealth": 145,
+    "BaseHealth": 180,
     "BaseAttack": 18,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -5852,7 +5886,7 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_01",
-    "BaseHealth": 65,
+    "BaseHealth": 81,
     "BaseAttack": 6,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -5884,7 +5918,7 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_01",
-    "BaseHealth": 100,
+    "BaseHealth": 124,
     "BaseAttack": 12,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -5916,7 +5950,7 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_01",
-    "BaseHealth": 123,
+    "BaseHealth": 153,
     "BaseAttack": 10,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -5948,7 +5982,7 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_01",
-    "BaseHealth": 75,
+    "BaseHealth": 93,
     "BaseAttack": 8,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -5977,21 +6011,21 @@
   },
   {
     "NameId": "pig_minion_guard_fork_bird2_castle",
-    "AssetId": "MinionGuardFork",
+    "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
-    "DefaultInventoryNameId": "",
-    "BaseHealth": 75,
+    "DefaultInventoryNameId": "pig_forge_pig_minion_guard_fork__e0_inv1",
+    "BaseHealth": 93,
     "BaseAttack": 12,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_guard_fork_castle"
+      "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
     ],
     "SkillCombos": [
       {
         "Percentage": 100.0,
         "ComboChain": [
-          "pig_attack_minion_guard_fork_castle"
+          "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
         ]
       }
     ],
@@ -6009,21 +6043,21 @@
   },
   {
     "NameId": "pig_minion_guard_fork_bird3",
-    "AssetId": "MinionGuardFork",
+    "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
-    "DefaultInventoryNameId": "",
-    "BaseHealth": 110,
+    "DefaultInventoryNameId": "pig_forge_pig_minion_guard_fork__e0_inv1",
+    "BaseHealth": 137,
     "BaseAttack": 13,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_guard_fork_castle"
+      "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
     ],
     "SkillCombos": [
       {
         "Percentage": 100.0,
         "ComboChain": [
-          "pig_attack_minion_guard_fork_castle"
+          "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
         ]
       }
     ],
@@ -6041,21 +6075,21 @@
   },
   {
     "NameId": "pig_minion_guard_fork",
-    "AssetId": "MinionGuardFork",
+    "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
-    "DefaultInventoryNameId": "",
-    "BaseHealth": 145,
+    "DefaultInventoryNameId": "pig_forge_pig_minion_guard_fork__e0_inv1",
+    "BaseHealth": 180,
     "BaseAttack": 18,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_guard_fork_castle"
+      "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
     ],
     "SkillCombos": [
       {
         "Percentage": 100.0,
         "ComboChain": [
-          "pig_attack_minion_guard_fork_castle"
+          "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
         ]
       }
     ],
@@ -6076,7 +6110,7 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_guard",
     "DefaultInventoryNameId": "pig_minion_guard_ninja",
-    "BaseHealth": 145,
+    "BaseHealth": 180,
     "BaseAttack": 18,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -6375,7 +6409,7 @@
   },
   {
     "NameId": "pig_minion_rogue_dynamite",
-    "AssetId": "MinionRogueDynamite",
+    "AssetId": "MinionPig",
     "LocaId": "pig_minion_rogue_dynamite",
     "DefaultInventoryNameId": "pig_minion_rogue_dynamite_01",
     "BaseHealth": 110,
@@ -6383,13 +6417,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_rogue_dynamite"
+      "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey",
+      "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 80.0,
         "ComboChain": [
-          "pig_attack_minion_rogue_dynamite"
+          "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey"
+        ]
+      },
+      {
+        "Percentage": 20.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
         ]
       }
     ],
@@ -6417,25 +6458,98 @@
     "SkillNameIds": [
       "pig_attack_minion_rogue_01",
       "pig_attack_minion_rogue_02",
+      "pig_support_forge_pig_minion_rogue_shield__e0_block",
       "pig_attack_minion_rogue"
     ],
     "SkillCombos": [
       {
-        "Percentage": 33.33,
+        "Percentage": 17.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 7.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 7.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 3.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 7.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 3.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 3.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 1.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 27.0,
         "ComboChain": [
           "pig_attack_minion_rogue_01"
         ]
       },
       {
-        "Percentage": 33.33,
+        "Percentage": 3.0,
         "ComboChain": [
           "pig_attack_minion_rogue_02"
         ]
       },
       {
-        "Percentage": 33.33,
+        "Percentage": 20.0,
         "ComboChain": [
-          "pig_attack_minion_rogue"
+          "pig_support_forge_pig_minion_rogue_shield__e0_block"
         ]
       }
     ],
@@ -6627,7 +6741,7 @@
   },
   {
     "NameId": "pig_minion_rogue_dynamite_bird2",
-    "AssetId": "MinionRogueDynamite",
+    "AssetId": "MinionPig",
     "LocaId": "pig_minion_rogue_dynamite",
     "DefaultInventoryNameId": "pig_minion_rogue_dynamite_01",
     "BaseHealth": 88,
@@ -6635,13 +6749,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_rogue_dynamite"
+      "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey",
+      "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 80.0,
         "ComboChain": [
-          "pig_attack_minion_rogue_dynamite"
+          "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey"
+        ]
+      },
+      {
+        "Percentage": 20.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
         ]
       }
     ],
@@ -6659,7 +6780,7 @@
   },
   {
     "NameId": "pig_minion_rogue_dynamite_bird3",
-    "AssetId": "MinionRogueDynamite",
+    "AssetId": "MinionPig",
     "LocaId": "pig_minion_rogue_dynamite",
     "DefaultInventoryNameId": "pig_minion_rogue_dynamite_01",
     "BaseHealth": 99,
@@ -6667,13 +6788,20 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_rogue_dynamite"
+      "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey",
+      "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 80.0,
         "ComboChain": [
-          "pig_attack_minion_rogue_dynamite"
+          "pig_attack_forge_pig_minion_rogue_dynamite__e0_kablowey"
+        ]
+      },
+      {
+        "Percentage": 20.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_rogue_dynamite__e0_sneer"
         ]
       }
     ],
@@ -7553,18 +7681,25 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_turban",
     "DefaultInventoryNameId": "pig_minion_turban_01",
-    "BaseHealth": 105,
+    "BaseHealth": 125,
     "BaseAttack": 15,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_turban"
+      "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 70.0,
         "ComboChain": [
-          "pig_attack_minion_turban"
+          "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
         ]
       }
     ],
@@ -7585,18 +7720,25 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_turban",
     "DefaultInventoryNameId": "pig_minion_turban_01",
-    "BaseHealth": 900,
+    "BaseHealth": 1071,
     "BaseAttack": 90,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_turban"
+      "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 70.0,
         "ComboChain": [
-          "pig_attack_minion_turban"
+          "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
         ]
       }
     ],
@@ -7617,18 +7759,25 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_turban",
     "DefaultInventoryNameId": "pig_minion_turban_01",
-    "BaseHealth": 900,
+    "BaseHealth": 1071,
     "BaseAttack": 90,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_turban"
+      "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 70.0,
         "ComboChain": [
-          "pig_attack_minion_turban"
+          "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
         ]
       }
     ],
@@ -7649,18 +7798,25 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_turban",
     "DefaultInventoryNameId": "pig_minion_turban_01",
-    "BaseHealth": 500,
+    "BaseHealth": 595,
     "BaseAttack": 30,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_minion_turban"
+      "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 70.0,
         "ComboChain": [
-          "pig_attack_minion_turban"
+          "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+        ]
+      },
+      {
+        "Percentage": 30.0,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
         ]
       }
     ],
@@ -7681,20 +7837,32 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_turban_cc_boss",
     "DefaultInventoryNameId": "pig_minion_turban_02",
-    "BaseHealth": 1300,
+    "BaseHealth": 1548,
     "BaseAttack": 90,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
       "pig_attack_minion_turban_cc_boss_01",
-      "pig_attack_minion_turban_cc_boss_02"
+      "pig_attack_minion_turban_cc_boss_02",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 33.33,
         "ComboChain": [
-          "pig_attack_minion_turban_cc_boss_02",
           "pig_attack_minion_turban_cc_boss_01"
+        ]
+      },
+      {
+        "Percentage": 33.33,
+        "ComboChain": [
+          "pig_attack_minion_turban_cc_boss_02"
+        ]
+      },
+      {
+        "Percentage": 33.33,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
         ]
       }
     ],
@@ -7715,20 +7883,32 @@
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_turban_cc_boss",
     "DefaultInventoryNameId": "pig_minion_turban_02",
-    "BaseHealth": 1300,
+    "BaseHealth": 1548,
     "BaseAttack": 90,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
       "pig_attack_minion_turban_cc_boss_01",
-      "pig_attack_minion_turban_cc_boss_02"
+      "pig_attack_minion_turban_cc_boss_02",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 33.33,
         "ComboChain": [
-          "pig_attack_minion_turban_cc_boss_02",
           "pig_attack_minion_turban_cc_boss_01"
+        ]
+      },
+      {
+        "Percentage": 33.33,
+        "ComboChain": [
+          "pig_attack_minion_turban_cc_boss_02"
+        ]
+      },
+      {
+        "Percentage": 33.33,
+        "ComboChain": [
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
         ]
       }
     ],
@@ -9949,54 +10129,6 @@
     "IgnoreDifficulty": false
   },
   {
-    "NameId": "pig_pirate_charents",
-    "AssetId": "PigCharents",
-    "LocaId": "pig_pirate_adventurer",
-    "DefaultInventoryNameId": "",
-    "BaseHealth": 190,
-    "BaseAttack": 12,
-    "PerLevelHealth": 0,
-    "PerLevelAttack": 0,
-    "SkillNameIds": [
-      "pig_attack_pirate_charents",
-      "pig_support_pirate_charents"
-    ],
-    "SkillCombos": [
-      {
-        "Percentage": 40.0,
-        "ComboChain": [
-          "pig_attack_pirate_charents"
-        ]
-      },
-      {
-        "Percentage": 40.0,
-        "ComboChain": [
-          "pig_attack_pirate_charents",
-          "pig_support_pirate_charents"
-        ]
-      },
-      {
-        "Percentage": 30.0,
-        "ComboChain": [
-          "pig_attack_pirate_charents",
-          "pig_attack_pirate_charents",
-          "pig_support_pirate_charents"
-        ]
-      }
-    ],
-    "SizeType": "Large",
-    "Faction": "Pigs",
-    "LootTableDefeatBonus": {
-      "loot_pig7_defeated_gold": 1,
-      "loot_pig7_defeated_exp": 1,
-      "loot_piglarge_defeated_mastery": 1
-    },
-    "SizeScale": 0.9,
-    "PigStrength": 7,
-    "PassiveSkillNameId": "pig_passive_dirtytricks",
-    "IgnoreDifficulty": false
-  },
-  {
     "NameId": "pig_pirate_adventurer_boss",
     "AssetId": "PigPirate",
     "LocaId": "pig_pirate_adventurer",
@@ -10618,7 +10750,7 @@
     "AssetId": "PrincePorky",
     "LocaId": "pig_prince_porky",
     "DefaultInventoryNameId": "pig_prince_porky_01",
-    "BaseHealth": 600,
+    "BaseHealth": 650,
     "BaseAttack": 10,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
@@ -10710,24 +10842,21 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_prince_porky",
-      "pig_support_prince_porky",
-      "pig_attack_prince_porky_quad",
-      "pig_attack_prince_porky_duel"
+      "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch",
+      "pig_attack_prince_porky_duel",
+      "pig_support_prince_porky"
     ],
     "SkillCombos": [
       {
         "Percentage": 75.0,
         "ComboChain": [
-          "pig_support_prince_porky",
-          "pig_attack_prince_porky",
-          "pig_attack_prince_porky"
+          "pig_support_prince_porky"
         ]
       },
       {
         "Percentage": 12.5,
         "ComboChain": [
-          "pig_attack_prince_porky_quad"
+          "pig_attack_forge_pig_prince_porky_thirdencounter_resolved__e0_quick_stitch"
         ]
       },
       {
@@ -15683,7 +15812,7 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 5,
-    "PassiveSkillNameId": "pig_passive_kingpig_dracula_01",
+    "PassiveSkillNameId": "pig_passive_kingpig_dracula_01,pig_passive_incompetentminions",
     "IgnoreDifficulty": false
   },
   {
@@ -15696,16 +15825,26 @@
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-      "pig_attack_prince_porky_02",
-      "pig_support_prince_porky_02"
+      "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal",
+      "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i",
+      "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
+      "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you"
     ],
     "SkillCombos": [
       {
-        "Percentage": 100.0,
+        "Percentage": 50.0,
         "ComboChain": [
-          "pig_support_prince_porky_02",
-          "pig_attack_prince_porky_02",
-          "pig_attack_prince_porky_02"
+          "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
+          "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you",
+          "pig_attack_forge_pig_prince_porky_valentine__e0_vicious_betrayal"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_pig_prince_porky_valentine__e0_tit_for_tat",
+          "pig_support_forge_pig_prince_porky_valentine__e0_all_for_you",
+          "pig_attack_forge_pig_prince_porky_valentine__e0_just_you_and_i"
         ]
       }
     ],
@@ -16502,7 +16641,7 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 5,
-    "PassiveSkillNameId": "pig_passive_moustache_director",
+    "PassiveSkillNameId": "pig_passive_moustache_director,pig_passive_incompetentminions",
     "IgnoreDifficulty": false
   },
   {
@@ -16541,7 +16680,7 @@
     },
     "SizeScale": 1.2,
     "PigStrength": 6,
-    "PassiveSkillNameId": "pig_passive_moustache_director",
+    "PassiveSkillNameId": "pig_passive_moustache_director,pig_passive_incompetentminions",
     "IgnoreDifficulty": false
   },
   {
@@ -17568,7 +17707,7 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 6,
-    "PassiveSkillNameId": "pig_passive_caster_passive",
+    "PassiveSkillNameId": "pig_passive_forge_pig_caster_referee__e0_flash_of_anger",
     "IgnoreDifficulty": false
   },
   {
@@ -17609,7 +17748,7 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 8,
-    "PassiveSkillNameId": "pig_passive_caster_passive",
+    "PassiveSkillNameId": "pig_passive_forge_pig_caster_referee__e0_flash_of_anger",
     "IgnoreDifficulty": false
   },
   {
@@ -19246,7 +19385,7 @@
     "NameId": "pig_minion_farmer_scythe",
     "AssetId": "MinionPig",
     "LocaId": "pig_minion_farmer_scythe",
-    "DefaultInventoryNameId": "pig_minion_farmer_scythe_01",
+    "DefaultInventoryNameId": "pig_forge_pig_minion_farmer__e0_inv2",
     "BaseHealth": 60,
     "BaseAttack": 26,
     "PerLevelHealth": 0,
@@ -19293,20 +19432,20 @@
     "SkillNameIds": [
       "pig_attack_forge_gonchacho_new_ability",
       "pig_attack_forge_gonchacho_new_ability_2",
-      "pig_support_forge_gonchacho_new_ability"
+      "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub"
     ],
     "SkillCombos": [
       {
         "Percentage": 50.0,
         "ComboChain": [
-          "pig_support_forge_gonchacho_new_ability",
+          "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub",
           "pig_attack_forge_gonchacho_new_ability"
         ]
       },
       {
         "Percentage": 50.0,
         "ComboChain": [
-          "pig_support_forge_gonchacho_new_ability",
+          "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub",
           "pig_attack_forge_gonchacho_new_ability_2"
         ]
       }
@@ -19409,33 +19548,32 @@
     "AssetId": "PigMage",
     "LocaId": "pig_forge_king_dj",
     "DefaultInventoryNameId": "pig_forge_king_dj_01",
-    "BaseHealth": 1050,
-    "BaseAttack": 43,
+    "BaseHealth": 420,
+    "BaseAttack": 14,
     "PerLevelHealth": 0,
     "PerLevelAttack": 0,
     "SkillNameIds": [
-    "pig_attack_forge_king_dj",
-    "pig_attack_forge_king_dj_sound",
-    "pig_attack_forge_king_dj_shrapnel"
-
-
+      "pig_attack_forge_king_dj_new_ability_2",
+      "pig_attack_forge_king_dj_new_ability",
+      "pig_attack_forge_king_dj_new_ability"
     ],
     "SkillCombos": [
       {
-        "Percentage": 35,
+        "Percentage": 33.33,
         "ComboChain": [
-          "pig_attack_forge_king_dj"       ]
-      },
-      {
-        "Percentage": 30,
-        "ComboChain": [
-          "pig_attack_forge_king_dj_sound"
+          "pig_attack_forge_king_dj_new_ability_2"
         ]
       },
       {
-        "Percentage": 30,
+        "Percentage": 33.33,
         "ComboChain": [
-          "pig_attack_forge_king_dj_shrapnel"
+          "pig_attack_forge_king_dj_new_ability"
+        ]
+      },
+      {
+        "Percentage": 33.33,
+        "ComboChain": [
+          "pig_attack_forge_king_dj_new_ability"
         ]
       }
     ],
@@ -19446,7 +19584,7 @@
       "loot_pig6_defeated_exp": 1,
       "loot_piglarge_defeated_mastery": 1
     },
-    "SizeScale": 1.7,
+    "SizeScale": 1.0,
     "PigStrength": 10,
     "PassiveSkillNameId": "",
     "IgnoreDifficulty": false
@@ -19487,6 +19625,371 @@
     },
     "SizeScale": 1.0,
     "PigStrength": 3,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_turban_shield",
+    "AssetId": "MinionPig",
+    "LocaId": "forge_pig_minion_turban_shield",
+    "DefaultInventoryNameId": "pig_forge_pig_minion_turban_shield__e0_inv1",
+    "BaseHealth": 200,
+    "BaseAttack": 15,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_forge_pig_minion_turban__e0_blinding_strike",
+      "pig_attack_forge_pig_minion_turban__e0_kick_sand",
+      "pig_support_forge_pig_minion_turban_shield__e0_block"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_pig_minion_turban_shield__e0_block",
+          "pig_attack_forge_pig_minion_turban__e0_blinding_strike"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_support_forge_pig_minion_turban_shield__e0_block",
+          "pig_attack_forge_pig_minion_turban__e0_kick_sand"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 3,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_phat_loot_attack",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_phat_loot",
+    "DefaultInventoryNameId": "pig_forge_pig_minion_phat_loot_attack__e0_inv1",
+    "BaseHealth": 115,
+    "BaseAttack": 10,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_leader_02",
+      "pig_attack_minion_phat_loot"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_leader_02"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_phat_loot"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "gold": 7,
+      "loot_pig3_defeated_exp": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 1,
+    "PassiveSkillNameId": "pig_passive_fullpockets",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_phat_loot_attack_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_phat_loot",
+    "DefaultInventoryNameId": "pig_forge_pig_minion_phat_loot_attack__e0_inv1",
+    "BaseHealth": 95,
+    "BaseAttack": 8,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_leader_02",
+      "pig_attack_minion_phat_loot"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_leader_02"
+        ]
+      },
+      {
+        "Percentage": 50.0,
+        "ComboChain": [
+          "pig_attack_minion_phat_loot"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "gold": 7,
+      "loot_pig3_defeated_exp": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 1,
+    "PassiveSkillNameId": "pig_passive_fullpockets",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_caster_pyropig_teacher",
+    "AssetId": "PigMage",
+    "LocaId": "pig_caster_pyropig",
+    "DefaultInventoryNameId": "pig_caster_pyropig_01",
+    "BaseHealth": 245,
+    "BaseAttack": 19,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_caster_pyropig",
+      "pig_support_caster_pyropig"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 60.0,
+        "ComboChain": [
+          "pig_attack_caster_pyropig"
+        ]
+      },
+      {
+        "Percentage": 40.0,
+        "ComboChain": [
+          "pig_support_caster_pyropig",
+          "pig_attack_caster_pyropig"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig6_defeated_gold": 1,
+      "loot_pig6_defeated_exp": 1,
+      "loot_piglarge_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 6,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_pirate_pirate_birdunlock",
+    "AssetId": "PigPirate",
+    "LocaId": "pig_pirate_pirate",
+    "DefaultInventoryNameId": "pig_pirate_pirate_01",
+    "BaseHealth": 5,
+    "BaseAttack": 3,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_pirate_pirate"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_pirate_pirate"
+        ]
+      }
+    ],
+    "SizeType": "Large",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": null,
+    "SizeScale": 0.9,
+    "PigStrength": 3,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": true
+  },
+  {
+    "NameId": "pig_pirate_matey_birdunlock",
+    "AssetId": "PigPirate",
+    "LocaId": "pig_pirate_matey",
+    "DefaultInventoryNameId": "pig_pirate_matey_01",
+    "BaseHealth": 5,
+    "BaseAttack": 2,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_pirate_matey"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_pirate_matey"
+        ]
+      }
+    ],
+    "SizeType": "Medium",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": null,
+    "SizeScale": 0.8,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "",
+    "IgnoreDifficulty": true
+  },
+  {
+    "NameId": "pig_pirate_matey_bird3",
+    "AssetId": "PigPirate",
+    "LocaId": "pig_pirate_matey",
+    "DefaultInventoryNameId": "pig_pirate_matey_01",
+    "BaseHealth": 32,
+    "BaseAttack": 10,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_pirate_matey"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 100.0,
+        "ComboChain": [
+          "pig_attack_pirate_matey"
+        ]
+      }
+    ],
+    "SizeType": "Medium",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig2_defeated_gold": 1,
+      "loot_pig2_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 0.8,
+    "PigStrength": 2,
+    "PassiveSkillNameId": "pig_passive_dirtytricks",
+    "IgnoreDifficulty": false
+  },
+  {
+    "NameId": "pig_minion_rogue_shield_bird3",
+    "AssetId": "MinionPig",
+    "LocaId": "pig_minion_rogue_shield",
+    "DefaultInventoryNameId": "pig_forge_pig_minion_rogue_shield__e0_inv1",
+    "BaseHealth": 149,
+    "BaseAttack": 8,
+    "PerLevelHealth": 0,
+    "PerLevelAttack": 0,
+    "SkillNameIds": [
+      "pig_attack_minion_rogue_01",
+      "pig_attack_minion_rogue_02",
+      "pig_support_forge_pig_minion_rogue_shield__e0_block",
+      "pig_attack_minion_rogue"
+    ],
+    "SkillCombos": [
+      {
+        "Percentage": 17.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 7.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 7.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 3.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 7.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 3.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_01",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 3.15,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 1.35,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02",
+          "pig_support_forge_pig_minion_rogue_shield__e0_block",
+          "pig_attack_minion_rogue_02",
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 27.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_01"
+        ]
+      },
+      {
+        "Percentage": 3.0,
+        "ComboChain": [
+          "pig_attack_minion_rogue_02"
+        ]
+      },
+      {
+        "Percentage": 20.0,
+        "ComboChain": [
+          "pig_support_forge_pig_minion_rogue_shield__e0_block"
+        ]
+      }
+    ],
+    "SizeType": "Small",
+    "Faction": "Pigs",
+    "LootTableDefeatBonus": {
+      "loot_pig3_defeated_gold": 1,
+      "loot_pig3_defeated_exp": 1,
+      "loot_pigsmall_defeated_mastery": 1
+    },
+    "SizeScale": 1.0,
+    "PigStrength": 4,
     "PassiveSkillNameId": "",
     "IgnoreDifficulty": false
   }

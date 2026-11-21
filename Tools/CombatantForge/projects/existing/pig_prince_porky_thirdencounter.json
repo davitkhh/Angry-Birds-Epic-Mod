@@ -60,7 +60,7 @@
    "origin": "pig_attack_prince_porky_quad",
    "type": "Attack",
    "source": "pig_attack_prince_porky_quad",
-   "name": "Assault",
+   "name": "Quick Stitch",
    "desc": "Attacks random targets [ff0000]{value_4}[-] times for [ff0000]{value_1}[-] damage each.",
    "color": "E55B5B",
    "atlas": "Skills_Pigs_01",
@@ -103,6 +103,9 @@
    "values": {
     "{value_1}": {
      "expr": "(Math.max(1, ((p(\"duel_turns\")))))"
+    },
+    "{value_2}": {
+     "expr": "((p(\"damage_taken_bonus_in_percent\")))"
     }
    },
    "template": "DuelKnockback",
@@ -131,6 +134,35 @@
    },
    "template": "IgnoreDamage",
    "duration": -1,
+   "design": ""
+  },
+  {
+   "uid": "ojh56u9f",
+   "type": "Support",
+   "source": "pig_support_prince_porky",
+   "name": "Tit for Tat",
+   "desc": "Increases dealt and taken damage of all allies by [ff0000]{value_3}%[-]. Lasts [ff0000]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Blessing",
+   "params": {
+    "damage_dealt_increase": 25,
+    "damage_taken_increase": 25,
+    "all": 1
+   },
+   "values": {
+    "{value_3}": {
+     "expr": "(p(\"damage_dealt_increase\"))"
+    },
+    "{value_2}": {
+     "expr": "D"
+    },
+    "{value_6}": {
+     "expr": "(p(\"damage_taken_increase\"))"
+    }
+   },
+   "template": "IncreaseDamageDealtAndReceived",
+   "duration": 2,
    "design": ""
   }
  ],

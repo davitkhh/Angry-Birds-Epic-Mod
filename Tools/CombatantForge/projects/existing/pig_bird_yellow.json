@@ -1,0 +1,398 @@
+{
+ "kind": "existing",
+ "id": "pig_bird_yellow",
+ "name": "Niels",
+ "rig": "YellowBird",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "29531ab990d6d804bb262cc7b5556f1d:Headgear_ArchMage",
+     "name": "Headgear_ArchMage",
+     "item": "Headgear_ArchMage",
+     "w": 250,
+     "h": 162,
+     "pivot": [
+      0.09,
+      -0.33
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "29531ab990d6d804bb262cc7b5556f1d:Headgear_ArchMage_Back",
+     "name": "Headgear_ArchMage_Back",
+     "item": "Headgear_ArchMage",
+     "w": 216,
+     "h": 66,
+     "pivot": [
+      0.02,
+      0.34
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "8ee6b40b95a3b264f8360248dd374273:MainHand_Yellow_Set_05",
+     "name": "MainHand_Yellow_Set_05",
+     "item": "MainHand_Yellow_Set_05",
+     "w": 228,
+     "h": 61,
+     "pivot": [
+      -0.30535716,
+      -0.33038643
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "29531ab990d6d804bb262cc7b5556f1d:OffHand_Yellow_Set_05",
+     "name": "OffHand_Yellow_Set_05",
+     "item": "OffHand_Yellow_Set_05",
+     "w": 92,
+     "h": 145,
+     "pivot": [
+      0.05892857,
+      -0.21923645
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_0d76d",
+   "origin": "pig_attack_yellow_nerd",
+   "type": "Attack",
+   "source": "pig_attack_yellow_nerd",
+   "name": "Storm",
+   "desc": "Deals [ff0000]{value_1}[-] damage to all enemies.",
+   "color": "E55B5B",
+   "atlas": "Skills_Birds_01",
+   "icon": "Storm",
+   "params": {
+    "all": 1,
+    "damage_in_percent": 61
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_3}": {
+     "expr": "p(\"charge\")"
+    }
+   },
+   "template": "SimpleAttackSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_d54d8",
+   "origin": "pig_support_yellow_nerd",
+   "type": "Support",
+   "source": "pig_support_yellow_nerd",
+   "name": "Shock Shield",
+   "desc": "Enemies attacking the target receive [ff0000]{value_1}[-] damage per attack. Lasts [00a800]{value_2}[-] turns.",
+   "color": "8CCB50",
+   "atlas": "Skills_Birds_01",
+   "icon": "ShockShield",
+   "params": {
+    "enemy_damage_retaliated_percent": 83
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(D)"
+    },
+    "{value_3}": {
+     "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+    }
+   },
+   "template": "ThornSkill",
+   "duration": 3,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": true,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 60,
+  "attack": 22,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 3,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig3_defeated_gold": 1,
+   "loot_pig3_defeated_exp": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_bird_yellow",
+  "fingerprint": "4767dca3275cdd4da1ad56abf552d8f903d95538",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 70,
+    "ComboChain": [
+     "pig_attack_yellow_nerd"
+    ]
+   },
+   {
+    "Percentage": 30,
+    "ComboChain": [
+     "pig_support_yellow_nerd",
+     "pig_attack_yellow_nerd"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Niels",
+   "rig": "YellowBird",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "29531ab990d6d804bb262cc7b5556f1d:Headgear_ArchMage",
+       "name": "Headgear_ArchMage",
+       "item": "Headgear_ArchMage",
+       "w": 250,
+       "h": 162,
+       "pivot": [
+        0.09,
+        -0.33
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "29531ab990d6d804bb262cc7b5556f1d:Headgear_ArchMage_Back",
+       "name": "Headgear_ArchMage_Back",
+       "item": "Headgear_ArchMage",
+       "w": 216,
+       "h": 66,
+       "pivot": [
+        0.02,
+        0.34
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "8ee6b40b95a3b264f8360248dd374273:MainHand_Yellow_Set_05",
+       "name": "MainHand_Yellow_Set_05",
+       "item": "MainHand_Yellow_Set_05",
+       "w": 228,
+       "h": 61,
+       "pivot": [
+        -0.30535716,
+        -0.33038643
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "29531ab990d6d804bb262cc7b5556f1d:OffHand_Yellow_Set_05",
+       "name": "OffHand_Yellow_Set_05",
+       "item": "OffHand_Yellow_Set_05",
+       "w": 92,
+       "h": 145,
+       "pivot": [
+        0.05892857,
+        -0.21923645
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": true,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 60,
+    "attack": 22,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 3,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig3_defeated_gold": 1,
+     "loot_pig3_defeated_exp": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_0d76d",
+     "origin": "pig_attack_yellow_nerd",
+     "type": "Attack",
+     "source": "pig_attack_yellow_nerd",
+     "name": "Storm",
+     "desc": "Deals [ff0000]{value_1}[-] damage to all enemies.",
+     "color": "E55B5B",
+     "atlas": "Skills_Birds_01",
+     "icon": "Storm",
+     "params": {
+      "all": 1,
+      "damage_in_percent": 61
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_3}": {
+       "expr": "p(\"charge\")"
+      }
+     },
+     "template": "SimpleAttackSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_d54d8",
+     "origin": "pig_support_yellow_nerd",
+     "type": "Support",
+     "source": "pig_support_yellow_nerd",
+     "name": "Shock Shield",
+     "desc": "Enemies attacking the target receive [ff0000]{value_1}[-] damage per attack. Lasts [00a800]{value_2}[-] turns.",
+     "color": "8CCB50",
+     "atlas": "Skills_Birds_01",
+     "icon": "ShockShield",
+     "params": {
+      "enemy_damage_retaliated_percent": 83
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"enemy_damage_retaliated_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(D)"
+      },
+      "{value_3}": {
+       "expr": "((p(\"enemy_damage_retaliated_percent\")))"
+      }
+     },
+     "template": "ThornSkill",
+     "duration": 3,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

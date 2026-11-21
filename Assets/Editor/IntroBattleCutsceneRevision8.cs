@@ -78,7 +78,7 @@ public static class IntroBattleCutsceneRevision8
 		Revise();
 	}
 
-	[MenuItem("Tools/Battle/Revise Intro Battle Cutscenes (8)")]
+	[MenuItem("Tools/Build/Battle/Revise Intro Battle Cutscenes (8)")]
 	public static void Revise()
 	{
 		s_Log.Length = 0;

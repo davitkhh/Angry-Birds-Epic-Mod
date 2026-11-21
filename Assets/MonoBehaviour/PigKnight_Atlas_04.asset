@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 529336600, guid: 5756d81aa87e464fb75773e9b4238632, type: 3}
+  m_Name: PigKnight_Atlas_04
+  m_EditorClassIdentifier:
+  material: {fileID: 2100000, guid: a43dae8d65fd45aabddb0b353dff3d50, type: 2}
+  uvs:
+  - serializedVersion: 2
+    x: 0.505859375
+    y: 0.7919921875
+    width: 0.2509765625
+    height: 0.2080078125
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.54296875
+    width: 0.1416015625
+    height: 0.0478515625
+  - serializedVersion: 2
+    x: 0.767578125
+    y: 0.619140625
+    width: 0.2216796875
+    height: 0.1171875
+  - serializedVersion: 2
+    x: 0.6337890625
+    y: 0.6171875
+    width: 0.1318359375
+    height: 0.119140625
+  - serializedVersion: 2
+    x: 0.2529296875
+    y: 0.7509765625
+    width: 0.2509765625
+    height: 0.2490234375
+  - serializedVersion: 2
+    x: 0.1435546875
+    y: 0.54296875
+    width: 0.1416015625
+    height: 0.0478515625
+  - serializedVersion: 2
+    x: 0.3896484375
+    y: 0.6015625
+    width: 0.2421875
+    height: 0.134765625
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.5927734375
+    width: 0.1416015625
+    height: 0.1435546875
+  - serializedVersion: 2
+    x: 0.0
+    y: 0.73828125
+    width: 0.2509765625
+    height: 0.26171875
+  - serializedVersion: 2
+    x: 0.287109375
+    y: 0.54296875
+    width: 0.1416015625
+    height: 0.0478515625
+  - serializedVersion: 2
+    x: 0.1435546875
+    y: 0.595703125
+    width: 0.244140625
+    height: 0.140625
+  - serializedVersion: 2
+    x: 0.7587890625
+    y: 0.8544921875
+    width: 0.142578125
+    height: 0.1455078125
+  textureGUIDs:
+  - 39a2105ac3104edf9852cdeb59d506dd
+  - e44b892f54244de5b7812e64a2ac4e76
+  - 9fc06cda8e714daeaadf2777780cdbde
+  - 6ac230981cd34adba65f3de2655ad173
+  - 5c76357a14a845ce8d4af3831de46033
+  - 18af88fb0da845ea9032f1f51d088d34
+  - 6aea0e18867d4df8b4a96be3c2d7fa31
+  - dbb0f83d1eab4e8da20fbcdfe5d22ffe
+  - 158dfb343e1d4d2e99e7addff5eaf713
+  - e577005b643141eab207db376e37fbd5
+  - e4cee4e00e2947e1bb0c8f08447de411
+  - 21a572ce3a97465ab3bd2298eee0fdb6
+  textureSizes:
+  - {x: 257, y: 213}
+  - {x: 145, y: 49}
+  - {x: 227, y: 120}
+  - {x: 135, y: 122}
+  - {x: 257, y: 255}
+  - {x: 145, y: 49}
+  - {x: 248, y: 138}
+  - {x: 145, y: 147}
+  - {x: 257, y: 268}
+  - {x: 145, y: 49}
+  - {x: 250, y: 144}
+  - {x: 146, y: 149}
+  defaultPivotOffsets:
+  - {x: -0.06964286, y: -0.2575998}
+  - {x: 0, y: -0}
+  - {x: -0.3690528, y: 0.05036458}
+  - {x: 0.075, y: -0.01116071}
+  - {x: -0.06964286, y: -0.2975245}
+  - {x: 0, y: -0}
+  - {x: -0.3801411, y: 0.0727808}
+  - {x: 0.03534483, y: -0.03307216}
+  - {x: -0.06964286, y: -0.3073461}
+  - {x: 0, y: -0}
+  - {x: -0.3811, y: 0.05585938}
+  - {x: 0.03167808, y: -0.03262824}
+  textureNames:
+  - Headgear_CactusKnightFruit
+  - Headgear_CactusKnightFruit_Back
+  - MainHand_CactusKnightFruit
+  - OffHand_CactusKnightFruit
+  - Headgear_CactusKnightBud
+  - Headgear_CactusKnightBud_Back
+  - MainHand_CactusKnightBud
+  - OffHand_CactusKnightBud
+  - Headgear_CactusKnightBloom
+  - Headgear_CactusKnightBloom_Back
+  - MainHand_CactusKnightBloom
+  - OffHand_CactusKnightBloom
+  texturePaths:
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/Headgear_CactusKnightFruit.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/Headgear_CactusKnightFruit_Back.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/MainHand_CactusKnightFruit.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/OffHand_CactusKnightFruit.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/Headgear_CactusKnightBud.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/Headgear_CactusKnightBud_Back.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/MainHand_CactusKnightBud.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/OffHand_CactusKnightBud.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/Headgear_CactusKnightBloom.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/Headgear_CactusKnightBloom_Back.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/MainHand_CactusKnightBloom.png
+  - Assets/Content/4_Characters/2_Pigs/2_PigKnight/BodyParts/OffHand_CactusKnightBloom.png
+  lastBuildID: 20160113144948166
+  needsRebuilt: 0
+  dataVersion: 4
+  maxAtlasSize: 1024
+  padding: 1
+  forceSquare: 1

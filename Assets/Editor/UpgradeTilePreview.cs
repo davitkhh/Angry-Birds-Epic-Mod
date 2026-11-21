@@ -185,7 +185,7 @@ public static class UpgradeTilePreview
 		}
 	}
 
-	private static void RenderTile(ShopOfferBlindWorldmap blind, StringBuilder log)
+	internal static void RenderTile(ShopOfferBlindWorldmap blind, StringBuilder log)
 	{
 		var root = blind.transform.root.gameObject;
 		var flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;

@@ -141,7 +141,7 @@ public static class SmoothMovesRigRebuilder
 		log.AppendLine(boneName + " (bone " + boneIndex + "): " + changed + " keyframes at depth " + from + " set to " + to);
 	}
 
-	private static void Build(string prefabPath, HashSet<Object> builtData, StringBuilder log)
+	internal static void Build(string prefabPath, HashSet<Object> builtData, StringBuilder log)
 	{
 		var root = PrefabUtility.LoadPrefabContents(prefabPath);
 		try

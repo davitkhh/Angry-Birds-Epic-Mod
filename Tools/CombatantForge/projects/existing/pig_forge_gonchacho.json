@@ -138,7 +138,9 @@
    },
    "template": "ThrowMainHandCritPurgeAttack",
    "duration": 0,
-   "design": ""
+   "design": "",
+   "anim": "",
+   "ranged": ""
   },
   {
    "uid": "a1_9410d",
@@ -180,7 +182,7 @@
   },
   {
    "uid": "a2_a8cf4",
-   "origin": "pig_support_forge_gonchacho_new_ability",
+   "origin": "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub",
    "type": "Support",
    "source": "pig_support_forge_gonchacho_new_ability",
    "name": "Scrub-a-dub-dub",
@@ -205,7 +207,48 @@
    },
    "template": "RemoveAllyEffectForCrit",
    "duration": 2,
-   "design": ""
+   "design": "",
+   "effects": [
+    {
+     "timing": "Start",
+     "delay": 0.25,
+     "target": "Origin",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Support_Warcry_Circular",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {}
+    },
+    {
+     "timing": "Impact",
+     "delay": 0,
+     "target": "Target",
+     "anchor": "Bottom",
+     "prefab": "SkillFX_Generic_Aura_Blessing",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": false,
+     "raw": {
+      "DoNotParentOnBone": "1"
+     }
+    },
+    {
+     "timing": "Impact",
+     "delay": 0.5,
+     "target": "Origin",
+     "anchor": "MainHand",
+     "prefab": "SkillFX_Blessing_CritChance",
+     "onHit": false,
+     "onHitPrefix": "",
+     "doNotMirror": true,
+     "raw": {
+      "Type": "1",
+      "UseTargetBoneRotation": "1"
+     }
+    }
+   ],
+   "nameId": "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub"
   }
  ],
  "weapon": {
@@ -232,21 +275,21 @@
  "statsEdited": true,
  "existing": {
   "nameId": "pig_forge_gonchacho",
-  "fingerprint": "0d7ca16dfd865795fe781587655a7d03a036dc4d",
+  "fingerprint": "63b4b098462f8ad4eb371c6c53ed8db2d7c40ddc",
   "rev": 0,
   "keepSkills": [],
   "combos": [
    {
     "Percentage": 50,
     "ComboChain": [
-     "pig_support_forge_gonchacho_new_ability",
+     "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub",
      "pig_attack_forge_gonchacho_new_ability"
     ]
    },
    {
     "Percentage": 50,
     "ComboChain": [
-     "pig_support_forge_gonchacho_new_ability",
+     "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub",
      "pig_attack_forge_gonchacho_new_ability_2"
     ]
    }
@@ -410,7 +453,9 @@
      },
      "template": "ThrowMainHandCritPurgeAttack",
      "duration": 0,
-     "design": ""
+     "design": "",
+     "anim": "",
+     "ranged": ""
     },
     {
      "uid": "a1_9410d",
@@ -452,7 +497,7 @@
     },
     {
      "uid": "a2_a8cf4",
-     "origin": "pig_support_forge_gonchacho_new_ability",
+     "origin": "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub",
      "type": "Support",
      "source": "pig_support_forge_gonchacho_new_ability",
      "name": "Scrub-a-dub-dub",
@@ -477,9 +522,51 @@
      },
      "template": "RemoveAllyEffectForCrit",
      "duration": 2,
-     "design": ""
+     "design": "",
+     "effects": [
+      {
+       "timing": "Start",
+       "delay": 0.25,
+       "target": "Origin",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_Generic_Support_Warcry_Circular",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {}
+      },
+      {
+       "timing": "Impact",
+       "delay": 0,
+       "target": "Target",
+       "anchor": "Bottom",
+       "prefab": "SkillFX_Generic_Aura_Blessing",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": false,
+       "raw": {
+        "DoNotParentOnBone": "1"
+       }
+      },
+      {
+       "timing": "Impact",
+       "delay": 0.5,
+       "target": "Origin",
+       "anchor": "MainHand",
+       "prefab": "SkillFX_Blessing_CritChance",
+       "onHit": false,
+       "onHitPrefix": "",
+       "doNotMirror": true,
+       "raw": {
+        "Type": "1",
+        "UseTargetBoneRotation": "1"
+       }
+      }
+     ],
+     "nameId": "pig_support_forge_pig_forge_gonchacho__e0_scrub_a_dub_dub"
     }
    ]
   }
- }
+ },
+ "publishedAt": "2026-11-13 18:55"
 }

@@ -1,0 +1,331 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_lancer",
+ "name": "Lancer",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Lancer",
+     "name": "Headgear_Lancer",
+     "item": "Headgear_Lancer",
+     "w": 126,
+     "h": 224,
+     "pivot": [
+      -0.19821429,
+      -0.28777903
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Lancer_Back",
+     "name": "Headgear_Lancer_Back",
+     "item": "Headgear_Lancer",
+     "w": 92,
+     "h": 62,
+     "pivot": [
+      -0.169,
+      -0.039
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Lancer",
+     "name": "MainHand_Lancer",
+     "item": "MainHand_Lancer",
+     "w": 194,
+     "h": 72,
+     "pivot": [
+      -0.38571426,
+      0.021651786
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_95f0c",
+   "origin": "pig_attack_minion_lancer_01",
+   "type": "Attack",
+   "source": "pig_attack_minion_lancer_01",
+   "name": "Lance Thrust",
+   "desc": "Deals [ff0000]{value_1}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "damage_in_percent": 100
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"tumble\"))"
+    }
+   },
+   "template": "SimpleAttackWithMissSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_03637",
+   "origin": "pig_attack_minion_lancer_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_lancer_02",
+   "name": "Stumble",
+   "desc": "The pig stumbles and does nothing. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "tumble": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Blow",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 90,
+  "attack": 19,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_lancer",
+  "fingerprint": "1914bff05ab33e18b6b74b359367d0bdc70a0cf2",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_attack_minion_lancer_01"
+    ]
+   },
+   {
+    "Percentage": 25,
+    "ComboChain": [
+     "pig_attack_minion_lancer_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Lancer",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Lancer",
+       "name": "Headgear_Lancer",
+       "item": "Headgear_Lancer",
+       "w": 126,
+       "h": 224,
+       "pivot": [
+        -0.19821429,
+        -0.28777903
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_Lancer_Back",
+       "name": "Headgear_Lancer_Back",
+       "item": "Headgear_Lancer",
+       "w": 92,
+       "h": 62,
+       "pivot": [
+        -0.169,
+        -0.039
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:MainHand_Lancer",
+       "name": "MainHand_Lancer",
+       "item": "MainHand_Lancer",
+       "w": 194,
+       "h": 72,
+       "pivot": [
+        -0.38571426,
+        0.021651786
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Blow",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 90,
+    "attack": 19,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_95f0c",
+     "origin": "pig_attack_minion_lancer_01",
+     "type": "Attack",
+     "source": "pig_attack_minion_lancer_01",
+     "name": "Lance Thrust",
+     "desc": "Deals [ff0000]{value_1}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "damage_in_percent": 100
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"tumble\"))"
+      }
+     },
+     "template": "SimpleAttackWithMissSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_03637",
+     "origin": "pig_attack_minion_lancer_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_lancer_02",
+     "name": "Stumble",
+     "desc": "The pig stumbles and does nothing. Stupid pig.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "tumble": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_chance\"))"
+      }
+     },
+     "template": "DoNothingSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,385 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_guard_fork",
+ "name": "Pig Guard",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "kf4zguug",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_PigGuard",
+     "name": "OffHand_PigGuard",
+     "item": "OffHand_PigGuard",
+     "w": 74,
+     "h": 78,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "kf4zguug"
+  },
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "ljnbqstt",
+     "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_PigGuard",
+     "name": "Headgear_PigGuard",
+     "item": "Headgear_PigGuard",
+     "w": 117,
+     "h": 94,
+     "pivot": [
+      -0.24107142,
+      -0.116688825
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "55mbk7l4"
+    }
+   ],
+   "hidden": false,
+   "active": "ljnbqstt"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "ingw2r19",
+     "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_PigGuard_Back",
+     "name": "Headgear_PigGuard_Back",
+     "item": "Headgear_PigGuard",
+     "w": 46,
+     "h": 57,
+     "pivot": [
+      0.56,
+      -0.23
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "55mbk7l4"
+    }
+   ],
+   "hidden": false,
+   "active": "ingw2r19"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "jn8bewnm",
+     "src": "upload:Pigs/MainHand/MainHand_PigGuardFork_Styled.png",
+     "name": "MainHand_PigGuardFork_Styled",
+     "item": "MainHand_PigGuardFork_Styled",
+     "w": 231,
+     "h": 48,
+     "pivot": [
+      0,
+      0
+     ],
+     "tx": 90.81238896236417,
+     "ty": -0.3830586870276136,
+     "rot": 0,
+     "sx": 1,
+     "sy": -1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "jn8bewnm"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_f366b",
+   "origin": "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab",
+   "type": "Attack",
+   "source": "pig_attack_minion_guard_fork_castle",
+   "name": "Fork Jab",
+   "desc": "Deals [ff0000]{value_1}[-] damage and jabs another Bird for [ff0000]{value_6}[-] damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chain": 1,
+    "chain_reduction": 50,
+    "chain_chance": 100,
+    "ForkJab_Chain": -1
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "((p(\"chain_ragereduce\")))"
+    },
+    "{value_5}": {
+     "expr": "((p(\"chain_reduction\")))"
+    },
+    "{value_6}": {
+     "expr": "(((p(\"damage_in_percent\")) / 100) * A * (100 - (p(\"chain_reduction\"))) / 100)"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_7}": {
+     "expr": "(p(\"chain\"))"
+    },
+    "{value_8}": {
+     "expr": "(p(\"chain_chance\"))"
+    }
+   },
+   "template": "AttackWithChainSkill",
+   "duration": 0,
+   "design": "Deals 100% damage and jabs another bird for 50% damage\n",
+   "nameId": "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab",
+   "written": true
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 180,
+  "attack": 18,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 5,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig4_defeated_gold": 1,
+   "loot_pig4_defeated_exp": 1,
+   "loot_piglarge_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_guard_fork",
+  "fingerprint": "28df5dcb73a305b6367c9c2c02316bd007bb4d31",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 100.0,
+    "ComboChain": [
+     "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Pig Guard",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "kf4zguug",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:OffHand_PigGuard",
+       "name": "OffHand_PigGuard",
+       "item": "OffHand_PigGuard",
+       "w": 74,
+       "h": 78,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "kf4zguug"
+    },
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "ljnbqstt",
+       "src": "67a1a7ccdaaccc04fb712602534fd40d:Headgear_PigGuard",
+       "name": "Headgear_PigGuard",
+       "item": "Headgear_PigGuard",
+       "w": 117,
+       "h": 94,
+       "pivot": [
+        -0.24107142,
+        -0.116688825
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "55mbk7l4"
+      }
+     ],
+     "hidden": false,
+     "active": "ljnbqstt"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "ingw2r19",
+       "src": "80d97b21d9eda9c439fa14c73a2c78d2:Headgear_PigGuard_Back",
+       "name": "Headgear_PigGuard_Back",
+       "item": "Headgear_PigGuard",
+       "w": 46,
+       "h": 57,
+       "pivot": [
+        0.56,
+        -0.23
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "55mbk7l4"
+      }
+     ],
+     "hidden": false,
+     "active": "ingw2r19"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "jn8bewnm",
+       "src": "upload:Pigs/MainHand/MainHand_PigGuardFork_Styled.png",
+       "name": "MainHand_PigGuardFork_Styled",
+       "item": "MainHand_PigGuardFork_Styled",
+       "w": 231,
+       "h": 48,
+       "pivot": [
+        0,
+        0
+       ],
+       "tx": 90.81238896236417,
+       "ty": -0.3830586870276136,
+       "rot": 0,
+       "sx": 1,
+       "sy": -1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "jn8bewnm"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 180,
+    "attack": 18,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 5,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig4_defeated_gold": 1,
+     "loot_pig4_defeated_exp": 1,
+     "loot_piglarge_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_f366b",
+     "origin": "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab",
+     "type": "Attack",
+     "source": "pig_attack_minion_guard_fork_castle",
+     "name": "Fork Jab",
+     "desc": "Deals [ff0000]{value_1}[-] damage and jabs another Bird for [ff0000]{value_6}[-] damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chain": 1,
+      "chain_reduction": 50,
+      "chain_chance": 100,
+      "ForkJab_Chain": -1
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "((p(\"chain_ragereduce\")))"
+      },
+      "{value_5}": {
+       "expr": "((p(\"chain_reduction\")))"
+      },
+      "{value_6}": {
+       "expr": "(((p(\"damage_in_percent\")) / 100) * A * (100 - (p(\"chain_reduction\"))) / 100)"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_7}": {
+       "expr": "(p(\"chain\"))"
+      },
+      "{value_8}": {
+       "expr": "(p(\"chain_chance\"))"
+      }
+     },
+     "template": "AttackWithChainSkill",
+     "duration": 0,
+     "design": "Deals 100% damage and jabs another bird for 50% damage\n",
+     "nameId": "pig_attack_forge_pig_minion_guard_fork__e0_fork_jab",
+     "written": true
+    }
+   ]
+  }
+ },
+ "guids": {
+  "src:Forge_pig_minion_guard_fork__e0": "a632e1e403a84a839b2df57dc6729128",
+  "src:Forge_pig_minion_guard_fork__e0_Back": "d9d6dd52ca4c4a5bb379136bed3e4823",
+  "src:Forge_pig_minion_guard_fork__e0_MainHand": "27efe1cffc8a4a87a29897cc257a98e6",
+  "src:Forge_pig_minion_guard_fork__e0_OffHand": "1d1f33ee423f4f769917b429c5e11cfb",
+  "tex:HR": "09700e2275ec4bbab27644afca641fe7",
+  "tex:LR": "2e3ef85a0e264945bf9cd3b4a31fdb14",
+  "mat:HR": "2cbb1903e6634afe8c98e75502dd32da",
+  "mat:LR": "aa72f9ba81f2431391090d8c0e196e12",
+  "atlas:HR": "72232fab435e4d2d9d6db8acc349a7ba",
+  "atlas:LR": "a0da0855639b44b68e2eaac7391e2e5a"
+ },
+ "publishedAt": "2026-11-13 21:51",
+ "publishedRig": "MinionPig"
+}

@@ -66,6 +66,7 @@ public class CoinBarController : MonoBehaviour
 	private void Awake()
 	{
 		m_CachedTransform = base.transform;
+		SetShopLink(false);
 	}
 
 	public CoinBarController SetInventory(InventoryGameData inventory)
@@ -209,7 +210,11 @@ public class CoinBarController : MonoBehaviour
 
 	public void SetShopLink(bool showShopLink)
 	{
-		m_ShopLinkButton.gameObject.SetActive(showShopLink);
+		// The green "+" shop shortcut next to currency counters is removed; always keep it hidden.
+		if (m_ShopLinkButton)
+		{
+			m_ShopLinkButton.gameObject.SetActive(false);
+		}
 	}
 
 	public float GetEnterDuration()

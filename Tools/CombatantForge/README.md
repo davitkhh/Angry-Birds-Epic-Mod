@@ -68,3 +68,39 @@ They appear in the library's Combatants tab as tiles drawn with their own equipm
 
 - Unity open: each JSON is written in place, then the tool waits for the watcher's `Reimported` log line.
 - Unity closed: the tool encodes in batch mode and restores the other languages' loca `.bytes`.
+
+## Eye beams
+
+- A beams layer (`kind: 'beams'`, `beams.py`) sits in a slot's layer stack but is never baked. It follows an art layer
+  (eyes are in that art's pixels, from its centre, y up) or has its own placement, and it lists the abilities that turn
+  it on (every support / every attack, or ticked ones). Library: Features → Eye_Beams (drop it on a slot or a layer row).
+- Art with the game's own beams (the basic Stoneguard helmet) brings a beams layer along, from the "builtin" entries
+  of `Assets/Resources/HelmetBeams.json`.
+- Upload writes the slot's beams under its texture name into that file (kinds as `Support`/`Attack`, ticked abilities
+  as `skill:<NameId>`), plus `Resources/ForgeBeams/*_cover.png` for the slot's layers above the beams.
+  The game side is `HelmetBeams.cs`, hooked into `PlaySupport/Attack/RageSkillAnimation`.
+
+## Bells
+
+- A bells layer (`kind: 'bells'`, `bells.py`) is a ring with a big and a small brass bell hanging off the art layer it
+  follows (ring centre in that art's pixels) or its own placement; any number per slot (each its own set in the game,
+  later sets drawn in front), never baked. On the Slots tab, drag a set by its ring or a bell to move it. Its panel sets the ring
+  (whole, the Dark Cupid handle-cut ring, none), "Place" on the canvas, "Game spot" on art with a preset, and what rings
+  it out: "any knock (always)", every attack / support / rage, or ticked abilities (those also jolt the bells as their
+  clip starts). Library: Features → Bells. Hide/Show on the layer row hides them.
+- Each bell's metal (Big bell / Small bell: Brass, Silver (sterling), Bronze (bell metal); layer `materials`) changes
+  its sprite and, from the config's `materials` table (E, density, decay against the recording's brass): pitch
+  ×sqrt((E/ρ)/(E/ρ)brass), ring length (the strike's decay e^-t/τ reshaped to τ·decay), mass (swing damping, knocks,
+  loudness). Silver ≈ ×0.754 pitch, ×0.75 ring, ×1.21 mass; bronze ≈ ×0.959, ×1.35, ×1.03.
+  Surface per metal: `roughness` (art: polished cel bands + glint vs bronze's as-cast matte gradients and pitting;
+  physics: hanger-loop friction on the ring), `patina` (art: tarnish in the recesses), `restitution` (clapper and
+  bell-on-bell bounce, from hardness: bronze 0.45, brass 0.35, sterling 0.28).
+- The preview runs ScytheBells.cs's physics (pendulums on the ring, clappers, bell-on-bell knocks) and plays each bell's
+  strike from `bell_ring.wav` through WebAudio (`/bellsound`, re-encoded to 16-bit), pitch 1/size, volume from impact
+  speed, at the physics step's time. "Sound" in the panel turns it off (remembered per browser).
+- Upload writes the slot's bells into `Assets/Resources/ScytheBellsConfig.json` "weapons" (matched by texture; `on`
+  tokens `Always`/`Attack`/`Support`/`Rage`/`skill:<NameId>`), plus `Resources/ForgeBells/*_bells_cover.png` for the
+  slot's layers above the bells, which hide the bells only where they overlap them (game: stencil shaders in
+  `Resources/ScytheBellsShaders`; preview: the set is drawn on its own canvas and the cover drawn `source-atop`); a set
+  whose slot is behind the body draws behind the character, as ScytheBells.BehindBody does. "builtin" entries (the belled Dark Cupid item) and "presets" come from
+  `ArtSource/ScytheBells/bells.py`, which keeps Forge entries when it regenerates the file.

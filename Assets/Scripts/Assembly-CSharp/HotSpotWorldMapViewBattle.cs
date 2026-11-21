@@ -208,13 +208,14 @@ public class HotSpotWorldMapViewBattle : HotSpotWorldMapViewBase
 					yield return StartCoroutine(PlayActionTree(execute2));
 				}
 			}
-			// A newly opened area's title and pan (e.g. Cobalt Plateaus after Chuck's rescue), before the popups.
-			yield return StartCoroutine(WorldMapAreaIntro.PlayIfDue(this));
-			StartCoroutine(DIContainerInfrastructure.LocationStateMgr.StoppablePopupCoroutine());
+			// Popups first (e.g. Chuck's unlock toast), waited out completely so the area intro never overlaps them.
+			yield return StartCoroutine(DIContainerInfrastructure.LocationStateMgr.StoppablePopupCoroutine());
 			while (DIContainerInfrastructure.LocationStateMgr.FeatureUnlocksRunning)
 			{
 				yield return new WaitForSeconds(0.1f);
 			}
+			// Then a newly opened area's title and pan (e.g. Cobalt Plateaus after Chuck's rescue).
+			yield return StartCoroutine(WorldMapAreaIntro.PlayIfDue(this));
 		}
 		var isAlreadyActive = false;
 		switch (base.Model.Data.UnlockState)

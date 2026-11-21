@@ -1,0 +1,401 @@
+{
+ "kind": "existing",
+ "id": "pig_minion_sportsman_b",
+ "name": "Tennis Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "g499aa97",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanB",
+     "name": "Headgear_SportsmanB",
+     "item": "Headgear_SportsmanB",
+     "w": 118,
+     "h": 72,
+     "pivot": [
+      -0.3053572,
+      -0.3906994
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g499aa97"
+  },
+  "Headgear_Back": {
+   "layers": [
+    {
+     "uid": "g6917eb7",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanB_Back",
+     "name": "Headgear_SportsmanB_Back",
+     "item": "Headgear_SportsmanB",
+     "w": 48,
+     "h": 36,
+     "pivot": [
+      0.4830741,
+      -0.7509911
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0,
+     "pair": "g_class"
+    }
+   ],
+   "hidden": false,
+   "active": "g6917eb7"
+  },
+  "MainHand": {
+   "layers": [
+    {
+     "uid": "g1f9cdfc",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SportsmanB",
+     "name": "MainHand_SportsmanB",
+     "item": "MainHand_SportsmanB",
+     "w": 142,
+     "h": 84,
+     "pivot": [
+      -0.32142857,
+      -0.12964286
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g1f9cdfc"
+  },
+  "OffHand": {
+   "layers": [
+    {
+     "uid": "g2cc5392",
+     "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_SportsmanB",
+     "name": "OffHand_SportsmanB",
+     "item": "OffHand_SportsmanB",
+     "w": 54,
+     "h": 50,
+     "pivot": [
+      0.11785714,
+      0.14753571
+     ],
+     "tx": 0,
+     "ty": 0,
+     "rot": 0,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "g2cc5392"
+  }
+ },
+ "abilities": [
+  {
+   "uid": "a0_18a71",
+   "origin": "pig_attack_minion_sportsman_b",
+   "type": "Attack",
+   "source": "pig_attack_minion_sportsman_b",
+   "name": "Sidestep",
+   "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_3}%[-] chance to deal critical damage.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "AttackCurse",
+   "params": {
+    "damage_in_percent": 100,
+    "chance": 35,
+    "extra_damage_in_percent": 50
+   },
+   "values": {
+    "{value_1}": {
+     "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+    },
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"chance\"))"
+    },
+    "{value_4}": {
+     "expr": "(p(\"attack_count\"))"
+    },
+    "{value_6}": {
+     "expr": "(p(\"extra_damage_in_percent\"))"
+    }
+   },
+   "template": "AttackWithCritChanceSkill",
+   "duration": 0,
+   "design": ""
+  },
+  {
+   "uid": "a1_a806b",
+   "origin": "pig_attack_minion_stickpig_02",
+   "type": "Attack",
+   "source": "pig_attack_minion_stickpig_02",
+   "name": "Stumble",
+   "desc": "The pig stumbles and does nothing. Stupid pig.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "params": {
+    "tumble": 100
+   },
+   "values": {
+    "{value_2}": {
+     "expr": "(p(\"charge\"))"
+    },
+    "{value_3}": {
+     "expr": "(p(\"bonus_chance\"))"
+    }
+   },
+   "template": "DoNothingSkill",
+   "duration": 0,
+   "design": ""
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": 70,
+  "attack": 12,
+  "sizeType": "Small",
+  "sizeScale": 0.9,
+  "strength": 2,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig2_defeated_gold": 1,
+   "loot_pig2_defeated_exp": 1,
+   "loot_pigsmall_defeated_mastery": 1
+  }
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_minion_sportsman_b",
+  "fingerprint": "bb400871fbb8def765caa4c18a0ff44a76187565",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [
+   {
+    "Percentage": 75,
+    "ComboChain": [
+     "pig_attack_minion_sportsman_b"
+    ]
+   },
+   {
+    "Percentage": 25,
+    "ComboChain": [
+     "pig_attack_minion_stickpig_02"
+    ]
+   }
+  ],
+  "original": {
+   "name": "Tennis Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {
+    "Headgear": {
+     "layers": [
+      {
+       "uid": "g499aa97",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanB",
+       "name": "Headgear_SportsmanB",
+       "item": "Headgear_SportsmanB",
+       "w": 118,
+       "h": 72,
+       "pivot": [
+        -0.3053572,
+        -0.3906994
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g499aa97"
+    },
+    "Headgear_Back": {
+     "layers": [
+      {
+       "uid": "g6917eb7",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:Headgear_SportsmanB_Back",
+       "name": "Headgear_SportsmanB_Back",
+       "item": "Headgear_SportsmanB",
+       "w": 48,
+       "h": 36,
+       "pivot": [
+        0.4830741,
+        -0.7509911
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0,
+       "pair": "g_class"
+      }
+     ],
+     "hidden": false,
+     "active": "g6917eb7"
+    },
+    "MainHand": {
+     "layers": [
+      {
+       "uid": "g1f9cdfc",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:MainHand_SportsmanB",
+       "name": "MainHand_SportsmanB",
+       "item": "MainHand_SportsmanB",
+       "w": 142,
+       "h": 84,
+       "pivot": [
+        -0.32142857,
+        -0.12964286
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g1f9cdfc"
+    },
+    "OffHand": {
+     "layers": [
+      {
+       "uid": "g2cc5392",
+       "src": "0518def0e8eeb544aaa9b87aea6d90db:OffHand_SportsmanB",
+       "name": "OffHand_SportsmanB",
+       "item": "OffHand_SportsmanB",
+       "w": 54,
+       "h": 50,
+       "pivot": [
+        0.11785714,
+        0.14753571
+       ],
+       "tx": 0,
+       "ty": 0,
+       "rot": 0,
+       "sx": 1,
+       "sy": 1,
+       "shear": 0
+      }
+     ],
+     "hidden": false,
+     "active": "g2cc5392"
+    }
+   },
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "_Melee_Smash",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": 70,
+    "attack": 12,
+    "sizeType": "Small",
+    "sizeScale": 0.9,
+    "strength": 2,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {
+     "loot_pig2_defeated_gold": 1,
+     "loot_pig2_defeated_exp": 1,
+     "loot_pigsmall_defeated_mastery": 1
+    }
+   },
+   "abilities": [
+    {
+     "uid": "a0_18a71",
+     "origin": "pig_attack_minion_sportsman_b",
+     "type": "Attack",
+     "source": "pig_attack_minion_sportsman_b",
+     "name": "Sidestep",
+     "desc": "Deals [ff0000]{value_1}[-] damage. [ff0000]{value_3}%[-] chance to deal critical damage.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "AttackCurse",
+     "params": {
+      "damage_in_percent": 100,
+      "chance": 35,
+      "extra_damage_in_percent": 50
+     },
+     "values": {
+      "{value_1}": {
+       "expr": "((((p(\"damage_in_percent\")) / 100) * A))"
+      },
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"chance\"))"
+      },
+      "{value_4}": {
+       "expr": "(p(\"attack_count\"))"
+      },
+      "{value_6}": {
+       "expr": "(p(\"extra_damage_in_percent\"))"
+      }
+     },
+     "template": "AttackWithCritChanceSkill",
+     "duration": 0,
+     "design": ""
+    },
+    {
+     "uid": "a1_a806b",
+     "origin": "pig_attack_minion_stickpig_02",
+     "type": "Attack",
+     "source": "pig_attack_minion_stickpig_02",
+     "name": "Stumble",
+     "desc": "The pig stumbles and does nothing. Stupid pig.",
+     "color": "E55B5B",
+     "atlas": "Skills_Pigs_01",
+     "icon": "Attack",
+     "params": {
+      "tumble": 100
+     },
+     "values": {
+      "{value_2}": {
+       "expr": "(p(\"charge\"))"
+      },
+      "{value_3}": {
+       "expr": "(p(\"bonus_chance\"))"
+      }
+     },
+     "template": "DoNothingSkill",
+     "duration": 0,
+     "design": ""
+    }
+   ]
+  }
+ }
+}

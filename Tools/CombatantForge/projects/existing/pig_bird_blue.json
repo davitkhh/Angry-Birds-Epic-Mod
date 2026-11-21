@@ -157,7 +157,8 @@
    },
    "template": "AttackAndResetCharge",
    "duration": 0,
-   "design": ""
+   "design": "",
+   "impactOnHit": false
   },
   {
    "uid": "a1_6338d",

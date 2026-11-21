@@ -279,6 +279,7 @@ namespace ABH.GameDatas
 					this.WorldGameData.Data.HotSpotInstances.RemoveAll(hs => hs.NameId == "hotspot_003_battleground");
 				}
 				ResolveRestoredHotspot005();
+				ResolveMcCoolGate();
 				PirateChain.Sync(this);
 			}
 			GrantBlueAmmoBows();
@@ -497,6 +498,31 @@ namespace ABH.GameDatas
 			if (!hotspot005.IsCompleted())
 			{
 				hotspot005.Data.UnlockState = HotspotUnlockState.Resolved;
+			}
+		}
+
+		// Since 2026-11-17 McCool's merchant follows hotspot_008_05 (whose win plays his cutscene) instead of 008. Saves
+		// that already opened his stall count 008_05 as beaten, so the stall stays and the cutscene doesn't replay.
+		private void ResolveMcCoolGate()
+		{
+			HotspotGameData merchant = null;
+			if (!WorldGameData.HotspotGameDatas.TryGetValue(MerchantStall.McCoolMerchantNameId, out merchant) || merchant == null || merchant.Data.UnlockState <= HotspotUnlockState.Hidden)
+			{
+				return;
+			}
+			HotspotGameData gate = null;
+			if (!WorldGameData.HotspotGameDatas.TryGetValue(MerchantStall.McCoolGateNameId, out gate))
+			{
+				HotspotBalancingData balancing = null;
+				if (!DIContainerBalancing.Service.TryGetBalancingData<HotspotBalancingData>(MerchantStall.McCoolGateNameId, out balancing))
+				{
+					return;
+				}
+				gate = WorldGameData.AddNewHotspot(balancing);
+			}
+			if (!gate.IsCompleted())
+			{
+				gate.Data.UnlockState = HotspotUnlockState.Resolved;
 			}
 		}
 

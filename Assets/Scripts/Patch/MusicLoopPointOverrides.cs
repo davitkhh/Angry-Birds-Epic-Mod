@@ -83,6 +83,9 @@ public static class MusicLoopPointOverrides
 		// The song plays one 80.015375 s section twice (from ~1.7 s) before its ending; the loop is
 		// one pass of it, seamed just before the accent at 6.015 s (samples 288305 -> 4129043 @ 48 kHz).
 		{ "pirateboss", new LoopPoint { StartSeconds = 6.006355, EndSeconds = 86.02173 } },
+		// Bomb's unlock sequence theme (BombsTheme.mp3). Its phrases are 4.5 s long (grid from 3.28 s), sections recur with
+		// variations (no exact repeat) and it fades out from ~122 s: the loop jumps 72 s (16 phrases) back, downbeat to downbeat.
+		{ "bombstheme", new LoopPoint { StartSeconds = 48.27, EndSeconds = 120.27 } },
 	};
 
 	// Last observed playback position per music source, remembered together with the clip it

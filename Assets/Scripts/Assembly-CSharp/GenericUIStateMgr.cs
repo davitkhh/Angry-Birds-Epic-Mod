@@ -167,9 +167,14 @@ public class GenericUIStateMgr : MonoBehaviour
 
 	private void EnterPlayerStatController(PlayerStatsType index, bool showShopLink = false)
 	{
-		m_PlayerStatsController[(int)index].m_StatBar.UpdateValueOnly();
-		m_PlayerStatsController[(int)index].m_ShowShopLink = showShopLink;
-		m_PlayerStatsController[(int)index].m_HasToBeShown = true;
+		EnterPlayerStatController(m_PlayerStatsController[(int)index], showShopLink);
+	}
+
+	private void EnterPlayerStatController(PlayerStatControllerEnterInfo info, bool showShopLink)
+	{
+		info.m_StatBar.UpdateValueOnly();
+		info.m_ShowShopLink = showShopLink;
+		info.m_HasToBeShown = true;
 		var list = (from s in m_PlayerStatsController
 			where s.m_HasToBeShown
 			orderby s.m_Priority
@@ -234,6 +239,7 @@ public class GenericUIStateMgr : MonoBehaviour
 			{
 				LeavePlayerStatController(PlayerStatsType.Energy);
 			}
+			LeaveResourceBars(null);
 		}
 		EnterCurrentBar(true);
 		DIContainerInfrastructure.GetCoreStateMgr().m_InfoOverlays.HideMissingCurrencyOverlay();
@@ -280,6 +286,104 @@ public class GenericUIStateMgr : MonoBehaviour
 			else
 			{
 				LeavePlayerStatController(PlayerStatsType.Energy);
+			}
+			LeaveResourceBars(barRegistry.showResources);
+			if (barRegistry.showResources != null)
+			{
+				foreach (var resource in barRegistry.showResources)
+				{
+					var info = GetOrCreateResourceBar(resource);
+					if (info != null)
+					{
+						EnterPlayerStatController(info, shopLink);
+					}
+				}
+			}
+		}
+	}
+
+	// Extra counters for inventory items such as resource_cobalt_stone. Each is a runtime clone of the
+	// friendship essence bar with its icon swapped, so it looks and animates exactly like the currencies.
+	// Named "0_..." so the alphabetic stats grid puts it left of the existing bars without moving them.
+	private readonly Dictionary<string, PlayerStatControllerEnterInfo> m_ResourceBars = new Dictionary<string, PlayerStatControllerEnterInfo>();
+
+	private const float ResourceIconSize = 60f;
+
+	private PlayerStatControllerEnterInfo GetOrCreateResourceBar(string itemNameId)
+	{
+		if (string.IsNullOrEmpty(itemNameId))
+		{
+			return null;
+		}
+		PlayerStatControllerEnterInfo info;
+		if (m_ResourceBars.TryGetValue(itemNameId, out info) && info.m_StatBar != null)
+		{
+			return info;
+		}
+		var template = m_PlayerStatsController[(int)PlayerStatsType.FriendshipEssence].m_StatBar;
+		var provider = DIContainerBalancing.GetInventoryItemBalancingDataPovider();
+		var balancing = provider != null ? provider.GetBalancingData(itemNameId) : null;
+		if (template == null || balancing == null)
+		{
+			return null;
+		}
+		var templateTransform = template.transform;
+		var clone = Instantiate(template.gameObject, templateTransform.parent);
+		clone.name = "0_Resource_" + itemNameId;
+		clone.transform.localPosition = templateTransform.localPosition;
+		clone.transform.localRotation = templateTransform.localRotation;
+		clone.transform.localScale = templateTransform.localScale;
+		var bar = clone.GetComponent<CoinBarController>();
+		bar.m_ItemName = itemNameId;
+		var iconTransform = clone.transform.Find("Animation/EssenceDisplay/Icon");
+		var icon = iconTransform != null ? iconTransform.GetComponent<UISprite>() : null;
+		if (icon != null)
+		{
+			var atlas = ShopOfferBlindWorldmap.GetIconAtlas(balancing.ItemType);
+			if (atlas != null)
+			{
+				icon.atlas = atlas;
+			}
+			icon.spriteName = balancing.AssetBaseId;
+			var sprite = icon.atlas != null ? icon.atlas.GetSprite(balancing.AssetBaseId) : null;
+			if (sprite != null && sprite.width > 0 && sprite.height > 0)
+			{
+				var scale = ResourceIconSize / Mathf.Max(sprite.width, sprite.height);
+				icon.width = Mathf.RoundToInt(sprite.width * scale);
+				icon.height = Mathf.RoundToInt(sprite.height * scale);
+			}
+		}
+		bar.SetInventory(DIContainerInfrastructure.GetCurrentPlayer().InventoryGameData);
+		clone.SetActive(false);
+		info = new PlayerStatControllerEnterInfo
+		{
+			m_StatBar = bar,
+			m_Priority = 0
+		};
+		m_PlayerStatsController.Add(info);
+		m_ResourceBars[itemNameId] = info;
+		return info;
+	}
+
+	private void LeaveResourceBars(List<string> keep)
+	{
+		foreach (var pair in m_ResourceBars)
+		{
+			if (pair.Value.m_StatBar != null && (keep == null || !keep.Contains(pair.Key)))
+			{
+				pair.Value.m_StatBar.UpdateValueOnly();
+				pair.Value.m_HasToBeShown = false;
+			}
+		}
+	}
+
+	public void UpdateResourceBars()
+	{
+		foreach (var info in m_ResourceBars.Values)
+		{
+			if (info.m_StatBar != null)
+			{
+				info.m_StatBar.UpdateAnim();
 			}
 		}
 	}
@@ -360,6 +464,7 @@ public class GenericUIStateMgr : MonoBehaviour
 		UpdateFriendshipEssenceBar();
 		UpdateLuckyCoinsBar();
 		UpdateEventEnergyBar();
+		UpdateResourceBars();
 		return true;
 	}
 

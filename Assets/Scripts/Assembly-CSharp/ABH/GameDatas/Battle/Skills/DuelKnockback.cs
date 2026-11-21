@@ -35,6 +35,8 @@ namespace ABH.GameDatas.Battle.Skills
 
 		private int m_DuelTurns;
 
+		private float m_DamageTakenBonusPercent;
+
 		private VisualEffectSetting m_DustCloud;
 
 		private bool m_AwaitingImpact;
@@ -57,6 +59,11 @@ namespace ABH.GameDatas.Battle.Skills
 			var turns = 3f;
 			base.Model.SkillParameters.TryGetValue("duel_turns", out turns);
 			m_DuelTurns = Mathf.Max(1, Mathf.RoundToInt(turns));
+			// Optional: the isolated bird takes this much extra damage (percent) for as long as the duel lasts.
+			if (!base.Model.SkillParameters.TryGetValue("damage_taken_bonus_in_percent", out m_DamageTakenBonusPercent))
+			{
+				m_DamageTakenBonusPercent = 0f;
+			}
 			VisualEffectSetting heroicStrike;
 			if (DIContainerLogic.GetVisualEffectsBalancing().TryGetVisualEffectSetting(DustCloudEffects, out heroicStrike))
 			{
@@ -181,7 +188,7 @@ namespace ABH.GameDatas.Battle.Skills
 
 			// 3. The blow. No damage: the bird flies back one battleground instead.
 			SpawnVisualEffects(VisualEffectSpawnTiming.Impact, m_DustCloud, m_Targets);
-			var knockback = director.StartCoroutine(director.Knockback(source, bird, m_DuelTurns, offset));
+			var knockback = director.StartCoroutine(director.Knockback(source, bird, m_DuelTurns, offset, m_DamageTakenBonusPercent));
 
 			// 4. Porky follows at his own pace once his swing is over (the camera stays with the bird).
 			if (attackLength - elapsed > 0f)
@@ -248,6 +255,7 @@ namespace ABH.GameDatas.Battle.Skills
 		{
 			var dictionary = new Dictionary<string, string>();
 			dictionary.Add("{value_1}", string.Empty + m_DuelTurns);
+			dictionary.Add("{value_2}", string.Empty + Mathf.RoundToInt(m_DamageTakenBonusPercent));
 			return DIContainerInfrastructure.GetLocaService().GetSkillDescriptions(base.Model.SkillDescription, dictionary);
 		}
 

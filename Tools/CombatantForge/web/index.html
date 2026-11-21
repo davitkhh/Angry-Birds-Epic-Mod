@@ -90,8 +90,9 @@
         <button id="targetLess" class="iconBtn" aria-label="One target fewer">−</button>
         <span id="targetCount" class="mono"></span>
         <button id="targetMore" class="iconBtn" aria-label="One more target">+</button>
-        <label class="check" title="Draw the path of every projectile (the attack you last played, or every fired component here)"><input type="checkbox" id="showPaths"> Projectile paths</label>
       </span>
+      <label class="check" title="Draw the path of every projectile (the attack you last played, or every fired component here)"><input type="checkbox" id="showPaths"> Projectile paths</label>
+      <label class="check combatOnly" title="Draw where the attack you last played walks to (melee attacks walk up to their target and back)"><input type="checkbox" id="showWalks"> Walk paths</label>
       <span class="grow"></span>
       <button id="fitBtn">Fit</button>
     </div>
@@ -131,6 +132,7 @@
         </div>
       </div>
       <div id="abilityList"></div>
+      <div id="decisionOrder"></div>
     </div>
     <div class="tab" id="tab-pphysics" hidden>
       <div id="physicsForm"></div>
@@ -150,5 +152,6 @@
 </dialog>
 <script src="app.js"></script>
 <script src="projectiles.js"></script>
+<script src="decisions.js"></script>
 </body>
 </html>

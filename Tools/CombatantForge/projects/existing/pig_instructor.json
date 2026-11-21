@@ -1,0 +1,58 @@
+{
+ "kind": "existing",
+ "id": "pig_instructor",
+ "name": "Stick Pig",
+ "rig": "MinionPig",
+ "variant": "",
+ "slots": {},
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "",
+  "directProjectile": false
+ },
+ "stats": {
+  "hp": -1,
+  "attack": 0,
+  "sizeType": "Small",
+  "sizeScale": 1,
+  "strength": 1,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {}
+ },
+ "statsEdited": true,
+ "existing": {
+  "nameId": "pig_instructor",
+  "fingerprint": "0db6a1f2f85661a166602f929481f8d8602853bd",
+  "rev": 0,
+  "keepSkills": [],
+  "combos": [],
+  "original": {
+   "name": "Stick Pig",
+   "rig": "MinionPig",
+   "variant": "",
+   "slots": {},
+   "weapon": {
+    "animationIndex": 1,
+    "isRanged": false,
+    "projectile": "",
+    "hitEffect": "",
+    "directProjectile": false
+   },
+   "stats": {
+    "hp": -1,
+    "attack": 0,
+    "sizeType": "Small",
+    "sizeScale": 1,
+    "strength": 1,
+    "perLevelHealth": 0,
+    "perLevelAttack": 0,
+    "loot": {}
+   },
+   "abilities": []
+  }
+ }
+}

@@ -69,7 +69,8 @@ namespace ABH.GameDatas
 
 		private void RefreshUpgradedPerks()
 		{
-			var signature = UpgradeBlueprints.UpgradeSignature(Data);
+			// McCool's blueprintless shield upgrades change the bonus perks without touching the item's data
+			var signature = UpgradeBlueprints.UpgradeSignature(Data) + MerchantShieldUpgrades.GetPerkSignature(Data);
 			if (m_BonusPerks != null && m_PerkSignature == signature)
 			{
 				return;
@@ -456,6 +457,8 @@ namespace ABH.GameDatas
 				return "PassiveEffect_Vigor";
 			case PerkType.Vitality:
 				return "PassiveEffect_Vitality";
+			case PerkType.Bulwark:
+				return "PassiveEffect_SoaringProtection";
 			case PerkType.IncreaseHealing:
 				return "PassiveEffect_Sweet";
 			case PerkType.IncreaseRage:
@@ -629,6 +632,19 @@ namespace ABH.GameDatas
 			{
 				text += "\n[c8a000]" + DIContainerInfrastructure.GetLocaService().GetPerkName(bonusPerk.Type) + ":[-] " + GetPerkDesc(bonusPerk);
 			}
+			var upgrades = UpgradeBlueprints.GetUpgradeSummary(item);
+			if (!string.IsNullOrEmpty(upgrades))
+			{
+				text += "\n" + upgrades;
+			}
+			return text;
+		}
+
+		// The item's own perk text and upgrade summary, without the bonus perks (for views that show those separately,
+		// BonusPerkRows).
+		internal static string GetMainPerkDesc(EquipmentGameData item)
+		{
+			var text = item.Perk != null ? GetPerkDesc(item.Perk) : string.Empty;
 			var upgrades = UpgradeBlueprints.GetUpgradeSummary(item);
 			if (!string.IsNullOrEmpty(upgrades))
 			{

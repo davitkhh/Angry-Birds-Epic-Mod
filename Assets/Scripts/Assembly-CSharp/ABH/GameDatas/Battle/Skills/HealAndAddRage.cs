@@ -63,6 +63,29 @@ namespace ABH.GameDatas.Battle.Skills
 			DIContainerLogic.GetBattleService().AddFixRage(battle, source, m_Fixed);
 		}
 
+		// Health bar / rage chili preview: DoAction's heals, then AddFixRage
+		public override void PreviewHealthChanges(HealthPreviewContext ctx)
+		{
+			List<ICombatant> targets;
+			if (!m_All)
+			{
+				targets = new List<ICombatant> { m_Self ? ctx.Source : ctx.Target };
+			}
+			else
+			{
+				targets = ctx.FactionOf(ctx.Target);
+			}
+			if (m_Percent > 0f)
+			{
+				foreach (var skillTarget in targets)
+				{
+					var referencedHealth = !m_InvokersHealth ? skillTarget.ModifiedHealth : ctx.Source.ModifiedHealth;
+					ctx.AddHeal(skillTarget, referencedHealth * m_Percent / 100f);
+				}
+			}
+			ctx.AddRage(m_Fixed);
+		}
+
 		public override string GetLocalizedDescription(ICombatant invoker)
 		{
 			var dictionary = new Dictionary<string, string>();

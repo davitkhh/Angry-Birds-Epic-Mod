@@ -98,6 +98,7 @@ public class ComboMoveDirector : MonoBehaviour
 			}
 			LastResolveActed = true;
 			var comboers = group.Select(e => e.Combatant).ToList();
+			recipe.Effectiveness = group.Average(e => e.Move.Effectiveness);
 			DebugLog.Log("[ComboMoveDirector] " + recipe.Model.SkillNameId + " by " + string.Join(", ", comboers.Select(c => c.CombatantNameId).ToArray()));
 			var label = DIContainerInfrastructure.GetLocaService().Tr("combo_label_prefix", "Combo: ") + recipe.GetLocalizedName();
 			comboers[0].CombatantView.ShowCombatLabel(label, SkillBlind.ComboColor);

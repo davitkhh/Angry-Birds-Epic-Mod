@@ -142,6 +142,12 @@ public class EnchantingItemSlot : InventoryItemSlot
 		}
 	}
 
+	// The enchanting list shows "selected/owned" counters, so keep the label even for a single item.
+	protected override bool HideSingleQuantity
+	{
+		get { return false; }
+	}
+
 	public int GetMax()
 	{
 		if (m_FinalItem == null)

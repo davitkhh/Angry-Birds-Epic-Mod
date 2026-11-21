@@ -1,0 +1,71 @@
+{
+ "id": "bnuy_mage",
+ "name": "Bnuy Mage",
+ "rig": "KingPig",
+ "variant": "",
+ "slots": {
+  "Headgear": {
+   "layers": [
+    {
+     "uid": "e0652r8p",
+     "src": "bdef4a6e002e7574ca91373e69a2c846:Headgear_Poltergeist",
+     "name": "Headgear_Poltergeist",
+     "item": "Headgear_Poltergeist",
+     "w": 110,
+     "h": 104,
+     "pivot": [
+      -0.02142857,
+      -0.28614354
+     ],
+     "tx": -5.356072594957396,
+     "ty": 15.376958356343437,
+     "rot": 10,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    },
+    {
+     "uid": "vlvck002",
+     "src": "bdef4a6e002e7574ca91373e69a2c846:Headgear_Poltergeist_Back",
+     "name": "Headgear_Poltergeist_Back",
+     "item": "Headgear_Poltergeist",
+     "w": 100,
+     "h": 92,
+     "pivot": [
+      0.032142855,
+      0.462927
+     ],
+     "tx": 9.104792258989399,
+     "ty": 14.636489242056037,
+     "rot": 10,
+     "sx": 1,
+     "sy": 1,
+     "shear": 0
+    }
+   ],
+   "hidden": false,
+   "active": "vlvck002"
+  }
+ },
+ "abilities": [],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 550,
+  "attack": 2,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ }
+}

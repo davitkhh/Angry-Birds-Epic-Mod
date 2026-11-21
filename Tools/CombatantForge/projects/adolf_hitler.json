@@ -1,0 +1,39 @@
+{
+ "id": "adolf_hitler",
+ "name": "Adolf Hitler",
+ "rig": "KingPig",
+ "variant": "",
+ "slots": {},
+ "abilities": [
+  {
+   "uid": "sqcu6gtl",
+   "type": "Attack",
+   "name": "New ability",
+   "desc": "Click here to write what the tooltip says.",
+   "color": "E55B5B",
+   "atlas": "Skills_Pigs_01",
+   "icon": "Attack",
+   "design": "Deals 120% damage. Target can't be affected by any positive status effects and can only use their support ability for 4 turns."
+  }
+ ],
+ "weapon": {
+  "animationIndex": 1,
+  "isRanged": false,
+  "projectile": "",
+  "hitEffect": "_Melee_Smash"
+ },
+ "stats": {
+  "hp": 550,
+  "attack": 2,
+  "sizeType": "Boss",
+  "sizeScale": 1,
+  "strength": 7,
+  "perLevelHealth": 0,
+  "perLevelAttack": 0,
+  "loot": {
+   "loot_pig_boss_defeated_gold": 1,
+   "loot_pig_boss_defeated_exp": 1,
+   "loot_pigboss_defeated_mastery": 1
+  }
+ }
+}

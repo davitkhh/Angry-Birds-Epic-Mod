@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ABH.GameDatas;
+using ABH.Shared.Models.Generic;
 using UnityEngine;
 
 public class PerkOverlay : MonoBehaviour
@@ -40,6 +41,31 @@ public class PerkOverlay : MonoBehaviour
 		{
 			initialArrowSize = m_Arrow.cachedTransform.localScale;
 		}
+	}
+
+	// A single perk on its own (e.g. the perk an upgrade offer adds), not an item's perk list
+	public void ShowPerkOverlay(Transform root, EquipmentPerk perk, Camera orientatedCamera)
+	{
+		if (m_Header)
+		{
+			m_Header.text = DIContainerInfrastructure.GetLocaService().GetPerkName(perk.Type);
+		}
+		var anchorPosition = m_InterfaceCamera.ScreenToWorldPoint(orientatedCamera.WorldToScreenPoint(root.position));
+		m_PerkDesc.text = EquipmentGameData.GetPerkDesc(perk);
+		if (m_PerkIcon != null)
+		{
+			m_PerkIcon.spriteName = EquipmentGameData.GetPerkIconNameByPerk(perk.Type);
+			m_PerkIcon.gameObject.SetActive(true);
+		}
+		base.transform.localPosition = new Vector3(anchorPosition.x, anchorPosition.y, base.transform.localPosition.z);
+		m_ContainerControl.transform.localPosition = PositionRelativeToAnchorPositionFixedOnAnchor(anchorPosition, m_OffsetLeft);
+		if (m_Arrow)
+		{
+			m_Arrow.cachedTransform.localPosition = PositionArrowRelativeToAnchorPositionFixedOnScreen(anchorPosition, m_OffsetLeft);
+			m_Arrow.cachedTransform.localScale = Vector3.Scale(initialArrowSize, new Vector3(-1f * Mathf.Sign(anchorPosition.x), 1f, 1f));
+			m_Arrow.gameObject.SetActive(false);
+		}
+		GetComponent<Animation>().Play("InfoOverlay_Enter");
 	}
 
 	public void ShowPerkOverlay(Transform root, EquipmentGameData equip, Camera orientatedCamera)
